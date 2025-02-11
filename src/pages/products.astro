@@ -3,11 +3,56 @@ import Navbar from "../components/Navbar.astro";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from 'astro:assets';
 import imagenPrincipio from "../assets/images/products/principio.png";
+import imagen1 from "../assets/images/products/letreros_neon_led.png";
+import imagen2 from "../assets/images/products/sillas_y_mesas_led.png";
+import imagen3 from "../assets/images/products/pisos_led.png";
+import imagen4 from "../assets/images/products/barras_pixel_led.png";
+
+import imagen5 from "../assets/images/products/tuneles_led.png";
+import imagen6 from "../assets/images/products/menu_boards.png";
+import imagen7 from "../assets/images/products/letras_pintadas.png";
+import imagen8 from "../assets/images/products/displays.png";
+
+import imagen9 from "../assets/images/products/hologramas_3d.png";
+import imagen10 from "../assets/images/products/relojes_digitales.png";
+import imagen11 from "../assets/images/products/pantallas_led.png";
+import imagen12 from "../assets/images/products/techos_led.png";
+import "../styles/products.css";
 ---
 
 <>
     <Layout>
         <Navbar />
     </Layout>
-    <Picture src={imagenPrincipio} formats={['png']} alt="imagenPrincipio" />
+    <section class="relative">
+        <Picture src={imagenPrincipio} formats={['png']} alt="imagenPrincipio" />
+        <div class="absolute inset-0 flex flex-col justify-center items-center">
+            <p class="text-[2.5rem] Montserrat font-bold text-[#23C1DE]">DESCUBRE NUESTRA INNOVADORA</p>
+            <p class="text-[4rem] Montserrat font-black text-[#FFFFFF]">LÍNEA DE PRODUCTOS</p>
+        </div>
+    </section>
+    <section class="bg-[#00031E] px-[200px]">
+        <p class="text-[3rem] Montserrat font-medium text-[#FFFFFF]">Nuestros Productos</p>
+        <p class="text-[1.25rem] Montserrat font-medium text-[#FFFFFF] opacity-75">Descubre nuestra innovadora línea de productos</p>
+        <p class="text-[1.563rem] Montserrat font-medium text-[#FFFFFF] opacity-75">Productos LED y 3D</p>
+        <div class="flex flex-row justify-around border-b-2 borde_color pb-[50px]">
+            <Picture class="w-[207.24px]" src={imagen1} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen2} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen3} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen4} formats={['png']} alt="Letreron neón LED" />
+        </div>
+        <div class="flex flex-row justify-around border-b-2 borde_color py-[50px] ">
+            <Picture class="w-[207.24px]" src={imagen5} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen6} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen7} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen8} formats={['png']} alt="Letreron neón LED" />
+        </div>
+        <div class="flex flex-row justify-around pt-[50px]">
+            <Picture class="w-[207.24px]" src={imagen9} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen10} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen11} formats={['png']} alt="Letreron neón LED" />
+            <Picture class="w-[207.24px]" src={imagen12} formats={['png']} alt="Letreron neón LED" />
+        </div>
+    </section>
+    
 </>
