@@ -1,0 +1,13 @@
+---
+import Navbar from "../components/Navbar.astro";
+import Layout from "../layouts/Layout.astro";
+import { Picture } from 'astro:assets';
+import imagenPrincipio from "../assets/images/products/principio.png";
+---
+
+<>
+    <Layout>
+        <Navbar />
+    </Layout>
+    <Picture src={imagenPrincipio} formats={['png']} alt="imagenPrincipio" />
+</>
