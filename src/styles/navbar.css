@@ -1,0 +1,40 @@
+/* Estilos para el NAVBAR */
+.border-effect::before,
+.border-effect::after,
+.border-effect span::before,
+.border-effect span::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid white;
+}
+
+.border-effect::before { /* Esquina superior izquierda */
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.border-effect::after { /* Esquina inferior derecha */
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.border-effect span::before { /* Esquina superior derecha */
+  top: -9px;
+  right: -24px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.border-effect span::after { /* Esquina inferior izquierda */
+  bottom: -10px;
+  left: -24px;
+  border-right: none;
+  border-top: none;
+}
+/* -------------------- */

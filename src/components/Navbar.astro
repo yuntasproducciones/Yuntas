@@ -1,0 +1,39 @@
+---
+import "../styles/navbar.css";
+const isActive = (path: string) => Astro.url.pathname === path;
+const rutas = [
+  { link: "/", texto: "INICIO" },
+  { link: "/products", texto: "PRODUCTOS" },
+  { link: "/about", texto: "NOSOTROS" },
+  { link: "/blog", texto: "BLOG" },
+  { link: "/contact", texto: "CONTACTO" },
+];
+---
+
+<header class="w-full">
+  <nav
+    class="w-full grid grid-cols-7 bg-linear-to-b items-center place-items-center from-slate-900 py-2 text-white font-semibold"
+  >
+    <a href="/" class="h-16">
+      <img
+        src="./images/logos/Logo-bajaresolucion.webp"
+        alt="Logo de Yuntas"
+        class="w-full h-full"
+        loading="lazy"
+      />
+    </a>
+    {
+      rutas.map(({ link, texto }) => {
+        return (
+          <a
+            href={link}
+            class={`relative px-6 py-2 ${isActive(link) ? "border-effect" : ""}`}
+          >
+            <span class="relative">{texto}</span>
+          </a>
+        );
+      })
+    }
+    <button>svg de usuario</button>
+  </nav>
+</header>
