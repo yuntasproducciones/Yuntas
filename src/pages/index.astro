@@ -1,8 +1,29 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const comentarios = [
+  {
+    nombre: "Kathy Calle",
+    comentario:
+      "¡Increíble,  rediseñaron todo mi local! Ahora derrocha brillo y personalidad.",
+    publicado: "10/10/2024",
+    estrellas: 5,
+  },
+  {
+    nombre: "Fabricio Valle",
+    comentario:
+      "Como siempre, los más confiables del mercado. Nunca me decepcionan con sus productos LED.",
+    publicado: "10/10/2024",
+    estrellas: 5,
+  },
+  {
+    nombre: "Sofia Herrera",
+    comentario:
+      "¡Excelente! Nunca me imaginé que mi salón brillaría tanto. Gracias YUNTAS.",
+    publicado: "10/10/2024",
+    estrellas: 5,
+  },
+];
 ---
 
 <Layout title="Yuntas">
@@ -14,9 +35,78 @@ import Layout from "../layouts/Layout.astro";
     />
     <h1
       class="relative z-10 text-cyan-500 font-bold text-5xl flex flex-col text-center"
+      style="filter: drop-shadow();"
     >
       ESPECIALISTAS
       <span class="text-8xl text-white">EN DISEÑAR TU ESPACIO</span>
     </h1>
+  </section>
+  <div
+    class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center"
+  >
+    <h2>¡SOMOS YUNTAS PRODUCCIONES!</h2>
+  </div>
+  <section
+    class="px-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col items-center"
+  >
+    <button
+      class="my-8 font-bold bg-linear-to-l from-cyan-300 to-cyan-600 px-8 py-2 rounded-full text-xl"
+      >¡Cotiza ahora!</button
+    >
+    <div class="flex flex-col justify-between items-center w-full h-[35rem]">
+      <hr class="w-1/3 border-cyan-400" />
+      <div class="grid grid-cols-2 gap-6 w-full">
+        <div class="rounded-4xl w-full bg-white text-black">
+          <img
+            src="../src/assets/images/inicio/cards/card_1.webp"
+            alt="imagen card wazaa"
+            class="h-96 w-full rounded-t-4xl object-cover object-center"
+          />
+          <p class="w-full text-center italic content-center py-6 px-14">
+            Descubre cómo integrar esta innovadora tecnología en tus proyectos
+            arquitectónicos
+          </p>
+        </div>
+        <div class="rounded-4xl w-full bg-white text-black">
+          <img
+            src="../src/assets/images/inicio/cards/card_2.webp"
+            alt="imagen card wazaa"
+            class="h-96 w-full rounded-t-4xl object-cover object-center"
+          />
+          <p class="w-full text-center italic content-center py-6 px-14">
+            Aprende cómo esta tecnología transforma el ambiente y optimiza el
+            consumo energético
+          </p>
+        </div>
+      </div>
+      <hr class="w-1/3 border-cyan-400" />
+    </div>
+    <div class="py-20 w-full">
+      <h3 class="text-3xl font-semibold flex flex-col text-center mb-20">
+        Tu opinión es importante para <span class="font-extrabold"
+          >NOSOTROS</span
+        >
+      </h3>
+      <div class="w-full flex justify-between">
+        {
+          comentarios.map((comentario) => {
+            return (
+              <div class="relative h-72 w-80 flex flex-col justify-between bg-white text-black rounded-4xl px-16 py-10">
+                <div class="left-6 bg-black text-white rounded-full absolute w-8 h-8 flex justify-center items-center">
+                  <p class="text-lg">{comentario.nombre.charAt(0)}</p>
+                </div>
+                <p class="text-lg">{comentario.nombre}</p>
+                <p>{comentario.comentario}</p>
+                <p class="text-sm text-gray-500 italic">
+                  Publicado: {comentario.publicado}
+                </p>
+                <hr class="border-black" />
+                <p class="text-center">{"⭐".repeat(comentario.estrellas)}</p>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
   </section>
 </Layout>
