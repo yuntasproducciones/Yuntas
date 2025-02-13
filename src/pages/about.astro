@@ -1,4 +1,8 @@
 ---
+import AboutComponent from "../components/about/AboutComponent.astro";
+import MissionCard from "../components/about/MissionCard.astro";
+import ValoresCorporativos from "../components/about/ValoresCorporativos.astro";
+import VisionCard from "../components/about/VisionCard.astro";
 import Layout from "../layouts/Layout.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -20,4 +24,8 @@ import Layout from "../layouts/Layout.astro";
       </span>
     </h1>
   </section>
+  <AboutComponent imageSrc="../src/assets/images/about/image.webp" />
+  <MissionCard />
+  <VisionCard />
+  <ValoresCorporativos />
 </Layout>
