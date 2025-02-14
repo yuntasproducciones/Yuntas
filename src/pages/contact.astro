@@ -1,0 +1,111 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Contacto">
+    <section class="relative w-full h-dvh flex justify-center items-center">
+        <!-- Imagen de fondo -->
+        <img
+                src="../src/assets/images/contact/principal.webp"
+                alt="Fondo de contacto"
+                class="absolute z-0 w-full h-full object-cover object-bottom"
+        />
+
+        <!-- Overlay azul frío oscuro -->
+        <div class="absolute inset-0 bg-[#0d1b2a]/70 z-1"></div>
+
+        <!-- Texto resaltado -->
+        <section>
+            <h1 class="relative z-10 text-[#38d4ff] font-extrabold text-5xl flex flex-col text-center drop-shadow-lg font-['Roboto']">
+                CONOCE NUESTROS MEDIOS DE
+                <span class="text-8xl text-white drop-shadow-[3px_3px_6px_rgba(0,0,0,0.9)] font-['Roboto']">
+                    CONTACTO
+                </span>
+            </h1>
+        </section>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section class="bg-gradient-to-b from-[#000428] via-[#004e92] to-[#00c6ff] px-[200px] py-10 text-white">
+        <div class="flex justify-around items-center mb-6 border-b border-b-sky-300/70 pb-10 relative">
+            <!-- Teléfono -->
+            <div class="flex flex-col items-center">
+                <div class="bg-[#38d4ff] p-3 rounded-full mb-2">
+                    <img src="../src/assets/images/contact/telefono.png" alt="Teléfono" class="w-8 h-8" />
+                </div>
+                <p class="text-lg">+51 912 849 782</p>
+            </div>
+
+            <!-- Línea separadora -->
+            <div class="h-20 w-[1px] bg-sky-700"></div>
+
+            <!-- Ubicación -->
+            <div class="flex flex-col items-center">
+                <div class="bg-[#38d4ff] p-3 rounded-full mb-2">
+                    <img src="../src/assets/images/contact/ubi3.png" alt="Ubicación" class="w-8 h-8" />
+                </div>
+                <p class="text-lg text-center">Urb. Alameda La Rivera Mz F Lt 30</p>
+            </div>
+
+            <!-- Línea separadora -->
+            <div class="h-20 w-[1px] bg-sky-700"></div>
+
+            <!-- Correo Electrónico -->
+            <div class="flex flex-col items-center">
+                <div class="bg-[#38d4ff] p-3 rounded-full mb-2">
+                    <img src="../src/assets/images/contact/email.png" alt="Correo" class="w-8 h-8" />
+                </div>
+                <p class="text-lg">yuntasproducciones@gmail.com</p>
+            </div>
+        </div>
+
+        <!-- Mensaje Final -->
+        <div class="bg-gradient-to-r from-[#0052D4] via-[#2CAAF2] to-[#12EBF5] text-center py-2 px-6  rounded-3xl max-w-[650px] mx-auto">
+            <p class="text-2xl font-bold">¡HOLA!</p>
+            <p class="text-lg">Déjanos tus datos y agenda una visita a nuestro local.</p>
+        </div>
+        <!-- Formulario de Contacto -->
+        <section class="max-w-2xl mx-auto bg-white rounded-lg p-8 shadow-lg mt-10"
+                 style="border-image: linear-gradient(to bottom, #38d4ff, #0052D4, #000000) 1; /* Degradado vertical ajustado */
+                border-radius: 20px;
+                border-width: 20px;
+                border-style: solid;">
+            <h2 class="text-xl font-bold text-center mb-6 text-black">Solicita información</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="nombre" class="block text-gray-700">Nombre*</label>
+                    <input type="text" id="nombre" class="border border-gray-300 p-3 rounded w-full focus:border-[#0052D4] focus:outline-none bg-white text-gray-800" placeholder="Ingresa tu nombre" required />
+                </div>
+                <div class="mb-4">
+                    <label for="apellidos" class="block text-gray-700">Apellidos*</label>
+                    <input type="text" id="apellidos" class="border border-gray-300 p-3 rounded w-full focus:border-[#0052D4] focus:outline-none bg-white text-gray-800" placeholder="Ingresa tus apellidos" required />
+                </div>
+                <div class="mb-4">
+                    <label for="telefono" class="block text-gray-700">Teléfono*</label>
+                    <input type="tel" id="telefono" class="border border-gray-300 p-3 rounded w-full focus:border-[#0052D4] focus:outline-none bg-white text-gray-800" placeholder="Ingresa tu teléfono" required />
+                </div>
+                <div class="mb-4">
+                    <label for="distrito" class="block text-gray-700">Distrito*</label>
+                    <input type="text" id="distrito" class="border border-gray-300 p-3 rounded w-full focus:border-[#0052D4] focus:outline-none bg-white text-gray-800" placeholder="Ingresa tu distrito" required />
+                </div>
+                <div class="mb-4">
+                    <label for="detalle" class="block text-gray-700">Detalle de reclamación</label>
+                    <input type="text" id="detalle" class="border border-gray-300 p-3 rounded w-full focus:border-[#0052D4] focus:outline-none bg-white text-gray-800" placeholder="Detalles de tu reclamación" />
+                </div>
+                <div class="mb-4">
+                    <label for="mensaje" class="block text-gray-700">Mensaje</label>
+                    <textarea id="mensaje" rows="4" class="border border-gray-300 p-3 rounded w-full focus:border-[#0052D4] focus:outline-none bg-white text-gray-800" placeholder="Escribe tu mensaje aquí"></textarea>
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="bg-[#0052D4] hover:bg-[#004bb5] text-white font-bold py-2 px-4 rounded">Enviar</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Mapa -->
+        <h2 class="text-center text-2xl font-bold mt-10">CADA VEZ MÁS CERCA DE TI</h2>
+        <div class="mt-6 flex justify-center">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.5809327052245!2d-76.98307892402178!3d-12.071620842788061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c72bd03bbeb5%3A0x7a8647f5bd79179b!2sUrb.%20Alameda%20La%20Rivera%20Mz%20F%20Lt%2030!5e0!3m2!1ses!2spe!4v1707704865253!5m2!1ses!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </section>
+</Layout>
