@@ -1,0 +1,190 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Contacto">
+  <section class="relative w-full h-dvh flex justify-center items-center">
+    <!-- Imagen de fondo -->
+    <img
+      src="../src/assets/images/contact/principal.webp"
+      alt="Fondo de contacto"
+      class="absolute z-0 w-full h-full object-cover object-bottom"
+    />
+
+    <!-- Overlay azul frío oscuro -->
+    <div class="absolute inset-0 bg-slate-900/70 z-1"></div>
+
+    <!-- Texto resaltado -->
+    <h1
+      class="relative z-10 text-cyan-500 font-extrabold text-5xl flex flex-col text-center sombra-title"
+    >
+      CONOCE NUESTROS MEDIOS DE
+      <span class="text-8xl text-white"> CONTACTO </span>
+    </h1>
+  </section>
+
+  <!-- Sección de Contacto -->
+  <section
+    class="bg-gradient-to-b from-blue-900 to-indigo-950 px-24 py-10 text-white"
+  >
+    <div
+      class="flex justify-around items-center border-b-2 border-b-sky-300 pb-10 relative text-lg"
+    >
+      <!-- Teléfono -->
+      <div class="flex flex-col items-center">
+        <div class="bg-cyan-400 p-3 rounded-full mb-2">
+          <img
+            src="../src/assets/images/contact/telefono.webp"
+            alt="Teléfono"
+            class="w-8 h-8"
+          />
+        </div>
+        <p>+51 912 849 782</p>
+      </div>
+
+      <!-- Línea separadora -->
+      <div class="h-20 w-0.5 bg-sky-300"></div>
+
+      <!-- Ubicación -->
+      <div class="flex flex-col items-center">
+        <div class="bg-cyan-400 p-3 rounded-full mb-2">
+          <img
+            src="../src/assets/images/contact/ubi3.webp"
+            alt="Ubicación"
+            class="w-8 h-8"
+          />
+        </div>
+        <p class="text-center">Urb. Alameda La Rivera Mz F Lt 30</p>
+      </div>
+
+      <!-- Línea separadora -->
+      <div class="h-20 w-0.5 bg-sky-300"></div>
+
+      <!-- Correo Electrónico -->
+      <div class="flex flex-col items-center">
+        <div class="bg-cyan-400 p-3 rounded-full mb-2">
+          <img
+            src="../src/assets/images/contact/email.webp"
+            alt="Correo"
+            class="w-8 h-8"
+          />
+        </div>
+        <p>yuntasproducciones@gmail.com</p>
+      </div>
+    </div>
+
+    <!-- Mensaje Final -->
+    <div class="flex flex-col items-center">
+      <p
+        class="bg-gradient-to-r from-blue-700 to-cyan-500 text-center py-2 px-20 rounded-3xl my-8 text-2xl font-bold flex flex-col"
+      >
+        ¡HOLA!
+        <span class="text-xl font-light">
+          Déjanos tus datos y agenda una visita a nuestro local.
+        </span>
+      </p>
+      <!-- Formulario de Contacto -->
+      <div
+        class="w-5/6 bg-white rounded-4xl p-7 shadow-2xl my-10 bg-linear-to-b from-cyan-500 via-blue-600 to-indigo-950"
+      >
+        <div class="bg-white p-6 rounded-4xl">
+          <h2 class="text-2xl font-semibold text-center mb-6 text-black">
+            Solicita información
+          </h2>
+          <form>
+            <div class="mb-4">
+              <label for="nombre" class="block text-gray-700"
+                >Nombre<span class="text-red-600">*</span></label
+              >
+              <input
+                type="text"
+                id="nombre"
+                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
+                placeholder="Ingresa tu nombre"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="apellidos" class="block text-gray-700"
+                >Apellidos<span class="text-red-600">*</span></label
+              >
+              <input
+                type="text"
+                id="apellidos"
+                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
+                placeholder="Ingresa tus apellidos"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="telefono" class="block text-gray-700"
+                >Teléfono<span class="text-red-600">*</span></label
+              >
+              <input
+                type="tel"
+                id="telefono"
+                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
+                placeholder="Ingresa tu teléfono"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="distrito" class="block text-gray-700"
+                >Distrito<span class="text-red-600">*</span></label
+              >
+              <input
+                type="text"
+                id="distrito"
+                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
+                placeholder="Ingresa tu distrito"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="detalle" class="block text-gray-700"
+                >Detalle de reclamación</label
+              >
+              <input
+                type="text"
+                id="detalle"
+                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
+                placeholder="Detalles de tu reclamación"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="mensaje" class="block text-gray-700">Mensaje</label>
+              <textarea
+                id="mensaje"
+                rows="4"
+                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
+                placeholder="Escribe tu mensaje aquí"></textarea>
+            </div>
+            <div class="flex justify-center">
+              <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-8 rounded-lg transition-all"
+                >Enviar</button
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mapa -->
+    <div>
+      <h2 class="text-center text-4xl font-bold">CADA VEZ MÁS CERCA DE TI</h2>
+      <div class="mt-6 flex justify-center">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.5809327052245!2d-76.98307892402178!3d-12.071620842788061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c72bd03bbeb5%3A0x7a8647f5bd79179b!2sUrb.%20Alameda%20La%20Rivera%20Mz%20F%20Lt%2030!5e0!3m2!1ses!2spe!4v1707704865253!5m2!1ses!2spe"
+          width="600"
+          height="450"
+          style="border:0;"
+          allowfullscreen=""
+          class="rounded-4xl w-full"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+</Layout>
