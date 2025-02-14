@@ -15,7 +15,6 @@ import imagen9 from "../assets/images/products/hologramas_3d.webp";
 import imagen10 from "../assets/images/products/relojes_digitales.webp";
 import imagen11 from "../assets/images/products/pantallas_led.webp";
 import imagen12 from "../assets/images/products/techos_led.webp";
-import "../styles/products.css";
 let productos = [
   { id: 1, url: imagen1, alt: "Letreros Neón LED" },
   { id: 2, url: imagen2, alt: "Sillas y Mesas LED" },
@@ -46,7 +45,7 @@ for (let i = 0; i < productos.length; i += 4) {
   <section class="relative">
     <Picture
       src={imagenPrincipio}
-      formats={["png"]}
+      formats={["webp"]}
       alt="Banner de Productos"
     />
     <div class="absolute inset-0 flex flex-col justify-center items-center">
