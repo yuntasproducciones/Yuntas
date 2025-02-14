@@ -1,0 +1,31 @@
+---
+import AboutComponent from "../components/about/AboutComponent.astro";
+import MissionCard from "../components/about/MissionCard.astro";
+import ValoresCorporativos from "../components/about/ValoresCorporativos.astro";
+import VisionCard from "../components/about/VisionCard.astro";
+import Layout from "../layouts/Layout.astro";
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout title="abaut">
+  <section class="relative w-full h-dvh flex justify-center items-center">
+    <img
+      src="../src/assets/images/about/image.webp"
+      alt=""
+      class="absolute z-0 w-full h-full object-cover object-bottom"
+    />
+    <h1
+      class="relative z-10 text-cyan-500 font-bold text-5xl flex flex-col text-center">
+      TU SOCIO PARA PERSONALIZAR
+      <span class="text-8xl text-white">
+        TU NEGOCIO
+      </span>
+    </h1>
+  </section>
+  <AboutComponent imageSrc="../src/assets/images/about/image.webp" />
+  <MissionCard />
+  <VisionCard />
+  <ValoresCorporativos />
+</Layout>

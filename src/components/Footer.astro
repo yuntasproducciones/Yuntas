@@ -1,0 +1,51 @@
+---
+// Importa los iconos de React Icons
+import { FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp } from "react-icons/fa";
+import { FaTiktok } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
+---
+
+<footer class="bg-[#172649] text-white py-16">
+  <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-10 md:px-20">
+    
+    <!-- Logo y Redes Sociales -->
+    <div class="text-center md:text-left mb-8 md:mb-0">
+      <img src="../src/assets/images/logo_yuntas.webp" alt="Yuntas Logo" class="h-25 mx-auto md:mx-10" />
+      <div class=" top-15 left-15 border-t-1 border-l-2 border-cyan-400 w-54"></div>
+      <div class="flex justify-center md:justify-start gap-3 mt-4 md:mx-5">
+        <a href="#"><FaFacebook className="text-white text-2xl hover:text-blue-500" /></a>
+        <a href="#"><FaInstagram className="text-white text-2xl hover:text-pink-500" /></a>
+        <a href="#"><FaLinkedin className="text-white text-2xl hover:text-blue-400" /></a>
+        <a href="#"><FaWhatsapp className="text-white text-2xl hover:text-green-500" /></a>
+        <a href="#"><FaTiktok  className="text-white text-2xl hover:text-gray-500" /></a>
+      </div>
+    </div>
+
+    <!-- Dirección y Horario -->
+    <div class="text-center md:text-left mb-8 md:mb-0">
+      <h3 class="font-semibold text-lg text-[#98D8DF]">Dirección</h3>
+      <p class="text-gray-300">Urb. Alameda La Rivera Mz F Lt 30</p>
+      <h3 class="font-semibold text-lg mt-4 text-[#98D8DF]">Horario</h3>
+      <p class="text-gray-300">L - V: 9 a.m - 5 p.m</p>
+      <p class="text-gray-300">S: 9 a.m - 2 p.m</p>
+      <p class="text-sm text-white-400 mt-2">Libro de reclamaciones</p>
+    </div>
+
+    <!-- Contacto -->
+    <div class="text-center md:text-left">
+      <h3 class="font-semibold text-lg text-[#98D8DF]">Contacto</h3>
+      <p class="flex items-center justify-center md:justify-start gap-2">
+        <FaWhatsapp className="text-xl text-white-400" /> +51 912 849 782
+      </p>
+      <p class="flex items-center justify-center md:justify-start gap-2 mt-2">
+        <MdEmail className="text-xl text-white-300" /> 
+        <a href="mailto:yuntasproducciones@gmail.com" class="hover:text-blue-400">
+          yuntasproducciones@gmail.com
+        </a>
+      </p>
+    </div>
+  </div>
+
+
+</footer>
+

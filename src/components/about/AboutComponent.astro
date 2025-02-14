@@ -1,0 +1,28 @@
+---
+export interface Props {
+  imageSrc: string;
+}
+---
+
+<section class="relative w-full h-140 flex justify-center bg-[#0a0f2b] px-8">
+  <div class="max-w-5xl flex flex-col md:flex-row items-center gap-6 md:gap-12 text-white ">
+    <!-- Logo -->
+    <div class="flex-shrink-0">
+      <img src="../src/assets/images/logo_yuntas.webp" alt="Logo Yuntas" class="w-32 md:w-60" />
+    </div>
+
+    <!-- Texto -->
+    <div class="text-center md:text-center ">
+      <p class="text-lg md:text-3xl font-light ">
+        En Yuntas Producciones
+        <span class="font-bold text-gray-300">transformamos espacios con soluciones tecnológicas</span> 
+        innovadoras en iluminación y diseño, ofreciendo calidad y vanguardia 
+        <span class="font-bold text-gray-300">para crear experiencias inolvidables</span>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Esquinas decorativas -->
+  <div class="absolute top-15 left-15 border-t-2 border-l-2 border-cyan-400 w-80 h-60"></div>
+  <div class="absolute bottom-15 right-15 border-b-2 border-r-2 border-cyan-400 w-80 h-60"></div>
+</section>

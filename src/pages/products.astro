@@ -42,9 +42,7 @@ for (let i = 0; i < productos.length; i += 4) {
 }
 ---
 
-<>
-    <Layout />
-
+<Layout title="Productos">
     <section class="relative">
         <Picture src={imagenPrincipio} formats={['png']} alt="imagenPrincipio" />
         <div class="absolute inset-0 flex flex-col justify-center items-center">
@@ -69,4 +67,4 @@ for (let i = 0; i < productos.length; i += 4) {
             </div>
           ))}
     </section>
-</>
+</Layout>
