@@ -28,43 +28,32 @@ let productos = [
   { "id": 9, "url": imagen9, "alt": "Hologramas 3D" },
   { "id": 10, "url": imagen10, "alt": "Relojes Digitales" },
   { "id": 11, "url": imagen11, "alt": "Pantallas LED" },
-  { "id": 12, "url": imagen12, "alt": "Techos LED" },
-  { "id": 13, "url": imagen12, "alt": "Techos LED" },
-  { "id": 14, "url": imagen12, "alt": "Techos LED" },
-  { "id": 15, "url": imagen12, "alt": "Techos LED" },
-  { "id": 5, "url": imagen5, "alt": "Túneles LED" },
-  { "id": 5, "url": imagen5, "alt": "Túneles LED" },
-  { "id": 5, "url": imagen5, "alt": "Túneles LED" },
-]
-const groupedProducts = [];
-for (let i = 0; i < productos.length; i += 4) {
-  groupedProducts.push(productos.slice(i, i + 4));
-}
+  { "id": 12, "url": imagen12, "alt": "Techos LED" }
+];
 ---
-
 <Layout title="Productos">
-    <section class="relative">
-        <Picture src={imagenPrincipio} formats={['webp']} alt="imagenPrincipio" />
-        <div class="absolute inset-0 flex flex-col justify-center items-center">
-            <p class="text-[2.5rem] Montserrat font-bold text-[#23C1DE]">DESCUBRE NUESTRA INNOVADORA</p>
-            <p class="text-[4rem] Montserrat font-black text-[#FFFFFF]">LÍNEA DE PRODUCTOS</p>
+    <section class="relative w-full">
+        <Picture src={imagenPrincipio} formats={['webp']} alt="imagenPrincipio" class="w-full h-auto" />
+        <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+            <p class="text-2xl sm:text-4xl font-bold text-[#23C1DE]">DESCUBRE NUESTRA INNOVADORA</p>
+            <p class="text-3xl sm:text-5xl font-black text-white">LÍNEA DE PRODUCTOS</p>
         </div>
     </section>
-    <section class="bg-[#00031E] px-[200px]">
+    <section class="bg-[#00031E] px-4 sm:px-20 lg:px-40 py-10">
         <div class="flex justify-center">
-            <div class="border-b-2 borde_color pt-[50px] mb-[50px] w-1/2"></div>
+            <div class="border-b-2 border-white w-1/2 mb-10"></div>
         </div>
-        <div class="px-[25px]">
-            <p class="text-[3rem] Montserrat font-medium text-[#FFFFFF] text-shadow-white">Nuestros Productos</p>
-            <p class="text-[1.25rem] Montserrat font-medium text-[#FFFFFF] opacity-75">Descubre nuestra innovadora línea de productos</p>
-            <p class="text-[1.563rem] Montserrat font-medium text-[#FFFFFF] opacity-75">Productos LED y 3D</p>
+        <div class="text-center">
+            <p class="text-2xl font-medium text-white">Nuestros Productos</p>
+            <p class="text-lg text-white opacity-75">Descubre nuestra innovadora línea de productos</p>
+            <p class="text-xl text-white opacity-75">Productos LED y 3D</p>
         </div>
-        {groupedProducts.map((row) => (
-            <div class="flex flex-row justify-between border-b-2 borde_color py-[50px] flex-wrap px-[25px]">
-              {row.map((producto) => (
-                <Picture class="w-[207.24px]" src={producto.url} formats={['webp']} alt={producto.alt} />
-              ))}
-            </div>
-          ))}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10">
+            {productos.map((producto) => (
+                <div class="flex justify-center">
+                    <Picture class="w-52 sm:w-64" src={producto.url} formats={['webp']} alt={producto.alt} />
+                </div>
+            ))}
+        </div>
     </section>
 </Layout>
