@@ -4,21 +4,26 @@ import MissionCard from "../components/about/MissionCard.astro";
 import ValoresCorporativos from "../components/about/ValoresCorporativos.astro";
 import VisionCard from "../components/about/VisionCard.astro";
 import Layout from "../layouts/Layout.astro";
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/about/image.webp"
 ---
 
 <Layout title="Sobre Nosotros">
-  <section class="relative w-full h-dvh flex justify-center items-center">
-    <img
-      src="../src/assets/images/about/image.webp"
-      alt=""
-      class="absolute z-0 w-full h-full object-cover object-bottom"
+  <section class="relative">
+    <Picture
+      src={imagen1}
+      formats={["webp"]}
+      alt="Imagen"
+      class="w-full max-h-[100vh]"
     />
-    <h1
-      class="relative z-10 text-cyan-500 font-bold text-5xl flex flex-col text-center sombra-title"
-    >
-      TU SOCIO PARA PERSONALIZAR
-      <span class="text-8xl text-white">TU NEGOCIO</span>
-    </h1>
+    <div class="absolute inset-0 flex flex-col justify-center items-center">
+      <h1 class="text-4xl text-center Montserrat font-bold text-cyan-500 sombra-title">
+        TU SOCIO PARA PERSONALIZAR
+      </h1>
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
+        TU NEGOCIO
+      </h1>
+    </div>
   </section>
   <AboutComponent />
   <MissionCard />
