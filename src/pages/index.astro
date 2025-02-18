@@ -1,5 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/inicio/slider/slider_1.webp";
+import imagen2 from "../assets/images/inicio/cards/card_1.webp";
+import imagen3 from "../assets/images/inicio/cards/card_2.webp";
 
 const comentarios = [
   {
@@ -27,18 +31,21 @@ const comentarios = [
 ---
 
 <Layout title="Yuntas">
-  <section class="relative w-full h-dvh flex justify-center items-center">
-    <img
-      src="../src/assets/images/inicio/slider/slider-1.webp"
-      alt=""
-      class="absolute z-0 w-full h-full object-cover object-bottom"
+  <section class="relative">
+    <Picture
+      src={imagen1}
+      formats={["webp"]}
+      alt="a"
+      class="w-full max-h-[100vh]"
     />
-    <h1
-      class="relative z-10 text-cyan-500 font-bold text-5xl flex flex-col text-center sombra-title"
-    >
-      ESPECIALISTAS
-      <span class="text-8xl text-white">EN DISEÑAR TU ESPACIO</span>
-    </h1>
+    <div class="absolute inset-0 flex flex-col justify-center items-center">
+      <h1 class="text-4xl text-center Montserrat font-bold text-cyan-500 sombra-title">
+        ESPECIALISTAS
+      </h1>
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
+        EN DISEÑAR TU ESPACIO
+      </h1>
+    </div>
   </section>
   <div
     class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center"
@@ -56,8 +63,9 @@ const comentarios = [
       <hr class="w-1/3 border-cyan-400" />
       <div class="grid grid-cols-2 gap-6 w-full">
         <div class="rounded-4xl w-full bg-white text-black">
-          <img
-            src="../src/assets/images/inicio/cards/card_1.webp"
+          <Picture
+            src={imagen2}
+            formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"
           />
@@ -67,8 +75,9 @@ const comentarios = [
           </p>
         </div>
         <div class="rounded-4xl w-full bg-white text-black">
-          <img
-            src="../src/assets/images/inicio/cards/card_2.webp"
+          <Picture
+            src={imagen3}
+            formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"
           />

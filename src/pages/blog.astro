@@ -1,6 +1,8 @@
 ---
 import ArticuloCard from "../components/blog/ArticuloCard.astro";
 import Layout from "../layouts/Layout.astro";
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/blog/banner_blog.webp";
 const art_cards = [
   {
     title: "PANELES PVC",
@@ -23,23 +25,17 @@ const art_cards = [
 ---
 
 <Layout title="Blog">
-  <section class="relative w-full h-dvh flex justify-center items-center">
-    <img
-      src="../src/assets/images/blog/banner_blog.webp"
-      alt=""
-      class="absolute z-0 w-full h-full object-cover object-bottom"
-    />
-    <h1
-      class="relative z-10 text-white font-bold text-5xl flex flex-col text-center sombra-title"
-    >
-      Blog Yuntero
-    </h1>
+  <section class="relative">
+    <Picture src={imagen1} formats={["webp"]} alt="Imagen" class="w-full max-h-[100vh]" />
+    <div class="absolute inset-0 flex flex-col justify-center items-center">
+      <h1 class="text-4xl text-center Montserrat font-bold text-cyan-500 sombra-title">
+        Blog Yuntero
+      </h1>
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
+        DESCUBRE MÁS SOBRE NUESTROS PRODUCTOS
+      </h1>
+    </div>
   </section>
-  <div
-    class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center"
-  >
-    <h2>DESCUBRE MAS SOBRE NUESTROS PRODUCTOS</h2>
-  </div>
   <section
     class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col"
   >
