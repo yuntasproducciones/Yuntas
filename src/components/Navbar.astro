@@ -1,5 +1,6 @@
 ---
 import "../styles/navbar.css";
+import BurgerMenu from "./BurgerMenu";
 const isActive = (path: string) => Astro.url.pathname === path;
 const rutas = [
   { link: "/", texto: "INICIO" },
@@ -7,19 +8,19 @@ const rutas = [
   { link: "/about", texto: "NOSOTROS" },
   { link: "/blog", texto: "BLOG" },
   { link: "/contact", texto: "CONTACTO" },
-
 ];
 ---
 
-<header class="absolute w-full z-20">
+<header class="fixed w-full z-20">
   <nav
-    class="w-full grid grid-cols-7 bg-linear-to-b items-center place-items-center from-slate-900/85 from-50% py-2 text-white font-semibold"
+    class="relative w-full grid lg:grid-cols-7 grid-cols-3 bg-linear-to-b from-slate-900/85 from-50% items-center h-32 px-10 lg:px-0 lg:place-items-center py-2 text-white font-semibold"
   >
+    <BurgerMenu links={rutas} client:load />
     <a href="/" class="h-16">
       <img
         src="../src/assets/images/logo_yuntas.webp"
         alt="Logo de Yuntas"
-        class="w-full h-full"
+        class="h-full justify-self-center"
       />
     </a>
     {
@@ -27,13 +28,15 @@ const rutas = [
         return (
           <a
             href={link}
-            class={`relative px-6 py-2 ${isActive(link) ? "border-effect" : ""}`}
+            class={`hidden lg:block relative px-6 py-2 ${isActive(link) ? "border-effect" : ""}`}
           >
             <span class="relative">{texto}</span>
           </a>
         );
       })
     }
-    <button>svg de usuario</button>
+    <button class="lg:justify-self-center justify-self-end"
+      >svg de usuario</button
+    >
   </nav>
 </header>
