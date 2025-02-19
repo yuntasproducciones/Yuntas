@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const images = ["esp_1.webp", "esp_2.webp", "esp_3.webp", "esp_4.webp"];
 
 const Fader = ({ nombreProducto }) => {
+    const productoRuta = nombreProducto.replace(/\s+/g, "");
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
@@ -17,7 +18,7 @@ const Fader = ({ nombreProducto }) => {
             {images.map((img, i) => (
                 <img
                     key={i}
-                    src={`../src/assets/images/products/${nombreProducto}/especificaciones/${img}`} // Ruta corregida
+                    src={`/products/${productoRuta}/especificaciones/${img}`} // Ruta corregida
                     alt={img}
                     className={`absolute top-0 left-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${i === index ? "opacity-100" : "opacity-0"}`}
                 />
