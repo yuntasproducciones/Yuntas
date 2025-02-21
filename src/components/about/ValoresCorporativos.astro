@@ -1,20 +1,29 @@
 ---
+import { Picture } from "astro:assets";
+import imagen1 from "../../assets/images/about/valor_0.webp"
+import imagen2 from "../../assets/images/about/valor_1.webp"
+import imagen3 from "../../assets/images/about/valor_2.webp"
+import imagen4 from "../../assets/images/about/valor_3.webp"
 const valores = [
   {
     light: "Somos un",
     bold: "EQUIPO",
+    url: imagen1,
   },
   {
     light: "Velamos por",
     bold: "EL CLIENTE",
+    url: imagen2,
   },
   {
     light: "Somos",
     bold: "RESPETUOSOS",
+    url: imagen3,
   },
   {
     light: "Orientación",
     bold: "AL CLIENTE",
+    url: imagen4,
   },
 ];
 ---
@@ -32,11 +41,11 @@ const valores = [
   <div class="bg-cyan-500 py-24">
     <div class="max-w-4xl mx-auto flex justify-between items-center text-white">
       {
-        valores.map((valor, index) => {
+        valores.map((valor) => {
           return (
             <div class="flex flex-col items-center gap-2 text-center text-2xl font-bold">
-              <img
-                src={`../src/assets/images/about/valor_${index}.webp`}
+              <Picture
+                src={valor.url}
                 alt={`Imagen del Valor: ${valor.light + " " + valor.bold}`}
                 class="w-32 h-32"
               />
