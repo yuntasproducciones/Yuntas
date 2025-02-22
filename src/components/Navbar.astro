@@ -9,6 +9,8 @@ const rutas = [
   { link: "/blog", texto: "BLOG" },
   { link: "/contact", texto: "CONTACTO" },
 ];
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/logo_yuntas.webp";
 ---
 
 <header class="fixed w-full z-20">
@@ -17,10 +19,10 @@ const rutas = [
   >
     <BurgerMenu links={rutas} client:load />
     <a href="/" class="h-16 2xl:h-28">
-      <img
-        src="../src/assets/images/logo_yuntas.webp"
+      <Picture
+        src={imagen1}
         alt="Logo de Yuntas"
-        class="h-full justify-self-center"
+        class="h-full w-auto justify-self-center"
       />
     </a>
     {
