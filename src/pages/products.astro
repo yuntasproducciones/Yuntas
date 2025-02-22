@@ -1,7 +1,7 @@
 ---
-import Navbar from "../components/Navbar.astro";
+import ProductCard from "../components/products/ProductCard.astro";
 import Layout from "../layouts/Layout.astro";
-import { Picture } from 'astro:assets';
+import { Picture } from "astro:assets";
 import imagenPrincipio from "../assets/images/products/principio.webp";
 import imagen1 from "../assets/images/products/letreros_neon_led.webp";
 import imagen2 from "../assets/images/products/sillas_y_mesas_led.webp";
@@ -15,45 +15,73 @@ import imagen9 from "../assets/images/products/hologramas_3d.webp";
 import imagen10 from "../assets/images/products/relojes_digitales.webp";
 import imagen11 from "../assets/images/products/pantallas_led.webp";
 import imagen12 from "../assets/images/products/techos_led.webp";
-import "../styles/products.css";
 let productos = [
-  { "id": 1, "url": imagen1, "alt": "Letreros Neón LED" },
-  { "id": 2, "url": imagen2, "alt": "Sillas y Mesas LED" },
-  { "id": 3, "url": imagen3, "alt": "Pisos LED" },
-  { "id": 4, "url": imagen4, "alt": "Barras Pixel LED" },
-  { "id": 5, "url": imagen5, "alt": "Túneles LED" },
-  { "id": 6, "url": imagen6, "alt": "Menu Boards" },
-  { "id": 7, "url": imagen7, "alt": "Letras Pintadas" },
-  { "id": 8, "url": imagen8, "alt": "Displays" },
-  { "id": 9, "url": imagen9, "alt": "Hologramas 3D" },
-  { "id": 10, "url": imagen10, "alt": "Relojes Digitales" },
-  { "id": 11, "url": imagen11, "alt": "Pantallas LED" },
-  { "id": 12, "url": imagen12, "alt": "Techos LED" }
+  { id: 1, url: imagen1, alt: "Letreros Neón LED" },
+  { id: 2, url: imagen2, alt: "Sillas y Mesas LED" },
+  { id: 3, url: imagen3, alt: "Pisos LED" },
+  { id: 4, url: imagen4, alt: "Barras Pixel LED" },
+  { id: 5, url: imagen5, alt: "Túneles LED" },
+  { id: 6, url: imagen6, alt: "Menu Boards" },
+  { id: 7, url: imagen7, alt: "Letras Pintadas" },
+  { id: 8, url: imagen8, alt: "Displays" },
+  { id: 9, url: imagen9, alt: "Hologramas 3D" },
+  { id: 10, url: imagen10, alt: "Relojes Digitales" },
+  { id: 11, url: imagen11, alt: "Pantallas LED" },
+  { id: 12, url: imagen12, alt: "Techos LED" },
+  { id: 13, url: imagen12, alt: "Techos LED" },
+  { id: 14, url: imagen12, alt: "Techos LED" },
+  { id: 15, url: imagen12, alt: "Techos LED" },
+  { id: 5, url: imagen5, alt: "Túneles LED" },
+  { id: 5, url: imagen5, alt: "Túneles LED" },
+  { id: 5, url: imagen5, alt: "Túneles LED" },
 ];
+const groupedProducts = [];
+for (let i = 0; i < productos.length; i += 4) {
+  groupedProducts.push(productos.slice(i, i + 4));
+}
 ---
 <Layout title="Productos">
-    <section class="relative w-full">
-        <Picture src={imagenPrincipio} formats={['webp']} alt="imagenPrincipio" class="w-full h-auto" />
-        <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-            <p class="text-2xl sm:text-4xl font-bold text-[#23C1DE]">DESCUBRE NUESTRA INNOVADORA</p>
-            <p class="text-3xl sm:text-5xl font-black text-white">LÍNEA DE PRODUCTOS</p>
+  <section class="relative">
+    <Picture
+      src={imagenPrincipio}
+      formats={["webp"]}
+      alt="Banner de Productos"
+      class="w-full max-h-[100vh]"
+    />
+    <div class="absolute inset-0 flex flex-col justify-center items-center">
+      <h1 class="text-4xl text-center Montserrat font-bold text-cyan-500 sombra-title">
+        DESCUBRE NUESTRA INNOVADORA
+      </h1>
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
+        LÍNEA DE PRODUCTOS
+      </h1>
+    </div>
+  </section>
+  <section
+    class="w-full bg-linear-to-b from-blue-900 to-indigo-950 px-48 py-20"
+  >
+    <hr class="w-2/4 border-cyan-400 place-self-center mb-16" />
+    <div>
+      <h2 class="text-5xl Montserrat font-medium text-white text-shadow-white">
+        Nuestros Productos
+      </h2>
+      <p class="text-xl Montserrat font-medium text-white/75">
+        Descubre nuestra innovadora línea de productos
+      </p>
+    </div>
+    <div class="mt-10">
+      <h3 class="text-2xl Montserrat font-medium text-white/75">
+        Productos LED y 3D
+      </h3>
+    </div>
+    {
+      groupedProducts.map((row) => (
+        <div class="flex flex-row justify-between border-b-2 border-cyan-300/50 py-12 flex-wrap">
+          {row.map((producto) => (
+            <ProductCard {...producto} />
+          ))}
         </div>
-    </section>
-    <section class="bg-[#00031E] px-4 sm:px-20 lg:px-40 py-10">
-        <div class="flex justify-center">
-            <div class="border-b-2 border-white w-1/2 mb-10"></div>
-        </div>
-        <div class="text-center">
-            <p class="text-2xl font-medium text-white">Nuestros Productos</p>
-            <p class="text-lg text-white opacity-75">Descubre nuestra innovadora línea de productos</p>
-            <p class="text-xl text-white opacity-75">Productos LED y 3D</p>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10">
-            {productos.map((producto) => (
-                <div class="flex justify-center">
-                    <Picture class="w-52 sm:w-64" src={producto.url} formats={['webp']} alt={producto.alt} />
-                </div>
-            ))}
-        </div>
-    </section>
+      ))
+    }
+  </section>
 </Layout>

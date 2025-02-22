@@ -1,21 +1,62 @@
-<section class="bg-cyan-500 py-20">
-    <div class="max-w-4xl mx-auto flex justify-between items-center text-white">
-      <div class="flex flex-col items-center space-y-2">
-        <img src="../src/assets/images/about/equipo.webp" alt="Equipo" class="w-20 h-20" />
-        <p class="text-center text-base font-bold">Somos un <br> <span class="font-extrabold">EQUIPO</span></p>
-      </div>
-      <div class="flex flex-col items-center space-y-2">
-        <img src="../src/assets/images/about/cliente.webp" alt="Cliente" class="w-20 h-20" />
-        <p class="text-center text-base font-bold">Velamos por <br> <span class="font-extrabold">EL CLIENTE</span></p>
-      </div>
-      <div class="flex flex-col items-center space-y-2">
-        <img src="../src/assets/images/about/apreton-de-manos.webp" alt="Respeto" class="w-20 h-20" />
-        <p class="text-center text-base font-bold">Somos <br> <span class="font-extrabold">RESPETUOSOS</span></p>
-      </div>
-      <div class="flex flex-col items-center space-y-2">
-        <img src="../src/assets/images/about/orientacion.webp" alt="Orientación" class="w-20 h-20" />
-        <p class="text-center text-base font-bold">Orientación <br> <span class="font-extrabold">AL CLIENTE</span></p>
-      </div>
+---
+import { Picture } from "astro:assets";
+import imagen1 from "../../assets/images/about/valor_0.webp"
+import imagen2 from "../../assets/images/about/valor_1.webp"
+import imagen3 from "../../assets/images/about/valor_2.webp"
+import imagen4 from "../../assets/images/about/valor_3.webp"
+const valores = [
+  {
+    light: "Somos un",
+    bold: "EQUIPO",
+    url: imagen1,
+  },
+  {
+    light: "Velamos por",
+    bold: "EL CLIENTE",
+    url: imagen2,
+  },
+  {
+    light: "Somos",
+    bold: "RESPETUOSOS",
+    url: imagen3,
+  },
+  {
+    light: "Orientación",
+    bold: "AL CLIENTE",
+    url: imagen4,
+  },
+];
+---
+
+<section>
+  <div
+    class="bg-linear-to-b from-blue-950 from-65% bg-slate-900 w-full py-15 flex justify-center"
+  >
+    <div
+      class="text-3xl bg-cyan-500 text-white font-extrabold px-6 py-2 rounded-full"
+    >
+      Nuestros valores
     </div>
-  </section>
-  
+  </div>
+  <div class="bg-cyan-500 py-24">
+    <div class="max-w-4xl mx-auto flex justify-between items-center text-white">
+      {
+        valores.map((valor) => {
+          return (
+            <div class="flex flex-col items-center gap-2 text-center text-2xl font-bold">
+              <Picture
+                src={valor.url}
+                alt={`Imagen del Valor: ${valor.light + " " + valor.bold}`}
+                class="w-32 h-32"
+              />
+              <p class="flex flex-col">
+                {valor.light}
+                <span class="font-extrabold">{valor.bold}</span>
+              </p>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

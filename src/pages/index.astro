@@ -1,5 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/inicio/slider/slider_1.webp";
+import imagen2 from "../assets/images/inicio/cards/card_1.webp";
+import imagen3 from "../assets/images/inicio/cards/card_2.webp";
 
 // Lista de comentarios de usuarios, sin duplicados y con id único
 const comentarios = [
@@ -31,51 +35,61 @@ const comentarios = [
 ---
 
 <Layout title="Yuntas">
-  <!-- Sección del banner principal -->
-  <section class="relative w-full h-screen flex justify-center items-center">
-    <img
-      src="../src/assets/images/inicio/slider/slider-1.webp"
-      alt="Diseño de iluminación"
-      class="absolute z-0 w-full h-full object-cover object-bottom"
+  <section class="relative">
+    <Picture
+      src={imagen1}
+      formats={["webp"]}
+      alt="a"
+      class="w-full max-h-[100vh]"
     />
-    <h1 class="relative z-10 text-cyan-500 font-bold text-4xl md:text-6xl text-center drop-shadow-lg">
-      ESPECIALISTAS
-      <span class="block text-6xl md:text-8xl text-white">EN DISEÑAR TU ESPACIO</span>
-    </h1>
+    <div class="absolute inset-0 flex flex-col justify-center items-center">
+      <h1 class="text-4xl text-center Montserrat font-bold text-cyan-500 sombra-title">
+        ESPECIALISTAS
+      </h1>
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
+        EN DISEÑAR TU ESPACIO
+      </h1>
+    </div>
   </section>
 
   <!-- Mensaje central -->
   <div class="w-full bg-white text-blue-950 text-center text-2xl md:text-3xl font-extrabold py-6">
     <h2>¡SOMOS YUNTAS PRODUCCIONES!</h2>
   </div>
-
-  <!-- Sección de contenido -->
-  <section class="px-6 md:px-24 text-white bg-gradient-to-b from-blue-900 to-indigo-950 flex flex-col items-center">
-    <button class="my-8 font-bold bg-gradient-to-l from-cyan-300 to-cyan-600 px-6 md:px-8 py-2 rounded-full text-lg md:text-xl">
-      ¡Cotiza ahora!
-    </button>
-
-    <!-- Tarjetas informativas -->
-    <div class="flex flex-col md:flex-row justify-center items-center gap-6 w-full max-w-5xl">
-      <div class="rounded-2xl bg-white text-black overflow-hidden w-full md:w-1/2">
-        <img
-          src="../src/assets/images/inicio/cards/card_1.webp"
-          alt="Ejemplo de iluminación LED"
-          class="h-64 md:h-96 w-full object-cover"
-        />
-        <p class="text-center italic py-6 px-6 md:px-14">
-          Descubre cómo integrar esta innovadora tecnología en tus proyectos arquitectónicos
-        </p>
-      </div>
-      <div class="rounded-2xl bg-white text-black overflow-hidden w-full md:w-1/2">
-        <img
-          src="../src/assets/images/inicio/cards/card_2.webp"
-          alt="Iluminación decorativa"
-          class="h-64 md:h-96 w-full object-cover"
-        />
-        <p class="text-center italic py-6 px-6 md:px-14">
-          Aprende cómo esta tecnología transforma el ambiente y optimiza el consumo energético
-        </p>
+  <section
+    class="px-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col items-center"
+  >
+    <button
+      class="my-8 font-bold bg-linear-to-l from-cyan-300 to-cyan-600 px-8 py-2 rounded-full text-xl"
+      >¡Cotiza ahora!</button
+    >
+    <div class="flex flex-col justify-between items-center w-full h-[35rem]">
+      <hr class="w-1/3 border-cyan-400" />
+      <div class="grid grid-cols-2 gap-6 w-full">
+        <div class="rounded-4xl w-full bg-white text-black">
+          <Picture
+            src={imagen2}
+            formats={["webp"]}
+            alt="imagen card wazaa"
+            class="h-96 w-full rounded-t-4xl object-cover object-center"
+          />
+          <p class="w-full text-center italic content-center py-6 px-14">
+            Descubre cómo integrar esta innovadora tecnología en tus proyectos
+            arquitectónicos
+          </p>
+        </div>
+        <div class="rounded-4xl w-full bg-white text-black">
+          <Picture
+            src={imagen3}
+            formats={["webp"]}
+            alt="imagen card wazaa"
+            class="h-96 w-full rounded-t-4xl object-cover object-center"
+          />
+          <p class="w-full text-center italic content-center py-6 px-14">
+            Aprende cómo esta tecnología transforma el ambiente y optimiza el
+            consumo energético
+          </p>
+        </div>
       </div>
     </div>
 
