@@ -1,0 +1,40 @@
+{
+    "title": "Blog Paneles PVC",
+    "bannerImage": "../assets/images/blog/banner_blog.webp",
+    "header": {
+      "title": "ARTÍCULOS"
+    },
+    "content": {
+      "heading": "PANELES ENMADERADOS",
+      "subheading": "Un toque de elegancia en la decoración de locales y negocios",
+      "sections": [
+        {
+          "image": "../assets/images/blog/paneles_enmaderados/wall_panel.webp",
+          "alt": "Wall Panel"
+        },
+        {
+          "text": "En los últimos años, los paneles enmaderados se han consolidado como una de las opciones más populares para decoración de locales y negocios. Estos elementos no solo aportan un toque de sofisticación, sino que también crean ambientes acogedores y cálidos que transforman completamente un espacio."
+        },
+        {
+          "image": "../assets/images/blog/paneles_enmaderados/paneles_enmaderados.webp",
+          "alt": "Paneles enmaderados"
+        },
+        {
+          "text": "En lugares como restaurantes, los paneles enmaderados contribuyen a crear una atmósfera relajante y agradable, invitando a los comensales a disfrutar su estancia. Por otro lado, en tiendas u oficinas, los paneles proporcionan distinción y modernidad, equilibrando elegancia con funcionalidad. Además, sus características acústicas permiten un ambiente tranquilo que aísla sonidos exteriores."
+        },
+        {
+          "image": "../assets/images/blog/paneles_enmaderados/panel_madera_1.webp",
+          "alt": "Panel de madera"
+        },
+        {
+          "text": "Los paneles enmaderados son excelentes para renovar la decoración de un local. Su versatilidad, estética y funcionalidad los convierten en un recurso ideal para transformar cualquier espacio."
+        }
+      ]
+    },
+    "cta": {
+      "text": "¿Quieres saber más?",
+      "buttonText": "Contáctanos",
+      "buttonLink": "/contact"
+    }
+  }
+  
