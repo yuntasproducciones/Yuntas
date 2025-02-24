@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Picture } from "astro:assets";
+
+// Importamos las imágenes de forma estática para aprovechar la optimización de Astro
+import wallPanel from "../assets/images/blog/paneles_enmaderados/wall_panel.webp";
+import panelesEnmaderados from "../assets/images/blog/paneles_enmaderados/paneles_enmaderados.webp";
+import panelMadera from "../assets/images/blog/paneles_enmaderados/panel_madera_1.webp";
+import bannerBlog from "../assets/images/blog/banner_blog.webp";
+
+// Creamos un mapeo entre las rutas definidas en el JSON y las importaciones
+const imageMapping = {
+  "../assets/images/blog/paneles_enmaderados/wall_panel.webp": wallPanel,
+  "../assets/images/blog/paneles_enmaderados/paneles_enmaderados.webp": panelesEnmaderados,
+  "../assets/images/blog/paneles_enmaderados/panel_madera_1.webp": panelMadera,
+  "../assets/images/blog/banner_blog.webp": bannerBlog
+};
+
+// Importamos el JSON con la información del artículo
+import articleData from "../utils/article.json";
+const { title, bannerImage, header, content, cta } = articleData;
+---
+
+<Layout title={title}>
+  {/* Banner principal */}
+  <section class="relative">
+    <Picture src={imageMapping[bannerImage as keyof typeof imageMapping]} alt="" class="w-full max-h-[100vh]" />
+    <div class="absolute inset-0 flex flex-col justify-center items-center">
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
+        {title}
+      </h1>
+    </div>
+  </section>
+
+  {/* Encabezado de sección */}
+  <div class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center">
+    <h2 class="text-5xl">{header.title}</h2>
+  </div>
+
+  {/* Contenido del artículo */}
+  <section class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col">
+    <div class="flex flex-col items-center">
+      <h3 class="text-5xl font-bold text-center mb-[30px]">{content.heading}</h3>
+      <p class="text-center font-bold text-4xl mb-[80px]">{content.subheading}</p>
+      <div class="flex flex-col items-center lg:block lg:columns-2 gap-16 max-w-[1100px]">
+        {content.sections.map((section) => {
+          if (section.image) {
+            return (
+              <Picture
+                src={imageMapping[section.image as keyof typeof imageMapping]}
+                formats={["webp"]}
+                alt={section.alt}
+              />
+            );
+          } else if (section.text) {
+            return (
+              <p class="text-justify Montserrat text-2xl py-[40px]">
+                {section.text}
+              </p>
+            );
+          }
+          return null;
+        })}
+      </div>
+      <p class="text-3xl Montserrat font-semibold mt-[150px]">{cta.text}</p>
+      <a
+        href={cta.buttonLink}
+        class="mt-[20px] text-4xl bg-linear-to-r from-[#2FEBFF] to-[#0EADCA] rounded-[50px] w-[350px] h-[88px] font-black flex items-center justify-center"
+      >
+        {cta.buttonText}
+      </a>
+    </div>
+  </section>
+</Layout>
+

@@ -40,19 +40,19 @@ for (let i = 0; i < productos.length; i += 4) {
   groupedProducts.push(productos.slice(i, i + 4));
 }
 ---
-
 <Layout title="Productos">
   <section class="relative">
     <Picture
       src={imagenPrincipio}
       formats={["webp"]}
       alt="Banner de Productos"
+      class="w-full max-h-[100vh]"
     />
     <div class="absolute inset-0 flex flex-col justify-center items-center">
-      <h1 class="text-4xl Montserrat font-bold text-cyan-500 sombra-title">
+      <h1 class="text-4xl text-center Montserrat font-bold text-cyan-500 sombra-title">
         DESCUBRE NUESTRA INNOVADORA
       </h1>
-      <h1 class="text-7xl Montserrat font-black text-white sombra-title">
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
         LÍNEA DE PRODUCTOS
       </h1>
     </div>
