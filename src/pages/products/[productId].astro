@@ -1,7 +1,14 @@
 ---
-import Picture from "astro/components/Picture.astro";
+import { Picture } from "astro:assets";
 import Fader from "../../components/products/Fader";
 import Layout from "../../layouts/Layout.astro";
+import imagen1 from "../../../public/products/BarrasPixelLED/beneficios.webp"
+import imagen2 from "../../../public/products/PisosLED/beneficios.webp"
+import imagen3 from "../../../public/products/SillasyMesasLED/beneficios.webp"
+import imagen4 from "../../../public/products/BarrasPixelLED/beneficios.webp"
+import imagen5 from "../../../public/products/PisosLED/beneficios.webp"
+import imagen6 from "../../../public/products/SillasyMesasLED/beneficios.webp"
+import { MdPictureAsPdf } from "react-icons/md";
 
 export const productos = [
   {
@@ -20,6 +27,8 @@ export const productos = [
       "Brinda personalidad",
       "Atractivo visual",
     ],
+    imagen_beneficios_url: imagen1,
+    imagen_banner_url: imagen4,
   },
   {
     id: 2,
@@ -37,6 +46,8 @@ export const productos = [
       "Toque exclusivo a tu evento",
       "Adaptable a tu estilo",
     ],
+    imagen_beneficios_url: imagen3,
+    imagen_banner_url: imagen6,
   },
   {
     id: 3,
@@ -54,6 +65,8 @@ export const productos = [
       "Flexibilidad de diseños",
       "Aumento de visibilidad",
     ],
+    imagen_beneficios_url: imagen2,
+    imagen_banner_url: imagen5,
   },
   {
     id: 4,
@@ -71,6 +84,8 @@ export const productos = [
       "Personalización rápida",
       "Alto atractivo visual",
     ],
+    imagen_beneficios_url: imagen1,
+    imagen_banner_url: imagen4,
   },
 ];
 
@@ -95,23 +110,33 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
 
 <Layout title={producto.nombre}>
   <section class="w-full h-dvh grid grid-rows-[90%_10%]">
-    <img
-      src={`/products/${productoRuta}/banner.webp`}
+    <Picture
+      src={producto.imagen_banner_url}
       alt={`Imagen de ${producto.nombre}`}
       class="w-full h-full object-cover"
     />
     <h1
-      class="w-full bg-white text-blue-950 place-content-center font-extrabold text-5xl text-center"
+      class="w-full bg-white text-blue-950 place-content-center font-extrabold text-center text-3xl lg:text-5xl 2xl:text-7xl"
     >
       {producto.nombre}
     </h1>
   </section>
   <section class="bg-linear-to-b from-blue-900 to-indigo-950 text-white">
-    <div class="grid grid-cols-2 py-16 px-24 place-items-center">
+    <div
+      class="grid grid-cols-2 py-8 sm:px-2 lg:py-10 2xl:py-16 lg:px-12 place-items-center"
+    >
       <Fader nombreProducto={producto.nombre} client:load />
-      <div class="flex flex-col justify-evenly px-10 w-full h-full">
-        <h2 class="text-4xl font-extrabold text-center">Especificaciones</h2>
-        <ul class="list-disc text-xl">
+      <div
+        class="flex flex-col justify-evenly ps-6 pe-2 sm:px-7 lg:px-10 2xl:px-16 w-full h-full"
+      >
+        <h2
+          class="text-sm sm:text-xl md:text-2xl lg:text-4xl 2xl:text-6xl font-extrabold text-center"
+        >
+          Especificaciones
+        </h2>
+        <ul
+          class="list-disc text-xs sm:text-md md:text-base lg:text-xl xl:text-2xl 2xl:text-4xl"
+        >
           {
             producto.especificaciones.map((item) => {
               return <li class="my-6">{item}</li>;
@@ -120,16 +145,32 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
         </ul>
       </div>
     </div>
-    <div class="text-blue-950 bg-white w-full py-10 text-center px-24">
-      <h2 class="text-4xl font-extrabold">Información</h2>
-      <p class="whitespace-break-spaces font-semibold text-xl my-5">
+    <div
+      class="text-blue-950 bg-white w-full py-6 text-center px-2 lg:px-12 2xl:py-14"
+    >
+      <h2 class="text-2xl md:text-3xl lg:text-4xl 2xl:text-6xl font-extrabold">
+        Información
+      </h2>
+      <p
+        class="whitespace-break-spaces font-semibold my-5 text-sm md:text-base lg:text-xl xl:text-2xl 2xl:text-4xl"
+      >
         {producto.info}
       </p>
     </div>
-    <div class="grid grid-cols-2 py-16 px-24 place-items-center">
-      <div class="flex flex-col justify-evenly px-10 w-full h-full">
-        <h2 class="text-4xl font-extrabold text-center">Beneficios</h2>
-        <ul class="list-disc text-xl">
+    <div
+      class="grid grid-cols-2 py-8 sm:px-2 lg:py-10 lg:px-12 place-items-center"
+    >
+      <div
+        class="flex flex-col justify-evenly ps-6 pe-2 sm:px-7 lg:px-10 2xl:px-16 w-full h-full"
+      >
+        <h2
+          class="text-sm sm:text-xl md:text-2xl lg:text-4xl 2xl:text-6xl font-extrabold text-center"
+        >
+          Beneficios
+        </h2>
+        <ul
+          class="list-disc text-xs sm:text-md md:text-base lg:text-xl xl:text-2xl 2xl:text-4xl"
+        >
           {
             producto.beneficios.map((item) => {
               return <li class="my-6">{item}</li>;
@@ -137,10 +178,10 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
           }
         </ul>
       </div>
-      <img
-        src=`/products/${productoRuta}/beneficios.webp`
+      <Picture
+        src={producto.imagen_beneficios_url}
         alt=`Imagen de ${producto.nombre} `
-        class="rounded-4xl h-96 w-80 shadow-2xl object-cover object-center"
+        class="rounded-4xl h-56 lg:h-80 2xl:h-[30rem] w-full lg:w-11/12 shadow-2xl object-cover object-center"
       />
     </div>
   </section>

@@ -1,0 +1,31 @@
+---
+let isOpen = true;
+---
+
+<div id="lightbox" class={`fixed inset-0 flex items-center justify-center bg-black/50 z-50 ${isOpen ? '' : 'hidden'}`}>
+  <div class="relative bg-white rounded-2xl shadow-lg max-w-lg flex overflow-hidden">
+    <!-- Imagen -->
+    <div class="w-1/2">
+      <img src="../src/assets/images/emergente/em11.webp" alt="Emer Letrero" class="h-full w-full object-cover">
+    </div>
+    
+    <!-- Formulario -->
+    <div class="w-1/2 bg-[#293296] p-6 text-white relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center">✕</button>
+      <h2 class="text-2xl font-semibold italic">Accede<br><span class="text-5xl font-bold">Ofertas<br></span><span class="text-4xl font-semibold">Exclusivas</span></h2>
+      
+      <form class="mt-4">
+        <label class="block text-lg font-bold">Nombre</label>
+        <input type="text" class="w-full px-3 py-1 rounded-full bg-white text-black mb-4">
+
+        <label class="block text-lg font-bold">Teléfono</label>
+        <input type="text" class="w-full px-3 py-1 rounded-full bg-white text-black mb-4">
+
+        <label class="block text-lg font-bold">Correo</label>
+        <input type="email" class="w-full px-3 py-1 rounded-full bg-white text-black mb-4">
+
+        <button class="w-full bg-[#172649] text-white-800 text-2xl border py-3 rounded-lg font-bold">Regístrate ya</button>
+      </form>
+    </div>
+  </div>
+</div>

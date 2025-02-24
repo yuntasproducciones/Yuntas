@@ -1,19 +1,24 @@
 ---
+
+// import EmerTechos from "../components/Lightboxs/EmerTechos.astro"; SE importo el componente de la ventana emergente
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagen1 from "../assets/images/inicio/slider/slider_1.webp";
 import imagen2 from "../assets/images/inicio/cards/card_1.webp";
 import imagen3 from "../assets/images/inicio/cards/card_2.webp";
 
+// Lista de comentarios de usuarios, sin duplicados y con id único
 const comentarios = [
   {
+    id: 1,
     nombre: "Kathy Calle",
     comentario:
-      "¡Increíble,  rediseñaron todo mi local! Ahora derrocha brillo y personalidad.",
+      "¡Increíble, rediseñaron todo mi local! Ahora derrocha brillo y personalidad.",
     publicado: "10/10/2024",
     estrellas: 5,
   },
   {
+    id: 2,
     nombre: "Fabricio Valle",
     comentario:
       "Como siempre, los más confiables del mercado. Nunca me decepcionan con sus productos LED.",
@@ -21,12 +26,13 @@ const comentarios = [
     estrellas: 5,
   },
   {
+    id: 3,
     nombre: "Sofia Herrera",
     comentario:
       "¡Excelente! Nunca me imaginé que mi salón brillaría tanto. Gracias YUNTAS.",
     publicado: "10/10/2024",
     estrellas: 5,
-  },
+  }
 ];
 ---
 
@@ -47,9 +53,9 @@ const comentarios = [
       </h1>
     </div>
   </section>
-  <div
-    class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center"
-  >
+
+  <!-- Mensaje central -->
+  <div class="w-full bg-white text-blue-950 text-center text-2xl md:text-3xl font-extrabold py-6">
     <h2>¡SOMOS YUNTAS PRODUCCIONES!</h2>
   </div>
   <section
@@ -87,34 +93,106 @@ const comentarios = [
           </p>
         </div>
       </div>
-      <hr class="w-1/3 border-cyan-400" />
     </div>
-    <div class="py-20 w-full">
-      <h3 class="text-3xl font-semibold flex flex-col text-center mb-20">
-        Tu opinión es importante para <span class="font-extrabold"
-          >NOSOTROS</span
-        >
+
+    <!-- Sección de testimonios -->
+    <div class="py-20 w-full max-w-5xl mx-auto relative">
+      <h3 class="text-2xl md:text-3xl font-semibold text-center mb-12">
+        Tu opinión es importante para <span class="font-extrabold">NOSOTROS</span>
       </h3>
-      <div class="w-full flex justify-between">
-        {
-          comentarios.map((comentario) => {
-            return (
-              <div class="relative h-72 w-80 flex flex-col justify-between bg-white text-black rounded-4xl px-16 py-10">
-                <div class="left-6 bg-black text-white rounded-full absolute w-8 h-8 flex justify-center items-center">
-                  <p class="text-lg">{comentario.nombre.charAt(0)}</p>
+  
+      <div class="relative overflow-hidden w-full">
+        <!-- Contenedor del slider -->
+        <div id="slider" class="flex transition-transform duration-300">
+          {comentarios.map((comentario) => (
+            <div class="w-full md:w-1/3 flex-shrink-0 px-4">
+              <div class="h-72 bg-white text-black rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center gap-4">
+                  <div class="w-10 h-10 flex justify-center items-center bg-black text-white rounded-full">
+                    {comentario.nombre.charAt(0)}
+                  </div>
+                  <p class="text-lg font-semibold">{comentario.nombre}</p>
                 </div>
-                <p class="text-lg">{comentario.nombre}</p>
-                <p>{comentario.comentario}</p>
-                <p class="text-sm text-gray-500 italic">
-                  Publicado: {comentario.publicado}
-                </p>
-                <hr class="border-black" />
-                <p class="text-center">{"⭐".repeat(comentario.estrellas)}</p>
+                <p class="mt-2">{comentario.comentario}</p>
+                <p class="text-sm text-gray-500 italic mt-4">Publicado: {comentario.publicado}</p>
+                <hr class="border-gray-300 my-2" />
+                <p class="text-center text-yellow-500">{"⭐".repeat(comentario.estrellas)}</p>
               </div>
-            );
-          })
-        }
+            </div>
+          ))}          
+        </div>
       </div>
+  
+      <!-- Botones de navegación -->
+      <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-3 rounded-full">
+        ◀
+      </button>
+      <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-3 rounded-full">
+        ▶
+      </button>
     </div>
+  
+    <!-- Script para controlar el slider -->
+    <script>
+      // Función que configura el slider según el tamaño actual de la ventana
+      function configurarSlider() {
+        const slider = document.getElementById("slider");
+        const sliderItems = slider ? slider.children : [];
+        // Determinamos la cantidad de items visibles según el ancho de pantalla
+        const itemsPerSlide = window.matchMedia('(max-width: 768px)').matches ? 1 : 3;
+        const totalSlides = sliderItems ? Math.ceil(sliderItems.length / itemsPerSlide) : 0;
+  
+        // Ajustamos el ancho total del contenedor del slider
+        if (slider) {
+          slider.style.width = `${totalSlides * 100}%`;
+        }
+  
+        return { slider, itemsPerSlide, totalSlides };
+      }
+  
+      // Variable para llevar el índice actual del slide
+      let currentIndex = 0;
+      let sliderConfig = configurarSlider();
+  
+      function updateSlider() {
+        const { slider, totalSlides } = sliderConfig;
+        if (slider) {
+          // Calculamos el porcentaje de desplazamiento
+          slider.style.transform = `translateX(-${(currentIndex * 100) / totalSlides}%)`;
+        }
+      }
+  
+      // Asignamos eventos a los botones de navegación
+      const prevButton = document.getElementById("prev");
+      const nextButton = document.getElementById("next");
+  
+      if (nextButton) {
+        nextButton.addEventListener("click", () => {
+          currentIndex = (currentIndex + 1) % sliderConfig.totalSlides;
+          updateSlider();
+        });
+      }
+  
+      if (prevButton) {
+        prevButton.addEventListener("click", () => {
+          currentIndex = (currentIndex - 1 + sliderConfig.totalSlides) % sliderConfig.totalSlides;
+          updateSlider();
+        });
+      }
+  
+      // Actualizamos la configuración del slider cuando cambia el tamaño de la ventana
+      window.addEventListener('resize', () => {
+        currentIndex = 0;
+        sliderConfig = configurarSlider();
+        updateSlider();
+      });
+  
+      // Inicializamos el slider una vez que el DOM esté completamente cargado
+      document.addEventListener("DOMContentLoaded", () => {
+        sliderConfig = configurarSlider();
+        updateSlider();
+      });
+    </script>
   </section>
+  <!-- <EmerTechos />  Ventana emergente -->
 </Layout>
