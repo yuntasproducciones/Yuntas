@@ -18,23 +18,23 @@ const BurgerMenu = ({ links }) => {
 
     return (
         <>
-            <button class="w-10 h-10 lg:hidden" onClick={handleClick}>
+            <button className="w-10 h-10 lg:hidden" onClick={handleClick}>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M4 18L20 18"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"></path>
+                        strokeWidth="2"
+                        strokeLinecap="round"></path>
                     <path
                         d="M4 12L20 12"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"></path>
+                        strokeWidth="2"
+                        strokeLinecap="round"></path>
                     <path
                         d="M4 6L20 6"
                         stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"></path>
+                        strokeWidth="2"
+                        strokeLinecap="round"></path>
                 </svg>
             </button>
             <aside className={`fixed left-0 transform transition-transform duration-500 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"} pb-9 border-b-2 border-r-2 border-white bg-linear-to-b to-blue-950 to-55% backdrop-blur-xs absolute w-72 h-96 top-28 rounded-br-4xl`}>
