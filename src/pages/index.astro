@@ -2,8 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagen1 from "../assets/images/inicio/slider/slider_1.webp";
-import imagen2 from "../assets/images/inicio/cards/card_1.webp";
-import imagen3 from "../assets/images/inicio/cards/card_2.webp";
+import imagen2 from "../assets/images/inicio/slider/slider_2.webp";
+import imagen3 from "../assets/images/inicio/slider/slider_3.webp";
+import card1 from "../assets/images/inicio/cards/card_1.webp";
+import card2 from "../assets/images/inicio/cards/card_2.webp";
 import Slider from "../components/ComentariosSlider.jsx";
 
 // Lista de comentarios de usuarios, sin duplicados y con id único
@@ -93,7 +95,7 @@ const comentarios = [
       <div class="grid grid-cols-2 gap-6 w-full">
         <div class="rounded-4xl w-full bg-white text-black">
           <Picture
-            src={imagen2}
+            src={card1}
             formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"
@@ -105,7 +107,7 @@ const comentarios = [
         </div>
         <div class="rounded-4xl w-full bg-white text-black">
           <Picture
-            src={imagen3}
+            src={card2}
             formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"

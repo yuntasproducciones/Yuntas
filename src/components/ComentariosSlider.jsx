@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+/**
+ * Componente Slider de comentarios
+ * Este componente muestra una lista de comentarios en un slider horizontal.
+ * Se muestran 3 comentarios por slide en escritorio y 1 en móvil.
+ * Se puede navegar entre los slides con flechas de navegación.
+ */
+import { useState, useEffect, useRef } from "react";
 
 const Slider = ({ comentarios }) => {
   const sliderRef = useRef(null);
