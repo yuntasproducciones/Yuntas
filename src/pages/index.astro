@@ -4,8 +4,11 @@
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagen1 from "../assets/images/inicio/slider/slider_1.webp";
-import imagen2 from "../assets/images/inicio/cards/card_1.webp";
-import imagen3 from "../assets/images/inicio/cards/card_2.webp";
+import imagen2 from "../assets/images/inicio/slider/slider_2.webp";
+import imagen3 from "../assets/images/inicio/slider/slider_3.webp";
+import card1 from "../assets/images/inicio/cards/card_1.webp";
+import card2 from "../assets/images/inicio/cards/card_2.webp";
+import Slider from "../components/ComentariosSlider.jsx";
 
 // Lista de comentarios de usuarios, sin duplicados y con id único
 const comentarios = [
@@ -31,6 +34,30 @@ const comentarios = [
     comentario:
       "¡Excelente! Nunca me imaginé que mi salón brillaría tanto. Gracias YUNTAS.",
     publicado: "10/10/2024",
+    estrellas: 5,
+  },
+  {
+    id: 4,
+    nombre: "Carlos Mendoza",
+    comentario:
+      "El servicio al cliente es excepcional y los productos son de alta calidad.",
+    publicado: "11/10/2024",
+    estrellas: 4,
+  },
+  {
+    id: 5,
+    nombre: "Lucia Perez",
+    comentario:
+      "Muy profesionales y atentos a los detalles. Mi oficina luce espectacular.",
+    publicado: "12/10/2024",
+    estrellas: 5,
+  },
+  {
+    id: 6,
+    nombre: "Miguel Torres",
+    comentario:
+      "Gran experiencia, el equipo de YUNTAS es muy creativo y eficiente.",
+    publicado: "13/10/2024",
     estrellas: 5,
   }
 ];
@@ -70,7 +97,7 @@ const comentarios = [
       <div class="grid grid-cols-2 gap-6 w-full">
         <div class="rounded-4xl w-full bg-white text-black">
           <Picture
-            src={imagen2}
+            src={card1}
             formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"
@@ -82,7 +109,7 @@ const comentarios = [
         </div>
         <div class="rounded-4xl w-full bg-white text-black">
           <Picture
-            src={imagen3}
+            src={card2}
             formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"
@@ -96,103 +123,13 @@ const comentarios = [
     </div>
 
     <!-- Sección de testimonios -->
-    <div class="py-20 w-full max-w-5xl mx-auto relative">
+    <div class="py-20 w-full max-w-8xl mx-auto relative">
       <h3 class="text-2xl md:text-3xl font-semibold text-center mb-12">
         Tu opinión es importante para <span class="font-extrabold">NOSOTROS</span>
       </h3>
-  
-      <div class="relative overflow-hidden w-full">
-        <!-- Contenedor del slider -->
-        <div id="slider" class="flex transition-transform duration-300">
-          {comentarios.map((comentario) => (
-            <div class="w-full md:w-1/3 flex-shrink-0 px-4">
-              <div class="h-72 bg-white text-black rounded-2xl p-6 shadow-lg">
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 flex justify-center items-center bg-black text-white rounded-full">
-                    {comentario.nombre.charAt(0)}
-                  </div>
-                  <p class="text-lg font-semibold">{comentario.nombre}</p>
-                </div>
-                <p class="mt-2">{comentario.comentario}</p>
-                <p class="text-sm text-gray-500 italic mt-4">Publicado: {comentario.publicado}</p>
-                <hr class="border-gray-300 my-2" />
-                <p class="text-center text-yellow-500">{"⭐".repeat(comentario.estrellas)}</p>
-              </div>
-            </div>
-          ))}          
-        </div>
-      </div>
-  
-      <!-- Botones de navegación -->
-      <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-3 rounded-full">
-        ◀
-      </button>
-      <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white p-3 rounded-full">
-        ▶
-      </button>
+      <Slider comentarios={comentarios} client:load />
     </div>
   
-    <!-- Script para controlar el slider -->
-    <script>
-      // Función que configura el slider según el tamaño actual de la ventana
-      function configurarSlider() {
-        const slider = document.getElementById("slider");
-        const sliderItems = slider ? slider.children : [];
-        // Determinamos la cantidad de items visibles según el ancho de pantalla
-        const itemsPerSlide = window.matchMedia('(max-width: 768px)').matches ? 1 : 3;
-        const totalSlides = sliderItems ? Math.ceil(sliderItems.length / itemsPerSlide) : 0;
-  
-        // Ajustamos el ancho total del contenedor del slider
-        if (slider) {
-          slider.style.width = `${totalSlides * 100}%`;
-        }
-  
-        return { slider, itemsPerSlide, totalSlides };
-      }
-  
-      // Variable para llevar el índice actual del slide
-      let currentIndex = 0;
-      let sliderConfig = configurarSlider();
-  
-      function updateSlider() {
-        const { slider, totalSlides } = sliderConfig;
-        if (slider) {
-          // Calculamos el porcentaje de desplazamiento
-          slider.style.transform = `translateX(-${(currentIndex * 100) / totalSlides}%)`;
-        }
-      }
-  
-      // Asignamos eventos a los botones de navegación
-      const prevButton = document.getElementById("prev");
-      const nextButton = document.getElementById("next");
-  
-      if (nextButton) {
-        nextButton.addEventListener("click", () => {
-          currentIndex = (currentIndex + 1) % sliderConfig.totalSlides;
-          updateSlider();
-        });
-      }
-  
-      if (prevButton) {
-        prevButton.addEventListener("click", () => {
-          currentIndex = (currentIndex - 1 + sliderConfig.totalSlides) % sliderConfig.totalSlides;
-          updateSlider();
-        });
-      }
-  
-      // Actualizamos la configuración del slider cuando cambia el tamaño de la ventana
-      window.addEventListener('resize', () => {
-        currentIndex = 0;
-        sliderConfig = configurarSlider();
-        updateSlider();
-      });
-  
-      // Inicializamos el slider una vez que el DOM esté completamente cargado
-      document.addEventListener("DOMContentLoaded", () => {
-        sliderConfig = configurarSlider();
-        updateSlider();
-      });
-    </script>
   </section>
   <!-- <EmerTechos />  Ventana emergente -->
 </Layout>
