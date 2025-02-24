@@ -1,7 +1,14 @@
 ---
-import Picture from "astro/components/Picture.astro";
+import { Picture } from "astro:assets";
 import Fader from "../../components/products/Fader";
 import Layout from "../../layouts/Layout.astro";
+import imagen1 from "../../../public/products/BarrasPixelLED/beneficios.webp"
+import imagen2 from "../../../public/products/PisosLED/beneficios.webp"
+import imagen3 from "../../../public/products/SillasyMesasLED/beneficios.webp"
+import imagen4 from "../../../public/products/BarrasPixelLED/beneficios.webp"
+import imagen5 from "../../../public/products/PisosLED/beneficios.webp"
+import imagen6 from "../../../public/products/SillasyMesasLED/beneficios.webp"
+import { MdPictureAsPdf } from "react-icons/md";
 
 export const productos = [
   {
@@ -20,6 +27,8 @@ export const productos = [
       "Brinda personalidad",
       "Atractivo visual",
     ],
+    imagen_beneficios_url: imagen1,
+    imagen_banner_url: imagen4,
   },
   {
     id: 2,
@@ -37,6 +46,8 @@ export const productos = [
       "Toque exclusivo a tu evento",
       "Adaptable a tu estilo",
     ],
+    imagen_beneficios_url: imagen3,
+    imagen_banner_url: imagen6,
   },
   {
     id: 3,
@@ -54,6 +65,8 @@ export const productos = [
       "Flexibilidad de diseños",
       "Aumento de visibilidad",
     ],
+    imagen_beneficios_url: imagen2,
+    imagen_banner_url: imagen5,
   },
   {
     id: 4,
@@ -71,6 +84,8 @@ export const productos = [
       "Personalización rápida",
       "Alto atractivo visual",
     ],
+    imagen_beneficios_url: imagen1,
+    imagen_banner_url: imagen4,
   },
 ];
 
@@ -95,8 +110,8 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
 
 <Layout title={producto.nombre}>
   <section class="w-full h-dvh grid grid-rows-[90%_10%]">
-    <img
-      src={`/products/${productoRuta}/banner.webp`}
+    <Picture
+      src={producto.imagen_banner_url}
       alt={`Imagen de ${producto.nombre}`}
       class="w-full h-full object-cover"
     />
@@ -137,8 +152,8 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
           }
         </ul>
       </div>
-      <img
-        src=`/products/${productoRuta}/beneficios.webp`
+      <Picture
+        src={producto.imagen_beneficios_url}
         alt=`Imagen de ${producto.nombre} `
         class="rounded-4xl h-96 w-80 shadow-2xl object-cover object-center"
       />
