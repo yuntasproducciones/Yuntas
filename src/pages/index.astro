@@ -1,15 +1,26 @@
 ---
+// import EmerTechos from "../components/Lightboxs/EmerTechos.astro"; SE importo el componente de la ventana emergente
 import Layout from "../layouts/Layout.astro";
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/inicio/slider/slider_1.webp";
+import imagen2 from "../assets/images/inicio/slider/slider_2.webp";
+import imagen3 from "../assets/images/inicio/slider/slider_3.webp";
+import card1 from "../assets/images/inicio/cards/card_1.webp";
+import card2 from "../assets/images/inicio/cards/card_2.webp";
+import Slider from "../components/ComentariosSlider.jsx";
 
+// Lista de comentarios de usuarios, sin duplicados y con id único
 const comentarios = [
   {
+    id: 1,
     nombre: "Kathy Calle",
     comentario:
-      "¡Increíble,  rediseñaron todo mi local! Ahora derrocha brillo y personalidad.",
+      "¡Increíble, rediseñaron todo mi local! Ahora derrocha brillo y personalidad.",
     publicado: "10/10/2024",
     estrellas: 5,
   },
   {
+    id: 2,
     nombre: "Fabricio Valle",
     comentario:
       "Como siempre, los más confiables del mercado. Nunca me decepcionan con sus productos LED.",
@@ -17,10 +28,35 @@ const comentarios = [
     estrellas: 5,
   },
   {
+    id: 3,
     nombre: "Sofia Herrera",
     comentario:
       "¡Excelente! Nunca me imaginé que mi salón brillaría tanto. Gracias YUNTAS.",
     publicado: "10/10/2024",
+    estrellas: 5,
+  },
+  {
+    id: 4,
+    nombre: "Carlos Mendoza",
+    comentario:
+      "El servicio al cliente es excepcional y los productos son de alta calidad.",
+    publicado: "11/10/2024",
+    estrellas: 4,
+  },
+  {
+    id: 5,
+    nombre: "Lucia Perez",
+    comentario:
+      "Muy profesionales y atentos a los detalles. Mi oficina luce espectacular.",
+    publicado: "12/10/2024",
+    estrellas: 5,
+  },
+  {
+    id: 6,
+    nombre: "Miguel Torres",
+    comentario:
+      "Gran experiencia, el equipo de YUNTAS es muy creativo y eficiente.",
+    publicado: "13/10/2024",
     estrellas: 5,
   },
 ];
@@ -40,8 +76,10 @@ const comentarios = [
       <span class="text-8xl text-white">EN DISEÑAR TU ESPACIO</span>
     </h1>
   </section>
+
+  <!-- Mensaje central -->
   <div
-    class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center"
+    class="w-full bg-white text-blue-950 text-center text-2xl md:text-3xl font-extrabold py-6"
   >
     <h2>¡SOMOS YUNTAS PRODUCCIONES!</h2>
   </div>
@@ -56,8 +94,9 @@ const comentarios = [
       <hr class="w-1/3 border-cyan-400" />
       <div class="grid grid-cols-2 gap-6 w-full">
         <div class="rounded-4xl w-full bg-white text-black">
-          <img
-            src="../src/assets/images/inicio/cards/card_1.webp"
+          <Picture
+            src={card1}
+            formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"
           />
@@ -67,8 +106,9 @@ const comentarios = [
           </p>
         </div>
         <div class="rounded-4xl w-full bg-white text-black">
-          <img
-            src="../src/assets/images/inicio/cards/card_2.webp"
+          <Picture
+            src={card2}
+            formats={["webp"]}
             alt="imagen card wazaa"
             class="h-96 w-full rounded-t-4xl object-cover object-center"
           />
@@ -78,34 +118,17 @@ const comentarios = [
           </p>
         </div>
       </div>
-      <hr class="w-1/3 border-cyan-400" />
     </div>
-    <div class="py-20 w-full">
-      <h3 class="text-3xl font-semibold flex flex-col text-center mb-20">
+
+    <!-- Sección de testimonios -->
+    <div class="py-20 w-full max-w-8xl mx-auto relative">
+      <h3 class="text-2xl md:text-3xl font-semibold text-center mb-12">
         Tu opinión es importante para <span class="font-extrabold"
           >NOSOTROS</span
         >
       </h3>
-      <div class="w-full flex justify-between">
-        {
-          comentarios.map((comentario) => {
-            return (
-              <div class="relative h-72 w-80 flex flex-col justify-between bg-white text-black rounded-4xl px-16 py-10">
-                <div class="left-6 bg-black text-white rounded-full absolute w-8 h-8 flex justify-center items-center">
-                  <p class="text-lg">{comentario.nombre.charAt(0)}</p>
-                </div>
-                <p class="text-lg">{comentario.nombre}</p>
-                <p>{comentario.comentario}</p>
-                <p class="text-sm text-gray-500 italic">
-                  Publicado: {comentario.publicado}
-                </p>
-                <hr class="border-black" />
-                <p class="text-center">{"⭐".repeat(comentario.estrellas)}</p>
-              </div>
-            );
-          })
-        }
-      </div>
+      <Slider comentarios={comentarios} client:load />
     </div>
   </section>
+  <!-- <EmerTechos />  Ventana emergente -->
 </Layout>
