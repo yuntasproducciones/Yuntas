@@ -2,12 +2,10 @@
 // import EmerTechos from "../components/Lightboxs/EmerTechos.astro"; SE importo el componente de la ventana emergente
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
-import imagen1 from "../assets/images/inicio/slider/slider_1.webp";
-import imagen2 from "../assets/images/inicio/slider/slider_2.webp";
-import imagen3 from "../assets/images/inicio/slider/slider_3.webp";
 import card1 from "../assets/images/inicio/cards/card_1.webp";
 import card2 from "../assets/images/inicio/cards/card_2.webp";
-import Slider from "../components/ComentariosSlider.jsx";
+import CommentSlider from "../components/ComentariosSlider.jsx";
+import HeroSlider from "../components/HeroSlider";
 
 // Lista de comentarios de usuarios, sin duplicados y con id único
 const comentarios = [
@@ -83,51 +81,51 @@ const comentarios = [
   >
     <h2>¡SOMOS YUNTAS PRODUCCIONES!</h2>
   </div>
-  <section
-    class="px-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col items-center"
-  >
-    <button
-      class="my-8 font-bold bg-linear-to-l from-cyan-300 to-cyan-600 px-8 py-2 rounded-full text-xl"
-      >¡Cotiza ahora!</button
-    >
-    <div class="flex flex-col justify-between items-center w-full h-[35rem]">
-      <hr class="w-1/3 border-cyan-400" />
-      <div class="grid grid-cols-2 gap-6 w-full">
+  <section class="px-4 sm:px-8 md:px-16 lg:px-24 text-white bg-gradient-to-b from-blue-900 to-indigo-950 flex flex-col items-center">
+    <button class="my-6 sm:my-8 font-bold bg-gradient-to-l from-cyan-300 to-cyan-600 px-6 sm:px-8 py-2 rounded-full text-lg sm:text-xl">
+      ¡Cotiza ahora!
+    </button>
+  
+    <div class="flex flex-col justify-between items-center w-full h-auto">
+      <hr class="w-1/3 border-cyan-400 my-10" />
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full">
         <div class="rounded-4xl w-full bg-white text-black">
           <Picture
             src={card1}
             formats={["webp"]}
             alt="imagen card wazaa"
-            class="h-96 w-full rounded-t-4xl object-cover object-center"
+            class="h-64 sm:h-80 md:h-96 w-full rounded-t-4xl object-cover object-center"
           />
-          <p class="w-full text-center italic content-center py-6 px-14">
-            Descubre cómo integrar esta innovadora tecnología en tus proyectos
-            arquitectónicos
+          <p class="w-full text-center italic py-4 px-6 sm:px-14 text-sm sm:text-base">
+            Descubre cómo integrar esta innovadora tecnología en tus proyectos arquitectónicos
           </p>
         </div>
+  
         <div class="rounded-4xl w-full bg-white text-black">
           <Picture
             src={card2}
             formats={["webp"]}
             alt="imagen card wazaa"
-            class="h-96 w-full rounded-t-4xl object-cover object-center"
+            class="h-64 sm:h-80 md:h-96 w-full rounded-t-4xl object-cover object-center"
           />
-          <p class="w-full text-center italic content-center py-6 px-14">
-            Aprende cómo esta tecnología transforma el ambiente y optimiza el
-            consumo energético
+          <p class="w-full text-center italic py-4 px-6 sm:px-14 text-sm sm:text-base">
+            Aprende cómo esta tecnología transforma el ambiente y optimiza el consumo energético
           </p>
         </div>
       </div>
+  
+      <hr class="w-1/3 border-cyan-400 my-10" />
     </div>
 
     <!-- Sección de testimonios -->
-    <div class="py-20 w-full max-w-8xl mx-auto relative">
+    <div class="py-20 w-full max-w-8xl mx-auto px-4 md:px-0 relative">
       <h3 class="text-2xl md:text-3xl font-semibold text-center mb-12">
         Tu opinión es importante para <span class="font-extrabold"
           >NOSOTROS</span
         >
       </h3>
-      <Slider comentarios={comentarios} client:load />
+      <CommentSlider comentarios={comentarios} client:load />
     </div>
   </section>
   <!-- <EmerTechos />  Ventana emergente -->
