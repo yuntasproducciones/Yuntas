@@ -1,13 +1,12 @@
 ---
 const card = Astro.props;
-import { Picture } from "astro:assets";
 ---
 
 <div
   class="bg-white rounded-2xl text-black h-80 w-80 my-10 hover:scale-110 transition-all duration-300 shadow-2xl"
 >
-  <Picture
-    src={card.url}
+  <img
+    src=`../src/assets/images/blog/article_cards/${card.title}.webp`
     alt={card.title}
     class="w-full object-cover rounded-t-2xl object-center h-4/6"
   />
