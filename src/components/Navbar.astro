@@ -11,7 +11,7 @@ const rutas = [
   { link: "/contact", texto: "CONTACTO" },
 ];
 import { Picture } from "astro:assets";
-import imagen1 from "../assets/images/logo_yuntas.webp"
+import imagen1 from "../assets/images/logo_yuntas.webp";
 ---
 
 <header class="fixed w-full z-20">
@@ -19,7 +19,7 @@ import imagen1 from "../assets/images/logo_yuntas.webp"
     class="relative w-full grid lg:grid-cols-7 grid-cols-3 bg-linear-to-b from-slate-900/85 from-50% items-center h-32 px-10 lg:px-0 lg:place-items-center py-2 text-white font-semibold 2xl:text-3xl"
   >
     <BurgerMenu links={rutas} client:load />
-    <a href="/" class="h-16">
+    <a href="/" class="h-16 2xl:h-28">
       <Picture
         src={imagen1}
         alt="Logo de Yuntas"
