@@ -3,53 +3,39 @@ import ArticuloCard from "../components/blog/ArticuloCard.astro";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagen1 from "../assets/images/blog/banner_blog.webp";
-
-import imagenes1 from "../assets/images/blog/article_cards/PANELES_PVC.webp"
-import imagenes2 from "../assets/images/blog/article_cards/PANTALLAS_LED.webp"
-import imagenes3 from "../assets/images/blog/article_cards/TECHOS_LED.webp"
-import imagenes4 from "../assets/images/blog/article_cards/TUNELES_LED.webp"
 const art_cards = [
   {
     title: "PANELES PVC",
     description: "Durabilidad y estilo al alcance de todos.",
-    url: imagenes1,
   },
   {
     title: "PANTALLAS LED",
     description: "Tecnología avanzada para una visualización impecable.",
-    url: imagenes2,
   },
   {
     title: "TECHOS LED",
     description: "Crea ambientes modernos y sostenibles con los Techos LED.",
-    url: imagenes3,
   },
   {
     title: "TUNELES LED",
-    description: "Crea ambientes mágicos con los Túneles LED con un diseño impactante",
-    url: imagenes4,
+    description:
+      "Crea ambientes mágicos con los Túneles LED con un diseño impactante",
   },
 ];
 ---
 
 <Layout title="Blog">
-  <section class="relative w-full h-dvh flex justify-center items-center">
-    <img
-      src="../src/assets/images/blog/banner_blog.webp"
-      alt=""
-      class="absolute z-0 w-full h-full object-cover object-bottom"
-    />
-    <h1
-      class="relative z-10 text-white font-bold text-5xl flex flex-col text-center sombra-title"
-    >
-      Blog Yuntero
-    </h1>
+  <section class="relative">
+    <Picture src={imagen1} formats={["webp"]} alt="Imagen" class="w-full max-h-[100vh]" />
+    <div class="absolute inset-0 flex flex-col justify-center items-center">
+      <h1 class="text-4xl text-center Montserrat font-bold text-cyan-500 sombra-title">
+        Blog Yuntero
+      </h1>
+      <h1 class="text-7xl text-center Montserrat font-black text-white sombra-title">
+        DESCUBRE MÁS SOBRE NUESTROS PRODUCTOS
+      </h1>
+    </div>
   </section>
-  <div
-    class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center"
-  >
-    <h2>DESCUBRE MAS SOBRE NUESTROS PRODUCTOS</h2>
-  </div>
   <section
     class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col"
   >
