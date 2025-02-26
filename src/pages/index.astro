@@ -1,4 +1,5 @@
 ---
+// import EmerTechos from "../components/Lightboxs/EmerTechos.astro"; SE importo el componente de la ventana emergente
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import card1 from "../assets/images/inicio/cards/card_1.webp";
@@ -55,7 +56,7 @@ const comentarios = [
       "Gran experiencia, el equipo de YUNTAS es muy creativo y eficiente.",
     publicado: "13/10/2024",
     estrellas: 5,
-  }
+  },
 ];
 ---
 
@@ -65,7 +66,9 @@ const comentarios = [
   </section>
 
   <!-- Mensaje central -->
-  <div class="w-full bg-white text-blue-950 text-center text-2xl md:text-3xl font-extrabold py-6">
+  <div
+    class="w-full bg-white text-blue-950 text-center text-2xl md:text-3xl font-extrabold py-6"
+  >
     <h2>¡SOMOS YUNTAS PRODUCCIONES!</h2>
   </div>
   <section class="px-4 sm:px-8 md:px-16 lg:px-24 text-white bg-gradient-to-b from-blue-900 to-indigo-950 flex flex-col items-center">
@@ -108,10 +111,74 @@ const comentarios = [
     <!-- Sección de testimonios -->
     <div class="py-20 w-full max-w-8xl mx-auto px-4 md:px-0 relative">
       <h3 class="text-2xl md:text-3xl font-semibold text-center mb-12">
-        Tu opinión es importante para <span class="font-extrabold">NOSOTROS</span>
+        Tu opinión es importante para <span class="font-extrabold"
+          >NOSOTROS</span
+        >
       </h3>
       <CommentSlider comentarios={comentarios} client:load />
     </div>
   
+    <!-- Script para controlar el slider -->
+    <script>
+      // Función que configura el slider según el tamaño actual de la ventana
+      function configurarSlider() {
+        const slider = document.getElementById("slider");
+        const sliderItems = slider ? slider.children : [];
+        // Determinamos la cantidad de items visibles según el ancho de pantalla
+        const itemsPerSlide = window.matchMedia('(max-width: 768px)').matches ? 1 : 3;
+        const totalSlides = sliderItems ? Math.ceil(sliderItems.length / itemsPerSlide) : 0;
+  
+        // Ajustamos el ancho total del contenedor del slider
+        if (slider) {
+          slider.style.width = `${totalSlides * 100}%`;
+        }
+  
+        return { slider, itemsPerSlide, totalSlides };
+      }
+  
+      // Variable para llevar el índice actual del slide
+      let currentIndex = 0;
+      let sliderConfig = configurarSlider();
+  
+      function updateSlider() {
+        const { slider, totalSlides } = sliderConfig;
+        if (slider) {
+          // Calculamos el porcentaje de desplazamiento
+          slider.style.transform = `translateX(-${(currentIndex * 100) / totalSlides}%)`;
+        }
+      }
+  
+      // Asignamos eventos a los botones de navegación
+      const prevButton = document.getElementById("prev");
+      const nextButton = document.getElementById("next");
+  
+      if (nextButton) {
+        nextButton.addEventListener("click", () => {
+          currentIndex = (currentIndex + 1) % sliderConfig.totalSlides;
+          updateSlider();
+        });
+      }
+  
+      if (prevButton) {
+        prevButton.addEventListener("click", () => {
+          currentIndex = (currentIndex - 1 + sliderConfig.totalSlides) % sliderConfig.totalSlides;
+          updateSlider();
+        });
+      }
+  
+      // Actualizamos la configuración del slider cuando cambia el tamaño de la ventana
+      window.addEventListener('resize', () => {
+        currentIndex = 0;
+        sliderConfig = configurarSlider();
+        updateSlider();
+      });
+  
+      // Inicializamos el slider una vez que el DOM esté completamente cargado
+      document.addEventListener("DOMContentLoaded", () => {
+        sliderConfig = configurarSlider();
+        updateSlider();
+      });
+    </script>
   </section>
+  <!-- <EmerTechos />  Ventana emergente -->
 </Layout>
