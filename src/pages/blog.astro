@@ -1,23 +1,33 @@
 ---
 import ArticuloCard from "../components/blog/ArticuloCard.astro";
 import Layout from "../layouts/Layout.astro";
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/blog/banner_blog.webp";
+
+import imagenes1 from "../assets/images/blog/article_cards/PANELES_PVC.webp"
+import imagenes2 from "../assets/images/blog/article_cards/PANTALLAS_LED.webp"
+import imagenes3 from "../assets/images/blog/article_cards/TECHOS_LED.webp"
+import imagenes4 from "../assets/images/blog/article_cards/TUNELES_LED.webp"
 const art_cards = [
   {
     title: "PANELES PVC",
     description: "Durabilidad y estilo al alcance de todos.",
+    url: imagenes1,
   },
   {
     title: "PANTALLAS LED",
     description: "Tecnología avanzada para una visualización impecable.",
+    url: imagenes2,
   },
   {
     title: "TECHOS LED",
     description: "Crea ambientes modernos y sostenibles con los Techos LED.",
+    url: imagenes3,
   },
   {
     title: "TUNELES LED",
-    description:
-      "Crea ambientes mágicos con los Túneles LED con un diseño impactante",
+    description: "Crea ambientes mágicos con los Túneles LED con un diseño impactante",
+    url: imagenes4,
   },
 ];
 ---
