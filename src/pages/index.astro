@@ -1,11 +1,11 @@
 ---
-// import EmerTechos from "../components/Lightboxs/EmerTechos.astro"; SE importo el componente de la ventana emergente
+// Importaciones
 import Layout from "../layouts/Layout.astro";
+import HeroSlider from "../components/index/HeroSlider.jsx";
 import { Picture } from "astro:assets";
 import card1 from "../assets/images/inicio/cards/card_1.webp";
 import card2 from "../assets/images/inicio/cards/card_2.webp";
 import CommentSlider from "../components/index/ComentariosSlider.jsx";
-import HeroSlider from "../components/index/HeroSlider.jsx";
 
 // Lista de comentarios de usuarios, sin duplicados y con id único
 const comentarios = [
@@ -61,14 +61,12 @@ const comentarios = [
 ---
 
 <Layout title="Yuntas">
-  <section class="relative">
-    <HeroSlider client:load/>
+  <section class="relative h-screen">
+    <HeroSlider client:load />
   </section>
 
   <!-- Mensaje central -->
-  <div
-    class="w-full bg-white text-blue-950 text-center text-2xl md:text-3xl font-extrabold py-6"
-  >
+  <div class="w-full bg-white text-blue-950 text-center text-2xl md:text-3xl font-extrabold py-6">
     <h2>¡SOMOS YUNTAS PRODUCCIONES!</h2>
   </div>
   <section class="px-4 sm:px-8 md:px-16 lg:px-24 text-white bg-gradient-to-b from-blue-900 to-indigo-950 flex flex-col items-center">
@@ -111,9 +109,7 @@ const comentarios = [
     <!-- Sección de testimonios -->
     <div class="py-20 w-full max-w-8xl mx-auto px-4 md:px-0 relative">
       <h3 class="text-2xl md:text-3xl font-semibold text-center mb-12">
-        Tu opinión es importante para <span class="font-extrabold"
-          >NOSOTROS</span
-        >
+        Tu opinión es importante para <span class="font-extrabold">NOSOTROS</span>
       </h3>
       <CommentSlider comentarios={comentarios} client:load />
     </div>
