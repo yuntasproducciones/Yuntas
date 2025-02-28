@@ -1,55 +1,32 @@
 ---
+// Importaciones
 import ArticuloCard from "../components/blog/ArticuloCard.astro";
 import Layout from "../layouts/Layout.astro";
-const art_cards = [
-  {
-    title: "PANELES PVC",
-    description: "Durabilidad y estilo al alcance de todos.",
-  },
-  {
-    title: "PANTALLAS LED",
-    description: "Tecnología avanzada para una visualización impecable.",
-  },
-  {
-    title: "TECHOS LED",
-    description: "Crea ambientes modernos y sostenibles con los Techos LED.",
-  },
-  {
-    title: "TUNELES LED",
-    description:
-      "Crea ambientes mágicos con los Túneles LED con un diseño impactante",
-  },
-];
+import { Picture } from "astro:assets";
+import imagen1 from "../assets/images/blog/banner_blog.webp";
+import { articles } from "./blogs/[articleId].astro";
 ---
 
 <Layout title="Blog">
-  <section class="relative w-full h-dvh flex justify-center items-center">
-    <img
-      src="../src/assets/images/blog/banner_blog.webp"
-      alt=""
-      class="absolute z-0 w-full h-full object-cover object-bottom"
-    />
-    <h1
-      class="relative z-10 text-white font-bold text-5xl flex flex-col text-center sombra-title"
-    >
-      Blog Yuntero
-    </h1>
+  <section class="relative h-screen">
+    <Picture src={imagen1} formats={["webp"]} alt="Imagen" class="w-full h-full object-cover" />
+    <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl Montserrat font-black text-white sombra-title">
+        Blog Yuntero
+      </h1>
+    </div>
   </section>
-  <div
-    class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center"
-  >
-    <h2>DESCUBRE MAS SOBRE NUESTROS PRODUCTOS</h2>
+  <div class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">DESCUBRE MÁS SOBRE NUESTROS ARTÍCULOS</h2>
   </div>
-  <section
-    class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col"
-  >
-    <h3 class="text-3xl font-bold">ARTICULOS</h3>
-    <div class="w-full flex flex-wrap justify-between">
-      {
-        art_cards.map((card) => {
-          return <ArticuloCard {...card} />;
-        })
-      }
+  <section class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col overflow-hidden">
+    <h3 class="text-3xl font-bold">ARTÍCULOS</h3>
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+      {articles.map((article) => (
+        <ArticuloCard key={article.id} {...article} class="w-full" />
+      ))}
     </div>
   </section>
 </Layout>
+
+
