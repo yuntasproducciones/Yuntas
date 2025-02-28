@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import imagen1 from "../../assets/images/inicio/slider/slider_1.webp";
+import imagen1 from "../../assets/images/inicio/slider/slider-1.webp";
 import imagen2 from "../../assets/images/inicio/slider/slider_2.webp";
 import imagen3 from "../../assets/images/inicio/slider/slider_3.webp";
 
