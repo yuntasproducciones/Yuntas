@@ -14,7 +14,6 @@ import imagen1 from "../assets/images/logo_yuntas.webp";
 ---
 
 <header class="fixed w-full z-20">
-<<<<<<< HEAD
     <nav
             class="relative w-full grid lg:grid-cols-7 grid-cols-3 bg-linear-to-b from-slate-900/85 from-50% items-center h-32 px-10 lg:px-0 lg:place-items-center py-2 text-white font-semibold"
     >
@@ -54,31 +53,4 @@ import imagen1 from "../assets/images/logo_yuntas.webp";
             </svg></button
         >
     </nav>
-=======
-  <nav
-    class="relative w-full grid lg:grid-cols-7 grid-cols-3 bg-linear-to-b from-slate-900/85 from-50% items-center h-32 px-10 lg:px-0 lg:place-items-center py-2 text-white font-semibold 2xl:text-3xl"
-  >
-    <BurgerMenu links={rutas} client:load />
-    <a href="/" class="h-16 2xl:h-28">
-      <Picture
-        src={imagen1}
-        alt="Logo de Yuntas"
-        class="h-full w-auto justify-self-center"
-      />
-    </a>
-    {
-      rutas.map(({ link, texto }) => {
-        return (
-          <a
-            href={link}
-            class={`hidden lg:block relative px-6 py-2 ${isActive(link) ? "border-effect" : ""}`}
-          >
-            <span class="relative">{texto}</span>
-          </a>
-        );
-      })
-    }
-    <TbUserScan className="w-8 h-8" />
-  </nav>
->>>>>>> 173d709c21d76c5de20c6e944ae3100e28530d25
 </header>

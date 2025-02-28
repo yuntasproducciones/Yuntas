@@ -1,5 +1,4 @@
 ---
-<<<<<<< HEAD
 const { id, title, subtitle, image_banner_url } = Astro.props;
 import { Picture } from "astro:assets";
 ---
@@ -15,22 +14,6 @@ import { Picture } from "astro:assets";
       <p class="font-bold text-xl">{title}</p>
       <p class="text-lg">{subtitle}</p>
     </div>
-=======
-const card = Astro.props;
----
-
-<div
-  class="bg-white rounded-2xl text-black h-80 w-80 my-10 hover:scale-110 transition-all duration-300 shadow-2xl"
->
-  <img
-    src=`../src/assets/images/blog/article_cards/${card.title}.webp`
-    alt={card.title}
-    class="w-full object-cover rounded-t-2xl object-center h-4/6"
-  />
-  <div class="h-2/6 w-full px-4 py-1">
-    <p class="font-bold">{card.title}</p>
-    <p>{card.description}</p>
->>>>>>> 173d709c21d76c5de20c6e944ae3100e28530d25
   </div>
 </a>
 
