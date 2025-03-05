@@ -22,7 +22,7 @@ const HeroSlider = () => {
   }, []);
 
   return (
-    <section className="relative w-full">
+    <section className="relative w-full h-screen">
       <img
         src={images[currentIndex].src} 
         alt="Imagen del slider"
@@ -30,11 +30,11 @@ const HeroSlider = () => {
       />
 
       {/* Texto sobre el slider */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-center">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl Montserrat font-bold text-cyan-500 sombra-title">
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl Montserrat font-bold text-cyan-500 sombra-title">
           ESPECIALISTAS
         </h1>
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl Montserrat font-black text-white sombra-title">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl Montserrat font-black text-white sombra-title">
           EN DISEÑAR TU ESPACIO
         </h1>
       </div>

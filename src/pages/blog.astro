@@ -21,7 +21,7 @@ import { articles } from "./blogs/[articleId].astro";
   </div>
   <section class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col overflow-hidden">
     <h3 class="text-3xl font-bold">ARTÍCULOS</h3>
-    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
       {articles.map((article) => (
         <ArticuloCard key={article.id} {...article} class="w-full" />
       ))}
