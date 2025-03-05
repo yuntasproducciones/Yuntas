@@ -8,7 +8,19 @@ import imagen3 from "../../../public/products/SillasyMesasLED/beneficios.webp";
 import imagen4 from "../../../public/products/BarrasPixelLED/beneficios.webp";
 import imagen5 from "../../../public/products/PisosLED/beneficios.webp";
 import imagen6 from "../../../public/products/SillasyMesasLED/beneficios.webp";
-import { MdPictureAsPdf } from "react-icons/md";
+import imagenEmergente1 from "../../../src/assets/images/emergente/yuleLove.jpg";
+import imagenEmergente2 from "../../../src/assets/images/emergente/em2.jpg";
+import imagenEmergente3 from "../../../src/assets/images/emergente/em3.webp";
+import imagenEmergente4 from "../../../src/assets/images/emergente/em4.jpg";
+import imagenEmergente5 from "../../../src/assets/images/emergente/em5.webp";
+import imagenEmergente6 from "../../../src/assets/images/emergente/em6.webp";
+import imagenEmergente7 from "../../../src/assets/images/emergente/em7.webp";
+import imagenEmergente8 from "../../../src/assets/images/emergente/em8.webp";
+import imagenEmergente9 from "../../../src/assets/images/emergente/em9.webp";
+import imagenEmergente10 from "../../../src/assets/images/emergente/em10.webp";
+import imagenEmergente11 from "../../../src/assets/images/emergente/em11.webp";
+import imagenEmergente12 from "../../../src/assets/images/emergente/em12.webp";
+const { imageUrl, title, subtitle, buttonText } = Astro.props;
 
 export const productos = [
   {
@@ -29,6 +41,10 @@ export const productos = [
     ],
     imagen_beneficios_url: imagen1,
     imagen_banner_url: imagen4,
+    emergente: {
+      tipo: 4,
+      imagen_url: imagenEmergente1,
+    }
   },
   {
     id: 2,
@@ -48,6 +64,10 @@ export const productos = [
     ],
     imagen_beneficios_url: imagen3,
     imagen_banner_url: imagen6,
+    emergente: {
+      tipo: 1,
+      imagen_url: imagenEmergente2,
+    }
   },
   {
     id: 3,
@@ -67,6 +87,10 @@ export const productos = [
     ],
     imagen_beneficios_url: imagen2,
     imagen_banner_url: imagen5,
+    emergente: {
+      tipo: 5,
+      imagen_url: imagenEmergente3,
+    }
   },
   {
     id: 4,
@@ -86,6 +110,10 @@ export const productos = [
     ],
     imagen_beneficios_url: imagen1,
     imagen_banner_url: imagen4,
+    emergente: {
+      tipo: 3,
+      imagen_url: imagenEmergente4,
+    }
   },
 ];
 
@@ -125,7 +153,7 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
     <div
       class="flex flex-col items-center sm:flex-row sm:justify-around w-full py-16 px-8"
     >
-        <Fader nombreProducto={producto.nombre} client:load />
+      <Fader nombreProducto={producto.nombre} client:load />
       <div
         class="flex flex-col justify-evenly ps-6 pe-2 sm:px-7 w-full h-full max-w-md sm:max-w-2xs lg:max-w-md xl:max-w-xl 2xl:max-w-2xl"
       >
@@ -161,7 +189,7 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
       class="flex flex-col items-center sm:flex-row sm:justify-around w-full py-16 px-8"
     >
       <div
-        class="flex flex-col justify-evenly ps-6 pe-2 sm:px-7 lg:px-10 2xl:px-16  w-full h-full max-w-md sm:max-w-2xs lg:max-w-md xl:max-w-xl 2xl:max-w-2xl"
+        class="flex flex-col justify-evenly ps-6 pe-2 sm:px-7 lg:px-10 2xl:px-16 w-full h-full max-w-md sm:max-w-2xs lg:max-w-md xl:max-w-xl 2xl:max-w-2xl"
       >
         <h2
           class="text-sm sm:text-xl md:text-2xl lg:text-4xl 2xl:text-6xl font-extrabold text-center"
@@ -181,8 +209,89 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
       <Picture
         src={producto.imagen_beneficios_url}
         alt=`Imagen de ${producto.nombre} `
-        class="rounded-4xl max-h-[20rem]  w-full h-full max-w-md sm:max-w-2xs lg:max-w-md xl:max-w-xl 2xl:max-w-2xl shadow-2xl object-cover object-center"
+        class="rounded-4xl max-h-[20rem] w-full h-full max-w-md sm:max-w-2xs lg:max-w-md xl:max-w-xl 2xl:max-w-2xl shadow-2xl object-cover object-center"
       />
     </div>
   </section>
 </Layout>
+
+<div
+  id="lightbox"
+  class={`fixed inset-0 flex items-center justify-center bg-black/50 z-50`}
+>
+  <div
+    class="relative bg-white rounded-2xl shadow-lg max-w-lg flex overflow-hidden"
+  >
+    <!-- Imagen -->
+    <div class="w-1/2">
+      <Picture
+        src={producto.emergente.imagen_url}
+        alt={producto.nombre}
+        class="h-full w-full object-cover"
+      />
+    </div>
+
+    <!-- Formulario -->
+    <div class="w-1/2 bg-[#293296] p-6 text-white relative">
+      <button
+        id="close-modal"
+        class="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center"
+        >✕</button
+      >
+      {producto.emergente.tipo == 1 && <h2 class="text-4xl font-semibold italic">Obtén<br><span class="text-5xl font-bold">Asesoría<br></span>gratuita</h2>}
+      {producto.emergente.tipo == 2 && <h2 class="text-4xl font-bold italic"><span class="text-3xl font-semibold">Disfruta Nuestros<br></span>Beneficios</h2>}
+      {producto.emergente.tipo == 3 && <h2 class="text-4xl font-semibold italic">Accede<br><span class="text-5xl font-bold">Ofertas<br></span>Exclusivas</h2>}
+      {producto.emergente.tipo == 4 && <h2 class="text-2xl font-semibold italic">Gana <br> <span class="text-5xl font-semibold">10% dto.</span> en tu compra</h2>}
+      {producto.emergente.tipo == 5 && <h2 class="text-2xl font-semibold italic"><span class="text-5xl font-semibold">Ahorra<br></span>en tu primera compra</h2>}
+      {producto.emergente.tipo == 6 && <h2 class="text-3xl font-semibold italic">Obtén<br><span class="text-4xl font-bold">Descuentos<br></span>Especiales</h2>}
+      {producto.emergente.tipo == 7 && <h2 class="text-4xl font-semibold italic">Envío<br /><span class="text-6xl font-bold">Gratis<br /></span><span class="text-2xl font-semibold">en todo Lima</span></h2>}
+
+      <form class="mt-4">
+        <label class="block text-lg font-bold">Nombre</label>
+        <input
+          type="text"
+          class="w-full px-3 py-1 rounded-full bg-white text-black mb-4"
+        />
+
+        <label class="block text-lg font-bold">Teléfono</label>
+        <input
+          type="text"
+          class="w-full px-3 py-1 rounded-full bg-white text-black mb-4"
+        />
+
+        <label class="block text-lg font-bold">Correo</label>
+        <input
+          type="email"
+          class="w-full px-3 py-1 rounded-full bg-white text-black mb-4"
+        />
+
+        <button class="w-full bg-[#172649] text-white-800 text-2xl border py-3 rounded-lg font-bold">
+            {producto.emergente.tipo == 1 && "Aprovecha ahora"}
+            {producto.emergente.tipo == 2 && "Aprovecha ahora"}
+            {producto.emergente.tipo == 3 && "Regístrate"}
+            {producto.emergente.tipo == 4 && "Cotiza ahora"}
+            {producto.emergente.tipo == 5 && "Regístrate"}
+            {producto.emergente.tipo == 6 && "Cotiza ahora"}
+            {producto.emergente.tipo == 7 && "Aprovecha ahora"}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+// Código que permite cerrar las ventanas emergentes
+<script>
+  function setupModal() {
+    const modal = document.getElementById("lightbox");
+    const closeButton = document.getElementById("close-modal");
+
+    if (modal && closeButton) {
+      closeButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", setupModal);
+  document.addEventListener("astro:after-swap", setupModal);
+</script>
