@@ -151,7 +151,7 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
   </section>
   <section class="bg-linear-to-b from-blue-900 to-indigo-950 text-white w-full">
     <div
-      class="flex flex-col items-center sm:flex-row sm:justify-around w-full py-16 px-8"
+      class="flex flex-col items-center sm:flex-row sm:justify-around w-full py-16 px-2 sm:px-8"
     >
       <Fader nombreProducto={producto.nombre} client:load />
       <div
@@ -186,7 +186,7 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
       </p>
     </div>
     <div
-      class="flex flex-col items-center sm:flex-row sm:justify-around w-full py-16 px-8"
+      class="flex flex-col items-center sm:flex-row sm:justify-around w-full py-16 px-2 sm:px-8"
     >
       <div
         class="flex flex-col justify-evenly ps-6 pe-2 sm:px-7 lg:px-10 2xl:px-16 w-full h-full max-w-md sm:max-w-2xs lg:max-w-md xl:max-w-xl 2xl:max-w-2xl"
@@ -214,37 +214,37 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
     </div>
   </section>
 </Layout>
-
+<!-- Ventana emergente -->
 <div
   id="lightbox"
-  class={`fixed inset-0 flex items-center justify-center bg-black/50 z-50`}
+  class="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
 >
   <div
-    class="relative bg-white rounded-2xl shadow-lg max-w-lg flex overflow-hidden"
+    class="flex flex-col-reverse sm:flex-row relative bg-white rounded-2xl shadow-lg max-w-[400px] sm:max-w-lg overflow-hidden mx-2 sm:mx-[0px]"
   >
     <!-- Imagen -->
-    <div class="w-1/2">
+    <div class="sm:w-1/2">
       <Picture
         src={producto.emergente.imagen_url}
         alt={producto.nombre}
-        class="h-full w-full object-cover"
+        class="h-[250px] sm:h-full w-full object-cover"
       />
     </div>
 
     <!-- Formulario -->
-    <div class="w-1/2 bg-[#293296] p-6 text-white relative">
+    <div class="sm:w-1/2 bg-[#293296] p-6 text-white relative">
       <button
         id="close-modal"
         class="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center"
         >✕</button
       >
-      {producto.emergente.tipo == 1 && <h2 class="text-4xl font-semibold italic">Obtén<br><span class="text-5xl font-bold">Asesoría<br></span>gratuita</h2>}
-      {producto.emergente.tipo == 2 && <h2 class="text-4xl font-bold italic"><span class="text-3xl font-semibold">Disfruta Nuestros<br></span>Beneficios</h2>}
-      {producto.emergente.tipo == 3 && <h2 class="text-4xl font-semibold italic">Accede<br><span class="text-5xl font-bold">Ofertas<br></span>Exclusivas</h2>}
-      {producto.emergente.tipo == 4 && <h2 class="text-2xl font-semibold italic">Gana <br> <span class="text-5xl font-semibold">10% dto.</span> en tu compra</h2>}
-      {producto.emergente.tipo == 5 && <h2 class="text-2xl font-semibold italic"><span class="text-5xl font-semibold">Ahorra<br></span>en tu primera compra</h2>}
-      {producto.emergente.tipo == 6 && <h2 class="text-3xl font-semibold italic">Obtén<br><span class="text-4xl font-bold">Descuentos<br></span>Especiales</h2>}
-      {producto.emergente.tipo == 7 && <h2 class="text-4xl font-semibold italic">Envío<br /><span class="text-6xl font-bold">Gratis<br /></span><span class="text-2xl font-semibold">en todo Lima</span></h2>}
+      {producto.emergente.tipo == 1 && <h2 class="text-xl sm:text-4xl font-semibold italic">Obtén<br><span class="text-2xl sm:text-5xl font-bold">Asesoría<br></span>gratuita</h2>}
+      {producto.emergente.tipo == 2 && <h2 class="text-xl sm:text-4xl font-bold italic"><span class="text-base sm:text-3xl font-semibold">Disfruta Nuestros<br></span>Beneficios</h2>}
+      {producto.emergente.tipo == 3 && <h2 class="text-xl sm:text-4xl font-semibold italic">Accede<br><span class="text-2xl sm:text-5xl font-bold">Ofertas<br></span>Exclusivas</h2>}
+      {producto.emergente.tipo == 4 && <h2 class="text-base sm:text-2xl font-semibold italic">Gana <br> <span class="text-2xl sm:text-5xl font-semibold">10% dto.</span> en tu compra</h2>}
+      {producto.emergente.tipo == 5 && <h2 class="text-base sm:text-2xl font-semibold italic"><span class="text-2xl sm:text-5xl font-semibold">Ahorra<br></span>en tu primera compra</h2>}
+      {producto.emergente.tipo == 6 && <h2 class="text-lg sm:text-3xl font-semibold italic">Obtén<br><span class="text-xl sm:text-4xl font-bold">Descuentos<br></span>Especiales</h2>}
+      {producto.emergente.tipo == 7 && <h2 class="text-xl sm:text-4xl font-semibold italic">Envío<br /><span class="text-3xl sm:text-6xl font-bold">Gratis<br /></span><span class="text-base sm:text-2xl font-semibold">en todo Lima</span></h2>}
 
       <form class="mt-4">
         <label class="block text-lg font-bold">Nombre</label>
@@ -279,7 +279,7 @@ const productoRuta = producto.nombre.replace(/\s+/g, "");
   </div>
 </div>
 
-// Código que permite cerrar las ventanas emergentes
+<!-- Código que permite cerrar las ventanas emergentes  -->
 <script>
   function setupModal() {
     const modal = document.getElementById("lightbox");
