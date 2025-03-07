@@ -14,14 +14,20 @@ import Layout from "../layouts/Layout.astro";
       class="absolute z-0 w-full h-full object-cover object-bottom"
     />
     <h1
-      class="relative z-10 text-cyan-500 font-bold text-5xl flex flex-col text-center sombra-title"
+      class="relative z-10 text-cyan-500 font-bold text-3xl md:text-5xl flex flex-col text-center sombra-title"
     >
       TU SOCIO PARA PERSONALIZAR
-      <span class="text-8xl text-white">TU NEGOCIO</span>
+      <span class="text-5xl md:text-8xl text-white">TU NEGOCIO</span>
     </h1>
   </section>
   <AboutComponent />
-  <MissionCard />
-  <VisionCard />
+  <div class="card-container flex flex-col md:flex-row justify-between items-stretch gap-8">
+    <div class="card flex-1 flex flex-col md:border-b-0 border-b-90 border-b-blue-950">
+      <MissionCard />
+    </div>
+    <div class="card flex-1 flex flex-col">
+      <VisionCard />
+    </div>
+  </div>
   <ValoresCorporativos />
 </Layout>
