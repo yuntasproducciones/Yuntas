@@ -1,12 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import telefono from "../assets/images/contact/telefono.webp";
+import fondo from "../assets/images/contact/principal.webp";
+import ubicacion from "../assets/images/contact/ubi3.webp";
+import email from "../assets/images/contact/email.webp";
 ---
 
 <Layout title="Contacto">
   <section class="relative w-full h-dvh flex justify-center items-center">
     <!-- Imagen de fondo -->
     <img
-      src="../src/assets/images/contact/principal.webp"
+      src= { fondo.src }
       alt="Fondo de contacto"
       class="absolute z-0 w-full h-full object-cover object-bottom"
     />
@@ -34,7 +38,7 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex flex-col items-center">
         <div class="bg-cyan-400 p-3 rounded-full mb-2">
           <img
-            src="../src/assets/images/contact/telefono.webp"
+            src={ telefono.src }
             alt="Teléfono"
             class="w-8 h-8"
           />
@@ -49,7 +53,7 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex flex-col items-center">
         <div class="bg-cyan-400 p-3 rounded-full mb-2">
           <img
-            src="../src/assets/images/contact/ubi3.webp"
+            src={ ubicacion.src }
             alt="Ubicación"
             class="w-8 h-8"
           />
@@ -64,7 +68,7 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex flex-col items-center">
         <div class="bg-cyan-400 p-3 rounded-full mb-2">
           <img
-            src="../src/assets/images/contact/email.webp"
+            src= { email.src }
             alt="Correo"
             class="w-8 h-8"
           />
