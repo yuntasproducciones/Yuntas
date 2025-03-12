@@ -36,8 +36,8 @@ let productos = [
   { id: 5, url: imagen5, alt: "Túneles LED" },
 ];
 const groupedProducts = [];
-for (let i = 0; i < productos.length; i += 4) {
-  groupedProducts.push(productos.slice(i, i + 4));
+for (let i = 0; i < productos.length; i += 3) {
+  groupedProducts.push(productos.slice(i, i + 3));
 }
 ---
 <Layout title="Productos">
