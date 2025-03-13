@@ -3,6 +3,7 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import { FaTiktok } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
+import yuntasLogo from "../assets/images/logo_yuntas.webp";
 ---
 
 <footer class="bg-[#172649] text-white py-16">
@@ -10,7 +11,7 @@ import { MdEmail } from "react-icons/md";
     
     <!-- Logo y Redes Sociales -->
     <div class="text-center md:text-left mb-8 md:mb-0">
-      <img src="../src/assets/images/logo_yuntas.webp" alt="Yuntas Logo" class="h-25 mx-auto md:mx-10" />
+      <img src={yuntasLogo.src} alt="Yuntas Logo" class="h-25 mx-auto md:mx-10" />
       <div class=" top-15 left-15 border-t-1 border-l-2 border-cyan-400 w-54"></div>
       <div class="flex justify-center md:justify-start gap-3 mt-4 md:mx-5">
         <a href="#"><FaFacebook className="text-white text-2xl hover:text-blue-500" /></a>
