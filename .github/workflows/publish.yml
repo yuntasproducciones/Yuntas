@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [closed] # Ejecutar cuando se cierre un pull request
     branches:
-      - main
+      - master
 
 jobs:
   build:
