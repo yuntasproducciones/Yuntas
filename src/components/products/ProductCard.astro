@@ -2,20 +2,17 @@
 import Picture from "astro/components/Picture.astro";
 const producto = Astro.props;
 ---
-
 <a
-  href=`/products/${producto.id}`
-  class="relative flex justify-center hover:scale-105 transition-all duration-200 cursor-pointer group my-4 xl:my-0"
+    href={`/products/${producto.id}`}
+    class="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group my-4 sm:my-6 md:my-8 lg:my-10 xl:my-12"
 >
-  <p
-    class="absolute select-none bottom-2.5 w-5/6 text-white bg-linear-to-r from-blue-600 to-cyan-500 rounded-full px-2 text-center py-[0.10rem] group-hover:text-shadow-white"
-  >
+  <Picture
+      class="w-40 h-40 sm:w-48 sm:h-48 md:w-60 md:h-60 lg:w-80 lg:h-80"
+      src={producto.url}
+      formats={["png"]}
+      alt={producto.alt}
+  />
+  <p class="text-white pt-2 text-xl sm:text-2xl md:text-4xl font-bold text-center">
     {producto.alt}
   </p>
-  <Picture
-    class="w-52 h-52"
-    src={producto.url}
-    formats={["png"]}
-    alt={producto.alt}
-  />
 </a>
