@@ -1,0 +1,26 @@
+body {
+  overflow-x: hidden;
+}
+
+.fondo-container {
+  background: linear-gradient(45deg, #0D1030, #053BB8);
+}
+
+/* Aplicar las reglas del contenedor del formulario solo en pantallas a partir de 768px */
+@media (min-width: 768px) {
+  .mov-login {
+    position: absolute;
+    width: 50%; /* Ocupa el 50% de la pantalla */
+    right: 0;
+    transform: translateX(100%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 1s ease-in-out;
+  }
+
+  .mov-login.active {
+    transform: translateX(0); 
+  }
+}

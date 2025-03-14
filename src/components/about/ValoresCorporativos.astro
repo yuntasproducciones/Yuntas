@@ -39,7 +39,7 @@ const valores = [
     </div>
   </div>
   <div class="bg-cyan-500 py-24">
-    <div class="max-w-4xl mx-auto flex justify-between items-center text-white">
+    <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center text-white gap-8">
       {
         valores.map((valor) => {
           return (
@@ -47,7 +47,7 @@ const valores = [
               <Picture
                 src={valor.url}
                 alt={`Imagen del Valor: ${valor.light + " " + valor.bold}`}
-                class="w-32 h-32"
+                class="w-24 h-24 md:w-32 md:h-32"
               />
               <p class="flex flex-col">
                 {valor.light}
