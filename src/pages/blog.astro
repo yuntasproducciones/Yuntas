@@ -21,7 +21,30 @@ import { articles } from "./blogs/[articleId].astro";
   </div>
   <section class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col overflow-hidden">
     <h3 class="text-3xl font-bold">ARTÍCULOS</h3>
-    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+    <div class="flex justify-center mt-10 w-full">
+      <div class="bg-gray-300 rounded-2xl p-8 w-full flex items-center relative">
+        <input
+            type="text"
+            placeholder="Buscar..."
+            class="w-full bg-white placeholder-black px-6 py-3 rounded-full text-black text-xl focus:outline-none"
+        />
+        <button class="absolute right-16 top-1/2 transform -translate-y-1/2 text-black text-lg">
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
       {articles.map((article) => (
         <ArticuloCard key={article.id} {...article} class="w-full" />
       ))}
