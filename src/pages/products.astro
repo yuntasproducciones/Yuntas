@@ -29,11 +29,20 @@ let productos = [
   { id: 11, url: imagen11, alt: "Pantallas LED" },
   { id: 12, url: imagen12, alt: "Techos LED" },
 ];
-const groupedProducts = [];
+
+// Grupos para móvil (2 productos por fila)
+const groupedMobile = [];
+for (let i = 0; i < productos.length; i += 2) {
+  groupedMobile.push(productos.slice(i, i + 2));
+}
+
+// Grupos para desktop (3 productos por fila)
+const groupedDesktop = [];
 for (let i = 0; i < productos.length; i += 3) {
-  groupedProducts.push(productos.slice(i, i + 3));
+  groupedDesktop.push(productos.slice(i, i + 3));
 }
 ---
+
 <Layout title="Productos">
   <section class="relative w-full">
     <Picture
@@ -42,42 +51,66 @@ for (let i = 0; i < productos.length; i += 3) {
       alt="Banner de Productos"
     />
     <div class="absolute inset-0 flex flex-col justify-center items-center">
-      <h1 class="text-4xl Montserrat font-bold text-cyan-500 sombra-title">
+      <!-- <h1 class="text-4xl Montserrat font-bold text-cyan-500 sombra-title">
         DESCUBRE NUESTRA INNOVADORA
       </h1>
       <h1 class="text-7xl Montserrat font-black text-white sombra-title">
         LÍNEA DE PRODUCTOS
-      </h1>
+      </h1> -->
     </div>
   </section>
-  <section
-    class="w-full bg-linear-to-b from-blue-900 to-indigo-950 px-16 sm:px-24 md:px-32 lg:px-48 py-20"
-  >
-    <div class="flex justify-center">
-      <hr class="w-2/4 border-cyan-400 place-self-center mb-16" />
+  <div class="bg-gray h-30 flex items-center justify-center">
+    <h2 class="text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-extrabold text-[#243360]">
+      NUESTROS PRODUCTOS
+    </h2>
+  </div>
+  <section class="w-full bg-linear-to-b from-blue-900 to-indigo-950 py-20">
+    <div class="max-w-[1200px] px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24 mx-auto">
+      <div class="flex items-center justify-center mb-10">
+        <p class="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-medium text-white/75 text-center">
+          Descubre la selección que tenemos para tí
+        </p>
+      </div>
+      
+      {/* Vista móvil - 2 columnas */}
+      <div class="md:hidden">
+        {groupedMobile.map((row, index) => (
+          <>
+            {index > 0 && (
+              <div class="w-full h-[2px] bg-[#76b3c2] my-5"></div>
+            )}
+            <div class="grid grid-cols-2 gap-4">
+              {row.map((producto) => (
+                <div class="flex justify-center">
+                  <div class="w-full max-w-[250px]">
+                    <ProductCard {...producto} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ))}
+      </div>
+      
+      {/* Vista desktop - 3 columnas */}
+      <div class="hidden md:block">
+        {groupedDesktop.map((row, index) => (
+          <>
+            {index > 0 && (
+              <div class="w-full h-[2px] bg-[#76b3c2] my-8"></div>
+            )}
+            <div class="grid grid-cols-3 gap-8 lg:gap-12">
+              {row.map((producto) => (
+                <div class="flex justify-center">
+                  <div class="w-full max-w-[250px]">
+                    <ProductCard {...producto} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ))}
+      </div>
     </div>
-
-    <div>
-      <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl Montserrat font-medium text-white text-shadow-white">
-        Nuestros Productos
-      </h2>
-      <p class="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl Montserrat font-medium text-white/75">
-        Descubre nuestra innovadora línea de productos
-      </p>
-    </div>
-    <div class="mt-10">
-      <h3 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl Montserrat font-medium text-white/75">
-        Productos LED y 3D
-      </h3>
-    </div>
-    {
-      groupedProducts.map((row) => (
-          <div class="flex flex-col sm:flex-row justify-center sm:justify-between flex-wrap border-b-2 border-cyan-300/50 py-6 sm:py-8 md:py-2">
-            {row.map((producto) => (
-                <ProductCard {...producto} />
-            ))}
-          </div>
-      ))
-    }
   </section>
 </Layout>
