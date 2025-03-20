@@ -4,15 +4,17 @@ const producto = Astro.props;
 ---
 <a
     href={`/products/${producto.id}`}
-    class="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group my-4 sm:my-6 md:my-8 lg:my-10 xl:my-12"
+    class="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group my-2 sm:my-3 md:my-4"
 >
-  <Picture
-      class="w-40 h-40 sm:w-48 sm:h-48 md:w-60 md:h-60 lg:w-80 lg:h-80"
-      src={producto.url}
-      formats={["png"]}
-      alt={producto.alt}
-  />
-  <p class="text-white pt-2 text-xl sm:text-2xl md:text-4xl font-bold text-center">
+  <div class="aspect-square w-full overflow-hidden rounded-3xl">
+    <Picture
+        class="w-full h-full object-cover"
+        src={producto.url}
+        formats={["png"]}
+        alt={producto.alt}
+    />
+  </div>
+  <p class="text-white pt-2 text-base sm:text-lg md:text-2xl font-bold text-center">
     {producto.alt}
   </p>
 </a>
