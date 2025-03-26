@@ -1,5 +1,5 @@
 ---
-import ProductCard from "../components/products/ProductCard.astro";
+import ProductCard from "../components/products/ProductCard.jsx";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagenPrincipio from "../assets/images/products/principio.webp";
@@ -70,7 +70,7 @@ for (let i = 0; i < productsApi.length; i += 3) {
               {row.map((producto) => (
                 <div key={producto.id} class="flex justify-center">
                   <div class="w-full max-w-[250px]">
-                    <ProductCard {...producto} />
+                    <ProductCard client:load producto={producto} />
                   </div>
                 </div>
               ))}
@@ -87,8 +87,9 @@ for (let i = 0; i < productsApi.length; i += 3) {
             <div class="grid grid-cols-3 gap-8 lg:gap-12">
               {row.map((producto) => (
                 <div key={producto.id} class="flex justify-center">
-                  <div class="w-full max-w-[250px]">
-                    <ProductCard {...producto} />
+                  <div class="w-full max-w-[250px]">       
+                    <ProductCard client:load producto={producto} />
+
                   </div>
                 </div>
               ))}
