@@ -3,187 +3,108 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Contacto">
-  <section class="relative w-full h-dvh flex justify-center items-center">
+  <section class="relative w-full min-h-screen flex justify-center items-center md:items-end">
     <!-- Imagen de fondo -->
     <img
-      src="../src/assets/images/contact/principal.webp"
-      alt="Fondo de contacto"
-      class="absolute z-0 w-full h-full object-cover object-bottom"
+        src="../src/assets/images/contact/principal.webp"
+        alt="Fondo de contacto"
+        class="absolute z-0 w-full h-full object-cover object-bottom"
     />
 
-    <!-- Overlay azul frío oscuro -->
-    <div class="absolute inset-0 bg-slate-900/70 z-1"></div>
-
     <!-- Texto resaltado -->
-    <h1
-      class="relative z-10 text-cyan-500 font-extrabold text-5xl flex flex-col text-center sombra-title"
-    >
-      CONOCE NUESTROS MEDIOS DE
-      <span class="text-8xl text-white"> CONTACTO </span>
-    </h1>
+    <div class="relative z-10 text-center mb-12 px-6">
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-white mb-6">
+        <span class="bg-cyan-400 text-white px-4 sm:px-8 rounded-3xl shadow-lg">
+          CONOCE NUESTROS MEDIOS DE
+        </span>
+      </h1>
+      <h2 class="text-5xl sm:text-7xl font-extrabold text-white mt-4 drop-shadow-lg">
+        CONTACTO
+      </h2>
+    </div>
   </section>
 
   <!-- Sección de Contacto -->
-  <section
-    class="bg-gradient-to-b from-blue-900 to-indigo-950 px-24 py-10 text-white"
-  >
-    <div
-      class="flex justify-around items-center border-b-2 border-b-sky-300 pb-10 relative text-lg"
-    >
+  <section class="bg-gradient-to-b from-blue-900 to-indigo-950 px-6 sm:px-12 py-10 text-white">
+    <div class="flex flex-wrap gap-8 justify-center md:justify-around items-center border-b-4 border-b-sky-300 pb-10 text-lg mb-15">
       <!-- Teléfono -->
       <div class="flex flex-col items-center">
-        <div class="bg-cyan-400 p-3 rounded-full mb-2">
-          <img
-            src="../src/assets/images/contact/telefono.webp"
-            alt="Teléfono"
-            class="w-8 h-8"
-          />
+        <div class="bg-cyan-400 p-3 rounded-full mb-4">
+          <img src="../src/assets/images/contact/telefono.webp" alt="Teléfono" class="size-12" />
         </div>
         <p>+51 912 849 782</p>
       </div>
 
-      <!-- Línea separadora -->
-      <div class="h-20 w-0.5 bg-sky-300"></div>
+      <!-- Línea separadora (solo en pantallas grandes) -->
+      <div class="hidden md:block h-20 w-1 bg-sky-300"></div>
 
       <!-- Ubicación -->
-      <div class="flex flex-col items-center">
-        <div class="bg-cyan-400 p-3 rounded-full mb-2">
-          <img
-            src="../src/assets/images/contact/ubi3.webp"
-            alt="Ubicación"
-            class="w-8 h-8"
-          />
+      <div class="flex flex-col items-center text-center">
+        <div class="bg-cyan-400 p-3 rounded-full mb-4">
+          <img src="../src/assets/images/contact/ubi3.webp" alt="Ubicación" class="size-12" />
         </div>
-        <p class="text-center">Urb. Alameda La Rivera Mz F Lt 30</p>
+        <p>Urb. Alameda La Rivera Mz F Lt 30</p>
       </div>
 
-      <!-- Línea separadora -->
-      <div class="h-20 w-0.5 bg-sky-300"></div>
+      <!-- Línea separadora (solo en pantallas grandes) -->
+      <div class="hidden md:block h-20 w-1 bg-sky-300"></div>
 
       <!-- Correo Electrónico -->
       <div class="flex flex-col items-center">
-        <div class="bg-cyan-400 p-3 rounded-full mb-2">
-          <img
-            src="../src/assets/images/contact/email.webp"
-            alt="Correo"
-            class="w-8 h-8"
-          />
+        <div class="bg-cyan-400 p-3 rounded-full mb-4">
+          <img src="../src/assets/images/contact/email.webp" alt="Correo" class="size-12" />
         </div>
         <p>yuntasproducciones@gmail.com</p>
       </div>
     </div>
 
     <!-- Mensaje Final -->
-    <div class="flex flex-col items-center">
-      <p
-        class="bg-gradient-to-r from-blue-700 to-cyan-500 text-center py-2 px-20 rounded-3xl my-8 text-2xl font-bold flex flex-col"
-      >
+    <div class="flex flex-col items-center my-12">
+      <p class="bg-gradient-to-r from-blue-700 to-cyan-500 text-center py-4 px-6 sm:px-20 rounded-3xl text-2xl sm:text-3xl font-extrabold mb-20">
         ¡HOLA!
-        <span class="text-xl font-light">
+        <span class="text-lg sm:text-xl font-normal block mt-2">
           Déjanos tus datos y agenda una visita a nuestro local.
         </span>
       </p>
+
       <!-- Formulario de Contacto -->
-      <div
-        class="w-5/6 bg-white rounded-4xl p-7 shadow-2xl my-10 bg-linear-to-b from-cyan-500 via-blue-600 to-indigo-950"
-      >
-        <div class="bg-white p-6 rounded-4xl">
-          <h2 class="text-2xl font-semibold text-center mb-6 text-black">
-            Solicita información
-          </h2>
-          <form>
-            <div class="mb-4">
-              <label for="nombre" class="block text-gray-700"
-                >Nombre<span class="text-red-600">*</span></label
-              >
-              <input
-                type="text"
-                id="nombre"
-                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
-                placeholder="Ingresa tu nombre"
-                required
-              />
-            </div>
-            <div class="mb-4">
-              <label for="apellidos" class="block text-gray-700"
-                >Apellidos<span class="text-red-600">*</span></label
-              >
-              <input
-                type="text"
-                id="apellidos"
-                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
-                placeholder="Ingresa tus apellidos"
-                required
-              />
-            </div>
-            <div class="mb-4">
-              <label for="telefono" class="block text-gray-700"
-                >Teléfono<span class="text-red-600">*</span></label
-              >
-              <input
-                type="tel"
-                id="telefono"
-                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
-                placeholder="Ingresa tu teléfono"
-                required
-              />
-            </div>
-            <div class="mb-4">
-              <label for="distrito" class="block text-gray-700"
-                >Distrito<span class="text-red-600">*</span></label
-              >
-              <input
-                type="text"
-                id="distrito"
-                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
-                placeholder="Ingresa tu distrito"
-                required
-              />
-            </div>
-            <div class="mb-4">
-              <label for="detalle" class="block text-gray-700"
-                >Detalle de reclamación</label
-              >
-              <input
-                type="text"
-                id="detalle"
-                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
-                placeholder="Detalles de tu reclamación"
-              />
-            </div>
-            <div class="mb-4">
-              <label for="mensaje" class="block text-gray-700">Mensaje</label>
-              <textarea
-                id="mensaje"
-                rows="4"
-                class="border border-gray-300 p-3 rounded w-full focus:border-blue-600 focus:outline-none bg-white text-gray-800"
-                placeholder="Escribe tu mensaje aquí"></textarea>
-            </div>
-            <div class="flex justify-center">
-              <button
-                type="submit"
-                class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-8 rounded-lg transition-all"
-                >Enviar</button
-              >
-            </div>
-          </form>
-        </div>
+      <div class="max-w-4xl md:max-w-6xl w-full bg-[#FDEEE8] rounded-3xl p-6 sm:p-8 shadow-2xl mt-6 mb-20">
+        <h2 class="text-xl sm:text-2xl font-semibold text-center mb-6 text-black">Solicita información</h2>
+
+        <form>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" placeholder="Nombre*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
+            <input type="text" placeholder="Apellidos*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
+            <input type="tel" placeholder="Teléfono*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
+            <input type="text" placeholder="Distrito*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
+          </div>
+
+          <input type="text" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4">
+          <input type="text" placeholder="Detalle de reclamación" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4">
+          <textarea placeholder="Mensaje" rows="4" class="text-black p-3 w-full bg-gray-300 placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4"></textarea>
+
+          <div class="mt-6 flex justify-center">
+            <button type="submit" class="bg-[#1D2C5E] hover:bg-[#141B40] text-lg text-white font-semibold py-2 px-10 rounded-full transition-all">
+              Enviar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
     <!-- Mapa -->
-    <div>
-      <h2 class="text-center text-4xl font-bold">CADA VEZ MÁS CERCA DE TI</h2>
+    <div class="mt-12 mb-20">
+      <h2 class="text-center text-3xl sm:text-4xl font-bold">CADA VEZ MÁS CERCA DE TI</h2>
       <div class="mt-6 flex justify-center">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.255255812076!2d-76.94464365943126!3d-12.025940110892334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c97c8934a213%3A0x7f6ccb249e86b5e6!2sYuntas%20Producciones!5e0!3m2!1ses-419!2spe!4v1739596969950!5m2!1ses-419!2spe"
-          width="600"
-          height="450"
-          style="border:0;"
-          allowfullscreen=""
-          class="rounded-4xl w-full"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.255255812076!2d-76.94464365943126!3d-12.025940110892334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c97c8934a213%3A0x7f6ccb249e86b5e6!2sYuntas%20Producciones!5e0!3m2!1ses-419!2spe!4v1739596969950!5m2!1ses-419!2spe"
+            width="600"
+            height="450"
+            class="rounded-3xl w-full md:max-w-6xl max-w-4xl"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            style="border:0;"
+        ></iframe>
       </div>
     </div>
   </section>
