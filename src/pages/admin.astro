@@ -1,8 +1,10 @@
 ---
 // filepath: /src/pages/admin.astro
+import ProductTable from "../components/dashboard/tables/ProductTable";
+import AdminLayout from "../layouts/AdminLayout.astro";
 import "../styles/global.css";
 ---
 
-  <section class="w-full h-screen flex items-center justify-center md:tex">
-    <h1 class="text-4xl font-bold">Bienvenido a la vista de administrador</h1>
-  </section>
+<AdminLayout title="Admin">
+  <ProductTable />
+</AdminLayout>
