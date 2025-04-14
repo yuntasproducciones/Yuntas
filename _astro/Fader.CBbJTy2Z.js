@@ -1,1 +1,0 @@
-import{j as r}from"./jsx-runtime.D_zvdyIk.js";import{r as t}from"./index.Dy6lLLXr.js";const c=({title:s})=>{const[e,o]=t.useState(!1);return t.useEffect(()=>{const a=setTimeout(()=>o(!0),1e3);return()=>clearTimeout(a)},[]),r.jsx("div",{className:`transition-opacity duration-1000 ${e?"opacity-100":"opacity-0"}`})};export{c as default};
