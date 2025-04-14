@@ -1,64 +1,52 @@
 ---
-import ProductCard from "../components/products/ProductCard.astro";
+import ProductCard from "../components/products/ProductCard.jsx";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagenPrincipio from "../assets/images/products/principio.webp";
-import imagen1 from "../assets/images/products/letreros_neon_led.webp";
-import imagen2 from "../assets/images/products/sillas_y_mesas_led.webp";
-import imagen3 from "../assets/images/products/pisos_led.webp";
-import imagen4 from "../assets/images/products/barras_pixel_led.webp";
-import imagen5 from "../assets/images/products/tuneles_led.webp";
-import imagen6 from "../assets/images/products/menu_boards.webp";
-import imagen7 from "../assets/images/products/letras_pintadas.webp";
-import imagen8 from "../assets/images/products/displays.webp";
-import imagen9 from "../assets/images/products/hologramas_3d.webp";
-import imagen10 from "../assets/images/products/relojes_digitales.webp";
-import imagen11 from "../assets/images/products/pantallas_led.webp";
-import imagen12 from "../assets/images/products/techos_led.webp";
-let productos = [
-  { id: 1, url: imagen1, alt: "Letreros Neón LED" },
-  { id: 2, url: imagen2, alt: "Sillas y Mesas LED" },
-  { id: 3, url: imagen3, alt: "Pisos LED" },
-  { id: 4, url: imagen4, alt: "Barras Pixel LED" },
-  { id: 5, url: imagen5, alt: "Túneles LED" },
-  { id: 6, url: imagen6, alt: "Menu Boards" },
-  { id: 7, url: imagen7, alt: "Letras Pintadas" },
-  { id: 8, url: imagen8, alt: "Displays" },
-  { id: 9, url: imagen9, alt: "Hologramas 3D" },
-  { id: 10, url: imagen10, alt: "Relojes Digitales" },
-  { id: 11, url: imagen11, alt: "Pantallas LED" },
-  { id: 12, url: imagen12, alt: "Techos LED" },
-];
 
-// Grupos para móvil (2 productos por fila)
-const groupedMobile = [];
-for (let i = 0; i < productos.length; i += 2) {
-  groupedMobile.push(productos.slice(i, i + 2));
+const API_URL = import.meta.env.PUBLIC_API_URL;
+
+let productsApi = [];
+try {
+  const response = await fetch(API_URL);
+  if (!response.ok) throw new Error("Error al obtener productos de la API");
+
+  const jsonResponse = await response.json();
+  if (jsonResponse.success && Array.isArray(jsonResponse.data)) {
+    productsApi = jsonResponse.data.map(producto => ({
+      id: producto.id,
+      title: producto.title,
+      subtitle: producto.subtitle,
+      tagline: producto.tagline,
+      description: producto.description,
+      image: producto.image || producto.images?.[0] || "", 
+      stock: producto.stockProducto,
+      price: producto.precioProducto,
+      section: producto.seccion
+    }));
+  }
+} catch (err) {
+  console.error("Error al obtener productos:", err);
 }
 
-// Grupos para desktop (3 productos por fila)
+// Agrupar productos para móvil (2 por fila)
+const groupedMobile = [];
+for (let i = 0; i < productsApi.length; i += 2) {
+  groupedMobile.push(productsApi.slice(i, i + 2));
+}
+
+// Agrupar productos para desktop (3 por fila)
 const groupedDesktop = [];
-for (let i = 0; i < productos.length; i += 3) {
-  groupedDesktop.push(productos.slice(i, i + 3));
+for (let i = 0; i < productsApi.length; i += 3) {
+  groupedDesktop.push(productsApi.slice(i, i + 3));
 }
 ---
 
 <Layout title="Productos">
   <section class="relative w-full">
-    <Picture
-      src={imagenPrincipio}
-      formats={["webp"]}
-      alt="Banner de Productos"
-    />
-    <div class="absolute inset-0 flex flex-col justify-center items-center">
-      <!-- <h1 class="text-4xl Montserrat font-bold text-cyan-500 sombra-title">
-        DESCUBRE NUESTRA INNOVADORA
-      </h1>
-      <h1 class="text-7xl Montserrat font-black text-white sombra-title">
-        LÍNEA DE PRODUCTOS
-      </h1> -->
-    </div>
+    <Picture src={imagenPrincipio} inferSize={true} formats={["webp"]} alt="Banner de Productos" />
   </section>
+
   <div class="bg-gray h-30 flex items-center justify-center">
     <h2 class="text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-extrabold text-[#243360]">
       NUESTROS PRODUCTOS
@@ -68,47 +56,44 @@ for (let i = 0; i < productos.length; i += 3) {
     <div class="max-w-[1200px] px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24 mx-auto">
       <div class="flex items-center justify-center mb-10">
         <p class="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-medium text-white/75 text-center">
-          Descubre la selección que tenemos para tí
+          Descubre la selección que tenemos para ti
         </p>
       </div>
-      
-      {/* Vista móvil - 2 columnas */}
+
+      <!-- Vista móvil - 2 columnas -->
       <div class="md:hidden">
         {groupedMobile.map((row, index) => (
-          <>
-            {index > 0 && (
-              <div class="w-full h-[2px] bg-[#76b3c2] my-5"></div>
-            )}
+          <div key={index}>
+            {index > 0 && <div class="w-full h-[2px] bg-[#76b3c2] my-5"></div>}
             <div class="grid grid-cols-2 gap-4">
               {row.map((producto) => (
-                <div class="flex justify-center">
+                <div key={producto.id} class="flex justify-center">
                   <div class="w-full max-w-[250px]">
-                    <ProductCard {...producto} />
+                    <ProductCard client:load producto={producto} />
                   </div>
                 </div>
               ))}
             </div>
-          </>
+          </div>
         ))}
       </div>
-      
-      {/* Vista desktop - 3 columnas */}
+
+      <!-- Vista desktop - 3 columnas -->
       <div class="hidden md:block">
         {groupedDesktop.map((row, index) => (
-          <>
-            {index > 0 && (
-              <div class="w-full h-[2px] bg-[#76b3c2] my-8"></div>
-            )}
+          <div key={index}>
+            {index > 0 && <div class="w-full h-[2px] bg-[#76b3c2] my-8"></div>}
             <div class="grid grid-cols-3 gap-8 lg:gap-12">
               {row.map((producto) => (
-                <div class="flex justify-center">
-                  <div class="w-full max-w-[250px]">
-                    <ProductCard {...producto} />
+                <div key={producto.id} class="flex justify-center">
+                  <div class="w-full max-w-[250px]">       
+                    <ProductCard client:load producto={producto} />
+
                   </div>
                 </div>
               ))}
             </div>
-          </>
+          </div>
         ))}
       </div>
     </div>

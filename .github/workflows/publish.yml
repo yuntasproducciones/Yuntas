@@ -1,11 +1,11 @@
 name: Generate a build and push to another branch
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [closed] # Ejecutar cuando se cierre un pull request
     branches:
       - master
-
 jobs:
   build:
     runs-on: ubuntu-latest
