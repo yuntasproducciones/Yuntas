@@ -1,0 +1,9 @@
+---
+import LayoutAdmin from "../../layouts/LayoutAdmin.astro";
+const tiempoTranscurrido = Date.now();
+const hoy = new Date(tiempoTranscurrido);
+---
+
+<LayoutAdmin title="VENTAS">
+  <p>Bienvenido al Dashboard de Administrador. {hoy.toLocaleDateString()}</p>
+</LayoutAdmin>

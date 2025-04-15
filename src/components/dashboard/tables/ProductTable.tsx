@@ -36,7 +36,7 @@ export default function DataTable() {
       {/* Tabla */}
       <table className="w-full border-separate border-spacing-2">
         <thead>
-          <tr className="bg-teal-600 text-white">
+          <tr className="bg-blue-950 text-white">
             <th className="px-4 py-2 rounded-xl">ID</th>
             <th className="px-4 py-2 rounded-xl">NOMBRE</th>
             <th className="px-4 py-2 rounded-xl">SECCION</th>
@@ -166,7 +166,7 @@ const BtnAñadirDatos = () => {
       {/* Botón para abrir el modal */}
       <button
         onClick={() => setIsOpen(true)}
-        className="mt-4 bg-teal-500 hover:bg-teal-600 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
+        className="mt-4 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
       >
         Añadir Producto
       </button>
@@ -174,7 +174,7 @@ const BtnAñadirDatos = () => {
       {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 flex items-start justify-center bg-black/50 overflow-y-auto py-10">
-          <div className="bg-teal-600 text-white px-10 py-8 rounded-4xl w-3/5">
+          <div className="bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5">
             <h2 className="text-2xl font-bold mb-4">AÑADIR DATOS</h2>
 
             {/* Formulario */}

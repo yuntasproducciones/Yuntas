@@ -38,8 +38,9 @@ const Sidebar = () => {
   };
 
   const items = [
-    { name: "Seguimiento", path: "/admin/seguimiento" },
-    { name: "Ventas", path: "/admin/ventas" },
+    { name: "Inicio", path: "/admin/inicio" },
+    //{ name: "Seguimiento", path: "/admin/seguimiento" },
+    //{ name: "Ventas", path: "/admin/ventas" },
     { name: "Productos", path: "/admin/productos" },
   ];
 
@@ -95,7 +96,7 @@ const Sidebar = () => {
           <p className="text-sm text-gray-600">Administrador</p>
           <button
             onClick={logout}
-            className="mt-2 w-full bg-teal-500 text-white py-2 rounded-full hover:bg-teal-600 transition"
+            className="mt-2 w-full bg-blue-950 text-white py-2 rounded-full hover:bg-teal-600 transition"
           >
             Cerrar sesión
           </button>
