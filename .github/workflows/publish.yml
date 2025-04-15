@@ -5,6 +5,7 @@ on:
     types: [closed] # Ejecutar cuando se cierre un pull request
     branches:
       - master
+  workflow_dispatch: # Permite ejecutar el workflow manualmente desde la interfaz de GitHub
 
 jobs:
   build:

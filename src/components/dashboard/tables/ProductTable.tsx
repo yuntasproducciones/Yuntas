@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 interface Producto {
   id: number | string;
-  name: string;
+  nombreProducto: string;
   seccion: string;
   precioProducto: number;
 }
@@ -53,7 +53,7 @@ export default function DataTable() {
               }`}
             >
               <td className="px-4 font-bold rounded-xl">{item.id}</td>
-              <td className="px-4 font-bold rounded-xl">{item.name}</td>
+              <td className="px-4 font-bold rounded-xl">{item.nombreProducto}</td>
               <td className="px-4 font-bold rounded-xl">{item.seccion}</td>
               <td className="px-4 font-bold rounded-xl">
                 {item.precioProducto}
