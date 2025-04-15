@@ -38,7 +38,7 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem("token", data.data.token); // Guardar token
-        window.location.href = "/admin"; // Redirigir al dashboard
+        window.location.href = "/admin/inicio"; // Redirigir al dashboard
       } else {
         console.error("Error en la respuesta del servidor:", data.message);
         alert(data.message || "Error al iniciar sesión");
