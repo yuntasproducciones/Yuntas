@@ -3,6 +3,8 @@ import { ClientRouter } from "astro:transitions";
 import Navbar from "../components/Navbar.astro";
 import "../styles/global.css";
 import Footer from "../components/Footer.astro";
+import Header from "../components/dashboard/Header.astro";
+import Sidebar from "../components/dashboard/Sidebar";
 
 interface Props {
   title: string;
@@ -11,7 +13,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -19,13 +21,16 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <!--  fuente de Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
+      rel="stylesheet"
+    />
 
     <ClientRouter />
   </head>
-  <body >
-    <Navbar />
+  <body class="h-screen w-screen overflow-hidden">
+    <Header />
+    <Sidebar />
     <slot />
-    <Footer />
   </body>
 </html>
