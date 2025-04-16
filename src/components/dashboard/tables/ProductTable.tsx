@@ -1,6 +1,5 @@
 import { FaTrash, FaCheck } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { FaPlus, FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 interface Producto {
@@ -92,7 +91,7 @@ const BtnAñadirDatos = () => {
       const token = localStorage.getItem("token");
       const data = new FormData(e.target);
       const respuesta = await fetch(
-        getApiUrl(config.endpoints.productos.create),
+          "https://apiyuntas.yuntasproducciones.com/api/v1/productos",
         {
           method: "POST",
           headers: {
@@ -132,6 +131,8 @@ const BtnAñadirDatos = () => {
           title: `${respuestaDatos.message}`,
           icon: "success",
         });
+        setIsOpen(false);
+        obtenerDatos(); // Recargar datos
       } else {
         Swal.fire({
           title: `${respuestaDatos.message}`,

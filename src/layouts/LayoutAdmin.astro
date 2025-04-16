@@ -28,9 +28,18 @@ const { title } = Astro.props;
 
     <ClientRouter />
   </head>
-  <body class="h-screen w-screen overflow-hidden">
-    <Header />
-    <Sidebar />
-    <slot />
+  <body>
+    <!-- HEADER FIJO -->
+    <Header title="PRINCIPAL" client:load />
+
+    <div class="flex h-full">
+      <!-- SIDEBAR FIJO -->
+      <Sidebar client:load />
+
+      <!-- CONTENIDO SIN SCROLL NI ESPACIO SUPERIOR -->
+      <main class="ml-64 w-full h-full">
+        <slot />
+      </main>
+    </div>
   </body>
 </html>

@@ -5,9 +5,5 @@ import ProductosTabla from "../../components/dashboard/tables/ProductTable.tsx";
 ---
 <LayoutAdmin title="VENTAS">
     <AdminDashboard client:only="react" />
-    <div class="flex-1 p-4">
-        <div class="p-4 w-full">
-            <ProductosTabla client:load />
-        </div>
-    </div>
+    <ProductosTabla client:load />
 </LayoutAdmin>

@@ -1,0 +1,10 @@
+---
+import LayoutAdmin from "../../layouts/LayoutAdmin.astro";
+import SeguimientoTable from "../../components/dashboard/tables/SeguimientoTable.tsx";
+---
+
+<LayoutAdmin title="SEGUIMIENTO">
+    <div class="px-2 py-4">
+        <SeguimientoTable client:visible />
+    </div>
+</LayoutAdmin>
