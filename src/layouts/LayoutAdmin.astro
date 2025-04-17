@@ -1,8 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import Navbar from "../components/Navbar.astro";
 import "../styles/global.css";
-import Footer from "../components/Footer.astro";
 import Header from "../components/dashboard/Header.astro";
 import Sidebar from "../components/dashboard/Sidebar";
 
@@ -30,7 +28,7 @@ const { title } = Astro.props;
   </head>
   <body>
     <!-- HEADER FIJO -->
-    <Header title="PRINCIPAL" client:load />
+    <Header title="PRINCIPAL" />
 
     <div class="flex h-full">
       <!-- SIDEBAR FIJO -->

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { config, getApiUrl } from "config";
-import type Blog from "src/models/Blog";
+import { config, getApiUrl } from "../../config";
+import type Blog from "../models/Blog";
 
 export function useBlog(idPost: string) {
   const [blog, setBlog] = useState<Blog | null>(null);
@@ -9,7 +9,9 @@ export function useBlog(idPost: string) {
   useEffect(() => {
     async function fetchBlog() {
       try {
-        const res = await fetch(getApiUrl(config.endpoints.blogs.detail(idPost)));
+        const res = await fetch(
+          getApiUrl(config.endpoints.blogs.detail(idPost))
+        );
         if (!res.ok) throw new Error("Error al obtener el contenido del blog");
 
         const { data }: { data: Blog } = await res.json();

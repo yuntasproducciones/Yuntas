@@ -3,11 +3,10 @@
  * @description Este archivo contiene los hooks para las acciones de los clientes.
  */
 
-import { getApiUrl, config } from "config"; // importa la configuración de la API
+import { config, getApiUrl } from "../../../../config";
 import type Cliente from "../../../models/clients"; // importa el modelo de cliente
 
 const useClienteAcciones = () => {
-  
   /**
    * Obtiene el token de autenticación del localStorage y realiza la solicitud a la API.
    * Si no se encuentra el token, lanza un error.
@@ -26,8 +25,8 @@ const useClienteAcciones = () => {
   const addCliente = async (
     clienteData: Partial<Cliente>
   ): Promise<Cliente> => {
-    const token = getValidToken(); 
-    const url = getApiUrl(config.endpoints.clientes.create); 
+    const token = getValidToken();
+    const url = getApiUrl(config.endpoints.clientes.create);
 
     const response = await fetch(url, {
       method: "POST",
@@ -73,7 +72,7 @@ const useClienteAcciones = () => {
   /**
    * Función para eliminar un cliente, usando los tipos
    */
-  
+
   const deleteCliente = async (id: number): Promise<{ message: string }> => {
     const token = getValidToken();
     const url = getApiUrl(config.endpoints.clientes.delete(id));
