@@ -68,7 +68,7 @@ const DataTable = () => {
     <>
       <table className="w-full md:w-40 border-separate border-spacing-2">
         <thead>
-          <tr className="bg-teal-600 text-white">
+          <tr className="bg-blue-950 text-white">
             <th className="px-4 py-2 rounded-xl">ID</th>
             <th className="px-4 py-2 rounded-xl">NOMBRE</th>
             <th className="px-4 py-2 rounded-xl">GMAIL</th>
