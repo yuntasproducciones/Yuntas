@@ -95,7 +95,7 @@ const Sidebar = () => {
           <p className="text-sm text-gray-600">Administrador</p>
           <button
             onClick={logout}
-            className="mt-2 w-full bg-teal-500 text-white py-2 rounded-full hover:bg-teal-600 transition"
+            className="mt-2 w-full bg-blue-900 text-white py-2 rounded-full hover:bg-teal-600 transition"
           >
             Cerrar sesión
           </button>
