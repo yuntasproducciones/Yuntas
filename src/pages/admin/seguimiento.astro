@@ -1,0 +1,13 @@
+---
+import LayoutAdmin from "../../layouts/LayoutAdmin.astro";
+import AdminDashboard from "../../components/admin/Admin";
+import SeguimientoTabla from "../../components/dashboard/tables/seguimiento/SeguimientoTable";
+---
+<LayoutAdmin title="SEGUIMIENTO">
+    <AdminDashboard client:only="react" />
+    <div class="flex-1 pl-64">
+        <div class="p-4 w-full">
+            <SeguimientoTabla client:load />
+        </div>
+    </div>
+</LayoutAdmin>
