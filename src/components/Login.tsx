@@ -3,6 +3,7 @@ import { fakeUsers } from "../utils/fakeUsers";
 import "../../src/styles/login.css";
 import logo from "../assets/images/logo_yuntas.webp?url";
 import loginImagen from "../assets/images/login/Login_fondo.webp?url";
+import { config, getApiUrl } from "../../config";
 
 const Login = () => {
   const [error, setError] = useState<string | null>(null);
@@ -22,14 +23,11 @@ const Login = () => {
     const password = formData.get("password");
 
     try {
-      const response = await fetch(
-        "https://apiyuntas.yuntasproducciones.com/api/v1/auth/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await fetch(getApiUrl(config.endpoints.auth.login), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
       console.log("Respuesta recibida:", response);
 
@@ -38,7 +36,7 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem("token", data.data.token); // Guardar token
-        window.location.href = "/admin"; // Redirigir al dashboard
+        window.location.href = "/admin/inicio"; // Redirigir al dashboard
       } else {
         console.error("Error en la respuesta del servidor:", data.message);
         alert(data.message || "Error al iniciar sesión");

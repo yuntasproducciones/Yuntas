@@ -9,11 +9,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^4.2.0",
+    "@astrojs/react": "^4.2.4",
     "@tailwindcss/vite": "^4.0.6",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "astro": "^5.2.5",
+    "astro": "^5.7.2",
+    "config": "^3.3.12",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
@@ -21,5 +22,8 @@
     "sweetalert2": "^11.17.2",
     "tailwindcss": "^4.0.6",
     "yuntas": "file:"
+  },
+  "devDependencies": {
+    "@types/config": "^3.3.5"
   }
 }
