@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Fader from "./Fader";
 import Emergente from "./Emergente";
-const API_URL = import.meta.env.PUBLIC_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 import imagen1 from "../../../public/products/BarrasPixelLED/beneficios.webp";
 import imagen2 from "../../../public/products/PisosLED/beneficios.webp";
@@ -33,6 +33,7 @@ export default function Details() {
 
     const fetchData = async () => {
       try {
+        console.log(API_URL);
         const response = await fetch(`${API_URL}/${identifier}`);
         if (!response.ok) throw new Error("Error al obtener el producto de la API");
 
