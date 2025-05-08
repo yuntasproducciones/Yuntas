@@ -3,28 +3,40 @@ import ProductCard from "../components/products/ProductCard.jsx";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagenPrincipio from "../assets/images/products/principio.webp";
+import { config, getApiUrl } from "../../config";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 let productsApi = [];
 try {
-  const response = await fetch(API_URL);
+  console.log("asd");
+  const response = await fetch(getApiUrl(config.endpoints.productos.list), {
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+         }
+      });
   if (!response.ok) throw new Error("Error al obtener productos de la API");
 
   const jsonResponse = await response.json();
   if (jsonResponse.success && Array.isArray(jsonResponse.data)) {
     productsApi = jsonResponse.data.map(producto => ({
       id: producto.id,
-      title: producto.title,
-      subtitle: producto.subtitle,
-      tagline: producto.tagline,
+      nombre: producto.nombre,
+      title: producto.titulo,
+      subtitle: producto.subtitulo,
+      stock: producto.stock,
+      price: producto.precio,
+      section: producto.seccion,
+      tagline: producto.lema,
       description: producto.description,
-      image: producto.image || producto.images?.[0] || "", 
-      stock: producto.stockProducto,
-      price: producto.precioProducto,
-      section: producto.seccion
+      especificaciones: producto.especificaciones,
+      mensaje_correo: producto.mensaje_correo,
+      image: producto.imagenes || producto.imagenes?.[0] || "", 
     }));
   }
+  console.log(productsApi);
 } catch (err) {
   console.error("Error al obtener productos:", err);
 }

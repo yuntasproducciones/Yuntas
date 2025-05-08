@@ -33,7 +33,6 @@ export default function Details() {
 
     const fetchData = async () => {
       try {
-        console.log(API_URL);
         const response = await fetch(`${API_URL}/${identifier}`);
         if (!response.ok) throw new Error("Error al obtener el producto de la API");
 
