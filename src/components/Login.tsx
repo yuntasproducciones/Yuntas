@@ -21,11 +21,14 @@ const Login = () => {
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email");
     const password = formData.get("password");
-
+    console.log(JSON.stringify({ email, password }));
     try {
       const response = await fetch(getApiUrl(config.endpoints.auth.login), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+         },
         body: JSON.stringify({ email, password }),
       });
 

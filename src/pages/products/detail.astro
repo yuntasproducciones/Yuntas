@@ -1,7 +1,11 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Details from '../../components/products/Detail'
+import Details from "../../components/products/Detail.jsx";
+
+const url = new URL(Astro.request.url);
+const id = url.searchParams.get("id");
 ---
-<Layout title="Products">
-  <Details client:load/>
+
+<Layout title="Detalle del producto">
+  <Details client:load id={id} />
 </Layout>

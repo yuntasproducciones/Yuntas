@@ -31,9 +31,9 @@ export const config = {
     },
     productos: {
       // Endpoints de productos
-      list: "/api/v1/productos",
-      detail: (id: number | string) => `/api/v1/productos/${id}`,
-      create: "/api/v1/productos",
+      list: '/api/v2/productos',
+      detail: (id: string | number) => `/api/v1/productos/${id}`,
+      create: "/api/v2/productos",
       update: (id: number | string) => `/api/v1/productos/${id}`,
       delete: (id: number | string) => `/api/v1/productos/${id}`,
     },
