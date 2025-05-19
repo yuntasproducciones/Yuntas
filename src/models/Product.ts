@@ -14,4 +14,5 @@ export default interface Producto {
   image: string;
   nombreProducto: string;
   seccion: string;
+  alt: string;
 }

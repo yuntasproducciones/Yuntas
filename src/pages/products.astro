@@ -5,16 +5,18 @@ import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagenPrincipio from "../assets/images/products/principio.webp";
 import { config, getApiUrl } from "../../config";
-// Variables y carga de productos
-const API_URL = import.meta.env.PUBLIC_API_URL;
-let productsApi = [];
+import type Producto from "../models/Product.ts";
 
+const API_URL = import.meta.env.PUBLIC_API_URL;
+let productsApi: Producto[] = [];
+
+// Cargar productos
 try {
   const response = await fetch(getApiUrl(config.endpoints.productos.list), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json"
+      Accept: "application/json"
     }
   });
 
@@ -22,46 +24,45 @@ try {
 
   const jsonResponse = await response.json();
 
+  console.log("Respuesta completa de la API:", jsonResponse);
+  console.log("Contenido de jsonResponse.data:", jsonResponse.data);
 
   if (Array.isArray(jsonResponse.data)) {
-    productsApi = jsonResponse.data.map((producto) => ({
+    productsApi = jsonResponse.data.map((producto: any): Producto => ({
       id: producto.id,
-      nombre: producto.nombre || "",
-      titulo: producto.titulo || "",
-      subtitulo: producto.subtitulo || "",
-      stock: producto.stock || 0,
-      precio: producto.precio || "0.00",
+      title: producto.titulo || "",
+      subtitle: producto.subtitulo || "",
+      tagline: producto.lema || "",
+      description: producto.descripcion || "",
+      specs: producto.especificaciones || {},
+      dimensions: producto.dimensiones || {},
+      relatedProducts: producto.productos_relacionados || [],
+      images: producto.imagenes?.map((img: any) => `${API_URL}${img.url_imagen}`) || [],
+      image: producto.imagenes?.[0] ? `${API_URL}${producto.imagenes[0].url_imagen}` : "",
+      nombreProducto: producto.nombre || "",
       seccion: producto.seccion || "",
-      lema: producto.lema || "",
-      descripcion: producto.descripcion || "",
-      especificaciones: producto.especificaciones || "",
-      mensaje_correo: producto.mensaje_correo || "",
-      imagenes: producto.imagenes ? producto.imagenes.map(img => ({
-        url: `${API_URL}${img.url_imagen}`,
-        alt: img.texto_alt_SEO || producto.titulo || ""
-      })) : []
+      alt: producto.imagenes?.[0] ? producto.imagenes[0].texto_alt_SEO : "Imagen no disponible",
     }));
   }
 } catch (err) {
   console.error("Error al obtener productos:", err);
 }
 
-// Agrupación de productos
-const groupedMobile = [];
+// Agrupar productos
+const groupedMobile: Producto[][] = [];
 for (let i = 0; i < productsApi.length; i += 2) {
   groupedMobile.push(productsApi.slice(i, i + 2));
 }
 
-const groupedDesktop = [];
+const groupedDesktop: Producto[][] = [];
 for (let i = 0; i < productsApi.length; i += 3) {
   groupedDesktop.push(productsApi.slice(i, i + 3));
 }
 ---
-
 <Layout title="Productos">
   <!-- Banner -->
   <section class="relative w-full">
-    <Picture src={imagenPrincipio} inferSize={true} formats={["webp"]} alt="Banner de Productos" />
+    <Picture src={imagenPrincipio} alt="Banner de Productos" />
   </section>
 
   <!-- Título principal -->
@@ -85,13 +86,13 @@ for (let i = 0; i < productsApi.length; i += 3) {
       <div class="md:hidden">
         {groupedMobile.length > 0 ? (
             groupedMobile.map((row, rowIndex) => (
-                <div key={`mobile-row-${rowIndex}`}>
+                <div>
                   {rowIndex > 0 && <div class="w-full h-[2px] bg-[#76b3c2] my-5"></div>}
                   <div class="grid grid-cols-2 gap-4">
                     {row.map((producto) => (
-                        <div key={`mobile-product-${producto.id}`} class="flex justify-center">
+                        <div class="flex justify-center">
                           <div class="w-full max-w-[250px]">
-                            <ProductCard client:load producto={producto.id} />
+                            <ProductCard client:load producto={producto} />
                           </div>
                         </div>
                     ))}
@@ -107,11 +108,11 @@ for (let i = 0; i < productsApi.length; i += 3) {
       <div class="hidden md:block">
         {groupedDesktop.length > 0 ? (
             groupedDesktop.map((row, rowIndex) => (
-                <div key={`desktop-row-${rowIndex}`}>
+                <div>
                   {rowIndex > 0 && <div class="w-full h-[2px] bg-[#76b3c2] my-8"></div>}
                   <div class="grid grid-cols-3 gap-8 lg:gap-12">
                     {row.map((producto) => (
-                        <div key={`desktop-product-${producto.id}`} class="flex justify-center">
+                        <div class="flex justify-center">
                           <div class="w-full max-w-[250px]">
                             <ProductCard client:load producto={producto} />
                           </div>
