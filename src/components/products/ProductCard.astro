@@ -1,20 +1,20 @@
 ---
 import Picture from "astro/components/Picture.astro";
 const producto = Astro.props;
+const product = producto.producto
 ---
 <a
-    href={`/products/${producto.id}`}
+    href={`/products/details/${product.id}`}
     class="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group my-2 sm:my-3 md:my-4"
 >
-  <div class="aspect-square w-full overflow-hidden rounded-3xl">
-    <Picture
+  <div class="h-[340px] w-full overflow-hidden rounded-3xl">
+    <img
         class="w-full h-full object-cover"
-        src={producto.url}
-        formats={["png"]}
-        alt={producto.alt}
+        src='https://www.shutterstock.com/image-vector/geometrical-pattern-design-hispanic-heritage-600nw-2464703235.jpg'
+        alt={product.alt || "Imagen de prueba"}
     />
   </div>
-  <p class="text-white pt-2 text-base sm:text-lg md:text-2xl font-bold text-center">
-    {producto.alt}
+  <p class="text-black py-2 px-5 text-base sm:text-lg md:text-xl font-bold text-center absolute bottom-2 bg-gradient-to-r from-cyan-600 to-cyan-300 rounded-full">
+    {product.title}
   </p>
 </a>
