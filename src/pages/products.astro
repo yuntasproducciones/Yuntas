@@ -13,7 +13,7 @@ let productsApi: Producto[] = [];
 // Cargar productos
 // getApiUrl(config.endpoints.productos.list)
 try {
-  const response = await fetch('https://apiyuntas.yuntasproducciones.com/api/v2/productos', {
+  const response = await fetch(getApiUrl(config.endpoints.productos.list), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -25,40 +25,42 @@ try {
 
   const jsonResponse = await response.json();
 
-  //console.log("Respuesta completa de la API:", jsonResponse);
-  //console.log("Contenido de jsonResponse.data:", jsonResponse.data);
+  // console.log("Respuesta completa de la API:", jsonResponse);
+  // console.log("Contenido de jsonResponse.data:", jsonResponse.data);
 
   if (Array.isArray(jsonResponse.data)) {
-    productsApi = jsonResponse.data.map((producto: any): Producto => ({
-      id: producto.id,
-      title: producto.titulo || "",
-      subtitle: producto.subtitulo || "",
-      tagline: producto.lema || "",
-      description: producto.descripcion || "",
-      specs: producto.especificaciones || {},
-      dimensions: producto.dimensiones || {},
-      relatedProducts: producto.productos_relacionados || [],
-      images: producto.imagenes?.map((img: any) => `${API_URL}${img.url_imagen}`) || [],
-      image: producto.imagenes?.[0] ? `${API_URL}${producto.imagenes[0].url_imagen}` : "",
-      nombreProducto: producto.nombre || "",
-      seccion: producto.seccion || "",
-      alt: producto.imagenes?.[0] ? producto.imagenes[0].texto_alt_SEO : "Imagen no disponible",
-    }));
+    productsApi = jsonResponse.data;
+    // productsApi = jsonResponse.data.map((producto: any): Producto => ({
+    //   id: producto.id,
+    //   title: producto.titulo || "",
+    //   subtitle: producto.subtitulo || "",
+    //   tagline: producto.lema || "",
+    //   description: producto.descripcion || "",
+    //   specs: producto.especificaciones || {},
+    //   dimensions: producto.dimensiones || {},
+    //   relatedProducts: producto.productos_relacionados || [],
+    //   images: producto.imagenes?.map((img: any) => `${API_URL}${img.url_imagen}`) || [],
+    //   image: producto.imagenes?.[0] ? `${API_URL}${producto.imagenes[0].url_imagen}` : "",
+    //   nombreProducto: producto.nombre || "",
+    //   seccion: producto.seccion || "",
+    //   alt: producto.imagenes?.[0] ? producto.imagenes[0].texto_alt_SEO : "Imagen no disponible",
+    // }));
   }
 } catch (err) {
   console.error("Error al obtener productos:", err);
 }
+// console.log(productsApi)
 
 // Agrupar productos
-const groupedMobile: Producto[][] = [];
-for (let i = 0; i < productsApi.length; i += 2) {
-  groupedMobile.push(productsApi.slice(i, i + 2));
-}
+// const groupedMobile: Producto[][] = [];
+// for (let i = 0; i < productsApi.length; i += 2) {
+//   groupedMobile.push(productsApi.slice(i, i + 2));
+// }
 
-const groupedDesktop: Producto[][] = [];
-for (let i = 0; i < productsApi.length; i += 3) {
-  groupedDesktop.push(productsApi.slice(i, i + 3));
-}
+// const groupedDesktop: Producto[][] = [];
+// for (let i = 0; i < productsApi.length; i += 3) {
+//   groupedDesktop.push(productsApi.slice(i, i + 3));
+// }
 const productosArray: Producto[][] = [];
 for (let i = 0; i < productsApi.length; i += 3) {
   productosArray.push(productsApi.slice(i, i + 3));
@@ -93,7 +95,7 @@ for (let i = 0; i < productsApi.length; i += 3) {
             productosArray.map((row) => (
                 row.map((producto) => (
                   <div class="flex justify-center">
-                    <div class="max-w-[350px] sm:max-w-[250px]">
+                    <div class="max-w-[300px] sm:max-w-[250px]">
                       <ProductCard producto={producto} />
                     </div>
                   </div>
