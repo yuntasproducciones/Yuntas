@@ -1,6 +1,9 @@
 import { FaTrash, FaCheck } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+
+import FileSelect from "./FileSelect";
 
 interface Producto {
   id: number | string;
@@ -13,7 +16,7 @@ export default function DataTable() {
   const [productos, setProductos] = useState<Producto[]>([]);
 
   const obtenerDatos = async () => {
-    const respuesta = await fetch("https://apiyuntas.yuntasproducciones.com/api/v1/productos", {
+    const respuesta = await fetch("https://apiyuntas.yuntasproducciones.com/api/v2/productos", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +33,7 @@ export default function DataTable() {
   return (
     <>
       <div className="flex flex-row gap-4">
-        <BtnAñadirDatos />
+        <BtnAñadirDatos onAdd={obtenerDatos} />
       </div>
       {/* Tabla */}
       <table className="w-full border-separate border-spacing-2">
@@ -64,13 +67,13 @@ export default function DataTable() {
                     className="p-2 text-red-600 hover:text-red-800 transition"
                     title="Eliminar"
                   >
-                    <FaTrash size={18} />
+                    <FaTrash className="cursor-pointer" size={18} />
                   </button>
                   <button
                     className="p-2 text-green-600 hover:text-green-800 transition"
                     title="Confirmar"
                   >
-                    <FaCheck size={18} />
+                    <FaCheck className="cursor-pointer" size={18} />
                   </button>
                 </div>
               </td>
@@ -82,14 +85,15 @@ export default function DataTable() {
   );
 }
 
-const BtnAñadirDatos = () => {
+const BtnAñadirDatos = ({onAdd}: {onAdd: () => void}) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const enviarDatos = async function (e) {
+  const enviarDatos = async function (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const data = new FormData(e.target);
+      const form = e.target as HTMLFormElement;
+      const data = new FormData(form);
       const respuesta = await fetch(
           "https://apiyuntas.yuntasproducciones.com/api/v1/productos",
         {
@@ -132,7 +136,7 @@ const BtnAñadirDatos = () => {
           icon: "success",
         });
         setIsOpen(false);
-        obtenerDatos(); // Recargar datos
+        onAdd(); // Recargar datos
       } else {
         Swal.fire({
           title: `${respuestaDatos.message}`,
@@ -167,7 +171,7 @@ const BtnAñadirDatos = () => {
       {/* Botón para abrir el modal */}
       <button
         onClick={() => setIsOpen(true)}
-        className="mt-4 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
+        className="mt-4 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2 cursor-pointer"
       >
         Añadir Producto
       </button>
@@ -176,7 +180,12 @@ const BtnAñadirDatos = () => {
       {isOpen && (
         <div className="fixed inset-0 flex items-start justify-center bg-black/50 overflow-y-auto py-10">
           <div className="bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5">
-            <h2 className="text-2xl font-bold mb-4">AÑADIR DATOS</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">AÑADIR PRODUCTO</h2>
+            <button onClick={() => setIsOpen(false)} className="cancel-btn cursor-pointer">
+                <IoMdCloseCircleOutline className="text-red-600 font-bold size-8" />
+              </button>
+            </div>
 
             {/* Formulario */}
             <form
@@ -228,7 +237,7 @@ const BtnAñadirDatos = () => {
                 <label className="block">Descripción</label>
                 <textarea
                   name="descripcion"
-                  rows="1"
+                  rows={1}
                   required
                   className="w-full bg-white p-2 outline-none rounded-md text-black"
                 ></textarea>
@@ -236,22 +245,12 @@ const BtnAñadirDatos = () => {
 
               <div className="col-span-2">
                 <label className="block">Imagen principal</label>
-                <input
-                  type="text"
-                  name="imagen_principal"
-                  required
-                  className="w-full bg-white p-2 outline-none rounded-md text-black"
-                />
+                <FileSelect/>
               </div>
 
               <div className="col-span-2">
                 <label className="block">Imágenes</label>
-                <input
-                  type="text"
-                  name="imagenes"
-                  required
-                  className="w-full bg-white p-2 outline-none rounded-md text-black"
-                />
+                <FileSelect multiple/>
               </div>
 
               <div>
@@ -341,12 +340,9 @@ const BtnAñadirDatos = () => {
               <button
                 type="submit"
                 form="eliminentechno3"
-                className="admin-act-btn"
+                className="admin-act-btn cursor-pointer text-black font-bold bg-gradient-to-br from-blue-200 to-blue-500 px-4 py-2 rounded-xl"
               >
-                Añadir dato
-              </button>
-              <button onClick={() => setIsOpen(false)} className="cancel-btn">
-                Cancelar
+                Agregar
               </button>
             </div>
           </div>
