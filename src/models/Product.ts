@@ -1,19 +1,15 @@
-import type Specs from "./Specs";
-
 export default interface Producto {
   id: string;
   nombre: string;
   titulo: string;
-  subtitulo: string;
-  lema: string,
-  descripcion: string;
-  imagenes: string[];
-  stock: number;
-  precio: number;
-  seccion: string;
-
   link: string;
-  // tagline: string;
-  especificaciones: string; //Specs
+  seccion: string;
+  precio: number;
+  stock: number;
+  subtitulo: string;
+  lema: string;
+  descripcion: string;
+  especificaciones: string;
+  imagenes: string[];
   textos_alt: string[];
 }

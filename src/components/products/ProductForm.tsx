@@ -1,7 +1,6 @@
 
 
 import type Producto from "../../models/Product";
-import type Specs from "../../models/Specs";
 
 interface Props {
   initialData?: Producto;
