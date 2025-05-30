@@ -9,7 +9,11 @@ export default interface Producto {
   subtitulo: string;
   lema: string;
   descripcion: string;
-  especificaciones: string;
-  imagenes: string[];
+  especificaciones: {
+    color: string;
+    material: string;
+  };
+  imagenes: File[];
   textos_alt: string[];
+  _method: string;
 }

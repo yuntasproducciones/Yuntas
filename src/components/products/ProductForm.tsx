@@ -1,6 +1,6 @@
-
-
+import { useState } from "react";
 import type Producto from "../../models/Product";
+import Input from "../Input";
 
 interface Props {
   initialData?: Producto;
@@ -9,11 +9,47 @@ interface Props {
   isEditing?: boolean;
 }
 
+type ImageAltPair = {
+  file: File | null;
+  alt: string;
+};
 
 const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
+  const [imageAltPairs, setImageAltPairs] = useState<ImageAltPair[]>([
+    { file: null, alt: "" },
+  ]);
+
+  const handleImageChange = (index: number, file: File | null) => {
+    const updated = [...imageAltPairs];
+    updated[index].file = file;
+    setImageAltPairs(updated);
+  };
+
+  const handleAltChange = (index: number, alt: string) => {
+    const updated = [...imageAltPairs];
+    updated[index].alt = alt;
+    setImageAltPairs(updated);
+  };
+
+  const addImageAltPair = () => {
+    const last = imageAltPairs[imageAltPairs.length - 1];
+    if (last.file && last.alt.trim()) {
+      setImageAltPairs([...imageAltPairs, { file: null, alt: "" }]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
+    const imagenes: File[] = imageAltPairs
+  .filter((pair) => pair.file && pair.alt.trim())
+  .map((pair) => pair.file!);
+
+const textos_alt: string[] = imageAltPairs
+  .filter((pair) => pair.file && pair.alt.trim())
+  .map((pair) => pair.alt);
+
     const data: Producto = {
       id: initialData?.id || "0",
       nombre: formData.get("nombre") as string,
@@ -25,9 +61,13 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
       subtitulo: formData.get("subtitulo") as string,
       lema: formData.get("lema") as string,
       descripcion: formData.get("descripcion") as string,
-      especificaciones: formData.get("especificaciones") as string,
-      imagenes: formData.get("imagenes") as unknown as string[],
-      textos_alt: formData.get("textos_alt") as unknown as string[],
+      especificaciones: {
+        color: formData.get("color") as string,
+        material: formData.get("material") as string,
+      },
+      imagenes,
+      textos_alt,
+      _method: "PUT",
     };
     await onSubmit(data);
   };
@@ -36,193 +76,136 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
     <form
       id="eliminentechno3"
       onSubmit={handleSubmit}
-      className="grid grid-cols-4 gap-4 gap-x-12"
+      className="grid  max-sm:grid-cols-1 grid-cols-2 gap-5"
     >
-      <div className="col-span-2">
-        <label className="block">Nombre</label>
-        <input
-          type="text"
-          name="nombre"
-          required
-          defaultValue={initialData?.nombre}
-          className="w-full bg-white outline-none p-2 rounded-md text-black"
-        />
+      <Input
+        label="Nombre"
+        name="nombre"
+        defaultValue={initialData?.nombre}
+        required
+      />
+      <Input
+        label="Título"
+        name="titulo"
+        defaultValue={initialData?.titulo}
+        required
+      />
+      <Input
+        label="Subtítulo"
+        name="subtitulo"
+        defaultValue={initialData?.subtitulo}
+        required
+      />
+      <Input
+        label="Lema"
+        name="lema"
+        defaultValue={initialData?.lema}
+        required
+      />
+      <Input
+        label="Descripción"
+        type="textarea"
+        rows={3}
+        name="descripcion"
+        defaultValue={initialData?.descripcion}
+        className="col-span-2"
+        required
+      />
+      <Input
+        label="Stock"
+        type="number"
+        name="stock"
+        defaultValue={initialData?.stock}
+        required
+      />
+      <Input
+        label="Precio"
+        type="number"
+        name="precio"
+        defaultValue={initialData?.precio}
+        required
+      />
+      <Input
+        label="Sección"
+        name="seccion"
+        defaultValue={initialData?.seccion}
+        required
+      />
+      <Input
+        label="Link"
+        name="link"
+        disabled
+        defaultValue={initialData?.link}
+        required
+        className="hidden"
+      />
+      <Input
+        label="Color"
+        name="color"
+        defaultValue={initialData?.especificaciones.color}
+        required
+      />
+      <Input
+        label="Material"
+        name="material"
+        defaultValue={initialData?.especificaciones.material}
+        className="col-span-2 w-[50%]"
+        required
+      />
+      {initialData?.imagenes.map((img) => (
+        <div key={img.id} className="flex items-center gap-4">
+          <img
+            src={`https://apiyuntas.yuntasproducciones.com${img.url_imagen}`}
+            alt={img.texto_alt_SEO}
+            className="w-20 h-20 object-cover"
+          />
+          <span className="text-sm">{img.texto_alt_SEO}</span>
+        </div>
+      ))}
+      <div className="col-span-2 space-y-4">
+        <label className="font-medium">Nuevas Imágenes y Alts</label>
+        {imageAltPairs.map((pair, index) => (
+          <div key={index} className="flex gap-4 items-center">
+            <input
+              type="file"
+              accept="image/*"
+              name="imagenes"
+              onChange={(e) =>
+                handleImageChange(index, e.target.files?.[0] || null)
+              }
+              className="border px-2 py-1 rounded"
+            />
+            <input
+              type="text"
+              placeholder="Texto ALT"
+              name="textos_alt"
+              value={pair.alt}
+              onChange={(e) => handleAltChange(index, e.target.value)}
+              className="border px-2 py-1 rounded w-full"
+            />
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={addImageAltPair}
+          className="text-blue-600 underline text-sm"
+        >
+          + Agregar otra imagen
+        </button>
       </div>
 
-      <div className="col-span-2">
-        <label className="block">Título</label>
-        <input
-          type="text"
-          name="titulo"
-          required
-          defaultValue={initialData?.titulo}
-          className="w-full bg-white outline-none p-2 rounded-md text-black"
-        />
-      </div>
-
-      <div className="col-span-2">
-        <label className="block">Subtítulo</label>
-        <input
-          type="text"
-          name="subtitulo"
-          required
-          defaultValue={initialData?.subtitulo}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div>
-
-      <div className="col-span-2">
-        <label className="block">Lema</label>
-        <input
-          type="text"
-          name="lema"
-          required
-          defaultValue={initialData?.lema}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div>
-
-      <div className="col-span-4">
-        <label className="block">Descripción</label>
-        <textarea
-          name="descripcion"
-          rows={3}
-          required
-          defaultValue={initialData?.descripcion}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        ></textarea>
-      </div>
-
-      <div className="col-span-2">
-        <label className="block">Imágenes</label>
-        <input
-          type="text"
-          name="imagenes"
-          required
-          defaultValue={initialData?.imagenes}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div>
-
-      <div>
-        <label className="block">Stock</label>
-        <input
-          type="number"
-          name="stock"
-          required
-          defaultValue={initialData?.stock}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div>
-
-      <div>
-        <label className="block">Precio</label>
-        <input
-          type="number"
-          name="precio"
-          step="0.01"
-          required
-          defaultValue={initialData?.precio}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div>
-
-      <div>
-        <label className="block">Sección</label>
-        <input
-          type="text"
-          name="seccion"
-          required
-          defaultValue={initialData?.seccion}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div>
-      <div>
-        <label className="block">Link</label>
-        <input
-          type="text"
-          name="link"
-          required
-          defaultValue={initialData?.link}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> 
-      <div>
-        <label className="block">Especificaciones</label>
-        <input
-          type="text"
-          name="especificaciones"
-          required
-          defaultValue={initialData?.especificaciones} //pasarlo en dos inputs pq es object, cambiar en el model a tipo Specs como estaba antes
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> 
-      <div>
-        <label className="block">Textos Alt</label>
-        <input
-          type="text"
-          name="link"
-          required
-          defaultValue={initialData?.textos_alt}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> 
-
-      {/* <div>
-        <label className="block">Color (espec.)</label>
-        <input
-          type="text"
-          name="color"
-          required
-          defaultValue={initialData?.c}
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> */}
-
-      {/* <div>
-        <label className="block">Alto</label>
-        <input
-          type="text"
-          name="alto"
-          required
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> */}
-
-      {/* <div>
-        <label className="block">Largo</label>
-        <input
-          type="text"
-          name="largo"
-          required
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> */}
-
-      {/* <div>
-        <label className="block">Ancho</label>
-        <input
-          type="text"
-          name="ancho"
-          required
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> */}
-
-      {/* <div>
-        <label className="block">Productos relac.</label>
-        <input
-          type="text"
-          name="productos_relacionados"
-          required
-          className="w-full bg-white p-2 outline-none rounded-md text-black"
-        />
-      </div> */}
-      <div className="flex gap-2 mt-8">
-        <button type="submit" form="eliminentechno3" className="admin-act-btn">
+      <div className="flex gap-2 mt-8 col-span-2">
+        <button
+          type="submit"
+          form="eliminentechno3"
+          className="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200 cursor-pointer"
+        >
           {isEditing ? "Guardar Cambios" : "Añadir"}
         </button>
-        <button onClick={onCancel} className="cancel-btn">
+        <button
+          onClick={onCancel}
+          className="bg-gray-300 text-gray-800 font-semibold px-5 py-2 rounded-lg hover:bg-gray-400 transition duration-200 cursor-pointer"
+        >
           Cancelar
         </button>
       </div>

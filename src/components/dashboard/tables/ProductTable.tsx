@@ -3,13 +3,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Modal from "../../Modal";
 import ProductForm from "../../products/ProductForm";
-
-interface Producto {
-  id: number | string;
-  nombre: string;
-  seccion: string;
-  precio: number;
-}
+import type Producto from "../../../models/Product";
 
 export default function DataTable() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -198,7 +192,7 @@ export default function DataTable() {
           setIsOpen(false);
           setCurrentProduct(undefined);
         }}
-        title="INGRESAR DATOS"
+        title={currentProduct ? 'Editar Datos' : 'Ingresar Datos'}
       >
         {/* Formulario */}
         <ProductForm
