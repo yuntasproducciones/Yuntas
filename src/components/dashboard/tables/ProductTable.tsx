@@ -179,9 +179,9 @@ const BtnAñadirDatos = ({onAdd}: {onAdd: () => void}) => {
       {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 flex items-start justify-center bg-black/50 overflow-y-auto py-10">
-          <div className="bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5">
+          <div className="bg-blue-950 text-white px-10 py-8 rounded-4xl w-4/5 md:w-3/5">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">AÑADIR PRODUCTO</h2>
+              <h2 className="text-md md:text-2xl font-bold">AÑADIR PRODUCTO</h2>
             <button onClick={() => setIsOpen(false)} className="cancel-btn cursor-pointer">
                 <IoMdCloseCircleOutline className="text-red-600 font-bold size-8" />
               </button>
@@ -193,7 +193,7 @@ const BtnAñadirDatos = ({onAdd}: {onAdd: () => void}) => {
               onSubmit={enviarDatos}
               className="grid grid-cols-4 gap-4 gap-x-12"
             >
-              <div className="col-span-2">
+              <div className="col-span-4 md:col-span-2">
                 <label className="block">Nombre</label>
                 <input
                   type="text"
@@ -203,7 +203,7 @@ const BtnAñadirDatos = ({onAdd}: {onAdd: () => void}) => {
                 />
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-4 md:col-span-2">
                 <label className="block">Título</label>
                 <input
                   type="text"
@@ -213,7 +213,7 @@ const BtnAñadirDatos = ({onAdd}: {onAdd: () => void}) => {
                 />
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-4 md:col-span-2">
                 <label className="block">Subtítulo</label>
                 <input
                   type="text"
@@ -223,7 +223,7 @@ const BtnAñadirDatos = ({onAdd}: {onAdd: () => void}) => {
                 />
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-4 md:col-span-2">
                 <label className="block">Lema</label>
                 <input
                   type="text"
@@ -237,18 +237,18 @@ const BtnAñadirDatos = ({onAdd}: {onAdd: () => void}) => {
                 <label className="block">Descripción</label>
                 <textarea
                   name="descripcion"
-                  rows={1}
+                  rows={3}
                   required
                   className="w-full bg-white p-2 outline-none rounded-md text-black"
                 ></textarea>
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-4 md:col-span-2">
                 <label className="block">Imagen principal</label>
                 <FileSelect/>
               </div>
 
-              <div className="col-span-2">
+              <div className="col-span-4 md:col-span-2">
                 <label className="block">Imágenes</label>
                 <FileSelect multiple/>
               </div>
