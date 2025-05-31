@@ -12,7 +12,7 @@ export default function DataTable() {
 
   const obtenerDatos = async () => {
     const respuesta = await fetch(
-      "https://apiyuntas.yuntasproducciones.com/api/v2/productos",
+      "http://localhost:8000/api/v2/productos",
       {
         method: "GET",
         headers: {
@@ -40,7 +40,7 @@ export default function DataTable() {
     if (confirmacion.isConfirmed) {
       try {
         const respuesta = await fetch(
-          `https://apiyuntas.yuntasproducciones.com/api/v2/productos/${id}`,
+          `http://localhost:8000/api/v2/productos/${id}`,
           {
             method: "DELETE",
             headers: {
@@ -70,20 +70,20 @@ export default function DataTable() {
     setIsOpen(true);
   };
 
-  const handleSubmit = async function (data: Producto) {
+  const handleSubmit = async function (formData: FormData) {
     const token = localStorage.getItem("token");
     try {
       const url = currentProduct
-        ? `https://apiyuntas.yuntasproducciones.com/api/v2/productos/${currentProduct.id}`
-        : "https://apiyuntas.yuntasproducciones.com/api/v2/productos";
+        ? `http://localhost:8000/api/v2/productos/${currentProduct.id}`
+        : "http://localhost:8000/api/v2/productos";
 
       const respuesta = await fetch(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          'Accept': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: formData,
       });
       const result = await respuesta.json();
       if (respuesta.ok) {

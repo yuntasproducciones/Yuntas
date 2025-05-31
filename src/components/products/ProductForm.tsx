@@ -4,7 +4,7 @@ import Input from "../Input";
 
 interface Props {
   initialData?: Producto;
-  onSubmit: (data: Producto) => Promise<void>;
+  onSubmit: (formData: FormData) => Promise<void>;
   onCancel: () => void;
   isEditing?: boolean;
 }
@@ -42,34 +42,29 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const imagenes: File[] = imageAltPairs
-  .filter((pair) => pair.file && pair.alt.trim())
-  .map((pair) => pair.file!);
+    imageAltPairs.forEach((pair, index) => {
+      if (pair.file) {
+        formData.append(`imagenes[${index}]`, pair.file); // <- archivo real
+        formData.append(`textos_alt[${index}]`, pair.alt); // <- texto alt correspondiente
+      }
+    });
 
-const textos_alt: string[] = imageAltPairs
-  .filter((pair) => pair.file && pair.alt.trim())
-  .map((pair) => pair.alt);
-
-    const data: Producto = {
-      id: initialData?.id || "0",
-      nombre: formData.get("nombre") as string,
-      titulo: formData.get("titulo") as string,
-      link: formData.get("link") as string,
-      seccion: formData.get("seccion") as string,
-      precio: parseFloat(formData.get("precio") as string),
-      stock: parseFloat(formData.get("stock") as string),
-      subtitulo: formData.get("subtitulo") as string,
-      lema: formData.get("lema") as string,
-      descripcion: formData.get("descripcion") as string,
-      especificaciones: {
-        color: formData.get("color") as string,
-        material: formData.get("material") as string,
-      },
-      imagenes,
-      textos_alt,
-      _method: "PUT",
+    const especificaciones = {
+      color: formData.get("color") as string,
+      material: formData.get("material") as string,
     };
-    await onSubmit(data);
+    
+    formData.append("especificaciones", JSON.stringify(especificaciones));
+
+    if (isEditing) {
+      formData.append("_method", "PUT");
+    }
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    await onSubmit(formData);
   };
 
   return (
@@ -134,10 +129,10 @@ const textos_alt: string[] = imageAltPairs
       <Input
         label="Link"
         name="link"
-        disabled
+        /* disabled */
         defaultValue={initialData?.link}
         required
-        className="hidden"
+        /* className="hidden" */
       />
       <Input
         label="Color"
@@ -152,6 +147,7 @@ const textos_alt: string[] = imageAltPairs
         className="col-span-2 w-[50%]"
         required
       />
+
       {initialData?.imagenes.map((img) => (
         <div key={img.id} className="flex items-center gap-4">
           <img

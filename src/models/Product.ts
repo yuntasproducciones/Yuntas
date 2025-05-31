@@ -4,16 +4,18 @@ export default interface Producto {
   titulo: string;
   link: string;
   seccion: string;
-  precio: number;
+  precio: string;
   stock: number;
   subtitulo: string;
   lema: string;
   descripcion: string;
   especificaciones: {
-    color: string;
-    material: string;
-  };
-  imagenes: File[];
-  textos_alt: string[];
-  _method: string;
+    color: string,
+    material: string,
+  },
+  imagenes: {
+    url_imagen: string,
+    texto_alt_SEO: string
+  }
+  // textos_alt: string[];
 }

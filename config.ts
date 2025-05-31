@@ -5,7 +5,7 @@
  * Los endpoints estan divididos por secciones, como auth, users, clientes, productos y blogs.
  **/
 export const config = {
-  apiUrl: "https://apiyuntas.yuntasproducciones.com", //import.meta.env.PUBLIC_API_URL, // URL de la API
+  apiUrl: "http://localhost:8000", //import.meta.env.PUBLIC_API_URL, // URL de la API  https://apiyuntas.yuntasproducciones.com
   environment: import.meta.env.MODE || "development", // Entorno de la aplicación, por defecto development
   endpoints: {
     auth: {
