@@ -1,18 +1,19 @@
-import type Dimensions from "./Dimensions";
-import type Specs from "./Specs";
-
 export default interface Producto {
   id: string;
-  title: string;
-  subtitle: string;
-  tagline: string;
-  description: string;
-  specs: Specs;
-  dimensions: Dimensions;
-  relatedProducts: string[];
-  images: string[];
-  image: string;
-  nombreProducto: string;
+  nombre: string;
+  titulo: string;
+  link: string;
   seccion: string;
-  alt: string;
+  precio: number;
+  stock: number;
+  subtitulo: string;
+  lema: string;
+  descripcion: string;
+  especificaciones: {
+    color: string;
+    material: string;
+  };
+  imagenes: File[];
+  textos_alt: string[];
+  _method: string;
 }
