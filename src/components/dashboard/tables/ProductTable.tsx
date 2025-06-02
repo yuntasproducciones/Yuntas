@@ -4,27 +4,29 @@ import Swal from "sweetalert2";
 import Modal from "../../Modal";
 import ProductForm from "../../products/ProductForm";
 import type Producto from "../../../models/Product";
+import { config, getApiUrl } from "../../../../config";
 
 export default function DataTable() {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Producto | undefined>(undefined);
+  const [currentProduct, setCurrentProduct] = useState<Producto | undefined>(
+    undefined
+  );
 
   const obtenerDatos = async () => {
-    const respuesta = await fetch(
-      "http://localhost:8000/api/v2/productos",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const url = getApiUrl(config.endpoints.productos.list);
+    const respuesta = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     const productosData = await respuesta.json();
     setProductos(productosData.data);
   };
 
-  const eliminarProducto = async (id: number | string) => {
+  const eliminarProducto = async (id: string) => {
+    const url = getApiUrl(config.endpoints.productos.delete(id));
     const token = localStorage.getItem("token"); // si necesitas autenticación
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro?",
@@ -39,16 +41,13 @@ export default function DataTable() {
 
     if (confirmacion.isConfirmed) {
       try {
-        const respuesta = await fetch(
-          `http://localhost:8000/api/v2/productos/${id}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const respuesta = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const data = await respuesta.json();
 
@@ -71,16 +70,17 @@ export default function DataTable() {
   };
 
   const handleSubmit = async function (formData: FormData) {
+    const urlCreate = getApiUrl(config.endpoints.productos.create);
     const token = localStorage.getItem("token");
     try {
       const url = currentProduct
-        ? `http://localhost:8000/api/v2/productos/${currentProduct.id}`
-        : "http://localhost:8000/api/v2/productos";
+        ? getApiUrl(config.endpoints.productos.update(currentProduct.id))
+        : urlCreate;
 
       const respuesta = await fetch(url, {
         method: "POST",
         headers: {
-          'Accept': 'application/json',
+          Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: formData,
@@ -92,6 +92,7 @@ export default function DataTable() {
           icon: "success",
         });
         setIsOpen(false);
+        obtenerDatos();
       } else {
         Swal.fire({
           title: `${result.message}`,
@@ -192,7 +193,7 @@ export default function DataTable() {
           setIsOpen(false);
           setCurrentProduct(undefined);
         }}
-        title={currentProduct ? 'Editar Datos' : 'Ingresar Datos'}
+        title={currentProduct ? "Editar Datos" : "Ingresar Datos"}
       >
         {/* Formulario */}
         <ProductForm

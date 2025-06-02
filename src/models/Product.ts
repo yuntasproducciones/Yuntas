@@ -1,3 +1,9 @@
+interface Imagenes{
+  id: string,
+  url_imagen: string,
+  texto_alt_SEO: string
+}
+
 export default interface Producto {
   id: string;
   nombre: string;
@@ -13,9 +19,7 @@ export default interface Producto {
     color: string,
     material: string,
   },
-  imagenes: {
-    url_imagen: string,
-    texto_alt_SEO: string
-  }
-  // textos_alt: string[];
+  imagenes: Imagenes[]
 }
+
+

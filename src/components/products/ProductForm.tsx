@@ -15,6 +15,16 @@ type ImageAltPair = {
 };
 
 const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
+  const [imagenesExistentes, setImagenesExistentes] = useState(
+    initialData?.imagenes || []
+  );
+  const [idsAEliminar, setIdsAEliminar] = useState<string[]>([]);
+
+  const deleteExistImage = (id: string) => {
+    setImagenesExistentes(imagenesExistentes.filter((img) => img.id !== id));
+    setIdsAEliminar([...idsAEliminar, id]);
+  };
+
   const [imageAltPairs, setImageAltPairs] = useState<ImageAltPair[]>([
     { file: null, alt: "" },
   ]);
@@ -44,24 +54,24 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
 
     imageAltPairs.forEach((pair, index) => {
       if (pair.file) {
-        formData.append(`imagenes[${index}]`, pair.file); // <- archivo real
-        formData.append(`textos_alt[${index}]`, pair.alt); // <- texto alt correspondiente
+        formData.append(`imagenes[${index}]`, pair.file);
+        formData.append(`textos_alt[${index}]`, pair.alt);
       }
     });
 
     const especificaciones = {
-      color: formData.get("color") as string,
-      material: formData.get("material") as string,
+      color: formData.get("color"),
+      material: formData.get("material"),
     };
-    
+
     formData.append("especificaciones", JSON.stringify(especificaciones));
 
     if (isEditing) {
       formData.append("_method", "PUT");
     }
 
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
+    if (idsAEliminar.length > 0) {
+      formData.append("imagenes_a_eliminar", JSON.stringify(idsAEliminar));
     }
 
     await onSubmit(formData);
@@ -129,10 +139,8 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
       <Input
         label="Link"
         name="link"
-        /* disabled */
         defaultValue={initialData?.link}
         required
-        /* className="hidden" */
       />
       <Input
         label="Color"
@@ -144,53 +152,83 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
         label="Material"
         name="material"
         defaultValue={initialData?.especificaciones.material}
-        className="col-span-2 w-[50%]"
         required
       />
-
-      {initialData?.imagenes.map((img) => (
-        <div key={img.id} className="flex items-center gap-4">
-          <img
-            src={`https://apiyuntas.yuntasproducciones.com${img.url_imagen}`}
-            alt={img.texto_alt_SEO}
-            className="w-20 h-20 object-cover"
-          />
-          <span className="text-sm">{img.texto_alt_SEO}</span>
-        </div>
-      ))}
-      <div className="col-span-2 space-y-4">
-        <label className="font-medium">Nuevas Imágenes y Alts</label>
+      <label className="font-medium col-span-2 text-gray-700 mt-3">
+        Imagenes
+      </label>
+      <div className="col-span-2">
+        {imagenesExistentes.length === 0 ? (
+          <div className="text-center text-gray-500 italic py-8">
+            {isEditing ? 'No hay imágenes registradas para este producto.' : 'Agrega imagenes para este producto.'}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {imagenesExistentes.map((img) => (
+              <div
+                key={img.id}
+                className="flex flex-col items-center p-4 bg-white rounded-xl shadow-md border hover:shadow-lg transition duration-300"
+              >
+                <img
+                  src={`https://apiyuntas.yuntasproducciones.com${img.url_imagen}`}
+                  alt={img.texto_alt_SEO}
+                  className="w-32 h-32 object-cover rounded-lg mb-2"
+                />
+                <span className="text-center text-gray-700 text-sm mb-2">
+                  {img.texto_alt_SEO}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => deleteExistImage(img.id)}
+                  className="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full hover:bg-red-200 transition"
+                >
+                  Eliminar
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="col-span-2 space-y-2">
         {imageAltPairs.map((pair, index) => (
-          <div key={index} className="flex gap-4 items-center">
-            <input
-              type="file"
-              accept="image/*"
-              name="imagenes"
-              onChange={(e) =>
-                handleImageChange(index, e.target.files?.[0] || null)
-              }
-              className="border px-2 py-1 rounded"
-            />
+          <div
+            key={index}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-2 bg-white rounded-xl shadow-sm border border-gray-300"
+          >
+            <div className="relative w-full sm:w-2/1">
+              <input
+                type="file"
+                accept="image/*"
+                name="imagenes"
+                onChange={(e) =>
+                  handleImageChange(index, e.target.files?.[0] || null)
+                }
+                className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 
+               file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 
+               hover:file:bg-blue-100 text-sm text-gray-600 rounded-md w-full file:cursor-pointer cursor-pointer"
+              />
+            </div>
             <input
               type="text"
               placeholder="Texto ALT"
               name="textos_alt"
               value={pair.alt}
               onChange={(e) => handleAltChange(index, e.target.value)}
-              className="border px-2 py-1 rounded w-full"
+              className="border border-gray-300 px-3 py-2 rounded-md w-full text-sm"
             />
           </div>
         ))}
+
         <button
           type="button"
           onClick={addImageAltPair}
-          className="text-blue-600 underline text-sm"
+          className="inline-block px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition mt-2 cursor-pointer"
         >
           + Agregar otra imagen
         </button>
       </div>
 
-      <div className="flex gap-2 mt-8 col-span-2">
+      <div className="flex gap-2 mt-5 col-span-2">
         <button
           type="submit"
           form="eliminentechno3"
