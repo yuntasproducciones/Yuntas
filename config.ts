@@ -1,6 +1,6 @@
 /**
  * @abstract Config file
- * @description Este archivo contiene la configuración de la aplicación.
+ * @description Este archivo contiene la configuraci贸n de la aplicaci贸n.
  * para esto, se ha creado un objeto config que contiene la url de la api y los endpoints.
  * Los endpoints estan divididos por secciones, como auth, users, clientes, productos y blogs.
  **/
@@ -9,7 +9,7 @@ export const config = {
   environment: import.meta.env.MODE || "development", // Entorno de la aplicación, por defecto development
   endpoints: {
     auth: {
-      // Endpoints de autenticación
+      // Endpoints de autenticaci贸n
       login: "/api/v1/auth/login",
       logout: "/api/v1/auth/logout",
     },
@@ -33,7 +33,10 @@ export const config = {
       // Endpoints de productos
       list: '/api/v2/productos',
       detail: (id: string | number) => `/api/v2/productos/${id}`,
+      detail: (id: string | number) => `/api/v2/productos/${id}`,
       create: "/api/v2/productos",
+      update: (id: number | string) => `/api/v2/productos/${id}`,
+      delete: (id: number | string) => `/api/v2/productos/${id}`,
       update: (id: number | string) => `/api/v2/productos/${id}`,
       delete: (id: number | string) => `/api/v2/productos/${id}`,
     },

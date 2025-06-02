@@ -3,7 +3,7 @@ import Fader from "./Fader";
 import Emergente from "./Emergente";
 import { config, getApiUrl } from "../../../config.ts";
 
-export default function Details({ id }) {
+export default function Detail({ id }) {
     const [producto, setProducto] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
