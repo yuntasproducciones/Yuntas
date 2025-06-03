@@ -26,8 +26,8 @@ export default function ProductPage(){
     if (loading) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold animate-pulse bg-blue-200">Cargando...</p> }
     if (!product) { return <p>Producto no encontrado...</p> }
 
-    const {title, subtitle, description, images, specs, tagline, seccion, stockProducto, precioProducto} = product.data;
-    // console.log(product)
+    const {title, subtitle, description, images, specs, lema, seccion, stock, precioProducto} = product.data;
+    console.log(product.data)
     return (
         <>
             <div className="w-full">
