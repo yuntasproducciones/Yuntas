@@ -5,6 +5,7 @@
  * Se puede navegar entre los slides con flechas de navegación.
  */
 import { useState, useEffect, useRef } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 const Slider = ({ comentarios }) => {
   const sliderRef = useRef(null);
@@ -86,8 +87,9 @@ const Slider = ({ comentarios }) => {
                         key={comentario.id}
                         className={isMobile ? "w-[95%] mx-auto" : "w-1/3"}
                       >
-                        <div className="h-80 bg-white text-black rounded-2xl p-4 shadow-lg">
-                          <div className="flex items-center gap-4">
+                        <div className="h-80 bg-white text-black rounded-2xl p-8 shadow-lg flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center gap-4">
                             <div className="w-10 h-10 flex justify-center items-center bg-black text-white rounded-full">
                               {comentario.nombre.charAt(0)}
                             </div>
@@ -95,14 +97,17 @@ const Slider = ({ comentarios }) => {
                               {comentario.nombre}
                             </p>
                           </div>
-                          <p className="mt-2">{comentario.comentario}</p>
-                          <p className="text-sm text-gray-500 italic mt-4">
-                            Publicado: {comentario.publicado}
-                          </p>
-                          <hr className="border-gray-300 my-2" />
-                          <p className="text-center text-yellow-500">
-                            {"⭐".repeat(comentario.estrellas)}
-                          </p>
+                          <p className="mt-2 text-lg">{comentario.comentario}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500 italic mt-4">
+                              Publicado: {comentario.publicado}
+                            </p>
+                            <hr className="border-gray-300 my-2" />
+                            <p className="text-center text-yellow-500">
+                              {"⭐".repeat(comentario.estrellas)}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -114,40 +119,20 @@ const Slider = ({ comentarios }) => {
       </div>
 
       {/* Flechas de navegacion entre cartas */}
-      <button
-        onClick={handlePrev}
-        className="absolute top-1/2 -left-8 transform -translate-y-1/2 bg-black text-white p-2 md:m-4 rounded-full z-50"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-6 h-6"
+      <div className="w-full flex justify-between absolute top-2/5">
+        <button
+          onClick={handlePrev}
+          className="p-2 md:m-4 cursor-pointer -ml-5 bg-black rounded-full text-white"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute top-1/2 -right-8 transform -translate-y-1/2 bg-black text-white p-2 md:m-4 rounded-full z-50"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-6 h-6"
+          <FaArrowLeft className="md:size-6"/>
+        </button>
+        <button
+          onClick={handleNext}
+          className="p-2 md:m-4 cursor-pointer -mr-5 bg-black rounded-full text-white"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+          <FaArrowRight className="md:size-6"/>
+        </button>
+      </div>
     </div>
   );
 };
