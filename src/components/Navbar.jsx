@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { IoPerson } from "react-icons/io5";
 import "../styles/navbar.css";
 
 const rutas = [
@@ -11,6 +13,7 @@ const rutas = [
 
 const Navbarjsx = ({ logo }) => {
     const [pathname, setPathname] = useState("/");
+    const [menuOpen, setMenuOpen] = useState(false); // Nuevo estado para el responsive
 
     useEffect(() => {
         setPathname(window.location.pathname);
@@ -18,38 +21,51 @@ const Navbarjsx = ({ logo }) => {
 
     return (
         <header className="fixed w-full z-20">
-            <nav className="relative w-full grid lg:grid-cols-7 grid-cols-3 bg-linear-to-b from-slate-900/85 from-50% items-center h-32 px-10 lg:px-0 lg:place-items-center py-2 text-white font-semibold">
-                {/* Logo */}
-                <a href="/" className="h-16 col-span-1">
-                    <img src={logo.src} alt="Logo de Yuntas" className="h-full w-auto justify-self-center" />
-                </a>
+            <nav className="relative w-full flex justify-between items-center bg-linear-to-b from-slate-900/85  lg:from-50% h-32 px-10 lg:px-10 lg:place-items-center py-2 text-white font-semibold">
 
-                {/* Links */}
+                <RxHamburgerMenu className="block lg:hidden size-10 cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}/>
+                
+                <img 
+                    src={logo.src} 
+                    alt="Logo de Yuntas" 
+                    className="h-16 w-auto hidden lg:block cursor-pointer"
+                />
+
+                {/* Links - Para pantallas grandes */}
+                <div className="flex justify-between lg:gap-x-6">
+                    {rutas.map(({ link, texto }) => (
+                        <a
+                            key={link}
+                            href={link}
+                            className={`hidden lg:block relative px-6 py-2 ${
+                                pathname === link ? "border-effect" : ""
+                            }`}
+                        >
+                            <span className="relative">{texto}</span>
+                        </a>
+                    ))}
+                </div>
+
+                {/* Menú desplegable para pantallas pequeñas */}
+                
+
+                {/* Icono de login */}
+                <a href="/login" className="lg:justify-self-center justify-self-end">
+                    <IoPerson className="size-10"/>
+                </a>
+                
+            </nav>
+            <nav className={`lg:hidden ${menuOpen ? 'flex' : 'hidden'} flex-col gap-y-4 absolute top-20 justify-center items-center w-screen bg-linear-to-b to-slate-900/85 text-white font-bold py-8`}>
                 {rutas.map(({ link, texto }) => (
                     <a
                         key={link}
                         href={link}
-                        className={`hidden lg:block relative px-6 py-2 ${
-                            pathname === link ? "border-effect" : ""
-                        }`}
+                        className={`relative px-6 py-2 ${pathname === link ? "border-effect" : ""}`}
+                        onClick={() => setMenuOpen(false)} // Cierra el menú al hacer clic en un enlace
                     >
                         <span className="relative">{texto}</span>
                     </a>
                 ))}
-
-                {/* Icono de login */}
-                <a href="/login" className="lg:justify-self-center justify-self-end">
-                    <svg viewBox="0 0 16 16" fill="none" className="w-10" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z"
-                            fill="currentColor"
-                        ></path>
-                        <path
-                            d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z"
-                            fill="currentColor"
-                        ></path>
-                    </svg>
-                </a>
             </nav>
         </header>
     );

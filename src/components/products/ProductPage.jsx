@@ -47,8 +47,8 @@ export default function ProductPage(){
     if (loading) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold animate-pulse bg-blue-200">Cargando...</p> }
     if (!product) { return <p>Producto no encontrado...</p> }
 
-    const {title, subtitle, description, images, specs, tagline, seccion, stockProducto, precioProducto} = product.data;
-    console.log(product)
+    const {titulo, subtitulo, descripcion, imagenes, specs, lema, seccion, stock, precioProducto} = product.data;
+    console.log(product.data)
     return (
         <>
             <div className="w-full">
@@ -59,7 +59,7 @@ export default function ProductPage(){
                         className="w-full h-[600px] mx-auto my-auto"
                 />
                 {/* Hero Banner */}
-                <h2 className="font-extrabold text-center text-5xl py-16 px-4 text-blue-950">{title}</h2>
+                <h2 className="font-extrabold text-center text-5xl py-16 px-4 text-blue-950">{titulo}</h2>
 
                 {/* Main Content */}
                 <ProductSection>
@@ -84,7 +84,7 @@ export default function ProductPage(){
                     {/* Grid de miniaturas */}
                     {/* <div
                     className="grid grid-cols-4 gap-2 w-full"
-                    id="images-list"
+                    id="imagenes-list"
                     >
                     </div> */}
                 </motion.div>
@@ -112,7 +112,7 @@ export default function ProductPage(){
                 </ProductSection>
                 <div className="text-center py-16 px-4 text-blue-950">
                     <p className="font-extrabold text-3xl mb-4">Información</p>
-                    <p className="font-semibold text-xl">{description}</p>
+                    <p className="font-semibold text-xl">{descripcion}</p>
                 </div>
                 
                 {/* Benefict Content */}
@@ -160,7 +160,7 @@ export default function ProductPage(){
                     {/* Grid de miniaturas */}
                     {/* <div
                     className="grid grid-cols-4 gap-2 w-full"
-                    id="images-list"
+                    id="imagenes-list"
                     >
                     </div> */}
                 </motion.div>
@@ -169,7 +169,7 @@ export default function ProductPage(){
                 {/* Call To Action Button */}
                 <div className="flex flex-col justify-center items-center bg-indigo-950 py-12">
                     <p className="text-white text-3xl font-semibold">¿Encontraste lo que buscabas?</p>
-                    <button className="my-6 text-white font-extrabold bg-gradient-to-l from-cyan-300 to-cyan-600 px-20 py-4 rounded-full text-lg sm:text-2xl hover:from-cyan-600 hover:to-cyan-300">Cotizar</button>
+                    <button className="my-6 text-white font-extrabold bg-gradient-to-l from-cyan-300 to-cyan-600 px-20 py-4 rounded-full text-lg sm:text-2xl hover:from-cyan-600 hover:to-cyan-300 cursor-pointer">Cotizar</button>
                 </div>
 
                     {/* Similar Products */}
