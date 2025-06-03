@@ -19,7 +19,8 @@ export default interface Producto {
     color: string,
     material: string,
   },
-  imagenes: Imagenes[]
+  imagenes: Imagenes[],
+  relacionados: string[]
 }
 
 

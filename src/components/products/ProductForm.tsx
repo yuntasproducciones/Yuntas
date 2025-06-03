@@ -19,6 +19,21 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
     initialData?.imagenes || []
   );
   const [idsAEliminar, setIdsAEliminar] = useState<string[]>([]);
+  const [relacionadoInput, setRelacionadoInput] = useState("");
+  const [relacionados, setRelacionados] = useState<string[]>(
+    initialData?.relacionados || []
+  );
+
+  const handleAddRelacionado = () => {
+    if (relacionadoInput.trim()) {
+      setRelacionados([...relacionados, relacionadoInput.trim()]);
+      setRelacionadoInput("");
+    }
+  };
+
+  const handleRemoveRelacionado = (id: string) => {
+    setRelacionados(relacionados.filter((r) => r !== id));
+  };
 
   const deleteExistImage = (id: string) => {
     setImagenesExistentes(imagenesExistentes.filter((img) => img.id !== id));
@@ -65,6 +80,10 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
     };
 
     formData.append("especificaciones", JSON.stringify(especificaciones));
+
+    relacionados.forEach((rel, index) => {
+      formData.append(`relacionados[${index}]`, rel);
+    });
 
     if (isEditing) {
       formData.append("_method", "PUT");
@@ -154,13 +173,51 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
         defaultValue={initialData?.especificaciones.material}
         required
       />
+      <div className="col-span-2">
+        <label className="font-medium text-gray-700">Relacionados (IDs)</label>
+        <div className="flex gap-2 mt-2">
+          <input
+            type="text"
+            placeholder="Ingresa el ID del producto relacionado."
+            value={relacionadoInput}
+            onChange={(e) => setRelacionadoInput(e.target.value)}
+            className="border border-gray-300 px-3 py-2 rounded-md w-full text-sm"
+          />
+          <button
+            type="button"
+            onClick={handleAddRelacionado}
+            className="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 text-sm"
+          >
+            Agregar
+          </button>
+        </div>
+        <div className="flex flex-wrap mt-2 gap-2">
+          {relacionados.map((id, idx) => (
+            <span
+              key={idx}
+              className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+            >
+              {id}
+              <button
+                type="button"
+                onClick={() => handleRemoveRelacionado(id)}
+                className="text-red-500 hover:text-red-700 font-bold"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      </div>
       <label className="font-medium col-span-2 text-gray-700 mt-3">
         Imagenes
       </label>
       <div className="col-span-2">
         {imagenesExistentes.length === 0 ? (
           <div className="text-center text-gray-500 italic py-8">
-            {isEditing ? 'No hay imágenes registradas para este producto.' : 'Agrega imagenes para este producto.'}
+            {isEditing
+              ? "No hay imágenes registradas para este producto."
+              : "Agrega imagenes para este producto."}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -170,7 +227,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
                 className="flex flex-col items-center p-4 bg-white rounded-xl shadow-md border hover:shadow-lg transition duration-300"
               >
                 <img
-                  src={`https://apiyuntas.yuntasproducciones.com${img.url_imagen}`}
+                  src={`https://apiyuntas.yuntaspublicidad.com${img.url_imagen}`}
                   alt={img.texto_alt_SEO}
                   className="w-32 h-32 object-cover rounded-lg mb-2"
                 />

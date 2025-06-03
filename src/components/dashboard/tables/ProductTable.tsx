@@ -22,7 +22,7 @@ export default function DataTable() {
       },
     });
     const productosData = await respuesta.json();
-    setProductos(productosData.data);
+    setProductos(productosData);
   };
 
   const eliminarProducto = async (id: string) => {
@@ -124,6 +124,7 @@ export default function DataTable() {
 
   useEffect(() => {
     obtenerDatos();
+    
   }, []);
 
   return (
