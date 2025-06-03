@@ -1,39 +1,36 @@
 ---
-import { Picture } from "astro:assets";
-import imagen1 from "../../assets/images/about/valor_0.webp"
-import imagen2 from "../../assets/images/about/valor_1.webp"
-import imagen3 from "../../assets/images/about/valor_2.webp"
-import imagen4 from "../../assets/images/about/valor_3.webp"
+import { RiTeamFill, RiEmotionHappyFill, RiShakeHandsFill   } from "react-icons/ri";
+import { FaHeadset } from "react-icons/fa";
 const valores = [
   {
     light: "Somos un",
     bold: "EQUIPO",
-    url: imagen1,
+    icon: RiTeamFill,
   },
   {
     light: "Velamos por",
     bold: "EL CLIENTE",
-    url: imagen2,
+    icon: RiEmotionHappyFill,
   },
   {
     light: "Somos",
     bold: "RESPETUOSOS",
-    url: imagen3,
+    icon: RiShakeHandsFill,
   },
   {
     light: "Orientación",
     bold: "AL CLIENTE",
-    url: imagen4,
+    icon: FaHeadset,
   },
 ];
 ---
 
 <section>
   <div
-    class="bg-linear-to-b from-blue-950 from-65% bg-slate-900 w-full py-15 flex justify-center"
+    class="bg-linear-to-b from-blue-950 from-65% bg-slate-900 w-full py-15"
   >
     <div
-      class="text-3xl bg-cyan-500 text-white font-extrabold px-6 py-2 rounded-full"
+      class="text-5xl text-white font-extrabold text-center"
     >
       Nuestros valores
     </div>
@@ -44,11 +41,7 @@ const valores = [
         valores.map((valor) => {
           return (
             <div class="flex flex-col items-center gap-2 text-center text-2xl font-bold">
-              <Picture
-                src={valor.url}
-                alt={`Imagen del Valor: ${valor.light + " " + valor.bold}`}
-                class="w-24 h-24 md:w-32 md:h-32"
-              />
+              <valor.icon className="size-24 md:size-32"/>
               <p class="flex flex-col">
                 {valor.light}
                 <span class="font-extrabold">{valor.bold}</span>

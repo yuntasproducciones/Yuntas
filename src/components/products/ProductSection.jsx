@@ -1,5 +1,3 @@
-import { Children } from "react";
-
 export default function ProductSection({children}){
     return (
         <div className="mx-auto">

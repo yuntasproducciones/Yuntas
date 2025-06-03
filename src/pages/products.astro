@@ -24,12 +24,11 @@ try {
   if (!response.ok) throw new Error("Error al obtener productos de la API");
 
   const jsonResponse = await response.json();
-
   // console.log("Respuesta completa de la API:", jsonResponse);
   // console.log("Contenido de jsonResponse.data:", jsonResponse.data);
 
-  if (Array.isArray(jsonResponse.data)) {
-    productsApi = jsonResponse.data;
+  if (Array.isArray(jsonResponse)) {
+    productsApi = jsonResponse;
     // productsApi = jsonResponse.data.map((producto: any): Producto => ({
     //   id: producto.id,
     //   title: producto.titulo || "",
