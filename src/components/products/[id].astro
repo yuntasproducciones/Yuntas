@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Details from "../../components/products/Detail.jsx";
+
+// Obtenemos el ID desde la URL dinámica
+const { id } = Astro.params;
+---
+
+<Layout title="Detalle del producto">
+  <Details client:load id={id} />
+</Layout>

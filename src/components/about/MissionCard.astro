@@ -1,25 +1,23 @@
 ---
-import mision from "../../assets/images/about/mision.webp";
+import { TbTargetArrow } from "react-icons/tb";
 ---
 <section
   class="w-full bg-white p-6 flex md:flex-col flex-row items-center justify-evenly md:h-full"
 >
   <div class="flex flex-col items-center md:order-1 md:w-1/2">
-    <img
-      src={ mision.src }
-      class="bg-blue-500/90 rounded-3xl h-24 md:h-36 p-4"
-    />
+    <TbTargetArrow className="bg-blue-500/90 rounded-3xl size-24 md:size-32 p-4"/>
     <div class="flex-col w-full">
-      <p class="text-blue-500 text-center font-extrabold text-2xl md:text-3xl mt-4 mb-1 md:mt-0">
+      <p class="text-blue-500 text-center font-extrabold text-2xl md:text-3xl my-4 mb-0 md:mb-4">
         MISIÓN
       </p>
       <hr class="border-2 border-blue-500" />
     </div>
   </div>
-  <p class="text-gray-600 text-xl md:text-2xl font-semibold md:order-2 md:w-1/2 md:text-center flex-grow flex items-center justify-center">
-    Transformar espacios y generar experiencias<br />inolvidables mediante
-    productos de servicios de<br />iluminación y diseño innovadores, superando<br
-    />
-    expectativas y satisfaciendo a los clientes.
+  <p class="text-gray-600 text-sm md:text-lg lg:text-xl font-semibold md:order-2 md:w-1/2 md:text-center text-wrap p-4">
+    Transformar espacios y generar 
+    <span class="text-blue-800/70 font-bold">experiencias inolvidables</span> 
+    mediante productos de servicios de iluminación y 
+    <span class="text-blue-800/70 font-bold">diseño innovadores</span>
+    , superando expectativas y satisfaciendo a los clientes.
   </p>
 </section>

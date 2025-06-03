@@ -16,12 +16,12 @@ import fondo from "../assets/images/contact/principal.webp";
 
     <!-- Texto resaltado -->
     <h1
-      class="relative z-10 top-[30%] bg-[#1ECCE6] rounded-4xl px-2 sm:px-8 py-2 Montserrat text-white font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center"
+      class="relative z-10 bg-[#1ECCE6] rounded-4xl px-2 sm:px-8 py-2 Montserrat text-white font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center text-balance"
     >
       CONOCE NUESTROS MEDIOS DE
     </h1>
     <h1
-      class="block relative z-10 top-[33%] Montserrat text-4xl sm:text-7xl font-black text-white sombra-title"
+      class="block relative z-10 Montserrat text-4xl sm:text-7xl font-black text-white sombra-title"
     >
       CONTACTO
     </h1>
@@ -38,7 +38,7 @@ import fondo from "../assets/images/contact/principal.webp";
       <div class="flex flex-col items-center flex-1">
         <a href="https://wa.me/912849782" target="_blank">
           <div
-            class="hover:bg-white group bg-[#23C1DE] p-2 rounded-2xl w-16 h-16 mb-2"
+            class="hover:bg-white group bg-[#23C1DE] p-2 rounded-2xl w-16 h-16 mb-2 transition-colors"
           >
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
 
@@ -89,7 +89,7 @@ import fondo from "../assets/images/contact/principal.webp";
       <div class="flex flex-col items-center mt-8 md:mt-0 flex-1">
         <a href="#mapa">
           <div
-            class="hover:bg-white group bg-[#23C1DE] p-2 rounded-2xl w-16 h-16 mb-2"
+            class="hover:bg-white group bg-[#23C1DE] p-2 rounded-2xl w-16 h-16 mb-2 transition-colors"
           >
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
 
@@ -123,7 +123,7 @@ import fondo from "../assets/images/contact/principal.webp";
       <div class="flex flex-col items-center mt-8 md:mt-0 flex-1">
         <a href="mailto:yuntasproducciones@gmail.com">
           <div
-            class="group bg-[#23C1DE] hover:bg-white w-16 h-16 p-2 rounded-2xl mb-2"
+            class="group bg-[#23C1DE] hover:bg-white w-16 h-16 p-2 rounded-2xl mb-2 transition-colors"
           >
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
 
@@ -147,7 +147,7 @@ import fondo from "../assets/images/contact/principal.webp";
 
     <!-- Mensaje Final -->
     <div class="flex flex-col items-center my-12">
-      <p class="bg-gradient-to-r from-blue-700 to-cyan-500 text-center py-4 px-6 sm:px-20 rounded-3xl text-2xl sm:text-3xl font-extrabold mb-20">
+      <p class="bg-gradient-to-r from-blue-700 to-cyan-500 text-center py-4 px-6 sm:px-20 rounded-3xl text-2xl sm:text-3xl font-extrabold mb-20 cursor-default">
         ¡HOLA!
         <span class="text-lg sm:text-xl font-normal block mt-2">
           Déjanos tus datos y agenda una visita a nuestro local.
@@ -160,18 +160,17 @@ import fondo from "../assets/images/contact/principal.webp";
 
         <form>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="text" placeholder="Nombre*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
-            <input type="text" placeholder="Apellidos*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
-            <input type="tel" placeholder="Teléfono*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
-            <input type="text" placeholder="Distrito*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none" required>
+            <input type="text" placeholder="Nombre*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
+            <input type="text" placeholder="Apellidos*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
+            <input type="tel" placeholder="Teléfono*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
+            <input type="text" placeholder="Distrito*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
           </div>
 
-          <input type="text" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4">
-          <input type="text" placeholder="Detalle de reclamación" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4">
-          <textarea placeholder="Mensaje" rows="4" class="text-black p-3 w-full bg-gray-300 placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4"></textarea>
+          <input type="text" placeholder="Detalle de reclamación" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4 rounded-md">
+          <textarea placeholder="Mensaje" rows="4" class="text-black p-3 w-full bg-gray-300 border border-gray-400 placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4 rounded-md"></textarea>
 
           <div class="mt-6 flex justify-center">
-            <button type="submit" class="bg-[#1D2C5E] hover:bg-[#141B40] text-lg text-white font-semibold py-2 px-10 rounded-full transition-all">
+            <button type="submit" class="bg-[#1D2C5E] hover:bg-[#141B40] text-lg text-white font-semibold py-2 px-10 rounded-full transition-all cursor-pointer">
               Enviar
             </button>
           </div>
