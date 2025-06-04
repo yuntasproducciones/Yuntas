@@ -54,8 +54,8 @@ export default function ProductPage(){
             <div className="w-full">
                 <img
                         id="product-img"
-                        src={`https://apiyuntas.yuntasproducciones.com/`+imagenes[0]}
-                        alt={'Banner de '+titulo}
+                        src={`https://apiyuntas.yuntaspublicidad.com/`+ imagenes[0].url_imagen}
+                        alt={'Banner de '+ titulo}
                         className="w-full h-[600px] mx-auto my-auto"
                 />
                 {/* Hero Banner */}
@@ -75,7 +75,7 @@ export default function ProductPage(){
                     <div className="mx-auto w-2/3 md:w-full aspect-[1/1] overflow-hidden flex items-center justify-center">
                     <img
                         id="product-viewer"
-                        src={`https://apiyuntas.yuntasproducciones.com/` + imagenes[0]}
+                        src={`https://apiyuntas.yuntaspublicidad.com/` + imagenes[0].url_imagen}
                         alt={"Primera imagen de " + titulo}
                         className="w-full rounded-2xl object-contain"
                     />
@@ -151,7 +151,7 @@ export default function ProductPage(){
                     <div className="overflow-hidden rounded-3xl">
                     <img
                         className="w-full h-[340px] object-cover"
-                        src={`https://apiyuntas.yuntasproducciones.com/` + imagenes[1]}
+                        src={`https://apiyuntas.yuntaspublicidad.com/` + imagenes[1]}
                         alt={"Segunda imagen de " + titulo}
                         loading="lazy"
                     />
