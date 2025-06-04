@@ -5,7 +5,6 @@ import Input from "../Input";
 interface Props {
   initialData?: Producto;
   onSubmit: (formData: FormData) => Promise<void>;
-  onCancel: () => void;
   isEditing?: boolean;
 }
 
@@ -14,7 +13,7 @@ type ImageAltPair = {
   alt: string;
 };
 
-const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
+const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
   const [imagenesExistentes, setImagenesExistentes] = useState(
     initialData?.imagenes || []
   );
@@ -100,7 +99,7 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
     <form
       id="eliminentechno3"
       onSubmit={handleSubmit}
-      className="grid  max-sm:grid-cols-1 grid-cols-2 gap-5"
+      className="grid max-sm:grid-cols-1 grid-cols-2 gap-5"
     >
       <Input
         label="Nombre"
@@ -282,22 +281,6 @@ const ProductForm = ({ initialData, onSubmit, onCancel, isEditing }: Props) => {
           className="inline-block px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition mt-2 cursor-pointer"
         >
           + Agregar otra imagen
-        </button>
-      </div>
-
-      <div className="flex gap-2 mt-5 col-span-2">
-        <button
-          type="submit"
-          form="eliminentechno3"
-          className="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200 cursor-pointer"
-        >
-          {isEditing ? "Guardar Cambios" : "Añadir"}
-        </button>
-        <button
-          onClick={onCancel}
-          className="bg-gray-300 text-gray-800 font-semibold px-5 py-2 rounded-lg hover:bg-gray-400 transition duration-200 cursor-pointer"
-        >
-          Cancelar
         </button>
       </div>
     </form>
