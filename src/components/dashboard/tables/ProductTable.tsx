@@ -160,23 +160,23 @@ export default function DataTable() {
                 index % 2 === 0 ? "bg-gray-100" : "bg-gray-300"
               }`}
             >
-              <td className="px-4 font-bold rounded-xl">{item.id}</td>
-              <td className="px-4 font-bold rounded-xl">{item.nombre}</td>
-              <td className="px-4 font-bold rounded-xl">{item.seccion}</td>
-              <td className="px-4 font-bold rounded-xl">{item.precio}</td>
-              <td className="px-4 rounded-xl">
+              <td className="p-2 font-bold rounded-xl">{item.id}</td>
+              <td className="p-2 font-bold rounded-xl">{item.nombre}</td>
+              <td className="p-2 font-bold rounded-xl">{item.seccion}</td>
+              <td className="p-2 font-bold rounded-xl">{item.precio}</td>
+              <td className="p-2 rounded-xl">
                 {/* Contenedor de acciones con íconos */}
-                <div className="flex justify-center gap-2 rounded-xl p-1">
+                <div className="flex justify-center gap-5 rounded-xl">
                   <button
                     onClick={() => handleEdit(item)}
-                    className="p-2 text-green-600 hover:text-green-800 transition"
+                    className="text-green-600 hover:text-green-800 transition cursor-pointer"
                     title="Confirmar"
                   >
                     <FaRegEdit size={18} />
                   </button>
                   <button
                     onClick={() => eliminarProducto(item.id)}
-                    className="p-2 text-red-600 hover:text-red-800 transition"
+                    className="text-red-600 hover:text-red-800 transition cursor-pointer"
                     title="Eliminar"
                   >
                     <FaTrash size={18} />
@@ -195,12 +195,13 @@ export default function DataTable() {
           setCurrentProduct(undefined);
         }}
         title={currentProduct ? "Editar Datos" : "Ingresar Datos"}
+        form="eliminentechno3"
+        btnText={currentProduct ? "Guardar Cambios" : "Añadir"}
       >
         {/* Formulario */}
         <ProductForm
           initialData={currentProduct}
           onSubmit={handleSubmit}
-          onCancel={() => setIsOpen(false)}
           isEditing={!!currentProduct}
         />
       </Modal>
