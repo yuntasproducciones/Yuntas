@@ -1,69 +1,10 @@
 ---
 // Imports
-import ProductCard from "../components/products/ProductCard.astro";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagenPrincipio from "../assets/images/products/principio.webp";
-import { config, getApiUrl } from "../../config";
-import type Producto from "../models/Product.ts";
+import FetchProductsList from "../components/products/FetchProductsList.tsx"
 
-const API_URL = import.meta.env.PUBLIC_API_URL;
-let productsApi: Producto[] = [];
-
-// Cargar productos
-// getApiUrl(config.endpoints.productos.list)
-try {
-  const response = await fetch(getApiUrl(config.endpoints.productos.list), {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    }
-  });
-
-  if (!response.ok) throw new Error("Error al obtener productos de la API");
-
-  const jsonResponse = await response.json();
-  // console.log("Respuesta completa de la API:", jsonResponse);
-  // console.log("Contenido de jsonResponse.data:", jsonResponse.data);
-
-  if (Array.isArray(jsonResponse)) {
-    productsApi = jsonResponse;
-    // productsApi = jsonResponse.data.map((producto: any): Producto => ({
-    //   id: producto.id,
-    //   title: producto.titulo || "",
-    //   subtitle: producto.subtitulo || "",
-    //   tagline: producto.lema || "",
-    //   description: producto.descripcion || "",
-    //   specs: producto.especificaciones || {},
-    //   dimensions: producto.dimensiones || {},
-    //   relatedProducts: producto.productos_relacionados || [],
-    //   images: producto.imagenes?.map((img: any) => `${API_URL}${img.url_imagen}`) || [],
-    //   image: producto.imagenes?.[0] ? `${API_URL}${producto.imagenes[0].url_imagen}` : "",
-    //   nombreProducto: producto.nombre || "",
-    //   seccion: producto.seccion || "",
-    //   alt: producto.imagenes?.[0] ? producto.imagenes[0].texto_alt_SEO : "Imagen no disponible",
-    // }));
-  }
-} catch (err) {
-  console.error("Error al obtener productos:", err);
-}
-// console.log(productsApi)
-
-// Agrupar productos
-// const groupedMobile: Producto[][] = [];
-// for (let i = 0; i < productsApi.length; i += 2) {
-//   groupedMobile.push(productsApi.slice(i, i + 2));
-// }
-
-// const groupedDesktop: Producto[][] = [];
-// for (let i = 0; i < productsApi.length; i += 3) {
-//   groupedDesktop.push(productsApi.slice(i, i + 3));
-// }
-const productosArray: Producto[][] = [];
-for (let i = 0; i < productsApi.length; i += 3) {
-  productosArray.push(productsApi.slice(i, i + 3));
-}
 ---
 <Layout title="Productos">
   <!-- Banner -->
@@ -88,22 +29,7 @@ for (let i = 0; i < productsApi.length; i += 3) {
         </p>
       </div>
 
-      
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {productosArray.length > 0 ? (
-            productosArray.map((row) => (
-                row.map((producto) => (
-                  <div class="flex justify-center">
-                    <div class="max-w-[300px] sm:max-w-[250px]">
-                      <ProductCard producto={producto} />
-                    </div>
-                  </div>
-                ))
-            ))
-        ) : (
-            <p class="text-white text-center">No hay productos disponibles</p>
-        )}
-      </div>
+      <FetchProductsList client:load />
     </div>
   </section>
 </Layout>
