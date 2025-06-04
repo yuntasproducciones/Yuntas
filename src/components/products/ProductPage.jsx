@@ -19,22 +19,46 @@ export default function ProductPage(){
                 let specsValue = data.data.specs;
                 let specsObject = {};
     
+                // Procesar "specs" si viene con contenido útil
                 if (typeof specsValue === 'string' && specsValue.includes(':')) {
                     specsValue.split(',').forEach(pair => {
                         const [key, value] = pair.split(':').map(str => str.trim());
                         if (key && value) specsObject[key] = value;
                     });
+                } else if (typeof specsValue === 'object' && specsValue !== null) {
+                    specsObject = specsValue;
                 } else {
-                    specsObject = { Descripción: specsValue };
+                    specsObject = { Descripción: specsValue ?? 'Sin descripción' };
                 }
+    
+                // Parsear el campo "especificaciones"
+                let especificacionesObject = {};
+                try {
+                    especificacionesObject = JSON.parse(data.data.especificaciones);
+                } catch (e) {
+                    console.warn("No se pudo parsear 'especificaciones'", e);
+                }
+    
+                // Combinar ambos objetos
+                let allSpecs = {
+                    ...specsObject,
+                    ...especificacionesObject
+                };
+                
+                // Eliminar la propiedad "descripcion" (o "Descripción")
+                delete allSpecs.descripcion;
+                delete allSpecs.Descripción;
+                
+                const benefits = data.data.benefits ?? [];
+    
                 setProduct({
                     ...data,
                     data: {
                         ...data.data,
-                        specs: specsObject
+                        specs: allSpecs,
+                        benefits: benefits
                     }
                 });
-    
                 setLoading(false);
             })
             .catch(() => {
@@ -42,6 +66,7 @@ export default function ProductPage(){
                 setLoading(false);
             });
     }, [id]);
+    
     
 
     if (loading) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold animate-pulse bg-blue-200">Cargando...</p> }
@@ -54,8 +79,8 @@ export default function ProductPage(){
             <div className="w-full">
                 <img
                         id="product-img"
-                        src={`https://apiyuntas.yuntaspublicidad.com/`+images[0]}
-                        alt={'Banner de '+title}
+                        src={`https://apiyuntas.yuntaspublicidad.com${imagenes[0]?.url_imagen}`}
+                        alt={'Banner de '+titulo}
                         className="w-full h-[600px] mx-auto my-auto"
                 />
                 {/* Hero Banner */}
@@ -75,8 +100,8 @@ export default function ProductPage(){
                     <div className="mx-auto w-2/3 md:w-full aspect-[1/1] overflow-hidden flex items-center justify-center">
                     <img
                         id="product-viewer"
-                        src={`https://apiyuntas.yuntaspublicidad.com/` + images[0]}
-                        alt={"Primera imagen de " + title}
+                        src={`https://apiyuntas.yuntaspublicidad.com${imagenes[1]?.url_imagen}`}
+                        alt={"Primera imagen de " + titulo}
                         className="w-full rounded-2xl object-contain"
                     />
                     </div>
@@ -98,14 +123,14 @@ export default function ProductPage(){
                     viewport={{ once: true, amount: 0.2 }}
                 >
                     <div className="grid gap-6 md:gap-8 rounded-lg mb-12 md:mb-0 text-white">
-                    <h3 className="font-extrabold mb-2 text-3xl">Especificaciones</h3>
+                    <h3 className="font-extrabold mb-2 text-3xl">Especificaciones:</h3>
                     <ul className="space-y-2" id="specs-list">
-                        {Object.entries(specs).map(([key, value]) => (
+                    {Object.entries(specs).map(([key, value]) => (
                         <li className="text-2xl flex items-center" key={key}>
-                            <FaRegSquareCheck className="mr-3" />
-                            <strong>{key.charAt(0).toUpperCase() + key.slice(1)}</strong>: {value}
+                        <FaRegSquareCheck className="mr-3" /> 
+                        {key.charAt(0).toUpperCase() + key.slice(1)} : {value}
                         </li>
-                        ))}
+                    ))}
                     </ul>
                     </div>
                 </motion.div>
@@ -151,8 +176,8 @@ export default function ProductPage(){
                     <div className="overflow-hidden rounded-3xl">
                     <img
                         className="w-full h-[340px] object-cover"
-                        src={`https://apiyuntas.yuntaspublicidad.com/` + images[1]}
-                        alt={"Segunda imagen de " + title}
+                        src={`https://apiyuntas.yuntaspublicidad.com${imagenes[2]?.url_imagen}`}
+                        alt={"Segunda imagen de " + titulo}
                         loading="lazy"
                     />
                     </div>
