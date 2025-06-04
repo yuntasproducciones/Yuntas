@@ -8,12 +8,16 @@ import { motion } from "framer-motion";
 export default function ProductPage(){
     const [product, setProduct] = useState(null)
     const [loading, setLoading] = useState(true)
-
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    const [link, setLink] = useState(null);
 
     useEffect(() => {
-        fetch(getApiUrl(config.endpoints.productos.detail(id)))
+        const urlParams = new URLSearchParams(window.location.search);
+        const link = urlParams.get('link');
+        setLink(link)
+    }, [])
+
+    useEffect(() => {
+        fetch(getApiUrl(config.endpoints.productos.link(link)))
             .then(response => response.json())
             .then(data => {
                 let specsValue = data.data.specs;
@@ -41,11 +45,11 @@ export default function ProductPage(){
                 setProduct(null);
                 setLoading(false);
             });
-    }, [id]);
+    }, [link]);
     
 
     if (loading) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold animate-pulse bg-blue-200">Cargando...</p> }
-    if (!product) { return <p>Producto no encontrado...</p> }
+    if (!product) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold bg-blue-200">Producto no encontrado...</p> }
 
     const {titulo, subtitulo, descripcion, imagenes, specs, lema, seccion, stock, precioProducto} = product.data;
     console.log(product.data)
@@ -151,8 +155,8 @@ export default function ProductPage(){
                     <div className="overflow-hidden rounded-3xl">
                     <img
                         className="w-full h-[340px] object-cover"
-                        src={`https://apiyuntas.yuntasproducciones.com/` + imagenes[1]}
-                        alt={"Segunda imagen de " + titulo}
+                        src={`https://apiyuntas.yuntaspublicidad.com/` + imagenes[1].url_imagen}
+                        alt={imagenes[1].texto_alt_SEO}
                         loading="lazy"
                     />
                     </div>
