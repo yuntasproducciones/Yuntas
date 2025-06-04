@@ -23,7 +23,7 @@ export default function FetchProductsList() {
         if (!response.ok) throw new Error("Error al obtener productos de la API");
 
         const jsonResponse = await response.json();
-        console.log("Respuesta completa de la API:", jsonResponse);
+        // console.log("Respuesta completa de la API:", jsonResponse);
 
         setProducts(jsonResponse);
 
@@ -37,7 +37,7 @@ export default function FetchProductsList() {
     fetchProducts();
   }, []);
 
-  if (loading) return <p>Cargando productos...</p>;
+  if (loading) return <p className="grid place-content-center min-h-screen text-white text-3xl animate-pulse font-extrabold ">Cargando productos...</p>
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
