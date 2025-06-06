@@ -9,48 +9,52 @@ export default function ProductPage(){
     const [product, setProduct] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    
 
     useEffect(() => {
-        fetch(getApiUrl(config.endpoints.productos.detail(id)))
-            .then(response => response.json())
-            .then(data => {
-                const especificacionesObject = data.data.especificaciones || {};
-                const benefits = especificacionesObject.beneficios || especificacionesObject.benefits || [];
+        const urlParams = new URLSearchParams(window.location.search);
+        const linkParam = urlParams.get('link');
+        if (!linkParam) return;
+        
+        fetch(getApiUrl(config.endpoints.productos.link(linkParam)))
+        .then(response => response.json())
+        .then(data => {
+            const especificacionesObject = data.data.especificaciones || {};
+            const benefits = especificacionesObject.beneficios || especificacionesObject.benefits || [];
 
-                const specs = { ...especificacionesObject };
-                delete specs.beneficios;
-                delete specs.benefits;
+            const specs = { ...especificacionesObject };
+            delete specs.beneficios;
+            delete specs.benefits;
 
-                delete specs.descripcion;
-                delete specs.Descripción; // por si acaso
-                delete specs.beneficios;  // <- aquí eliminas 'beneficios' si existe
-                delete specs.benefits;   
+            delete specs.descripcion;
+            delete specs.Descripción; // por si acaso
+            delete specs.beneficios;  // <- aquí eliminas 'beneficios' si existe
+            delete specs.benefits;   
 
-    
-                setProduct({
-                    ...data,
-                    data: {
-                        ...data.data,
-                        specs: specs,
-                        benefits: benefits,
-                    }
-                });
-                setLoading(false);
-            })
-            .catch(() => {
-                setProduct(null);
-                setLoading(false);
+
+            setProduct({
+                ...data,
+                data: {
+                    ...data.data,
+                    specs: specs,
+                    benefits: benefits,
+                }
             });
-    }, [id]);
+            setLoading(false);
+        })
+        .catch(() => {
+            setProduct(null);
+            setLoading(false);
+        });
+}, []);
+
     
     
     
     
 
     if (loading) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold animate-pulse bg-blue-200">Cargando...</p> }
-    if (!product) { return <p>Producto no encontrado...</p> }
+    if (!product) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold bg-blue-200">Producto no encontrado...</p> }
 
     const {titulo, subtitulo, descripcion, imagenes, specs, lema, seccion, stock, precioProducto} = product.data;
     console.log(product.data)
@@ -84,7 +88,7 @@ console.log("Benefits:", product.data.benefits);
                     <img
                         id="product-viewer"
                         src={`https://apiyuntas.yuntaspublicidad.com${imagenes[1]?.url_imagen}`}
-                        alt={"Primera imagen de " + titulo}
+                        alt={imagenes[1]?.texto_alt_SEO}
                         className="w-full rounded-2xl object-contain"
                     />
                     </div>
@@ -168,7 +172,7 @@ console.log("Benefits:", product.data.benefits);
                     <img
                         className="w-full h-[340px] object-cover"
                         src={`https://apiyuntas.yuntaspublicidad.com${imagenes[2]?.url_imagen}`}
-                        alt={"Segunda imagen de " + titulo}
+                        alt={imagenes[2]?.texto_alt_SEO}
                         loading="lazy"
                     />
                     </div>
@@ -185,7 +189,7 @@ console.log("Benefits:", product.data.benefits);
                 {/* Call To Action Button */}
                 <div className="flex flex-col justify-center items-center bg-indigo-950 py-12">
                     <p className="text-white text-3xl font-semibold">¿Encontraste lo que buscabas?</p>
-                    <button className="my-6 text-white font-extrabold bg-gradient-to-l from-cyan-300 to-cyan-600 px-20 py-4 rounded-full text-lg sm:text-2xl hover:from-cyan-600 hover:to-cyan-300 cursor-pointer">Cotizar</button>
+                    <a href="/contact" className="my-6 text-white font-extrabold bg-gradient-to-l from-cyan-300 to-cyan-600 px-20 py-4 rounded-full text-lg sm:text-2xl hover:from-cyan-600 hover:to-cyan-300">Cotizar</a>
                 </div>
 
                     {/* Similar Products */}
