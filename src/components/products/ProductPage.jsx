@@ -16,47 +16,25 @@ export default function ProductPage(){
         fetch(getApiUrl(config.endpoints.productos.detail(id)))
             .then(response => response.json())
             .then(data => {
-                let specsValue = data.data.specs;
-                let specsObject = {};
-    
-                // Procesar "specs" si viene con contenido útil
-                if (typeof specsValue === 'string' && specsValue.includes(':')) {
-                    specsValue.split(',').forEach(pair => {
-                        const [key, value] = pair.split(':').map(str => str.trim());
-                        if (key && value) specsObject[key] = value;
-                    });
-                } else if (typeof specsValue === 'object' && specsValue !== null) {
-                    specsObject = specsValue;
-                } else {
-                    specsObject = { Descripción: specsValue ?? 'Sin descripción' };
-                }
-    
-                // Parsear el campo "especificaciones"
-                let especificacionesObject = {};
-                try {
-                    especificacionesObject = JSON.parse(data.data.especificaciones);
-                } catch (e) {
-                    console.warn("No se pudo parsear 'especificaciones'", e);
-                }
-    
-                // Combinar ambos objetos
-                let allSpecs = {
-                    ...specsObject,
-                    ...especificacionesObject
-                };
-                
-                // Eliminar la propiedad "descripcion" (o "Descripción")
-                delete allSpecs.descripcion;
-                delete allSpecs.Descripción;
-                
-                const benefits = data.data.benefits ?? [];
+                const especificacionesObject = data.data.especificaciones || {};
+                const benefits = especificacionesObject.beneficios || especificacionesObject.benefits || [];
+
+                const specs = { ...especificacionesObject };
+                delete specs.beneficios;
+                delete specs.benefits;
+
+                delete specs.descripcion;
+                delete specs.Descripción; // por si acaso
+                delete specs.beneficios;  // <- aquí eliminas 'beneficios' si existe
+                delete specs.benefits;   
+
     
                 setProduct({
                     ...data,
                     data: {
                         ...data.data,
-                        specs: allSpecs,
-                        benefits: benefits
+                        specs: specs,
+                        benefits: benefits,
                     }
                 });
                 setLoading(false);
@@ -68,12 +46,17 @@ export default function ProductPage(){
     }, [id]);
     
     
+    
+    
 
     if (loading) { return <p className="grid min-h-screen place-content-center text-5xl font-extrabold animate-pulse bg-blue-200">Cargando...</p> }
     if (!product) { return <p>Producto no encontrado...</p> }
 
     const {titulo, subtitulo, descripcion, imagenes, specs, lema, seccion, stock, precioProducto} = product.data;
     console.log(product.data)
+    console.log("Specs:", specs);
+console.log("Benefits:", product.data.benefits);
+
     return (
         <>
             <div className="w-full">
@@ -125,12 +108,16 @@ export default function ProductPage(){
                     <div className="grid gap-6 md:gap-8 rounded-lg mb-12 md:mb-0 text-white">
                     <h3 className="font-extrabold mb-2 text-3xl">Especificaciones:</h3>
                     <ul className="space-y-2" id="specs-list">
-                    {Object.entries(specs).map(([key, value]) => (
+                    {Object.entries(specs).length > 0 ? (
+                        Object.entries(specs).map(([key, value]) => (
                         <li className="text-2xl flex items-center" key={key}>
-                        <FaRegSquareCheck className="mr-3" /> 
-                        {key.charAt(0).toUpperCase() + key.slice(1)} : {value}
+                            <FaRegSquareCheck className="mr-3" /> 
+                            {key.charAt(0).toUpperCase() + key.slice(1)} : {value}
                         </li>
-                    ))}
+                        ))
+                    ) : (
+                        <li>No hay especificaciones disponibles</li>
+                    )}
                     </ul>
                     </div>
                 </motion.div>
@@ -152,13 +139,17 @@ export default function ProductPage(){
                 >
                     <div className="grid gap-6 md:gap-8 rounded-lg mt-12 md:mt-0 text-white">
                     <h3 className="font-extrabold mb-2 text-3xl">Beneficios:</h3>
-                    <ul className="space-y-2" id="specs-list">
-                        {Object.entries(specs).map(([key, value]) => (
-                        <li className="text-2xl flex items-center" key={key}>
+                    <ul className="space-y-2" id="benefits-list">
+                    {product.data.benefits.length > 0 ? (
+                        product.data.benefits.map((benefit, index) => (
+                        <li className="text-2xl flex items-center" key={index}>
                             <FaRegSquareCheck className="mr-3" /> 
-                            {key.charAt(0).toUpperCase() + key.slice(1)} : {value}
+                            {benefit}
                         </li>
-                        ))}
+                        ))
+                    ) : (
+                        <li>No hay beneficios disponibles para este producto.</li>
+                    )}
                     </ul>
                     </div>
                 </motion.div>
