@@ -2,25 +2,31 @@
 // Importaciones
 import ArticuloCard from "../components/blog/ArticuloCard.astro";
 import Layout from "../layouts/Layout.astro";
-import { Picture } from "astro:assets";
 import imagen1 from "../assets/images/blog/banner_blog.webp";
-import { articles } from "./blogs/[articleId].astro";
+
+// Consumir blogs desde la API
+const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
+const apiResponse = await res.json();
+const articles = apiResponse.data;
 ---
 
 <Layout title="Blog">
   <section class="relative h-screen">
-    <Picture src={imagen1} formats={["webp"]} alt="Imagen" class="w-full h-full object-cover" />
+    <img src={imagen1.src} alt="Imagen" class="w-full h-full object-cover" />
     <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
       <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl Montserrat font-black text-white sombra-title">
         Blog Yuntero
       </h1>
     </div>
   </section>
+
   <div class="w-full bg-white text-blue-950 text-3xl font-extrabold text-center h-20 content-center">
     <h2 class="text-2xl sm:text-3xl md:text-2xl lg:text-4xl">DESCUBRE MÁS SOBRE NUESTROS ARTÍCULOS</h2>
   </div>
-  <section class="p-24 text-white bg-linear-to-b from-blue-900 to-indigo-950 flex flex-col overflow-hidden">
+
+  <section class="p-24 text-white bg-gradient-to-b from-blue-900 to-indigo-950 flex flex-col overflow-hidden">
     <h3 class="text-3xl font-bold">ARTÍCULOS</h3>
+
     <div class="flex justify-center mt-10 w-full">
       <div class="bg-gray-300 rounded-2xl p-8 w-full flex items-center relative">
         <input
@@ -44,12 +50,17 @@ import { articles } from "./blogs/[articleId].astro";
         </button>
       </div>
     </div>
-    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
-      {articles.map((article) => (
-        <ArticuloCard key={article.id} {...article} class="w-full" />
+
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 mt-10">
+      {articles.map((article:any) => (
+        <ArticuloCard
+          key={article.id}
+          id={article.id}
+          title={article.titulo}
+          subtitle={article.descripcion}
+          image={article.imagenPrincipal}
+        />
       ))}
     </div>
   </section>
 </Layout>
-
-
