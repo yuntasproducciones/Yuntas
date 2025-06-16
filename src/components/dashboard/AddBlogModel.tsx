@@ -7,6 +7,7 @@ interface ImagenAdicional {
 }
 
 interface BlogPOST {
+  producto_id: string;
   titulo: string;
   link: string;
   parrafo: string;
@@ -22,6 +23,7 @@ interface BlogPOST {
 const AddBlogModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<BlogPOST>({
+    producto_id: "",
     titulo: "",
     link: "",
     parrafo: "",
@@ -87,6 +89,7 @@ const AddBlogModal = () => {
   const closeModal = () => {
     setIsOpen(false);
     setFormData({
+      producto_id: "",
       titulo: "",
       link: "",
       parrafo: "",
@@ -115,16 +118,16 @@ const AddBlogModal = () => {
 
     // Validar campos requeridos
     if (
-      !formData.titulo ||
-      !formData.parrafo ||
-      !formData.descripcion ||
-      !formData.subtitulo_beneficio ||
-      !formData.titulo_blog ||
-      !formData.titulo_video ||
-      !formData.url_video ||
-      !formData.imagen_principal ||
-      !formData.imagenes ||
-      formData.imagenes.some((imagen) => !imagen.url_imagen) // Verifica si alguna imagen es null
+        !formData.titulo ||
+        !formData.link ||
+        !formData.parrafo ||
+        !formData.descripcion ||
+        !formData.subtitulo_beneficio ||
+        !formData.titulo_blog ||
+        !formData.titulo_video ||
+        !formData.url_video ||
+        !formData.imagen_principal ||
+        formData.imagenes.some((img) => !img.url_imagen)
     ) {
       alert("⚠️ Todos los campos son obligatorios.");
       return;
@@ -134,20 +137,20 @@ const AddBlogModal = () => {
       const token = localStorage.getItem("token");
       const formDataToSend = new FormData();
 
+
+      formDataToSend.append("producto_id", formData.producto_id);
       formDataToSend.append("titulo", formData.titulo);
       formDataToSend.append("link", formData.link);
       formDataToSend.append("parrafo", formData.parrafo);
       formDataToSend.append("descripcion", formData.descripcion);
-      formDataToSend.append("subTituloBlog", formData.subtitulo_beneficio);
-      formDataToSend.append("tituloBlog", formData.titulo_blog);
-      formDataToSend.append("tituloVideoBlog", formData.titulo_video);
-      formDataToSend.append("videoBlog", formData.url_video);
-      formDataToSend.append("imagenPrincipal", formData.imagen_principal as File);
-      formData.imagenes.forEach((item, index) => {
-        if (item.url_imagen) {
-          formDataToSend.append(`imagenesBlog[${index}][url]`, item.url_imagen);
-        }
-        formDataToSend.append(`imagenesBlog[${index}][parrafo]`, item.parrafo_imagen);
+      formDataToSend.append("subtitulo_beneficio", formData.subtitulo_beneficio);
+      formDataToSend.append("titulo_blog", formData.titulo_blog);
+      formDataToSend.append("titulo_video", formData.titulo_video);
+      formDataToSend.append("url_video", formData.url_video);
+      formDataToSend.append("imagen_principal", formData.imagen_principal as File);
+
+      formData.imagenes.forEach((item) => {
+        formDataToSend.append("imagenes[]", item.url_imagen as File);
       });
 
 
@@ -216,6 +219,18 @@ const AddBlogModal = () => {
                     value={formData.link}
                     onChange={handleChange}
                     required
+                    className="w-full bg-white outline-none p-2 rounded-md text-black"
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="block">Producto</label>
+                <input
+                    type="text"
+                    name="producto_id"
+                    value={formData.producto_id}
+                    onChange={handleChange}
+                    required
+                    placeholder="ID del producto"
                     className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
