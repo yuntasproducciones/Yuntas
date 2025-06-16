@@ -2,29 +2,31 @@ import { config, getApiUrl } from "../../../config";
 import { useState } from "react";
 
 interface ImagenAdicional {
-  url_imagen: File | null; // 👈 aquí permitimos File o null
+  url_imagen: File | null;
   parrafo_imagen: string;
 }
 
 interface BlogPOST {
   titulo: string;
+  link: string;
   parrafo: string;
   descripcion: string;
-  imagen_principal: File | null; // 👈 aquí permitimos File o null
+  imagen_principal: File | null;
   titulo_blog: string;
   subtitulo_beneficio: string;
   url_video: string;
   titulo_video: string;
-  imagenes: ImagenAdicional[]; // 👈 arreglo con imagen y párrafo
+  imagenes: ImagenAdicional[];
 }
 
 const AddBlogModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<BlogPOST>({
     titulo: "",
+    link: "",
     parrafo: "",
     descripcion: "",
-    imagen_principal: null, // 👈 inicializamos con null
+    imagen_principal: null,
     titulo_blog: "",
     subtitulo_beneficio: "",
     url_video: "",
@@ -86,6 +88,7 @@ const AddBlogModal = () => {
     setIsOpen(false);
     setFormData({
       titulo: "",
+      link: "",
       parrafo: "",
       descripcion: "",
       imagen_principal: null,
@@ -132,31 +135,22 @@ const AddBlogModal = () => {
       const formDataToSend = new FormData();
 
       formDataToSend.append("titulo", formData.titulo);
+      formDataToSend.append("link", formData.link);
       formDataToSend.append("parrafo", formData.parrafo);
       formDataToSend.append("descripcion", formData.descripcion);
-      formDataToSend.append(
-        "subtitulo_beneficio",
-        formData.subtitulo_beneficio
-      );
-      formDataToSend.append("titulo_blog", formData.titulo_blog);
-      formDataToSend.append("titulo_video", formData.titulo_video);
-      formDataToSend.append("url_video", formData.url_video);
+      formDataToSend.append("subTituloBlog", formData.subtitulo_beneficio);
+      formDataToSend.append("tituloBlog", formData.titulo_blog);
+      formDataToSend.append("tituloVideoBlog", formData.titulo_video);
+      formDataToSend.append("videoBlog", formData.url_video);
+      formDataToSend.append("imagenPrincipal", formData.imagen_principal as File);
       formData.imagenes.forEach((item, index) => {
         if (item.url_imagen) {
-          formDataToSend.append(
-            `imagenes[${index}][url_imagen]`,
-            item.url_imagen as File
-          ); // Use 'imagen' key
+          formDataToSend.append(`imagenesBlog[${index}][url]`, item.url_imagen);
         }
-        formDataToSend.append(
-          `imagenes[${index}][parrafo_imagen]`,
-          item.parrafo_imagen
-        );
+        formDataToSend.append(`imagenesBlog[${index}][parrafo]`, item.parrafo_imagen);
       });
-      formDataToSend.append(
-        "imagen_principal",
-        formData.imagen_principal as File
-      ); // Subir imagen como archivo
+
+
 
       const response = await fetch(getApiUrl(config.endpoints.blogs.create), {
         method: "POST",
@@ -214,7 +208,17 @@ const AddBlogModal = () => {
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
-
+              <div>
+                <label className="block">Link</label>
+                <input
+                    type="text"
+                    name="link"
+                    value={formData.link}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-white outline-none p-2 rounded-md text-black"
+                />
+              </div>
               <div>
                 <label className="block">Párrafo</label>
                 <input
