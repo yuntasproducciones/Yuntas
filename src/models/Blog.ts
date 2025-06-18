@@ -1,6 +1,7 @@
 export default interface Blog {
   id: number;
   titulo: string;
+  producto_id: number;
   parrafo: string;
   descripcion: string;
   imagenPrincipal: string;
@@ -10,10 +11,6 @@ export default interface Blog {
   parrafoImagenesBlog: string[]; // Un array de párrafos
   videoBlog: string;
   tituloVideoBlog: string;
-}
-interface ImagenAdicional {
-  url_imagen: File | null;
-  parrafo_imagen: string;
 }
 
 
