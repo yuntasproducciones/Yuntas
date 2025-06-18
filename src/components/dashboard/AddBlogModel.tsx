@@ -149,19 +149,22 @@ const AddBlogModal = () => {
       formDataToSend.append("url_video", formData.url_video);
       formDataToSend.append("imagen_principal", formData.imagen_principal as File);
 
-      formData.imagenes.forEach((item) => {
-        formDataToSend.append("imagenes[]", item.url_imagen as File);
+      formData.imagenes.forEach((item, index) => {
+        if (item.url_imagen) {
+          formDataToSend.append(`imagenes[${index}][imagen]`, item.url_imagen as File);
+        }
+        formDataToSend.append(`imagenes[${index}][parrafo_imagen]`, item.parrafo_imagen);
       });
-
-
 
       const response = await fetch(getApiUrl(config.endpoints.blogs.create), {
         method: "POST",
-        body: formDataToSend, // FormData
+        body: formDataToSend,
         headers: {
           Authorization: `Bearer ${token}`,
+          Accept: "application/json",
         },
       });
+
 
       const data = await response.json();
       console.log("Respuesta del servidor:", data);

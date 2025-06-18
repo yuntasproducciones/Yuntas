@@ -11,3 +11,9 @@ export default interface Blog {
   videoBlog: string;
   tituloVideoBlog: string;
 }
+interface ImagenAdicional {
+  url_imagen: File | null;
+  parrafo_imagen: string;
+}
+
+
