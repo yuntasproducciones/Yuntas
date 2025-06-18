@@ -1,0 +1,10 @@
+---
+import LayoutAdmin from "../../layouts/LayoutAdmin.astro";
+import UsersTable from "../../components/dashboard/tables/UsersTable";
+---
+
+<LayoutAdmin title="Usuarios">
+  <div class="p-8">
+    <UsersTable client:load />
+  </div>
+</LayoutAdmin>
