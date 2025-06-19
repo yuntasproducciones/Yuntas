@@ -20,6 +20,8 @@ interface Blog {
 const BlogsTable = () => {
   // Estado para almacenar los datos de la API
   const [data, setData] = useState<Blog[]>([]);
+  //Para editar el blog
+  const [editData, setEditData] = useState<Blog | null>(null);
   // Estado para la página actual
   const [currentPage, setCurrentPage] = useState<number>(1);
   // Número de elementos por página
@@ -137,7 +139,8 @@ const BlogsTable = () => {
                       </button>
                       <button
                         className="p-2 text-yellow-600 hover:text-yellow-800 transition"
-                        title="Confirmar"
+                        title="Editar"
+                        onClick={() => setEditData(item)}
                       >
                         <FaEdit size={18} />
                       </button>
