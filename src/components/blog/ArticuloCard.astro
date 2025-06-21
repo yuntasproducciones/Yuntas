@@ -1,12 +1,11 @@
 ---
-const { id, title, subtitle, image_banner_url } = Astro.props;
-import { Picture } from "astro:assets";
+const { id, title, subtitle, image } = Astro.props;
 ---
 
 <a href={`/blogs/${id}`} class="block w-full p-4">
   <div class="bg-white rounded-2xl text-black h-96 w-full my-10 hover:scale-110 transition-all duration-300 shadow-2xl">
-    <Picture
-      src={image_banner_url}
+    <img
+      src={image}
       alt={title}
       class="w-full object-cover rounded-t-2xl object-center h-1/2"
     />
@@ -16,4 +15,3 @@ import { Picture } from "astro:assets";
     </div>
   </div>
 </a>
-

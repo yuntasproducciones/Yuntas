@@ -41,8 +41,8 @@ const Sidebar = () => {
     { name: "Inicio", path: "/admin/inicio" },
     { name: "Seguimiento", path: "/admin/seguimiento" },
     { name: "Blogs", path: "/admin" },
-    // { name: "Ventas", path: "/admin/ventas" },
     { name: "Productos", path: "/admin/productos" },
+    { name: "Usuarios", path: "/admin/usuarios" }, // Agregado para mostrar la tabla de usuarios
   ];
 
   return (
