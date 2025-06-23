@@ -1,8 +1,8 @@
 import { config, getApiUrl } from "../../../config";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ImagenAdicional {
-  url_imagen: File | null; // 👈 aquí permitimos File o null
+  url_imagen: File | null;
   parrafo_imagen: string;
 }
 
@@ -10,21 +10,45 @@ interface BlogPOST {
   titulo: string;
   parrafo: string;
   descripcion: string;
-  imagen_principal: File | null; // 👈 aquí permitimos File o null
+  imagen_principal: File | null;
   titulo_blog: string;
   subtitulo_beneficio: string;
   url_video: string;
   titulo_video: string;
-  imagenes: ImagenAdicional[]; // 👈 arreglo con imagen y párrafo
+  imagenes: ImagenAdicional[];
 }
 
-const AddBlogModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface Blog {
+  id: number;
+  titulo: string;
+  parrafo: string;
+  descripcion: string;
+  imagenPrincipal: string;
+  tituloBlog?: string;
+  subTituloBlog?: string;
+  videoBlog?: string;
+  tituloVideoBlog?: string;
+  created_at?: string | null;
+}
+
+interface AddBlogModalProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  blogToEdit?: Blog | null;
+  onSuccess?: () => void;
+}
+
+const AddBlogModal = ({
+  isOpen,
+  setIsOpen,
+  blogToEdit,
+  onSuccess,
+}: AddBlogModalProps) => {
   const [formData, setFormData] = useState<BlogPOST>({
     titulo: "",
     parrafo: "",
     descripcion: "",
-    imagen_principal: null, // 👈 inicializamos con null
+    imagen_principal: null,
     titulo_blog: "",
     subtitulo_beneficio: "",
     url_video: "",
@@ -38,8 +62,42 @@ const AddBlogModal = () => {
         url_imagen: null,
         parrafo_imagen: "",
       },
-    ], // 👈 inicializamos como un arreglo vacío
+    ],
   });
+
+  useEffect(() => {
+    if (isOpen && blogToEdit) {
+      setFormData({
+        titulo: blogToEdit.titulo || "",
+        parrafo: blogToEdit.parrafo || "",
+        descripcion: blogToEdit.descripcion || "",
+        imagen_principal: null, // No se puede rellenar un File
+        titulo_blog: blogToEdit.tituloBlog || "",
+        subtitulo_beneficio: blogToEdit.subTituloBlog || "",
+        url_video: blogToEdit.videoBlog || "",
+        titulo_video: blogToEdit.tituloVideoBlog || "",
+        imagenes: [
+          { url_imagen: null, parrafo_imagen: "" },
+          { url_imagen: null, parrafo_imagen: "" },
+        ],
+      });
+    } else if (!isOpen) {
+      setFormData({
+        titulo: "",
+        parrafo: "",
+        descripcion: "",
+        imagen_principal: null,
+        titulo_blog: "",
+        subtitulo_beneficio: "",
+        url_video: "",
+        titulo_video: "",
+        imagenes: [
+          { url_imagen: null, parrafo_imagen: "" },
+          { url_imagen: null, parrafo_imagen: "" },
+        ],
+      });
+    }
+  }, [isOpen, blogToEdit]);
 
   // Manejar cambios en los inputs de texto
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,8 +216,16 @@ const AddBlogModal = () => {
         formData.imagen_principal as File
       ); // Subir imagen como archivo
 
-      const response = await fetch(getApiUrl(config.endpoints.blogs.create), {
-        method: "POST",
+      let url = getApiUrl(config.endpoints.blogs.create);
+      let method = "POST";
+      if (blogToEdit && blogToEdit.id) {
+        url = `https://apiyuntas.yuntaspublicidad.com/api/blogs/${blogToEdit.id}`;
+        method = "POST";
+        formDataToSend.append("_method", "PUT");
+      }
+
+      const response = await fetch(url, {
+        method,
         body: formDataToSend, // FormData
         headers: {
           Authorization: `Bearer ${token}`,
@@ -170,8 +236,13 @@ const AddBlogModal = () => {
       console.log("Respuesta del servidor:", data);
 
       if (response.ok) {
-        alert("✅ Blog añadido exitosamente");
+        alert(
+          blogToEdit
+            ? "✅ Blog editado exitosamente"
+            : "✅ Blog añadido exitosamente"
+        );
         closeModal(); // Cerrar modal
+        if (onSuccess) onSuccess();
       } else {
         alert(`❌ Error: ${data.message}`);
       }

@@ -24,6 +24,8 @@ const BlogsTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   // Número de elementos por página
   const itemsPerPage = 10;
+  const [editBlog, setEditBlog] = useState<Blog | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Cargar datos desde la API
   useEffect(() => {
@@ -137,7 +139,11 @@ const BlogsTable = () => {
                       </button>
                       <button
                         className="p-2 text-yellow-600 hover:text-yellow-800 transition"
-                        title="Confirmar"
+                        title="Editar"
+                        onClick={() => {
+                          setEditBlog(item);
+                          setIsModalOpen(true);
+                        }}
                       >
                         <FaEdit size={18} />
                       </button>
@@ -175,7 +181,17 @@ const BlogsTable = () => {
         </button>
       </div>
 
-      <AddBlogModal />
+      <AddBlogModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        blogToEdit={editBlog}
+        onSuccess={() => {
+          setEditBlog(null);
+          setIsModalOpen(false);
+          // Recargar los datos
+          window.location.reload();
+        }}
+      />
     </>
   );
 };
