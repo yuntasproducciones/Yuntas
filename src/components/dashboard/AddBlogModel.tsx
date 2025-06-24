@@ -1,30 +1,42 @@
 import { config, getApiUrl } from "../../../config";
-import { useState } from "react";
+import {useEffect, useState} from "react";
+import Swal from "sweetalert2";
+import type Blog from "../../models/Blog.ts";
+
 
 interface ImagenAdicional {
-  url_imagen: File | null; // 👈 aquí permitimos File o null
+  url_imagen: File | null;
   parrafo_imagen: string;
 }
 
 interface BlogPOST {
+  producto_id: number;
   titulo: string;
+  link: string;
   parrafo: string;
   descripcion: string;
-  imagen_principal: File | null; // 👈 aquí permitimos File o null
+  imagen_principal: File | null;
   titulo_blog: string;
   subtitulo_beneficio: string;
   url_video: string;
   titulo_video: string;
-  imagenes: ImagenAdicional[]; // 👈 arreglo con imagen y párrafo
+  imagenes: ImagenAdicional[];
 }
 
-const AddBlogModal = () => {
+interface AddBlogModalProps {
+  onBlogAdded?: () => void;
+}
+
+const AddBlogModal: React.FC<AddBlogModalProps> = ({ onBlogAdded }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [productos, setProductos] = useState<any[]>([]);
   const [formData, setFormData] = useState<BlogPOST>({
+    producto_id: 0,
     titulo: "",
+    link: "",
     parrafo: "",
     descripcion: "",
-    imagen_principal: null, // 👈 inicializamos con null
+    imagen_principal: null,
     titulo_blog: "",
     subtitulo_beneficio: "",
     url_video: "",
@@ -40,11 +52,76 @@ const AddBlogModal = () => {
       },
     ], // 👈 inicializamos como un arreglo vacío
   });
+  useEffect(() => {
+    if (isOpen) {
+      fetch(getApiUrl(config.endpoints.blogs.list), {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Accept: "application/json",
+        },
+      })
+          .then((res) => res.json())
+          .then((data) => {
+            const linksUsados = data?.data
+                ?.map((b: any) => parseInt(b.link))
+                .filter((n: number) => Number.isInteger(n) && n > 0);
 
+            const linkLibre = obtenerPrimerNumeroLibre(linksUsados || []);
+            setFormData((prev) => ({ ...prev, link: String(linkLibre) }));
+          })
+          .catch((err) => console.error("Error al obtener blogs:", err));
+    }
+  }, [isOpen]);
+  useEffect(() => {
+    if (isOpen) {
+      fetch(getApiUrl(config.endpoints.productos.list), {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Accept: "application/json",
+        },
+      })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("Respuesta productos:", data);
+            setProductos(data || []); // ← Usamos `data` directamente
+          })
+          .catch((err) => console.error("Error al obtener productos:", err));
+    }
+  }, [isOpen]);
+
+  function obtenerPrimerNumeroLibre(numeros: number[]): number {
+    const set = new Set(numeros);
+    let i = 1;
+    while (set.has(i)) {
+      i++;
+    }
+    return i;
+  }
   // Manejar cambios en los inputs de texto
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "link") {
+      const sanitized = value
+          .normalize("NFD") // descompone letras acentuadas
+          .replace(/[\u0300-\u036f]/g, "") // elimina las marcas diacríticas
+          .toLowerCase()
+          .replaceAll(" ", "-");
+
+      setFormData((prev) => ({
+        ...prev,
+        link: sanitized,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
+
 
   // Manejar cambios en la imagen (file input)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +162,9 @@ const AddBlogModal = () => {
   const closeModal = () => {
     setIsOpen(false);
     setFormData({
+      producto_id: 0,
       titulo: "",
+      link: "",
       parrafo: "",
       descripcion: "",
       imagen_principal: null,
@@ -112,18 +191,23 @@ const AddBlogModal = () => {
 
     // Validar campos requeridos
     if (
-      !formData.titulo ||
-      !formData.parrafo ||
-      !formData.descripcion ||
-      !formData.subtitulo_beneficio ||
-      !formData.titulo_blog ||
-      !formData.titulo_video ||
-      !formData.url_video ||
-      !formData.imagen_principal ||
-      !formData.imagenes ||
-      formData.imagenes.some((imagen) => !imagen.url_imagen) // Verifica si alguna imagen es null
+        !formData.titulo ||
+        !formData.link ||
+        !formData.parrafo ||
+        !formData.descripcion ||
+        !formData.subtitulo_beneficio ||
+        !formData.titulo_blog ||
+        !formData.titulo_video ||
+        !formData.url_video ||
+        !formData.imagen_principal ||
+        formData.imagenes.some((img) => !img.url_imagen)
     ) {
-      alert("⚠️ Todos los campos son obligatorios.");
+      Swal.fire({
+        icon: "warning",
+        title: "Campos obligatorios",
+        text: "⚠️ Todos los campos son obligatorios.",
+      });
+
       return;
     }
 
@@ -131,56 +215,65 @@ const AddBlogModal = () => {
       const token = localStorage.getItem("token");
       const formDataToSend = new FormData();
 
+
+      console.log("Producto ID a enviar:", formData.producto_id);
+      if (formData.producto_id && !isNaN(formData.producto_id)) {
+        formDataToSend.append("producto_id", String(formData.producto_id));
+      } else {
+        alert("⚠️ Debes seleccionar un producto válido.");
+        return;
+      }
       formDataToSend.append("titulo", formData.titulo);
+      formDataToSend.append("link", formData.link);
       formDataToSend.append("parrafo", formData.parrafo);
       formDataToSend.append("descripcion", formData.descripcion);
-      formDataToSend.append(
-        "subtitulo_beneficio",
-        formData.subtitulo_beneficio
-      );
+      formDataToSend.append("subtitulo_beneficio", formData.subtitulo_beneficio);
       formDataToSend.append("titulo_blog", formData.titulo_blog);
       formDataToSend.append("titulo_video", formData.titulo_video);
       formDataToSend.append("url_video", formData.url_video);
+      formDataToSend.append("imagen_principal", formData.imagen_principal as File);
+
       formData.imagenes.forEach((item, index) => {
         if (item.url_imagen) {
-          formDataToSend.append(
-            `imagenes[${index}][url_imagen]`,
-            item.url_imagen as File
-          ); // Use 'imagen' key
+          formDataToSend.append(`imagenes[${index}][imagen]`, item.url_imagen as File);
         }
-        formDataToSend.append(
-          `imagenes[${index}][parrafo_imagen]`,
-          item.parrafo_imagen
-        );
+        formDataToSend.append(`imagenes[${index}][parrafo_imagen]`, item.parrafo_imagen);
       });
-      formDataToSend.append(
-        "imagen_principal",
-        formData.imagen_principal as File
-      ); // Subir imagen como archivo
 
       const response = await fetch(getApiUrl(config.endpoints.blogs.create), {
         method: "POST",
-        body: formDataToSend, // FormData
+        body: formDataToSend,
         headers: {
           Authorization: `Bearer ${token}`,
+          Accept: "application/json",
         },
       });
+
 
       const data = await response.json();
       console.log("Respuesta del servidor:", data);
 
-      if (response.ok) {
-        alert("✅ Blog añadido exitosamente");
+      if (response.ok) {await Swal.fire({
+        icon: "success",
+        title: "Blog añadido exitosamente",
+        showConfirmButton: true,
+      });
         closeModal(); // Cerrar modal
-      } else {
-        alert(`❌ Error: ${data.message}`);
+      } else {Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `❌ Error: ${data.message}`,
+      });
+
       }
+      if (onBlogAdded) onBlogAdded();
     } catch (error) {
       console.error("Error al enviar los datos:", error);
       alert(`❌ Error: ${error}`);
     }
   };
 
+  // @ts-ignore
   return (
     <>
       {/* Botón para abrir el modal */}
@@ -195,7 +288,7 @@ const AddBlogModal = () => {
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">
           <div className="h-3/4 overflow-y-scroll bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5">
-            <h2 className="text-2xl font-bold mb-4">AÑADIR BLOG</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Añadir Nuevo Blog</h2>
 
             {/* Formulario */}
             <form
@@ -210,11 +303,19 @@ const AddBlogModal = () => {
                   name="titulo"
                   value={formData.titulo}
                   onChange={handleChange}
-                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
-
+              <div>
+                <label className="block">Link</label>
+                <input
+                    type="text"
+                    name="link"
+                    value={formData.link}
+                    onChange={handleChange}
+                    className="w-full bg-white outline-none p-2 rounded-md text-black"
+                />
+              </div>
               <div>
                 <label className="block">Párrafo</label>
                 <input
@@ -222,7 +323,6 @@ const AddBlogModal = () => {
                   name="parrafo"
                   value={formData.parrafo}
                   onChange={handleChange}
-                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -234,7 +334,6 @@ const AddBlogModal = () => {
                   name="descripcion"
                   value={formData.descripcion}
                   onChange={handleChange}
-                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -246,7 +345,6 @@ const AddBlogModal = () => {
                   name="subtitulo_beneficio"
                   value={formData.subtitulo_beneficio}
                   onChange={handleChange}
-                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -258,7 +356,6 @@ const AddBlogModal = () => {
                   name="titulo_blog"
                   value={formData.titulo_blog}
                   onChange={handleChange}
-                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -270,7 +367,6 @@ const AddBlogModal = () => {
                   name="titulo_video"
                   value={formData.titulo_video}
                   onChange={handleChange}
-                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -282,10 +378,29 @@ const AddBlogModal = () => {
                   name="url_video"
                   value={formData.url_video}
                   onChange={handleChange}
-                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
+              <div className="col-span-2">
+                <label className="block">Producto</label>
+                <select
+                    name="producto_id"
+                    value={formData.producto_id || ""} // En blanco si es 0
+                    onChange={(e) =>
+                        setFormData({ ...formData, producto_id: Number(e.target.value) })
+                    }
+                    required
+                    className="w-full bg-white outline-none p-2 rounded-md text-black"
+                >
+                  <option value="">Selecciona un producto</option>
+                  {productos.map((producto) => (
+                      <option key={producto.id} value={producto.id}>
+                        {producto.nombre || producto.titulo}
+                      </option>
+                  ))}
+                </select>
+              </div>
+
 
               <div className="col-span-2">
                 <label className="block">Imagen Principal</label>
