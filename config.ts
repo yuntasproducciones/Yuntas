@@ -41,11 +41,11 @@ export const config = {
     },
     blogs: {
       // Endpoints de blogs
-      list: "/api/v1/blogs",
-      detail: (id: number | string) => `/api/v1/blogs/${id}`,
-      create: "/api/v1/blogs",
-      update: (id: number | string) => `/api/v1/blogs/${id}`,
-      delete: (id: number | string) => `/api/v1/blogs/${id}`,
+      list: "/api/blogs",
+      detail: (id: number | string) => `/api/blogs/${id}`,
+      create: "/api/blogs",
+      update: (id: number | string) => `/api/blogs/${id}`,
+      delete: (id: number | string) => `/api/blogs/${id}`,
     },
   },
 };

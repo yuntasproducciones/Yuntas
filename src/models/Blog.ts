@@ -1,6 +1,7 @@
 export default interface Blog {
   id: number;
   titulo: string;
+  producto_id: number;
   parrafo: string;
   descripcion: string;
   imagenPrincipal: string;
@@ -11,3 +12,5 @@ export default interface Blog {
   videoBlog: string;
   tituloVideoBlog: string;
 }
+
+
