@@ -3,17 +3,13 @@ import { useState, useEffect } from "react";
 
 interface ImagenAdicional {
   url_imagen: File | null;
-  url_imagen: File | null;
   parrafo_imagen: string;
 }
 
 interface BlogPOST {
-  producto_id: number;
   titulo: string;
-  link: string;
   parrafo: string;
   descripcion: string;
-  imagen_principal: File | null;
   imagen_principal: File | null;
   titulo_blog: string;
   subtitulo_beneficio: string;
@@ -35,6 +31,8 @@ interface Blog {
   videoBlog?: string;
   tituloVideoBlog?: string;
   created_at?: string | null;
+  link?: string; // <-- Añade esto
+  producto_id?: string; // <-- Y esto
 }
 
 interface AddBlogModalProps {
@@ -50,13 +48,13 @@ const AddBlogModal = ({
   blogToEdit,
   onSuccess,
 }: AddBlogModalProps) => {
+  // Nuevo estado para la imagen principal existente
+  const [imagenPrincipalExistente, setImagenPrincipalExistente] = useState<string | null>(null);
+
   const [formData, setFormData] = useState<BlogPOST>({
-    producto_id: 0,
     titulo: "",
-    link: "",
     parrafo: "",
     descripcion: "",
-    imagen_principal: null,
     imagen_principal: null,
     titulo_blog: "",
     subtitulo_beneficio: "",
@@ -82,7 +80,7 @@ const AddBlogModal = ({
         titulo: blogToEdit.titulo || "",
         parrafo: blogToEdit.parrafo || "",
         descripcion: blogToEdit.descripcion || "",
-        imagen_principal: null, // No se puede rellenar un File
+        imagen_principal: null, // Siempre null al editar
         titulo_blog: blogToEdit.tituloBlog || "",
         subtitulo_beneficio: blogToEdit.subTituloBlog || "",
         url_video: blogToEdit.videoBlog || "",
@@ -91,9 +89,10 @@ const AddBlogModal = ({
           { url_imagen: null, parrafo_imagen: "" },
           { url_imagen: null, parrafo_imagen: "" },
         ],
-        link: "", // NUEVO
-        producto_id: "", // NUEVO
+        link: blogToEdit.link ?? "", // Usa nullish coalescing para aceptar valores falsy válidos
+        producto_id: blogToEdit.producto_id ?? "", // Igual aquí
       });
+      setImagenPrincipalExistente(blogToEdit.imagenPrincipal || null); // Guarda la imagen existente
     } else if (!isOpen) {
       setFormData({
         titulo: "",
@@ -111,34 +110,14 @@ const AddBlogModal = ({
         link: "", // NUEVO
         producto_id: "", // NUEVO
       });
+      setImagenPrincipalExistente(null);
     }
   }, [isOpen, blogToEdit]);
 
   // Manejar cambios en los inputs de texto
-  const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-
-    if (name === "link") {
-      const sanitized = value
-          .normalize("NFD") // descompone letras acentuadas
-          .replace(/[\u0300-\u036f]/g, "") // elimina las marcas diacríticas
-          .toLowerCase()
-          .replaceAll(" ", "-");
-
-      setFormData((prev) => ({
-        ...prev,
-        link: sanitized,
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
 
   // Manejar cambios en la imagen (file input)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,9 +158,7 @@ const AddBlogModal = ({
   const closeModal = () => {
     setIsOpen(false);
     setFormData({
-      producto_id: 0,
       titulo: "",
-      link: "",
       parrafo: "",
       descripcion: "",
       imagen_principal: null,
@@ -208,27 +185,41 @@ const AddBlogModal = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar campos requeridos
+    // Validación temporal: no permitir edición hasta que se implemente la ruta
+    if (blogToEdit && blogToEdit.id) {
+      alert("⚠️ La funcionalidad de edición no está disponible aún. La API no tiene implementada la ruta de actualización.");
+      return;
+    }
+
+    // Resto de la validación para creación
+    // Validar campos requeridos según las reglas del backend
+    const imagenPrincipalValida = formData.imagen_principal || imagenPrincipalExistente;
+
+    // Validar producto_id como número
+    const productoIdNumber = Number(formData.producto_id);
+
+    // Validar url_video como URL
+    const urlVideoValida = /^https?:\/\/.+\..+/.test(formData.url_video);
+
     if (
       !formData.titulo ||
+      !formData.link ||
+      !formData.producto_id ||
+      isNaN(productoIdNumber) ||
       !formData.parrafo ||
       !formData.descripcion ||
-      !formData.subtitulo_beneficio ||
+      !imagenPrincipalValida ||
       !formData.titulo_blog ||
-      !formData.titulo_video ||
+      !formData.subtitulo_beneficio ||
       !formData.url_video ||
-      !formData.imagen_principal ||
+      !urlVideoValida ||
+      !formData.titulo_video ||
       !formData.imagenes ||
-      formData.imagenes.some((imagen) => !imagen.url_imagen) ||
-      !formData.link || // NUEVO
-      !formData.producto_id // NUEVO
+      !Array.isArray(formData.imagenes) ||
+      formData.imagenes.length === 0 ||
+      formData.imagenes.some((img) => !img.url_imagen)
     ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Campos obligatorios",
-        text: "⚠️ Todos los campos son obligatorios.",
-      });
-
+      alert("⚠️ Todos los campos son obligatorios y deben tener el formato correcto.");
       return;
     }
 
@@ -236,49 +227,34 @@ const AddBlogModal = ({
       const token = localStorage.getItem("token");
       const formDataToSend = new FormData();
 
-
-      console.log("Producto ID a enviar:", formData.producto_id);
-      if (formData.producto_id && !isNaN(formData.producto_id)) {
-        formDataToSend.append("producto_id", String(formData.producto_id));
-      } else {
-        alert("⚠️ Debes seleccionar un producto válido.");
-        return;
-      }
       formDataToSend.append("titulo", formData.titulo);
       formDataToSend.append("link", formData.link);
+      formDataToSend.append("producto_id", productoIdNumber.toString());
       formDataToSend.append("parrafo", formData.parrafo);
       formDataToSend.append("descripcion", formData.descripcion);
-      formDataToSend.append("subtitulo_beneficio", formData.subtitulo_beneficio);
       formDataToSend.append("titulo_blog", formData.titulo_blog);
-      formDataToSend.append("titulo_video", formData.titulo_video);
+      formDataToSend.append("subtitulo_beneficio", formData.subtitulo_beneficio);
       formDataToSend.append("url_video", formData.url_video);
-      formDataToSend.append("imagen_principal", formData.imagen_principal as File);
+      formDataToSend.append("titulo_video", formData.titulo_video);
 
+      // Imagen principal (solo si se seleccionó una nueva)
+      if (formData.imagen_principal) {
+        formDataToSend.append("imagen_principal", formData.imagen_principal as File);
+      }
+
+      // Imágenes adicionales - CORREGIR nombres de campos
       formData.imagenes.forEach((item, index) => {
         if (item.url_imagen) {
-          formDataToSend.append(
-            `imagenes[${index}][imagen]`,
-            item.url_imagen as File
-          );
+          // Cambia 'url_imagen' por 'imagen' para coincidir con backend
+          formDataToSend.append(`imagenes[${index}][imagen]`, item.url_imagen as File);
         }
-        formDataToSend.append(`imagenes[${index}][parrafo_imagen]`, item.parrafo_imagen);
+        // Cambia 'parrafo_imagen' por 'parrafo' para coincidir con backend
+        formDataToSend.append(`imagenes[${index}][parrafo]`, item.parrafo_imagen || "");
       });
-      formDataToSend.append(
-        "imagen_principal",
-        formData.imagen_principal as File
-      );
-      formDataToSend.append("link", formData.link); // NUEVO
-      formDataToSend.append("producto_id", formData.producto_id); // NUEVO
 
+      // Solo crear, no editar
       let url = getApiUrl(config.endpoints.blogs.create);
       let method = "POST";
-      if (blogToEdit && blogToEdit.id) {
-        url = `https://apiyuntas.yuntaspublicidad.com/api/blogs/${blogToEdit.id}`;
-        // Si tu backend es Laravel, usa POST + _method: PUT, si no, usa PUT directamente:
-        // method = "PUT";
-        method = "POST";
-        formDataToSend.append("_method", "PUT");
-      }
 
       const response = await fetch(url, {
         method,
@@ -289,18 +265,14 @@ const AddBlogModal = ({
         },
       });
 
-      let data: any = null;
+      let data;
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
-        // Si no es JSON, intenta leer como texto y mostrar el error
-        const text = await response.text();
-        console.error("Respuesta no JSON:", text);
-        alert("❌ Error inesperado del servidor.");
-        return;
+        data = await response.text();
+        throw new Error("Respuesta inesperada del servidor: " + data);
       }
-      console.log("Respuesta del servidor:", data);
 
       if (response.ok) {
         alert(
@@ -311,7 +283,7 @@ const AddBlogModal = ({
         closeModal();
         if (onSuccess) onSuccess();
       } else {
-        alert(`❌ Error: ${data.message || "Error desconocido"}`);
+        alert(`❌ Error: ${data.message || data}`);
       }
     } catch (error) {
       console.error("Error al enviar los datos:", error);
@@ -319,7 +291,6 @@ const AddBlogModal = ({
     }
   };
 
-  // @ts-ignore
   return (
     <>
       {/* Botón para abrir el modal */}
@@ -334,7 +305,7 @@ const AddBlogModal = ({
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">
           <div className="h-3/4 overflow-y-scroll bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5">
-            <h2 className="text-3xl font-bold text-white mb-4">Añadir Nuevo Blog</h2>
+            <h2 className="text-2xl font-bold mb-4">AÑADIR BLOG</h2>
 
             {/* Formulario */}
             <form
@@ -349,19 +320,11 @@ const AddBlogModal = ({
                   name="titulo"
                   value={formData.titulo}
                   onChange={handleChange}
+                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
-              <div>
-                <label className="block">Link</label>
-                <input
-                    type="text"
-                    name="link"
-                    value={formData.link}
-                    onChange={handleChange}
-                    className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
+
               <div>
                 <label className="block">Párrafo</label>
                 <input
@@ -369,6 +332,7 @@ const AddBlogModal = ({
                   name="parrafo"
                   value={formData.parrafo}
                   onChange={handleChange}
+                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -380,6 +344,7 @@ const AddBlogModal = ({
                   name="descripcion"
                   value={formData.descripcion}
                   onChange={handleChange}
+                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -391,6 +356,7 @@ const AddBlogModal = ({
                   name="subtitulo_beneficio"
                   value={formData.subtitulo_beneficio}
                   onChange={handleChange}
+                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -402,6 +368,7 @@ const AddBlogModal = ({
                   name="titulo_blog"
                   value={formData.titulo_blog}
                   onChange={handleChange}
+                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -413,6 +380,7 @@ const AddBlogModal = ({
                   name="titulo_video"
                   value={formData.titulo_video}
                   onChange={handleChange}
+                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
@@ -424,29 +392,10 @@ const AddBlogModal = ({
                   name="url_video"
                   value={formData.url_video}
                   onChange={handleChange}
+                  required
                   className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
-              <div className="col-span-2">
-                <label className="block">Producto</label>
-                <select
-                    name="producto_id"
-                    value={formData.producto_id || ""} // En blanco si es 0
-                    onChange={(e) =>
-                        setFormData({ ...formData, producto_id: Number(e.target.value) })
-                    }
-                    required
-                    className="w-full bg-white outline-none p-2 rounded-md text-black"
-                >
-                  <option value="">Selecciona un producto</option>
-                  {productos.map((producto) => (
-                      <option key={producto.id} value={producto.id}>
-                        {producto.nombre || producto.titulo}
-                      </option>
-                  ))}
-                </select>
-              </div>
-
 
               <div className="col-span-2">
                 <label className="block">Imagen Principal</label>
@@ -481,6 +430,7 @@ const AddBlogModal = ({
                   />
                 </div>
               ))}
+
               <div>
                 <label className="block">Link</label>
                 <input
@@ -507,7 +457,7 @@ const AddBlogModal = ({
               {/* Botones */}
               <div className="flex gap-2 mt-8">
                 <button type="submit" className="admin-act-btn">
-                  Añadir Blog
+                  {blogToEdit ? "Guardar cambios" : "Añadir Blog"}
                 </button>
                 <button
                   onClick={closeModal}
