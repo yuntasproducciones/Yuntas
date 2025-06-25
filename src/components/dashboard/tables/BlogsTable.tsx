@@ -20,6 +20,8 @@ interface Blog {
 const BlogsTable = () => {
   // Estado para almacenar los datos de la API
   const [data, setData] = useState<Blog[]>([]);
+  //Para editar el blog
+  const [editData, setEditData] = useState<Blog | null>(null);
   // Estado para la página actual
   const [currentPage, setCurrentPage] = useState<number>(1);
   // Número de elementos por página
