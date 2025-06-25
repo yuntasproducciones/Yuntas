@@ -16,6 +16,8 @@ interface BlogPOST {
   url_video: string;
   titulo_video: string;
   imagenes: ImagenAdicional[];
+  link: string; // NUEVO
+  producto_id: string; // NUEVO
 }
 
 interface Blog {
@@ -63,6 +65,8 @@ const AddBlogModal = ({
         parrafo_imagen: "",
       },
     ],
+    link: "", // NUEVO
+    producto_id: "", // NUEVO
   });
 
   useEffect(() => {
@@ -80,6 +84,8 @@ const AddBlogModal = ({
           { url_imagen: null, parrafo_imagen: "" },
           { url_imagen: null, parrafo_imagen: "" },
         ],
+        link: "", // NUEVO
+        producto_id: "", // NUEVO
       });
     } else if (!isOpen) {
       setFormData({
@@ -95,6 +101,8 @@ const AddBlogModal = ({
           { url_imagen: null, parrafo_imagen: "" },
           { url_imagen: null, parrafo_imagen: "" },
         ],
+        link: "", // NUEVO
+        producto_id: "", // NUEVO
       });
     }
   }, [isOpen, blogToEdit]);
@@ -161,6 +169,8 @@ const AddBlogModal = ({
           parrafo_imagen: "",
         },
       ],
+      link: "", // NUEVO
+      producto_id: "", // NUEVO
     });
   };
 
@@ -179,7 +189,9 @@ const AddBlogModal = ({
       !formData.url_video ||
       !formData.imagen_principal ||
       !formData.imagenes ||
-      formData.imagenes.some((imagen) => !imagen.url_imagen) // Verifica si alguna imagen es null
+      formData.imagenes.some((imagen) => !imagen.url_imagen) ||
+      !formData.link || // NUEVO
+      !formData.producto_id // NUEVO
     ) {
       alert("⚠️ Todos los campos son obligatorios.");
       return;
@@ -202,9 +214,9 @@ const AddBlogModal = ({
       formData.imagenes.forEach((item, index) => {
         if (item.url_imagen) {
           formDataToSend.append(
-            `imagenes[${index}][url_imagen]`,
+            `imagenes[${index}][imagen]`,
             item.url_imagen as File
-          ); // Use 'imagen' key
+          );
         }
         formDataToSend.append(
           `imagenes[${index}][parrafo_imagen]`,
@@ -214,25 +226,39 @@ const AddBlogModal = ({
       formDataToSend.append(
         "imagen_principal",
         formData.imagen_principal as File
-      ); // Subir imagen como archivo
+      );
+      formDataToSend.append("link", formData.link); // NUEVO
+      formDataToSend.append("producto_id", formData.producto_id); // NUEVO
 
       let url = getApiUrl(config.endpoints.blogs.create);
       let method = "POST";
       if (blogToEdit && blogToEdit.id) {
         url = `https://apiyuntas.yuntaspublicidad.com/api/blogs/${blogToEdit.id}`;
+        // Si tu backend es Laravel, usa POST + _method: PUT, si no, usa PUT directamente:
+        // method = "PUT";
         method = "POST";
         formDataToSend.append("_method", "PUT");
       }
 
       const response = await fetch(url, {
         method,
-        body: formDataToSend, // FormData
+        body: formDataToSend,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const data = await response.json();
+      let data: any = null;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        // Si no es JSON, intenta leer como texto y mostrar el error
+        const text = await response.text();
+        console.error("Respuesta no JSON:", text);
+        alert("❌ Error inesperado del servidor.");
+        return;
+      }
       console.log("Respuesta del servidor:", data);
 
       if (response.ok) {
@@ -241,10 +267,10 @@ const AddBlogModal = ({
             ? "✅ Blog editado exitosamente"
             : "✅ Blog añadido exitosamente"
         );
-        closeModal(); // Cerrar modal
+        closeModal();
         if (onSuccess) onSuccess();
       } else {
-        alert(`❌ Error: ${data.message}`);
+        alert(`❌ Error: ${data.message || "Error desconocido"}`);
       }
     } catch (error) {
       console.error("Error al enviar los datos:", error);
@@ -391,6 +417,28 @@ const AddBlogModal = ({
                   />
                 </div>
               ))}
+              <div>
+                <label className="block">Link</label>
+                <input
+                  type="text"
+                  name="link"
+                  value={formData.link}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-white outline-none p-2 rounded-md text-black"
+                />
+              </div>
+              <div>
+                <label className="block">Producto ID</label>
+                <input
+                  type="text"
+                  name="producto_id"
+                  value={formData.producto_id}
+                  onChange={handleChange}
+                  required
+                  className="w-full bg-white outline-none p-2 rounded-md text-black"
+                />
+              </div>
 
               {/* Botones */}
               <div className="flex gap-2 mt-8">

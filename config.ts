@@ -10,7 +10,7 @@ export const config = {
   environment: import.meta.env.MODE || "development", // Entorno de la aplicación, por defecto development
   endpoints: {
     auth: {
-      // Endpoints de autenticaci贸n
+      // Endpoints de autenticaci贸
       login: "/api/v1/auth/login",
       logout: "/api/v1/auth/logout",
     },
@@ -43,7 +43,7 @@ export const config = {
       // Endpoints de blogs
       list: "/api/blogs",
       detail: (id: number | string) => `/api/blogs/${id}`,
-      create: "/api/v1/blogs",
+      create: "/api/blogs",
       update: (id: number | string) => `/api/blogs/${id}`,
       delete: (id: number | string) => `/api/blogs/${id}`,
     },

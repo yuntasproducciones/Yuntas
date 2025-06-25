@@ -12,3 +12,22 @@
 @utility text-shadow-white {
     text-shadow: 0px 0px 9.6px rgba(255, 255, 255, 1);
 }
+
+.adaptable-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #00eaff 0%, #00cfff 100%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 2rem;
+  padding: 0.5em 1.5em;
+  border: none;
+  border-radius: 2em;
+  text-align: center;
+  white-space: pre-line;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.adaptable-btn:hover {
+  background: linear-gradient(90deg, #00cfff 0%, #00eaff 100%);
+}
