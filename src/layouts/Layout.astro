@@ -8,9 +8,9 @@ import WhatsApp from "../components/ui/whatsapp.astro";
 interface Props {
   title: string;
   description?: string;
-  url?: string;
+  canonical?: string;
 }
-const { title, description, url } = Astro.props;
+const { title, description, canonical } = Astro.props;
 
 ---
 
@@ -23,7 +23,7 @@ const { title, description, url } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="url" href={url} />
+    <link rel="url" href={canonical} />
 
     <!--  fuente de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="preconnect" />
