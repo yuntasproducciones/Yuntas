@@ -6,33 +6,38 @@ body {
   background: linear-gradient(45deg, #0D1030, #053BB8);
 }
 
-/* ----------- SOLO ESCRITORIO ----------- */
+/* Base: siempre empieza fuera */
+.mov-login {
+  transform: translateX(100%);
+  transition: transform 1s ease-in-out;
+  position: absolute;
+  width: 100%;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mov-login.active {
+  transform: translateX(0);
+}
+
+/* Desktop: ajusta a 50% */
 @media (min-width: 768px) {
   .mov-login {
-    position: absolute;
     width: 50%;
-    right: 0;
-    transform: translateX(100%);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 1s ease-in-out;
-  }
-
-  .mov-login.active {
-    transform: translateX(0);
   }
 }
 
-/* ----------- MÓVIL----------- */
+/* En mobile: NO animación, NO transform */
 @media (max-width: 767px) {
   .mov-login {
-    position: relative;   /* <<-- NO absolute */
-    width: 100%;          /* <<-- Ocupa todo, sin pegado a la derecha */
-    right: auto;          /* <<-- Elimina el right */
-    transform: none !important;
-    transition: none !important;
+    position: relative;
+    width: 100%;
+    right: auto;
+    transform: none;
+    transition: none;
     height: 100%;
     display: flex;
     align-items: center;
@@ -40,6 +45,6 @@ body {
   }
 
   .mov-login.active {
-    transform: none !important;
+    transform: none;
   }
 }

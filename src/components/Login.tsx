@@ -8,12 +8,13 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const [isActive, setIsActive] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [hasCheckedWidth, setHasCheckedWidth] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const width = window.innerWidth;
       setIsDesktop(width >= 768);
-
+      setHasCheckedWidth(true);
       if (width >= 768) {
         setTimeout(() => {
           setIsActive(true);
@@ -59,48 +60,55 @@ const Login = () => {
 
   return (
       <div className="flex h-screen">
+        {/* Fondo lateral que solo se ve en desktop */}
         <div
             className="hidden md:flex w-full h-full bg-cover bg-center"
             style={{ backgroundImage: `url(${loginImagen})` }}
         ></div>
-        <div
-            className={`mov-login ${isDesktop && isActive ? "active" : ""} w-full lg:w-2/5 h-full flex items-center justify-center`}
-        >
-        <div className="fondo-container w-full h-full shadow-lg flex flex-col items-center justify-center px-8">
-            <img src={logo} alt="Logo Yuntas" className="w-16 md:w-32 mb-4" />
-            <h1 className="text-2xl font-bold mt-4 mb-4 text-center text-amber-50">
-              BIENVENIDO
-            </h1>
-            <form onSubmit={handleLogin} className="w-full max-w-xs">
-              <div className="mb-4 flex justify-center w-full">
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="rounded-full bg-white w-64 py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline placeholder-gray-600"
-                    placeholder="Usuario"
-                />
+
+        {hasCheckedWidth ? (
+            <div
+                className={`mov-login ${isDesktop && isActive ? "active" : ""} w-full lg:w-2/5 h-full flex items-center justify-center`}
+            >
+              <div className="fondo-container w-full h-full shadow-lg flex flex-col items-center justify-center px-8">
+                <img src={logo} alt="Logo Yuntas" className="w-16 md:w-32 mb-4" />
+                <h1 className="text-2xl font-bold mt-4 mb-4 text-center text-amber-50">
+                  BIENVENIDO
+                </h1>
+                <form onSubmit={handleLogin} className="w-full max-w-xs">
+                  <div className="mb-4 flex justify-center w-full">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        className="rounded-full bg-white w-64 py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline placeholder-gray-600"
+                        placeholder="Usuario"
+                    />
+                  </div>
+                  <div className="mb-4 flex justify-center w-full">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        className="rounded-full bg-white w-64 py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline placeholder-gray-600"
+                        placeholder="Password"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <button
+                        className="bg-[#23C1DE] hover:bg-gray-100 text-white font-bold py-2 px-8 rounded-full focus:outline-none focus:shadow-outline transition duration-300"
+                        type="submit"
+                    >
+                      INGRESAR
+                    </button>
+                  </div>
+                </form>
               </div>
-              <div className="mb-4 flex justify-center w-full">
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="rounded-full bg-white w-64 py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline placeholder-gray-600"
-                    placeholder="Password"
-                />
-              </div>
-              <div className="flex items-center justify-center">
-                <button
-                    className="bg-[#23C1DE] hover:bg-gray-100 text-white font-bold py-2 px-8 rounded-full focus:outline-none focus:shadow-outline transition duration-300"
-                    type="submit"
-                >
-                  INGRESAR
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+            </div>
+        ) : (
+            // Espacio en blanco para que el layout flex padre no salte
+            <div className="w-full lg:w-2/5 h-full"></div>
+        )}
       </div>
   );
 };
