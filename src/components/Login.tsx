@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { fakeUsers } from "../utils/fakeUsers";
 import "../../src/styles/login.css";
-import logo from "../assets/images/logo_yuntas.webp?url";
+import logo from "../assets/images/yuntas_publicidad_logo.webp?url";
 import loginImagen from "../assets/images/login/Login_fondo.webp?url";
 import { config, getApiUrl } from "../../config";
 

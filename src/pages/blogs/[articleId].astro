@@ -27,9 +27,43 @@ const article = blogs.find((b:any) => b.id.toString() === articleId);
 if (!article) {
   throw new Error(`Artículo no encontrado: ${articleId}`);
 }
+
+// 📝 Mapeo de metadatos específicos por ID de artículo
+const metadataMap: Record<string, { title: string; description: string }> = {
+  "1": {
+    title: "Innovación con Panel de Fibra de Bambú para Diseño y Construcción Ecológica",
+    description: "Innovación con Panel de Fibra de Bambú para Diseño y Construcción Ecológica"
+  },
+  "2": {
+    title: "Soldadora Lingba: Eficiencia y Precisión en Soldadura | Yuntas Publicidad",
+    description: "En el blog de Yuntas Publicidad, exploramos la soldadora Lingba. Descubre sus innovadoras características y cómo transformará la eficiencia, calidad y precisión."
+  },
+  "3": {
+    title: "Soldadora Spark: Rendimiento Avanzado para Proyectos | Yuntas Publicidad", 
+    description: "Explora en Yuntas Publicidad la soldadora Spark, potencia y precisión para tus proyectos. Conoce sus características avanzadas y optimiza tu soldadura profesional."
+  },
+
+  "4": {
+    title: "Ventilador Holográfico: El Futuro de la Publicidad | Yuntas Publicidad",
+    description: "En Yuntas Publicidad, explora el ventilador holográfico. Conoce cómo esta innovadora tecnología 3D está revolucionando la publicidad y capturando audiencias al instante."
+  },
+};
+
+// Obtener metadatos específicos o usar valores por defecto
+const metadata = metadataMap[articleId] || {
+  title: `${article.titulo} - Blog de Innovación en Luces LED y Tendencias en Diseño Sostenible`,
+  description: article.descripcion || "Explore el blog de Yuntas Publicidad para conocer a fondo las novedades en construcción y diseño. Encuentra las tendencias que están transformando el sector."
+};
+
+const canonicalUrl = `https://yuntaspublicidad.com/blogs/${articleId}/`;
 ---
 
-<Layout title={article.titulo}>
+<Layout 
+  title={metadata.title}
+  description={metadata.description}
+  canonical={canonicalUrl}
+>
+  <!-- Tu contenido existente permanece igual -->
   <section class="relative">
     {article.imagenesBlog && article.imagenesBlog.length > 0 ? (
       <img
