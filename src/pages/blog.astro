@@ -10,7 +10,7 @@ const generalMetadata = {
   description: "Explore el blog de Yuntas Publicidad para conocer a fondo las novedades en construcción y diseño. Encuentra las tendencias que están transformando el sector."
 };
 
-// Consumir blogs desde la API
+
 const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
 const apiResponse = await res.json();
 const allArticles = apiResponse.data;
@@ -18,8 +18,6 @@ const allArticles = apiResponse.data;
 
 <Layout 
   title={generalMetadata.titulo}
-  description={generalMetadata.description} 
-  canonicalUrl="https://yuntaspublicidad.com/blog/"
 >
   <!-- Banner -->
   <section class="relative h-screen">
