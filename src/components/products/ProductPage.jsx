@@ -17,44 +17,58 @@ export default function ProductPage(){
     fetch(getApiUrl(config.endpoints.productos.link(linkParam)))
         .then(response => response.json())
         .then(data => {
-            let specsValue = data.data.specs;
+            // Manejar la estructura de la API v1
+            const productData = data.data;
+            let specsValue = productData.specs;
             let specsObject = {};
 
-            if (typeof specsValue === 'string' && specsValue.includes(':')) {
+            // Procesar specs de la API v1
+            if (typeof specsValue === 'object' && specsValue !== null) {
+                // API v1 ya devuelve un objeto
+                specsObject = specsValue;
+            } else if (typeof specsValue === 'string' && specsValue.includes(':')) {
+                // Fallback para formato string
                 specsValue.split(',').forEach(pair => {
                     const [key, value] = pair.split(':').map(str => str.trim());
                     if (key && value) specsObject[key] = value;
                 });
-            } else if(typeof specsValue === 'object' && specsValue !== null){
-                specsObject = specsValue;
-            } else{
-                specsObject = { Descriptión: specsValue ?? "Sin Descripción"}
+            } else {
+                specsObject = { Descripción: specsValue ?? "Sin Descripción" };
             }
 
-            // Parsear el campo "especificaciones"
+            // Parsear especificaciones adicionales si existen (legacy)
             let especificacionesObject = {};
-            try {
-                especificacionesObject = JSON.parse(data.data.especificaciones);
-            } catch (e) {
-                console.warn("No se pudo parsear 'especificaciones'", e);
+            if (productData.especificaciones) {
+                try {
+                    especificacionesObject = typeof productData.especificaciones === 'string' 
+                        ? JSON.parse(productData.especificaciones)
+                        : productData.especificaciones;
+                } catch (e) {
+                    console.warn("No se pudo parsear 'especificaciones'", e);
+                }
             }
 
-            // Combinar ambos objetos
+            // Combinar specs y especificaciones
             let allSpecs = {
                 ...specsObject,
                 ...especificacionesObject
             };
             
-            // Eliminar la propiedad "descripcion" (o "Descripción")
+            // Eliminar la descripción de specs ya que va en su propio campo
             delete allSpecs.descripcion;
             delete allSpecs.Descripción;
             
-            const benefits = data.data.benefits ?? [];
+            // Procesar beneficios - API v1 puede tenerlos en specs o benefits
+            const benefits = productData.benefits || 
+                Object.entries(allSpecs)
+                    .filter(([key]) => key.startsWith('beneficio_'))
+                    .map(([key, value]) => ({ texto: String(value) })) || 
+                [];
 
             setProduct({
                 ...data,
                 data: {
-                    ...data.data,
+                    ...productData,
                     specs: allSpecs,
                     benefits: benefits,
                 }

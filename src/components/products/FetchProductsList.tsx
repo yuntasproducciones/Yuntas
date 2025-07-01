@@ -25,7 +25,11 @@ export default function FetchProductsList() {
         const jsonResponse = await response.json();
         // console.log("Respuesta completa de la API:", jsonResponse);
 
-        setProducts(jsonResponse);
+        // Manejar la estructura de respuesta de la API v1
+        const productData = jsonResponse.data || jsonResponse;
+        const products = Array.isArray(productData) ? productData : [productData];
+
+        setProducts(products);
 
       } catch (err) {
         console.error("Error al obtener productos:", err);
