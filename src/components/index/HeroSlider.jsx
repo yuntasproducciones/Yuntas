@@ -40,6 +40,7 @@ const HeroSlider = () => {
             <img
               src={slide.src.src ? slide.src.src : slide.src}
               alt={slide.alt}
+              quality={70}
               title={slide.title}
               className="w-full h-full object-cover absolute inset-0"
               draggable="false"
