@@ -20,12 +20,12 @@ interface Blog {
 const BlogsTable = () => {
   // Estado para almacenar los datos de la API
   const [data, setData] = useState<Blog[]>([]);
-  //Para editar el blog
-  const [editData, setEditData] = useState<Blog | null>(null);
   // Estado para la página actual
   const [currentPage, setCurrentPage] = useState<number>(1);
   // Número de elementos por página
   const itemsPerPage = 10;
+  const [editBlog, setEditBlog] = useState<Blog | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Cargar datos desde la API
   useEffect(() => {
@@ -140,7 +140,10 @@ const BlogsTable = () => {
                       <button
                         className="p-2 text-yellow-600 hover:text-yellow-800 transition"
                         title="Editar"
-                        onClick={() => setEditData(item)}
+                        onClick={() => {
+                          setEditBlog(item);
+                          setIsModalOpen(true);
+                        }}
                       >
                         <FaEdit size={18} />
                       </button>
@@ -178,7 +181,17 @@ const BlogsTable = () => {
         </button>
       </div>
 
-      <AddBlogModal />
+      <AddBlogModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        blogToEdit={editBlog}
+        onSuccess={() => {
+          setEditBlog(null);
+          setIsModalOpen(false);
+          // Recargar los datos
+          window.location.reload();
+        }}
+      />
     </>
   );
 };
