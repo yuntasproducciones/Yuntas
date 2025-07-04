@@ -3,11 +3,21 @@
 import SearchBar from "../pages/blogs/SearchBar";
 import Layout from "../layouts/Layout.astro";
 import imagen1 from "../assets/images/blog/banner_blog.webp";
+import { blogService } from "../services/blogService";
+import type Blog from "../models/Blog";
 
-// Consumir blogs desde la API
-const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
-const apiResponse = await res.json();
-const allArticles = apiResponse.data;
+// Consumir blogs desde la API usando el nuevo servicio
+let allArticles: Blog[] = [];
+let error: string | null = null;
+
+try {
+  const response = await blogService.getAllBlogs();
+  allArticles = response.data || [];
+} catch (err) {
+  console.error('Error obteniendo blogs:', err);
+  error = err instanceof Error ? err.message : 'Error desconocido';
+  allArticles = [];
+}
 ---
 
 <Layout title="Blog">
@@ -21,7 +31,13 @@ const allArticles = apiResponse.data;
 
   <section class="bg-gradient-to-b from-blue-900 to-indigo-950 p-12 text-white">
     <div class="flex justify-center">
-      <SearchBar client:load articles={allArticles} />
+      {error ? (
+        <div class="text-red-500 text-xl">
+          Error cargando blogs: {error}
+        </div>
+      ) : (
+        <SearchBar client:load articles={allArticles} />
+      )}
     </div>
   </section>
 </Layout>

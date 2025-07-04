@@ -96,6 +96,8 @@ export default function DataTable() {
     console.log('Token preview:', token.substring(0, 20) + '...');
     console.log('FormData entries:', [...formData.entries()]);
     
+    //// 
+    
     try {
       const url = currentProduct
         ? getApiUrl(config.endpoints.productos.update(currentProduct.id))
