@@ -31,8 +31,6 @@ interface Blog {
   videoBlog?: string;
   tituloVideoBlog?: string;
   created_at?: string | null;
-  link?: string; // <-- Añade esto
-  producto_id?: string; // <-- Y esto
 }
 
 interface AddBlogModalProps {
@@ -48,9 +46,6 @@ const AddBlogModal = ({
   blogToEdit,
   onSuccess,
 }: AddBlogModalProps) => {
-  // Nuevo estado para la imagen principal existente
-  const [imagenPrincipalExistente, setImagenPrincipalExistente] = useState<string | null>(null);
-
   const [formData, setFormData] = useState<BlogPOST>({
     titulo: "",
     parrafo: "",
@@ -80,7 +75,7 @@ const AddBlogModal = ({
         titulo: blogToEdit.titulo || "",
         parrafo: blogToEdit.parrafo || "",
         descripcion: blogToEdit.descripcion || "",
-        imagen_principal: null, // Siempre null al editar
+        imagen_principal: null, // No se puede rellenar un File
         titulo_blog: blogToEdit.tituloBlog || "",
         subtitulo_beneficio: blogToEdit.subTituloBlog || "",
         url_video: blogToEdit.videoBlog || "",
@@ -89,10 +84,9 @@ const AddBlogModal = ({
           { url_imagen: null, parrafo_imagen: "" },
           { url_imagen: null, parrafo_imagen: "" },
         ],
-        link: blogToEdit.link ?? "", // Usa nullish coalescing para aceptar valores falsy válidos
-        producto_id: blogToEdit.producto_id ?? "", // Igual aquí
+        link: "", // NUEVO
+        producto_id: "", // NUEVO
       });
-      setImagenPrincipalExistente(blogToEdit.imagenPrincipal || null); // Guarda la imagen existente
     } else if (!isOpen) {
       setFormData({
         titulo: "",
@@ -110,7 +104,6 @@ const AddBlogModal = ({
         link: "", // NUEVO
         producto_id: "", // NUEVO
       });
-      setImagenPrincipalExistente(null);
     }
   }, [isOpen, blogToEdit]);
 
@@ -185,41 +178,22 @@ const AddBlogModal = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validación temporal: no permitir edición hasta que se implemente la ruta
-    if (blogToEdit && blogToEdit.id) {
-      alert("⚠️ La funcionalidad de edición no está disponible aún. La API no tiene implementada la ruta de actualización.");
-      return;
-    }
-
-    // Resto de la validación para creación
-    // Validar campos requeridos según las reglas del backend
-    const imagenPrincipalValida = formData.imagen_principal || imagenPrincipalExistente;
-
-    // Validar producto_id como número
-    const productoIdNumber = Number(formData.producto_id);
-
-    // Validar url_video como URL
-    const urlVideoValida = /^https?:\/\/.+\..+/.test(formData.url_video);
-
+    // Validar campos requeridos
     if (
       !formData.titulo ||
-      !formData.link ||
-      !formData.producto_id ||
-      isNaN(productoIdNumber) ||
       !formData.parrafo ||
       !formData.descripcion ||
-      !imagenPrincipalValida ||
-      !formData.titulo_blog ||
       !formData.subtitulo_beneficio ||
-      !formData.url_video ||
-      !urlVideoValida ||
+      !formData.titulo_blog ||
       !formData.titulo_video ||
+      !formData.url_video ||
+      !formData.imagen_principal ||
       !formData.imagenes ||
-      !Array.isArray(formData.imagenes) ||
-      formData.imagenes.length === 0 ||
-      formData.imagenes.some((img) => !img.url_imagen)
+      formData.imagenes.some((imagen) => !imagen.url_imagen) ||
+      !formData.link || // NUEVO
+      !formData.producto_id // NUEVO
     ) {
-      alert("⚠️ Todos los campos son obligatorios y deben tener el formato correcto.");
+      alert("⚠️ Todos los campos son obligatorios.");
       return;
     }
 
@@ -228,51 +202,64 @@ const AddBlogModal = ({
       const formDataToSend = new FormData();
 
       formDataToSend.append("titulo", formData.titulo);
-      formDataToSend.append("link", formData.link);
-      formDataToSend.append("producto_id", productoIdNumber.toString());
       formDataToSend.append("parrafo", formData.parrafo);
       formDataToSend.append("descripcion", formData.descripcion);
+      formDataToSend.append(
+        "subtitulo_beneficio",
+        formData.subtitulo_beneficio
+      );
       formDataToSend.append("titulo_blog", formData.titulo_blog);
-      formDataToSend.append("subtitulo_beneficio", formData.subtitulo_beneficio);
-      formDataToSend.append("url_video", formData.url_video);
       formDataToSend.append("titulo_video", formData.titulo_video);
-
-      // Imagen principal (solo si se seleccionó una nueva)
-      if (formData.imagen_principal) {
-        formDataToSend.append("imagen_principal", formData.imagen_principal as File);
-      }
-
-      // Imágenes adicionales - CORREGIR nombres de campos
+      formDataToSend.append("url_video", formData.url_video);
       formData.imagenes.forEach((item, index) => {
         if (item.url_imagen) {
-          // Cambia 'url_imagen' por 'imagen' para coincidir con backend
-          formDataToSend.append(`imagenes[${index}][imagen]`, item.url_imagen as File);
+          formDataToSend.append(
+            `imagenes[${index}][imagen]`,
+            item.url_imagen as File
+          );
         }
-        // Cambia 'parrafo_imagen' por 'parrafo' para coincidir con backend
-        formDataToSend.append(`imagenes[${index}][parrafo]`, item.parrafo_imagen || "");
+        formDataToSend.append(
+          `imagenes[${index}][parrafo_imagen]`,
+          item.parrafo_imagen
+        );
       });
+      formDataToSend.append(
+        "imagen_principal",
+        formData.imagen_principal as File
+      );
+      formDataToSend.append("link", formData.link); // NUEVO
+      formDataToSend.append("producto_id", formData.producto_id); // NUEVO
 
-      // Solo crear, no editar
       let url = getApiUrl(config.endpoints.blogs.create);
       let method = "POST";
+      if (blogToEdit && blogToEdit.id) {
+        url = `https://apiyuntas.yuntaspublicidad.com/api/blogs/${blogToEdit.id}`;
+        // Si tu backend es Laravel, usa POST + _method: PUT, si no, usa PUT directamente:
+        // method = "PUT";
+        method = "POST";
+        formDataToSend.append("_method", "PUT");
+      }
 
       const response = await fetch(url, {
         method,
         body: formDataToSend,
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "application/json",
         },
       });
 
-      let data;
+      let data: any = null;
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
-        data = await response.text();
-        throw new Error("Respuesta inesperada del servidor: " + data);
+        // Si no es JSON, intenta leer como texto y mostrar el error
+        const text = await response.text();
+        console.error("Respuesta no JSON:", text);
+        alert("❌ Error inesperado del servidor.");
+        return;
       }
+      console.log("Respuesta del servidor:", data);
 
       if (response.ok) {
         alert(
@@ -283,7 +270,7 @@ const AddBlogModal = ({
         closeModal();
         if (onSuccess) onSuccess();
       } else {
-        alert(`❌ Error: ${data.message || data}`);
+        alert(`❌ Error: ${data.message || "Error desconocido"}`);
       }
     } catch (error) {
       console.error("Error al enviar los datos:", error);
@@ -430,7 +417,6 @@ const AddBlogModal = ({
                   />
                 </div>
               ))}
-
               <div>
                 <label className="block">Link</label>
                 <input
@@ -457,7 +443,7 @@ const AddBlogModal = ({
               {/* Botones */}
               <div className="flex gap-2 mt-8">
                 <button type="submit" className="admin-act-btn">
-                  {blogToEdit ? "Guardar cambios" : "Añadir Blog"}
+                  Añadir Blog
                 </button>
                 <button
                   onClick={closeModal}
