@@ -123,12 +123,14 @@ const Slider = ({ comentarios }) => {
         <button
           onClick={handlePrev}
           className="p-2 md:m-4 cursor-pointer -ml-5 bg-black rounded-full text-white"
+          aria-label="Ir a la lista anterior"
         >
           <FaArrowLeft className="md:size-6"/>
         </button>
         <button
           onClick={handleNext}
           className="p-2 md:m-4 cursor-pointer -mr-5 bg-black rounded-full text-white"
+          aria-label="Ir a la lista siguiente"
         >
           <FaArrowRight className="md:size-6"/>
         </button>

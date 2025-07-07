@@ -50,7 +50,7 @@ const Navbarjsx = ({ logo }) => {
                 
 
                 {/* Icono de login */}
-                <a href="/login" className="lg:justify-self-center justify-self-end">
+                <a href="/login" className="lg:justify-self-center justify-self-end" aria-label="Iniciar sesión">
                     <IoPerson className="size-10"/>
                 </a>
                 
