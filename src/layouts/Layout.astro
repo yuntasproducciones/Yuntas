@@ -7,20 +7,25 @@ import WhatsApp from "../components/ui/whatsapp.astro";
 
 interface Props {
   title: string;
+  description?: string;
 }
-const { title } = Astro.props;
+const { 
+  title,
+  description = "YUNTAS PUBLICIDAD Especialistas en diseñar y transformar tus espacios utilizando tecnología innovadora y soluciones eficientes. Creamos ambientes personalizados"
+ } = Astro.props;
 
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="es" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-
+    <meta name="description" content={description} />
+    
     <!--  fuente de Google Fonts Optimizada -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
