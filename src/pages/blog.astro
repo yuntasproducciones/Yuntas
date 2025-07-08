@@ -13,9 +13,19 @@ const generalMetadata = {
 };
 
 
-const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
-const apiResponse = await res.json();
-const allArticles = apiResponse.data;
+let allArticles = [];
+let error = null;
+
+try {
+  const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+  const apiResponse = await res.json();
+  allArticles = apiResponse.data;
+} catch (err) {
+  error = err instanceof Error ? err.message : 'Error desconocido';
+}
 ---
 
 <Layout 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba API Productos</title>
+</head>
+<body>
+    <h1>Prueba de API de Productos</h1>
+    <div id="result"></div>
+    
+    <script>
+        console.log("🚀 Iniciando prueba de API...");
+        
+        async function testAPI() {
+            try {
+                const url = "https://apiyuntas.yuntaspublicidad.com/api/v1/productos";
+                console.log(" URL:", url);
+                
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    }
+                });
+                
+                console.log("📡 Response status:", response.status);
+                console.log("📡 Response ok:", response.ok);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log("📦 Data:", data);
+                
+                document.getElementById('result').innerHTML = `
+                    <h2> API funcionando correctamente</h2>
+                    <p><strong>Productos encontrados:</strong> ${data.data?.length || 0}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                console.error("❌ Error:", error);
+                document.getElementById('result').innerHTML = `
+                    <h2>❌ Error al conectar con la API</h2>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+        
+        testAPI();
+    </script>
+</body>
+</html>

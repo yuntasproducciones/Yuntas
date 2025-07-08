@@ -6,8 +6,12 @@ const ProductCard = ({ producto }) => {
     // Determinar el título a mostrar
     const titulo = producto.title || producto.titulo;
     
-    // Determinar el link
-    const link = producto.link || (producto.title ? producto.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '') : '');
+    // Usar el link del producto directamente (viene de la base de datos)
+    const link = producto.link;
+    
+    // Determinar la URL base para las imágenes (local vs desplegada)
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const imageBaseUrl = isLocalDev ? 'http://127.0.0.1:8000' : 'https://apiyuntas.yuntaspublicidad.com';
     
     return (
         <a
@@ -15,14 +19,20 @@ const ProductCard = ({ producto }) => {
             className="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group my-2 sm:my-3 md:my-4"
         >
         <div className="h-[340px] w-full overflow-hidden rounded-3xl">
-            <img
-                className="w-full h-full object-cover"
-                src={`https://apiyuntas.yuntaspublicidad.com${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
-                alt={imagenAlt}
-            />
+            {imagenUrl ? (
+                <img
+                    className="w-full h-full object-cover"
+                    src={`${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
+                    alt={imagenAlt}
+                />
+            ) : (
+                <div className="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                    <p className="text-white text-xl font-bold">Sin imagen</p>
+                </div>
+            )}
         </div>
         <p className="text-black py-2 px-5 text-base sm:text-lg md:text-xl font-bold text-center absolute bottom-2 bg-gradient-to-r from-cyan-600 to-cyan-300 rounded-full">
-            {titulo}
+            {titulo || "Producto sin título"}
         </p>
         </a>
     );

@@ -115,79 +115,76 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    // Mapear campos del formulario a la estructura de la API v1
-    const title = formData.get('titulo_hero') as string;
-    const subtitle = formData.get('nombre') as string;
-    const tagline = formData.get('seccion') as string;
-    const description = formData.get('descripcion_informacion') as string;
-    const nombreProducto = formData.get('nombre') as string;
-    const stockProducto = parseInt(formData.get('stock') as string);
-    const precioProducto = (formData.get('precio') as string).replace('$', ''); // Mantener como string según v1
-    const section = formData.get('seccion') as string;
-    const link = formData.get('link') as string;
-
-    // Crear el objeto specs combinando especificaciones
-    const specs: any = {};
+    // Crear FormData con los campos exactos que espera el backend
+    const finalFormData = new FormData();
+    
+    // CAMPOS REQUERIDOS por StoreProductoRequest
+    finalFormData.append('nombre', formData.get('nombre') as string);
+    finalFormData.append('link', formData.get('link') as string);
+    finalFormData.append('titulo', formData.get('titulo_hero') as string);
+    finalFormData.append('stock', formData.get('stock') as string);
+    
+    // Limpiar el precio (quitar el símbolo $)
+    const precioValue = (formData.get('precio') as string).replace('$', '').trim();
+    finalFormData.append('precio', precioValue);
+    
+    // CAMPOS OPCIONALES
+    finalFormData.append('subtitulo', formData.get('nombre') as string); // Usar nombre como subtítulo
+    finalFormData.append('lema', formData.get('seccion') as string); // Usar sección como lema
+    finalFormData.append('descripcion', formData.get('descripcion_informacion') as string);
+    finalFormData.append('seccion', formData.get('seccion') as string);
+    
+    // IMAGEN PRINCIPAL (requerida) - usar la primera imagen disponible
+    const imagenPrincipal = formData.get('imagen_lista_productos') as File || 
+                           formData.get('imagen_hero') as File;
+    if (imagenPrincipal && imagenPrincipal.size > 0) {
+      finalFormData.append('imagen_principal', imagenPrincipal);
+    }
+    
+    // ESPECIFICACIONES como array asociativo
+    const especificacionesObj: any = {};
     especificaciones.forEach((esp, index) => {
       if (esp.trim()) {
-        specs[`spec_${index + 1}`] = esp.trim();
+        especificacionesObj[`spec_${index + 1}`] = esp.trim();
       }
     });
-
-    // Agregar beneficios al specs también
+    
+    // Agregar beneficios a especificaciones
     beneficios.forEach((ben, index) => {
       if (ben.trim()) {
-        specs[`beneficio_${index + 1}`] = ben.trim();
+        especificacionesObj[`beneficio_${index + 1}`] = ben.trim();
       }
     });
-
-    // Convertir relacionados a números
-    const relatedProducts = relacionados
+    
+    // Solo agregar especificaciones si hay alguna
+    if (Object.keys(especificacionesObj).length > 0) {
+      Object.entries(especificacionesObj).forEach(([key, value]) => {
+        finalFormData.append(`especificaciones[${key}]`, value as string);
+      });
+    }
+    
+    // IMÁGENES ADICIONALES como array - solo si se seleccionaron archivos
+    const imagenesKeys = ['imagen_hero', 'imagen_especificaciones', 'imagen_beneficios'];
+    const imagenesConArchivos = imagenesKeys.filter(key => {
+      const file = formData.get(key) as File;
+      return file && file.size > 0 && key !== 'imagen_lista_productos';
+    });
+    
+    if (imagenesConArchivos.length > 0) {
+      imagenesConArchivos.forEach((key, index) => {
+        const file = formData.get(key) as File;
+        finalFormData.append(`imagenes[${index}]`, file);
+      });
+    }
+    
+    // PRODUCTOS RELACIONADOS
+    const relacionadosValidos = relacionados
       .filter(rel => rel.trim())
       .map(rel => parseInt(rel.trim()))
       .filter(rel => !isNaN(rel));
-
-    // Preparar datos para la API v1 de manera más simple
-    const apiData = {
-      title,
-      subtitle,
-      tagline,
-      description,
-      specs,
-      relatedProducts,
-      nombreProducto,
-      stockProducto,
-      precioProducto,
-      section,
-      link
-    };
-
-    // Crear FormData directamente con los campos individuales
-    const finalFormData = new FormData();
     
-    // Agregar campos básicos
-    finalFormData.append('title', title);
-    finalFormData.append('subtitle', subtitle);
-    finalFormData.append('tagline', tagline);
-    finalFormData.append('description', description);
-    finalFormData.append('nombreProducto', nombreProducto);
-    finalFormData.append('stockProducto', stockProducto.toString());
-    finalFormData.append('precioProducto', precioProducto); // Ya es string
-    finalFormData.append('section', section);
-    finalFormData.append('link', link);
-    
-    // Agregar specs como JSON
-    finalFormData.append('specs', JSON.stringify(specs));
-    
-    // Agregar productos relacionados como JSON
-    finalFormData.append('relatedProducts', JSON.stringify(relatedProducts));
-    
-    // Agregar imágenes si existen
-    ['imagen_lista_productos', 'imagen_hero', 'imagen_especificaciones', 'imagen_beneficios'].forEach(key => {
-      const file = formData.get(key) as File;
-      if (file && file.size > 0) {
-        finalFormData.append(key, file);
-      }
+    relacionadosValidos.forEach((id, index) => {
+      finalFormData.append(`relacionados[${index}]`, id.toString());
     });
 
     if (isEditing) {
@@ -206,7 +203,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: DATOS PARA DASHBOARD */}
       <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
         <h3 className="text-lg font-semibold text-blue-800 mb-4 flex items-center">
-          📊 Datos para Dashboard (Gestión Interna)
+           Datos para Dashboard (Gestión Interna)
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -286,7 +283,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: DATOS PARA PÁGINA DE PRODUCTO */}
       <div className="bg-green-50 p-6 rounded-lg border border-green-200">
         <h3 className="text-lg font-semibold text-green-800 mb-4 flex items-center">
-          🌐 Datos para Página de Producto (Frontend)
+           Datos para Página de Producto (Frontend)
         </h3>
         
         <div className="space-y-4">
@@ -321,7 +318,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: ESPECIFICACIONES */}
       <div className="bg-purple-50 p-6 rounded-lg border border-purple-200">
         <h3 className="text-lg font-semibold text-purple-800 mb-4 flex items-center">
-          ✅ Especificaciones (Checkmarks en el producto)
+           Especificaciones (Checkmarks en el producto)
         </h3>
         
         <div className="space-y-3">
@@ -358,7 +355,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: BENEFICIOS */}
       <div className="bg-orange-50 p-6 rounded-lg border border-orange-200">
         <h3 className="text-lg font-semibold text-orange-800 mb-4 flex items-center">
-          🎯 Beneficios (Lista en el producto)
+           Beneficios (Lista en el producto)
         </h3>
         
         <div className="space-y-3">
@@ -395,7 +392,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: IMÁGENES */}
       <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
         <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-          📸 Imágenes del Producto (4 imágenes específicas requeridas)
+           Imágenes del Producto (4 imágenes específicas requeridas)
         </h3>
         
         {/* Imágenes existentes */}
@@ -434,14 +431,15 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen para lista de productos */}
           <div className="bg-white p-4 rounded-lg border border-blue-200">
             <h4 className="text-md font-semibold text-blue-700 mb-3">
-              🏷️ Imagen para Lista de Productos
+               Imagen para Lista de Productos <span className="text-red-500">*</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Esta imagen aparece en la página "Nuestros Productos"</p>
+            <p className="text-sm text-gray-600 mb-3">Esta imagen aparece en la página "Nuestros Productos" y es <strong>obligatoria</strong></p>
             <div className="space-y-2">
               <input
                 type="file"
                 accept="image/*"
                 name="imagen_lista_productos"
+                required
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
               <input
@@ -456,7 +454,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen Hero */}
           <div className="bg-white p-4 rounded-lg border border-green-200">
             <h4 className="text-md font-semibold text-green-700 mb-3">
-              🖼️ Imagen Hero del Producto
+               Imagen Hero del Producto
             </h4>
             <p className="text-sm text-gray-600 mb-3">Imagen de fondo grande en la página individual del producto</p>
             <div className="space-y-2">
@@ -478,7 +476,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Especificaciones */}
           <div className="bg-white p-4 rounded-lg border border-purple-200">
             <h4 className="text-md font-semibold text-purple-700 mb-3">
-              ✅ Imagen para Especificaciones
+               Imagen para Especificaciones
             </h4>
             <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de especificaciones</p>
             <div className="space-y-2">
@@ -500,7 +498,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Beneficios */}
           <div className="bg-white p-4 rounded-lg border border-orange-200">
             <h4 className="text-md font-semibold text-orange-700 mb-3">
-              🎯 Imagen para Beneficios
+               Imagen para Beneficios
             </h4>
             <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de beneficios</p>
             <div className="space-y-2">
@@ -531,7 +529,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: PRODUCTOS RELACIONADOS */}
       <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
         <h3 className="text-lg font-semibold text-indigo-800 mb-4 flex items-center">
-          🔗 Productos Relacionados
+           Productos Relacionados
         </h3>
         
         <div className="space-y-4">

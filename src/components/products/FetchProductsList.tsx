@@ -7,12 +7,13 @@ export default function FetchProductsList() {
   const [products, setProducts] = useState<Producto[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = import.meta.env.PUBLIC_API_URL;
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(getApiUrl(config.endpoints.productos.list), {
+        // Usar el endpoint local para evitar problemas de CORS
+        const url = "/api/productos";
+        
+        const response = await fetch(url, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -23,7 +24,6 @@ export default function FetchProductsList() {
         if (!response.ok) throw new Error("Error al obtener productos de la API");
 
         const jsonResponse = await response.json();
-        // console.log("Respuesta completa de la API:", jsonResponse);
 
         // Manejar la estructura de respuesta de la API v1
         const productData = jsonResponse.data || jsonResponse;

@@ -90,13 +90,13 @@ const useClienteForm = (cliente?: Cliente | null, onSuccess?: () => void) => {
          * Si estamos editando un cliente, llamamos a la función de actualización.
          */
         await updateCliente(cliente!.id, { name, celular, email });
-        alert("✅ Cliente actualizado correctamente");
+        alert(" Cliente actualizado correctamente");
       } else {
         /**
          * Si estamos añadiendo un nuevo cliente, llamamos a la función de añadir.
          */
         await addCliente({ name, celular, email });
-        alert("✅ Cliente registrado exitosamente");
+        alert(" Cliente registrado exitosamente");
       }
 
       onSuccess?.(); // Llamamos a la función de éxito si existe

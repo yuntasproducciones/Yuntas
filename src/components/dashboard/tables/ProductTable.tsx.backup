@@ -65,7 +65,7 @@ export default function DataTable() {
     const token = localStorage.getItem("authToken");
     
     console.log('📋 Obteniendo lista de productos...');
-    console.log('🔗 URL:', url);
+    console.log(' URL:', url);
     console.log('🔐 Token length:', token?.length || 0);
     
     try {
@@ -106,8 +106,8 @@ export default function DataTable() {
         html: `
           <p>Para eliminar productos necesitas:</p>
           <ul style="text-align: left; margin-top: 10px;">
-            <li>✅ Rol: ADMIN o USER ${userPermissions.hasValidRole ? '(✓ Tienes)' : '(❌ Falta)'}</li>
-            <li>✅ Permiso: ENVIAR ${userPermissions.hasEnviarPermission ? '(✓ Tienes)' : '(❌ Falta)'}</li>
+            <li> Rol: ADMIN o USER ${userPermissions.hasValidRole ? '(✓ Tienes)' : '(❌ Falta)'}</li>
+            <li> Permiso: ENVIAR ${userPermissions.hasEnviarPermission ? '(✓ Tienes)' : '(❌ Falta)'}</li>
           </ul>
           <p style="margin-top: 15px;">Contacta al administrador para obtener los permisos necesarios.</p>
         `,
@@ -121,7 +121,7 @@ export default function DataTable() {
     const token = localStorage.getItem("authToken");
     
     console.log('🗑️ Eliminando producto ID:', id);
-    console.log('🔗 URL delete:', url);
+    console.log(' URL delete:', url);
     console.log('🔐 Token length:', token?.length || 0);
     
     const confirmacion = await Swal.fire({
@@ -188,8 +188,8 @@ export default function DataTable() {
         html: `
           <p>Para editar productos necesitas:</p>
           <ul style="text-align: left; margin-top: 10px;">
-            <li>✅ Rol: ADMIN o USER ${userPermissions.hasValidRole ? '(✓ Tienes)' : '(❌ Falta)'}</li>
-            <li>✅ Permiso: ENVIAR ${userPermissions.hasEnviarPermission ? '(✓ Tienes)' : '(❌ Falta)'}</li>
+            <li> Rol: ADMIN o USER ${userPermissions.hasValidRole ? '(✓ Tienes)' : '(❌ Falta)'}</li>
+            <li> Permiso: ENVIAR ${userPermissions.hasEnviarPermission ? '(✓ Tienes)' : '(❌ Falta)'}</li>
           </ul>
           <p style="margin-top: 15px;">Contacta al administrador para obtener los permisos necesarios.</p>
         `,
@@ -251,9 +251,9 @@ export default function DataTable() {
         ? permissions.some(perm => (perm.name || perm) === 'ENVIAR')
         : (permissions.name || permissions) === 'ENVIAR';
       
-      console.log('✅ Tiene rol válido (ADMIN/USER):', hasValidRole);
-      console.log('✅ Tiene permiso ENVIAR:', hasEnviarPermission);
-      console.log('🎯 Puede crear/editar productos:', hasValidRole && hasEnviarPermission);
+      console.log(' Tiene rol válido (ADMIN/USER):', hasValidRole);
+      console.log(' Tiene permiso ENVIAR:', hasEnviarPermission);
+      console.log(' Puede crear/editar productos:', hasValidRole && hasEnviarPermission);
       console.log('=== FIN DIAGNÓSTICO ===');
       
     } catch (e) {
@@ -364,8 +364,8 @@ export default function DataTable() {
                 html: `
                   <p>Para gestionar productos necesitas:</p>
                   <ul style="text-align: left; margin-top: 10px;">
-                    <li>✅ Rol: ADMIN o USER ${userPermissions.hasValidRole ? '(✓ Tienes)' : '(❌ Falta)'}</li>
-                    <li>✅ Permiso: ENVIAR ${userPermissions.hasEnviarPermission ? '(✓ Tienes)' : '(❌ Falta)'}</li>
+                    <li> Rol: ADMIN o USER ${userPermissions.hasValidRole ? '(✓ Tienes)' : '(❌ Falta)'}</li>
+                    <li> Permiso: ENVIAR ${userPermissions.hasEnviarPermission ? '(✓ Tienes)' : '(❌ Falta)'}</li>
                   </ul>
                   <p style="margin-top: 15px;">Contacta al administrador para obtener los permisos necesarios.</p>
                 `,
