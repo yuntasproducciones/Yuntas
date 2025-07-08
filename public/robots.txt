@@ -1,11 +1,5 @@
 User-agent: *
 Disallow: /admin/
 Disallow: /login
-Disallow: /utils/
-Disallow: /components/
-Disallow: /hooks/
-Disallow: /models/
-Disallow: /styles/
-Disallow: /assets/
 
 Sitemap: https://yuntaspublicidad.com/sitemap-index.xml

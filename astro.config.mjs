@@ -12,10 +12,27 @@ export default defineConfig({
     sitemap({
       filter: (page) => 
         !page.includes('/admin/') && 
-        !page.includes('/login/')
+        !page.includes('/login/') &&
+        !page.includes('/blogs/') &&
+        !page.includes('/products/producto/')
     })
   ],
+
+  build: {
+    inlineStylesheets: 'auto'
+  },
+
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      cssCodeSplit: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor': ['astro'],
+          }
+        }
+      }
+    }
   }
 });

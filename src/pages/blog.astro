@@ -6,21 +6,21 @@ import imagen1 from "../assets/images/blog/banner_blog.webp";
 import { blogService } from "../services/blogService";
 import type Blog from "../models/Blog";
 
-// Consumir blogs desde la API usando el nuevo servicio
-let allArticles: Blog[] = [];
-let error: string | null = null;
+// Metadatos específicos para la página general del blog
+const generalMetadata = {
+  titulo: "Blog de Innovación en Luces LED y Tendencias en Diseño Sostenible",
+  description: "Explore el blog de Yuntas Publicidad para conocer a fondo las novedades en construcción y diseño. Encuentra las tendencias que están transformando el sector."
+};
 
-try {
-  const response = await blogService.getAllBlogs();
-  allArticles = response.data || [];
-} catch (err) {
-  console.error('Error obteniendo blogs:', err);
-  error = err instanceof Error ? err.message : 'Error desconocido';
-  allArticles = [];
-}
+
+const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
+const apiResponse = await res.json();
+const allArticles = apiResponse.data;
 ---
 
-<Layout title="Blog">
+<Layout 
+  title={generalMetadata.titulo}
+>
   <!-- Banner -->
   <section class="relative h-screen">
     <img src={imagen1.src} alt="Biblioteca moderna con tecnología LED, espacio ideal para proyectos de diseño sostenible y ambientes funcionales" class="w-full h-full object-cover" />

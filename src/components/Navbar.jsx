@@ -27,7 +27,7 @@ const Navbarjsx = ({ logo }) => {
                 
                 <img 
                     src={logo.src} 
-                    alt="Logo de Yuntas" 
+                    alt=" Logo de Yuntas Publicidad, especialistas en soluciones LED, letreros personalizados, paneles electrónicos y tecnología visual innovadora para negocios y espacios comerciales" 
                     className="h-16 w-auto hidden lg:block cursor-pointer"
                 />
 
@@ -50,7 +50,7 @@ const Navbarjsx = ({ logo }) => {
                 
 
                 {/* Icono de login */}
-                <a href="/login" className="lg:justify-self-center justify-self-end">
+                <a href="/login" className="lg:justify-self-center justify-self-end" aria-label="Iniciar sesión">
                     <IoPerson className="size-10"/>
                 </a>
                 
