@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-
-interface Blog {
-    id: number;
-    titulo: string;
-    descripcion: string;
-    imagenPrincipal: string;
-}
+import type Blog from "../../models/Blog";
 
 interface SearchBarProps {
     articles: Blog[];
@@ -16,8 +10,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ articles }) => {
     const [filteredArticles, setFilteredArticles] = useState<Blog[]>(articles);
 
     useEffect(() => {
-        const filtered = articles.filter((a) =>
-            a.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+        const filtered = articles.filter((article) =>
+            article.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            article.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredArticles(filtered);
     }, [searchTerm, articles]);
@@ -30,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ articles }) => {
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Buscar..."
+                    placeholder="Buscar blogs..."
                     className="w-full bg-white placeholder-black px-6 py-3 rounded-full text-black text-xl focus:outline-none"
                 />
             </div>
@@ -50,16 +45,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ articles }) => {
                                     alt={article.titulo}
                                     className="w-full object-cover rounded-t-2xl object-center h-1/2"
                                 />
-                                <div className="h-2/5 w-full px-4 py-1">
-                                    <p className="font-bold text-xl">{article.titulo}</p>
-                                    <p className="text-lg">{article.descripcion}</p>
+                                <div className="h-2/5 w-full px-4 py-2">
+                                    <h3 className="font-bold text-xl mb-2 line-clamp-2">{article.titulo}</h3>
+                                    <p className="text-lg text-gray-600 line-clamp-3">{article.descripcion}</p>
+                                    <div className="mt-2 text-sm text-gray-500">
+                                        {article.created_at && new Date(article.created_at).toLocaleDateString()}
+                                    </div>
                                 </div>
                             </div>
                         </a>
                     ))
                 ) : (
                     <p className="text-white mt-6 text-lg col-span-full text-center">
-                        No se encontraron artículos.
+                        No se encontraron artículos que coincidan con tu búsqueda.
                     </p>
                 )}
             </div>

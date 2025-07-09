@@ -277,8 +277,8 @@ const AddBlogModal = ({
       if (response.ok) {
         alert(
           blogToEdit
-            ? "✅ Blog editado exitosamente"
-            : "✅ Blog añadido exitosamente"
+            ? " Blog editado exitosamente"
+            : " Blog añadido exitosamente"
         );
         closeModal();
         if (onSuccess) onSuccess();

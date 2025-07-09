@@ -6,7 +6,8 @@
  **/
 export const config = {
 
-  apiUrl: "https://apiyuntas.yuntaspublicidad.com", //import.meta.env.PUBLIC_API_URL, // URL de la API
+  // apiUrl: "http://localhost:8000", // API local para desarrollo
+  apiUrl: "https://apiyuntas.yuntaspublicidad.com", // API desplegada (comentada para desarrollo)
   environment: import.meta.env.MODE || "development", // Entorno de la aplicación, por defecto development
   endpoints: {
     auth: {
@@ -32,12 +33,12 @@ export const config = {
     },
     productos: {
       // Endpoints de productos
-      list: '/api/v2/productos',
-      detail: (id: string | number) => `/api/v2/productos/${id}`,
-      link: (link: string) => `/api/v2/productos/link/${link}`,
-      create: "/api/v2/productos",
-      update: (id: number | string) => `/api/v2/productos/${id}`,
-      delete: (id: number | string) => `/api/v2/productos/${id}`,
+      list: '/api/v1/productos',
+      detail: (id: string | number) => `/api/v1/productos/${id}`,
+      link: (link: string) => `/api/v1/productos/link/${link}`,
+      create: "/api/v1/productos",
+      update: (id: number | string) => `/api/v1/productos/${id}`,
+      delete: (id: number | string) => `/api/v1/productos/${id}`,
     },
     blogs: {
       // Endpoints de blogs

@@ -3,6 +3,8 @@
 import SearchBar from "../pages/blogs/SearchBar";
 import Layout from "../layouts/Layout.astro";
 import imagen1 from "../assets/images/blog/banner_blog.webp";
+import { blogService } from "../services/blogService";
+import type Blog from "../models/Blog";
 
 // Metadatos específicos para la página general del blog
 const generalMetadata = {
@@ -11,9 +13,19 @@ const generalMetadata = {
 };
 
 
-const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
-const apiResponse = await res.json();
-const allArticles = apiResponse.data;
+let allArticles = [];
+let error = null;
+
+try {
+  const res = await fetch("https://apiyuntas.yuntaspublicidad.com/api/blogs");
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+  const apiResponse = await res.json();
+  allArticles = apiResponse.data;
+} catch (err) {
+  error = err instanceof Error ? err.message : 'Error desconocido';
+}
 ---
 
 <Layout 
@@ -29,7 +41,13 @@ const allArticles = apiResponse.data;
 
   <section class="bg-gradient-to-b from-blue-900 to-indigo-950 p-12 text-white">
     <div class="flex justify-center">
-      <SearchBar client:load articles={allArticles} />
+      {error ? (
+        <div class="text-red-500 text-xl">
+          Error cargando blogs: {error}
+        </div>
+      ) : (
+        <SearchBar client:load articles={allArticles} />
+      )}
     </div>
   </section>
 </Layout>

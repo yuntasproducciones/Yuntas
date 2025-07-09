@@ -1,32 +1,42 @@
 import { useState, useEffect } from "react";
-import { config, getApiUrl } from "../../config";
+import { blogService } from "../services/blogService";
 import type Blog from "../models/Blog";
 
-export function useBlog(idPost: string) {
+interface UseBlogResult {
+  blog: Blog | null;
+  loading: boolean;
+  error: string | null;
+  refetch: () => Promise<void>;
+}
+
+export function useBlog(idPost: string): UseBlogResult {
   const [blog, setBlog] = useState<Blog | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchBlog() {
-      try {
-        const res = await fetch(
-          getApiUrl(config.endpoints.blogs.detail(idPost))
-        );
-        if (!res.ok) throw new Error("Error al obtener el contenido del blog");
-
-        const { data }: { data: Blog } = await res.json();
-        setBlog(data);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
-      }
+  const fetchBlog = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await blogService.getBlogById(idPost);
+      setBlog(response.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error desconocido al obtener el blog');
+      console.error('Error en useBlog:', err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    fetchBlog();
+  const refetch = async () => {
+    await fetchBlog();
+  };
+
+  useEffect(() => {
+    if (idPost) {
+      fetchBlog();
+    }
   }, [idPost]);
 
-  return { blog, error };
+  return { blog, loading, error, refetch };
 }
