@@ -134,11 +134,10 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
     finalFormData.append('descripcion', formData.get('descripcion_informacion') as string);
     finalFormData.append('seccion', formData.get('seccion') as string);
     
-    // IMAGEN PRINCIPAL (requerida) - usar la primera imagen disponible
-    const imagenPrincipal = formData.get('imagen_lista_productos') as File || 
-                           formData.get('imagen_hero') as File;
-    if (imagenPrincipal && imagenPrincipal.size > 0) {
-      finalFormData.append('imagen_principal', imagenPrincipal);
+    // IMAGEN PRINCIPAL (para catálogo/lista) - NO es la imagen Hero
+    const imagenListaProductos = formData.get('imagen_lista_productos') as File;
+    if (imagenListaProductos && imagenListaProductos.size > 0) {
+      finalFormData.append('imagen_principal', imagenListaProductos);
     }
     
     // ESPECIFICACIONES como array asociativo
@@ -163,19 +162,27 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       });
     }
     
-    // IMÁGENES ADICIONALES como array - solo si se seleccionaron archivos
-    const imagenesKeys = ['imagen_hero', 'imagen_especificaciones', 'imagen_beneficios'];
-    const imagenesConArchivos = imagenesKeys.filter(key => {
-      const file = formData.get(key) as File;
-      return file && file.size > 0 && key !== 'imagen_lista_productos';
-    });
+    // IMÁGENES ADICIONALES como array - ORDEN CORRECTO SEGÚN DISEÑO
+    // Orden: [0] = HERO, [1] = Especificaciones, [2] = Beneficios
+    const imagenesEnOrden = [
+      { key: 'imagen_hero', file: formData.get('imagen_hero') as File },
+      { key: 'imagen_especificaciones', file: formData.get('imagen_especificaciones') as File },
+      { key: 'imagen_beneficios', file: formData.get('imagen_beneficios') as File }
+    ];
     
-    if (imagenesConArchivos.length > 0) {
-      imagenesConArchivos.forEach((key, index) => {
-        const file = formData.get(key) as File;
-        finalFormData.append(`imagenes[${index}]`, file);
-      });
-    }
+    // ENVIAR SOLO LAS IMÁGENES QUE TIENEN ARCHIVOS VÁLIDOS
+    // pero mantener la información de qué tipo de imagen es cada una
+    imagenesEnOrden.forEach((imagen, originalIndex) => {
+      if (imagen.file && imagen.file.size > 0) {
+        console.log(`Agregando imagen ${originalIndex}:`, imagen.key, imagen.file.name);
+        // Usar el índice original para mantener el orden correcto
+        finalFormData.append(`imagenes[${originalIndex}]`, imagen.file);
+        // También enviar el tipo de imagen para que el backend sepa qué es
+        finalFormData.append(`imagen_tipos[${originalIndex}]`, imagen.key);
+      } else {
+        console.log(`Imagen ${originalIndex} (${imagen.key}) no tiene archivo o está vacía`);
+      }
+    });
     
     // PRODUCTOS RELACIONADOS
     const relacionadosValidos = relacionados
@@ -454,9 +461,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen Hero */}
           <div className="bg-white p-4 rounded-lg border border-green-200">
             <h4 className="text-md font-semibold text-green-700 mb-3">
-               Imagen Hero del Producto
+               🎯 Imagen Hero del Producto <span className="text-sm text-gray-500">(Banner Principal)</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Imagen de fondo grande en la página individual del producto</p>
+            <p className="text-sm text-gray-600 mb-3">Imagen de fondo grande en la página individual del producto - <strong>Banner superior principal</strong></p>
             <div className="space-y-2">
               <input
                 type="file"
@@ -476,9 +483,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Especificaciones */}
           <div className="bg-white p-4 rounded-lg border border-purple-200">
             <h4 className="text-md font-semibold text-purple-700 mb-3">
-               Imagen para Especificaciones
+               📋 Imagen para Especificaciones <span className="text-sm text-gray-500">(Sección Izquierda)</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de especificaciones</p>
+            <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de especificaciones - <strong>Lado izquierdo de la página</strong></p>
             <div className="space-y-2">
               <input
                 type="file"
@@ -498,9 +505,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Beneficios */}
           <div className="bg-white p-4 rounded-lg border border-orange-200">
             <h4 className="text-md font-semibold text-orange-700 mb-3">
-               Imagen para Beneficios
+               🎁 Imagen para Beneficios <span className="text-sm text-gray-500">(Sección Derecha)</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de beneficios</p>
+            <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de beneficios - <strong>Lado derecho de la página</strong></p>
             <div className="space-y-2">
               <input
                 type="file"
@@ -520,8 +527,11 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
         <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-sm text-yellow-800">
-            <strong>💡 Importante:</strong> Solo se requieren estas 4 imágenes específicas para cada producto. 
-            Cada una tiene un propósito específico en la página web.
+            <strong>💡 Estructura CORRECTA de imágenes:</strong><br/>
+            📸 <strong>Lista Productos:</strong> Imagen para vista de catálogo (imagen_principal)<br/>
+            🎯 <strong>Hero:</strong> Banner principal superior (images[0])<br/>
+            📋 <strong>Especificaciones:</strong> Acompaña características (images[1])<br/>
+            🎁 <strong>Beneficios:</strong> Acompaña ventajas (images[2])
           </p>
         </div>
       </div>
