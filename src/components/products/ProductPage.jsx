@@ -169,7 +169,7 @@ export default function ProductPage(){
                         src={
                           images && images.length > 0 && images[0]?.url_imagen
                             ? buildImageUrl(images[0].url_imagen)
-                            : buildImageUrl(mainImage)
+                            : buildImageUrl('/placeholder-image.jpg')
                         }
                         alt={'Banner de '+title}
                         className="w-full h-[600px] mx-auto my-auto"

@@ -37,6 +37,17 @@ export default function DataTable() {
     const url = getApiUrl(config.endpoints.productos.delete(id));
     const token = localStorage.getItem("token");
     
+    // Verificar que el token exista
+    if (!token) {
+      Swal.fire({
+        title: "Error de autenticación",
+        text: "No se encontró token de acceso. Por favor inicia sesión nuevamente.",
+        icon: "error",
+        confirmButtonText: "Entendido"
+      });
+      return;
+    }
+    
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro?",
       text: "¡Esta acción no se puede deshacer!",
@@ -50,7 +61,10 @@ export default function DataTable() {
 
     if (confirmacion.isConfirmed) {
       try {
-        // Revertir: SÍ requiere autenticación
+        console.log('🗑️ Eliminando producto ID:', id);
+        console.log('URL delete:', url);
+        
+        // Hacer la petición DELETE
         const respuesta = await fetch(url, {
           method: "DELETE",
           headers: {
@@ -60,17 +74,38 @@ export default function DataTable() {
           },
         });
 
+        console.log('Respuesta status:', respuesta.status);
         const data = await respuesta.json();
+        console.log('Respuesta data:', data);
 
         if (respuesta.ok) {
           Swal.fire("¡Eliminado!", data.message, "success");
           // Actualizar la lista de productos
           obtenerDatos();
         } else {
-          Swal.fire("Error", data.message, "error");
+          // Manejar diferentes tipos de errores
+          let errorMessage = data.message || 'Error desconocido al eliminar';
+          
+          if (respuesta.status === 401) {
+            errorMessage = 'Token expirado o inválido. Por favor inicia sesión nuevamente.';
+            localStorage.removeItem("token");
+          } else if (respuesta.status === 403) {
+            if (data.message?.includes('roles') || data.error?.includes('roles')) {
+              errorMessage = 'No tienes el rol necesario para eliminar productos.';
+            } else if (data.message?.includes('permission') || data.error?.includes('permission')) {
+              errorMessage = 'No tienes el permiso necesario para eliminar productos.';
+            } else {
+              errorMessage = 'Acceso denegado. Contacta al administrador.';
+            }
+          } else if (respuesta.status === 404) {
+            errorMessage = 'El producto no existe o ya fue eliminado.';
+          }
+          
+          Swal.fire("Error", errorMessage, "error");
         }
       } catch (error) {
-        Swal.fire("Error", "No se pudo eliminar el producto.", "error");
+        console.error('Error al eliminar producto:', error);
+        Swal.fire("Error", "No se pudo conectar con el servidor.", "error");
       }
     }
   };
@@ -95,8 +130,6 @@ export default function DataTable() {
     console.log('Token length:', token.length);
     console.log('Token preview:', token.substring(0, 20) + '...');
     console.log('FormData entries:', [...formData.entries()]);
-    
-    //// 
     
     try {
       const url = currentProduct
