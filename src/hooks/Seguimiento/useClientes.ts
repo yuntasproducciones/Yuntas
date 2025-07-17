@@ -33,7 +33,7 @@ const useClientes = (trigger: boolean, page: number = 1) => {
         /**
          * Realiza la solicitud a la API para obtener la lista de clientes.
          */
-        const response = await fetch("https://apiyuntas.yuntasproducciones.com/api/v1/clientes", {
+        const response = await fetch("https://apiyuntas.yuntaspublicidad.com/api/v1/clientes", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

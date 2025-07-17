@@ -3,7 +3,7 @@ import { FaRegFolder } from "react-icons/fa";
 
 async function logout() {
   try {
-    const response = await fetch("https://apiyuntas.yuntasproducciones.com/api/v1/auth/logout", {
+    const response = await fetch("https://apiyuntas.yuntaspublicidad.com/api/v1/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

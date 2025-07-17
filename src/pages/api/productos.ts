@@ -1,7 +1,12 @@
 export async function GET() {
   try {
-    // Usar backend local en desarrollo
-    const response = await fetch("http://127.0.0.1:8000/api/v1/productos", {
+    // Usar SIEMPRE la API de producción
+    const apiUrl = "https://apiyuntas.yuntaspublicidad.com/api/v1/productos";
+    
+    console.log('🌐 Usando API de PRODUCCIÓN');
+    console.log('📡 API URL:', apiUrl);
+    
+    const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

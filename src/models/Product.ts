@@ -19,16 +19,16 @@ export default interface Producto {
   image: string;                     // "principal.jpg"
   nombreProducto: string;            // "Producto de Prueba"
   stockProducto: number;             // 50
-  precioProducto: number;            // 99.99
-  section: string;                   // "Pruebas"
+  precioProducto: string;            // "99.99" - viene como string de la API
+  seccion: string;                   // "Pruebas" - corregido de "section"
+  link: string;                      // Campo requerido para la navegación
 
   // Campos computados para el frontend (se mapean desde los datos de la API)
   // Estos se usan internamente pero no se envían a la API
   nombre?: string;        // Se mapea desde nombreProducto
   precio?: string;        // Se mapea desde precioProducto
   stock?: number;         // Se mapea desde stockProducto
-  seccion?: string;       // Se mapea desde section
-  link?: string;          // Se genera desde el título
+  section?: string;       // Se mapea desde seccion (para compatibilidad)
   titulo_hero?: string;   // Se mapea desde title
   descripcion_informacion?: string; // Se mapea desde description
   
