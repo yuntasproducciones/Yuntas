@@ -1,13 +1,21 @@
 const ProductCard = ({ producto }) => {
+    console.log('🎴 ProductCard recibió producto:', producto);
+    
     // Determinar la imagen a mostrar (API v1 usa different structure)
     const imagenUrl = producto.image || producto.images?.[0] || (producto.imagenes?.[0]?.url_imagen);
     const imagenAlt = producto.title || producto.imagenes?.[0]?.texto_alt_SEO || "Imagen de prueba";
     
+    console.log('🖼️ Imagen URL calculada:', imagenUrl);
+    
     // Determinar el título a mostrar
     const titulo = producto.title || producto.titulo;
     
+    console.log('📝 Título calculado:', titulo);
+    
     // Usar el link del producto directamente (viene de la base de datos)
     const link = producto.link;
+    
+    console.log('🔗 Link del producto:', link);
     
     // Determinar la URL base para las imágenes (local vs desplegada)
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
