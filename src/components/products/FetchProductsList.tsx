@@ -12,23 +12,18 @@ export default function FetchProductsList() {
       try {
         console.log('🚀 Iniciando fetch de productos...');
         
-        // Usar el endpoint local para evitar problemas de CORS
-        const url = "/api/productos";
-        console.log('📡 URL del endpoint:', url);
+        // Llamar directamente a la API de producción para evitar problemas de cache
+        const timestamp = new Date().getTime();
+        const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/v1/productos?_t=${timestamp}`;
+        console.log('📡 URL del endpoint:', apiUrl);
         
-        const response = await fetch(url, {
+        const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json"
+            // Removemos headers de cache para evitar problemas CORS
           }
-        });
-
-        console.log('📡 Respuesta HTTP:', {
-          status: response.status,
-          statusText: response.statusText,
-          ok: response.ok,
-          headers: Object.fromEntries(response.headers.entries())
         });
 
         if (!response.ok) {
@@ -61,7 +56,7 @@ export default function FetchProductsList() {
 
         // Validar que los productos tengan la estructura esperada
         const validProducts = products.filter(producto => {
-          const isValid = producto && (producto.id || producto.title || producto.name);
+          const isValid = producto && (producto.id || producto.title || producto.nombreProducto);
           if (!isValid) {
             console.warn('⚠️ Producto inválido encontrado:', producto);
           }
@@ -79,14 +74,15 @@ export default function FetchProductsList() {
           name: err instanceof Error ? err.name : "Error"
         });
         
-        // En caso de error, intentar con la API directa como fallback
-        console.log('🔄 Intentando con API directa como fallback...');
+        // Si falla la API directa, intentar con el endpoint local como fallback
+        console.log('🔄 Intentando con endpoint local como fallback...');
         try {
-          const fallbackResponse = await fetch('https://apiyuntas.yuntaspublicidad.com/api/v1/productos', {
+          const fallbackResponse = await fetch('/api/productos', {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json"
+              // Sin headers de cache para evitar problemas
             }
           });
           
@@ -131,7 +127,7 @@ export default function FetchProductsList() {
         <div className="bg-black/80 text-white p-4 mb-4 rounded-lg text-sm">
           <p>🔍 <strong>Debug Info:</strong></p>
           <p>📊 Productos cargados: {products.length}</p>
-          <p>🌐 Endpoint usado: /api/productos</p>
+          <p>🌐 Endpoint usado: API directa (sin proxy)</p>
           {products.length > 0 && (
             <p>✅ Productos: {products.map(p => p.title || p.nombreProducto).join(', ')}</p>
           )}
