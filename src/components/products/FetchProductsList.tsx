@@ -134,15 +134,28 @@ export default function FetchProductsList() {
         </div>
       )}
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="space-y-8">
         {products.length > 0 ? (
-          products.map((producto, index) => (
-            <div key={producto.id || index} className="flex justify-center">
-              <div className="max-w-[300px] sm:max-w-[250px]">
-                <ProductCard producto={producto} />
+          <>
+            {/* Dividir productos en grupos de 3 */}
+            {Array.from({ length: Math.ceil(products.length / 3) }, (_, groupIndex) => (
+              <div key={groupIndex}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                  {products.slice(groupIndex * 3, (groupIndex + 1) * 3).map((producto, index) => (
+                    <div key={producto.id || index} className="flex justify-center">
+                      <div className="max-w-[300px] sm:max-w-[250px]">
+                        <ProductCard producto={producto} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {/* Línea divisoria celeste - no mostrar después del último grupo */}
+                {groupIndex < Math.ceil(products.length / 3) - 1 && (
+                  <div className="w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent mb-8"></div>
+                )}
               </div>
-            </div>
-          ))
+            ))}
+          </>
         ) : (
           <div className="col-span-full text-center py-20">
             <p className="text-white text-2xl mb-4">No hay productos disponibles</p>
