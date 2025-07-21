@@ -18,20 +18,23 @@ const ProductCard = ({ producto }) => {
     console.log('🔗 Link del producto:', link);
     
     // Determinar la URL base para las imágenes (local vs desplegada)
-    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const imageBaseUrl = isLocalDev ? 'http://127.0.0.1:8000' : 'https://apiyuntas.yuntaspublicidad.com';
+    // const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    // const imageBaseUrl = isLocalDev ? 'http://127.0.0.1:8000' : 'https://apiyuntas.yuntaspublicidad.com';
+    // Forzar siempre la URL de producción para las imágenes
+    const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
     
     return (
         <a
             href={`/products/producto/?link=${link}`}
             className="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group my-2 sm:my-3 md:my-4"
         >
-        <div className="h-[340px] w-full overflow-hidden rounded-3xl">
+        <div className="h-[340px] w-[250px] overflow-hidden rounded-3xl mx-auto">
             {imagenUrl ? (
                 <img
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                     src={`${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
                     alt={imagenAlt}
+                    style={{ width: '250px', height: '340px' }}
                 />
             ) : (
                 <div className="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
