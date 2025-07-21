@@ -230,19 +230,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Sección/Categoría <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
             </label>
-            <select
+            <input
               name="seccion"
               defaultValue={initialData?.section || initialData?.tagline}
+              placeholder="ej: Letreros LED, Sillas LED, Pisos LED, etc."
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
-            >
-              <option value="">Selecciona una sección</option>
-              <option value="Letreros LED">Letreros LED</option>
-              <option value="Sillas LED">Sillas LED</option>
-              <option value="Pisos LED">Pisos LED</option>
-              <option value="Mesas LED">Mesas LED</option>
-              <option value="Barras LED">Barras LED</option>
-            </select>
+            />
           </div>
           
           <div>
