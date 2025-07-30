@@ -9,11 +9,10 @@ interface Props {
   title: string;
   description?: string;
 }
-const { 
+const {
   title,
-  description = "YUNTAS PUBLICIDAD Especialistas en diseñar y transformar tus espacios utilizando tecnología innovadora y soluciones eficientes. Creamos ambientes personalizados"
- } = Astro.props;
-
+  description = "YUNTAS PUBLICIDAD Especialistas en diseñar y transformar tus espacios utilizando tecnología innovadora y soluciones eficientes. Creamos ambientes personalizados",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -25,10 +24,16 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    
+
     <!--  fuente de Google Fonts Optimizada -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Precarga de la fuente Roboto para mejorar el LCP -->
     <link
       rel="preload"
@@ -51,11 +56,13 @@ const {
       />
     </noscript>
 
+
     <ClientRouter />
   </head>
-  <body >
-    <Navbar />
-    <slot/>
+  <body>
+    <Navbar variant="default" />
+
+    <slot />
     <Footer />
     <WhatsApp />
   </body>

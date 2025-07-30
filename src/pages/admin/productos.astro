@@ -3,7 +3,15 @@ import LayoutAdmin from "../../layouts/LayoutAdmin.astro";
 import AdminDashboard from "../../components/admin/Admin";
 import ProductosTabla from "../../components/dashboard/tables/ProductTable.tsx";
 ---
-<LayoutAdmin title="VENTAS">
-    <AdminDashboard client:only="react" />
-    <ProductosTabla client:load />
+
+<LayoutAdmin title="PRODUCTOS">
+  <!-- Componente de autenticación que se ejecuta primero -->
+  <AdminDashboard client:only="react" />
+
+  <!-- Contenido principal que solo se muestra si está autenticado -->
+  <div class="flex-1">
+    <div class="w-full">
+      <ProductosTabla client:load />
+    </div>
+  </div>
 </LayoutAdmin>

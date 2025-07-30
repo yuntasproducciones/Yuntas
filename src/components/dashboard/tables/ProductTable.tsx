@@ -5,6 +5,7 @@ import Modal from "../../Modal";
 import ProductForm from "../../products/ProductForm";
 import type Producto from "../../../models/Product";
 import { config, getApiUrl } from "../../../../config";
+import TableContainer from "./TableContainer";
 
 export default function DataTable() {
   const [productos, setProductos] = useState<Producto[]>([]);
@@ -211,83 +212,91 @@ export default function DataTable() {
   }, []);
 
   return (
-    <>
-      <div className="flex flex-row gap-4">
-        {/* Botón para abrir el modal */}
-        <button
-          onClick={() => {
-            setCurrentProduct(undefined); // Reset para modo "añadir"
-            setIsOpen(true);
-          }}
-          className="mt-4 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
-        >
-          Añadir Producto
-        </button>
-      </div>
-      {/* Tabla */}
-      <table className="w-full border-separate border-spacing-2">
-        <thead>
-          <tr className="bg-blue-950 text-white">
-            <th className="px-4 py-2 rounded-xl">ID</th>
-            <th className="px-4 py-2 rounded-xl">NOMBRE</th>
-            <th className="px-4 py-2 rounded-xl">SECCION</th>
-            <th className="px-4 py-2 rounded-xl">PRECIO</th>
-            <th className="px-4 py-2 rounded-xl">ACCIÓN</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productos.map((item, index) => (
-            <tr
-              key={item.id}
-              className={`text-center ${
-                index % 2 === 0 ? "bg-gray-100" : "bg-gray-300"
-              }`}
-            >
-              <td className="p-2 font-bold rounded-xl">{item.id}</td>
-              <td className="p-2 font-bold rounded-xl">{item.nombreProducto || item.subtitle || item.nombre}</td>
-              <td className="p-2 font-bold rounded-xl">{item.section || item.tagline || item.seccion}</td>
-              <td className="p-2 font-bold rounded-xl">${item.precioProducto || item.precio}</td>
-              <td className="p-2 rounded-xl">
-                {/* Contenedor de acciones con íconos */}
-                <div className="flex justify-center gap-5 rounded-xl">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="text-green-600 hover:text-green-800 transition cursor-pointer"
-                    title="Confirmar"
-                  >
-                    <FaRegEdit size={18} />
-                  </button>
-                  <button
-                    onClick={() => eliminarProducto(item.id)}
-                    className="text-red-600 hover:text-red-800 transition cursor-pointer"
-                    title="Eliminar"
-                  >
-                    <FaTrash size={18} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <Modal
-        isOpen={isOpen}
-        onClose={() => {
-          setIsOpen(false);
+  <>
+    <div className="flex flex-row gap-4 mb-4">
+      <button
+        onClick={() => {
           setCurrentProduct(undefined);
+          setIsOpen(true);
         }}
-        title={currentProduct ? "Editar Datos" : "Ingresar Datos"}
-        form="eliminentechno3"
-        btnText={currentProduct ? "Guardar Cambios" : "Añadir"}
+        className="mt-4 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
       >
-        {/* Formulario */}
-        <ProductForm
-          initialData={currentProduct}
-          onSubmit={handleSubmit}
-          isEditing={!!currentProduct}
-        />
-      </Modal>
-    </>
-  );
+        Añadir Producto
+      </button>
+    </div>
+   <TableContainer tableType="productos">
+  <thead>
+    <tr className="bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold">
+      <th className="px-4 py-2 rounded-md">ID</th>
+      <th className="px-4 py-2 rounded-md">NOMBRE</th>
+      <th className="px-4 py-2 rounded-md">SECCIÓN</th>
+      <th className="px-4 py-2 rounded-md">PRECIO</th>
+      <th className="px-4 py-2 rounded-md">ACCIÓN</th>
+    </tr>
+  </thead>
+  <tbody>
+    {productos.map((item, index) => {
+      const isEven = index % 2 === 0;
+      const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
+      const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
+      const text = "text-gray-900 dark:text-gray-100";
+
+      return (
+        <tr key={item.id} className={`${bgLight} ${bgDark}`}>
+          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>{item.id}</td>
+          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+            {item.nombreProducto || item.subtitle || item.nombre}
+          </td>
+          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+            {item.section || item.tagline || item.seccion}
+          </td>
+          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+            ${item.precioProducto || item.precio}
+          </td>
+          <td className={`px-4 py-2 rounded-md ${text}`}>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => handleEdit(item)}
+                className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+                title="Editar"
+              >
+                <FaRegEdit size={18} />
+              </button>
+              <button
+                onClick={() => eliminarProducto(item.id)}
+                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                title="Eliminar"
+              >
+                <FaTrash size={18} />
+              </button>
+            </div>
+          </td>
+        </tr>
+      );
+    })}
+  </tbody>
+</TableContainer>
+
+  
+
+    {/* Modal */}
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        setIsOpen(false);
+        setCurrentProduct(undefined);
+      }}
+      title={currentProduct ? "Editar Datos" : "Ingresar Datos"}
+      form="eliminentechno3"
+      btnText={currentProduct ? "Guardar Cambios" : "Añadir"}
+    >
+      <ProductForm
+        initialData={currentProduct}
+        onSubmit={handleSubmit}
+        isEditing={!!currentProduct}
+      />
+    </Modal>
+  </>
+);
+
 }

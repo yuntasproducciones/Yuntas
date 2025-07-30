@@ -303,9 +303,9 @@ const AddBlogModal = ({
 
       {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-          <div className="h-3/4 overflow-y-scroll bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5">
-            <h2 className="text-2xl font-bold mb-4">AÑADIR BLOG</h2>
+       <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+    <div className="bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5 max-h-[90vh] overflow-y-auto">
+      <h2 className="text-2xl font-bold mb-4">AÑADIR BLOG</h2>
 
             {/* Formulario */}
             <form

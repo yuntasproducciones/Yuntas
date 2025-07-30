@@ -12,7 +12,7 @@ import type Cliente from "../../models/clients";
  * Funcion para manejar el formulario de cliente 
  */
 const useClienteForm = (cliente?: Cliente | null, onSuccess?: () => void) => {
-  type ClienteFormData = Pick<Cliente, "name" | "celular" | "email">;
+  type ClienteFormData = Pick<Cliente, "name" | "celular" | "email" | "seccion" | "created_at">;
 
   /**
    * Estado para manejar los datos del formulario.
@@ -22,6 +22,8 @@ const useClienteForm = (cliente?: Cliente | null, onSuccess?: () => void) => {
     name: "",
     celular: "",
     email: "",
+    seccion: "",
+    created_at: "",
   });
 
   const [isEditing, setIsEditing] = useState(false); // Estado para manejar si estamos editando o añadiendo un cliente
@@ -41,6 +43,8 @@ const useClienteForm = (cliente?: Cliente | null, onSuccess?: () => void) => {
         name: cliente.name,
         celular: cliente.celular,
         email: cliente.email,
+        seccion: cliente.seccion,
+        created_at: cliente.created_at,
       });
       setIsEditing(true);
     } else {
@@ -116,7 +120,7 @@ const useClienteForm = (cliente?: Cliente | null, onSuccess?: () => void) => {
    * Limpia los datos del formulario y establece el estado de edición en falso.
    */
   const resetForm = () => {
-    setFormData({ name: "", celular: "", email: "" });
+    setFormData({ name: "", celular: "", email: "", seccion: "", created_at: "" });
     setIsEditing(false);
   };
 

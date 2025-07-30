@@ -1,10 +1,17 @@
 ---
 import LayoutAdmin from "../../layouts/LayoutAdmin.astro";
 import UsersTable from "../../components/dashboard/tables/UsersTable";
+import AdminDashboard from "../../components/admin/Admin";
 ---
 
 <LayoutAdmin title="Usuarios">
-  <div class="p-8">
-    <UsersTable client:load />
+  <!-- Componente de autenticación que se ejecuta primero -->
+  <AdminDashboard client:only="react" />
+
+  <!-- Contenido principal que solo se muestra si está autenticado -->
+  <div class="flex-1">
+    <div class="w-full">
+      <UsersTable client:load />
+    </div>
   </div>
 </LayoutAdmin>
