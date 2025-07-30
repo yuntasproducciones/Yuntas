@@ -48,12 +48,13 @@ const useClientes = (trigger: boolean, page: number = 1) => {
          * Convierte la respuesta a JSON y maneja los datos.
          */
         const data = await response.json();
-
+        console.log("🚀 Datos obtenidos:", data.data);
         /**
          * Extrae la lista de clientes y el número total de páginas de la respuesta.
          * Si no hay datos, establece un array vacío y una página total de 1.
          */
-        const clientesArray = data.data?.data || [];
+        const clientesArray = data.data || [];
+        console.log("🚀 Clientes obtenidos:", clientesArray);
         const totalPages = Math.ceil(data.total / 10) || 1;
         setClientes(clientesArray);
         setTotalPages(totalPages);
