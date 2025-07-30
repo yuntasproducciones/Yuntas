@@ -34,6 +34,21 @@ export interface BlogFormData {
     parrafo_imagen: string;
   }>;
 }
+export default interface BlogAPI {
+  id: number;
+  nombre_producto: string;
+  subtitulo: string;
+  imagen_principal: string;
+  imagenes: Array<{
+    ruta_imagen: string;
+    texto_alt: string;
+  }>;
+  parrafos: Array<{
+    parrafo: string;
+  }>;
+  created_at: string;
+  updated_at?: string;
+}
 
 export interface BlogCreateRequest {
   titulo: string;
