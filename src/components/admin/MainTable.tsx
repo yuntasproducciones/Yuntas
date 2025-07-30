@@ -19,42 +19,83 @@ const DataTable = () => {
         <button className="bg-sky-600 font-semibold opacity-80 text-white px-4 py-2 rounded-xl">IMPRIMIR</button>
       </div>
       {/* Tabla */}
-      <table className="w-full border-separate border-spacing-2">
-        <thead>
-          <tr className="bg-cyan-500 opacity-80 text-white">
-            <th className="px-4 py-2 rounded-xl">ID</th>
-            <th className="px-4 py-2 rounded-xl">NOMBRE</th>
-            <th className="px-4 py-2 rounded-xl">GMAIL</th>
-            <th className="px-4 py-2 rounded-xl">TELÉFONO</th>
-            <th className="px-4 py-2 rounded-xl">SECCIÓN</th>
-            <th className="px-4 py-2 rounded-xl">FECHA</th>
-            <th className="px-4 py-2 rounded-xl">ACCIÓN</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={item.id} className={`text-center ${index % 2 === 0 ? "bg-gray-100" : "bg-gray-300"}`}>
-              <td className="px-4 font-bold rounded-xl">{item.id}</td>
-              <td className="px-4 font-bold rounded-xl">{item.nombre}</td>
-              <td className="px-4 rounded-xl">{item.gmail}</td>
-              <td className="px-4 font-bold rounded-xl">{item.telefono}</td>
-              <td className="px-4 font-bold rounded-xl">{item.seccion}</td>
-              <td className="px-4 font-bold rounded-xl">{item.fecha}</td>
-              <td className="px-4 rounded-xl">
-                {/* Contenedor de acciones con íconos */}
-                <div className="flex justify-center gap-2 rounded-xl p-1">
-                  <button className="p-2 text-red-600 hover:text-red-800 transition" title="Eliminar">
-                    <FaTrash size={18} />
-                  </button>
-                  <button className="p-2 text-green-600 hover:text-green-800 transition" title="Confirmar">
-                    <FaCheck size={18} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+       <div className="overflow-x-auto p-4">
+    <table
+      className="min-w-full text-sm text-center border-separate border-spacing-x-2 border-spacing-y-2"
+    >
+      <thead>
+        <tr>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >ID</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Nombre</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Gmail</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Teléfono</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Sección</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Fecha</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {/* <!-- Fila con datos impar (1) --> */}
+        <tr>
+          <td className="px-4 py-2 rounded-md font-bold bg-[#d9d9d9]">1</td>
+          <td className="px-4 py-2 rounded-md font-bold bg-[#d9d9d9]">Kiara</td>
+          <td className="px-4 py-2 rounded-md font-bold bg-[#d9d9d9]"
+            >namelose@gmail.com</td>
+          <td className="px-4 py-2 rounded-md font-bold bg-[#d9d9d9]">941825478</td>
+          <td className="px-4 py-2 rounded-md font-bold bg-[#d9d9d9]">WAOS</td>
+          <td className="px-4 py-2 rounded-md font-bold bg-[#d9d9d9]">25/01/2025</td>
+          <td
+            className="px-4 py-2 rounded-md font-bold bg-[#d9d9d9] flex justify-center gap-2"
+          >
+            <button className="text-red-500 hover:text-red-700">🗑️</button>
+            <button className="text-green-500 hover:text-green-700">✅</button>
+          </td>
+        </tr>
+
+        {/* <!-- Filas vacías con estilo alternado --> */}
+        {
+          Array.from({ length: 9 }).map((_, i) => {
+            const isEven = (i + 2) % 2 === 0;
+            const bg = isEven ? "bg-[#d9d9d94D]" : "bg-[#d9d9d9]";
+            return (
+              <tr>
+                <td className={`px-4 py-2 rounded-md font-bold ${bg}`}>{i + 2}</td>
+                <td className={`px-4 py-2 rounded-md ${bg}`} />
+                <td className={`px-4 py-2 rounded-md ${bg}`} />
+                <td className={`px-4 py-2 rounded-md ${bg}`} />
+                <td className={`px-4 py-2 rounded-md ${bg}`} />
+                <td className={`px-4 py-2 rounded-md ${bg}`} />
+                <td
+                  className={`px-4 py-2 rounded-md ${bg} flex justify-center gap-2`}
+                >
+                  {/* <button class="text-red-600 dark:text-red-400 cursor-not-allowed">
+                    🗑️
+                  </button> */}
+                  <button className="text-red-500 cursor-not-allowed">🗑️</button>
+
+                  <button className="text-green-300 cursor-not-allowed">✅</button>
+                </td>
+              </tr>
+            );
+          })
+        }
+      </tbody>
+    </table>
+  </div>
 
       {/* Botón de añadir datos con icono */}
       <button className="mt-4 bg-cyan-500 opacity-50 text-white px-4 py-2 rounded-xl flex items-center gap-2">
