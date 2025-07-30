@@ -29,7 +29,27 @@ const {
     <!--  fuente de Google Fonts Optimizada -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet" />
+    <!-- Precarga de la fuente Roboto para mejorar el LCP -->
+    <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <!-- Carga asíncrona de la hoja de estilos de Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <ClientRouter />
   </head>
