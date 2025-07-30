@@ -2,9 +2,17 @@
 // filepath: /src/pages/admin.astro
 import BlogsTable from "../components/dashboard/tables/BlogsTable.tsx";
 import LayoutAdmin from "../layouts/LayoutAdmin.astro";
+import AdminDashboard from "../components/admin/Admin.tsx";
 import "../styles/global.css";
 ---
 
 <LayoutAdmin title="admin">
-  <BlogsTable client:only="react" />
+  <!-- Componente de autenticación que se ejecuta primero -->
+  <AdminDashboard client:only="react" />
+  <!-- Contenido principal que solo se muestra si está autenticado -->
+  <div class="flex-1">
+    <div class="w-full">
+      <BlogsTable client:load />
+    </div>
+  </div>
 </LayoutAdmin>
