@@ -26,7 +26,7 @@ const useClienteAcciones = () => {
     clienteData: Partial<Cliente>
   ): Promise<Cliente> => {
     const token = getValidToken(); 
-    const url = `https://apiyuntas.yuntasproducciones.com/api/v1/clientes`; 
+    const url = `https://apiyuntas.yuntaspublicidad.com/api/v1/clientes`; 
 
     const response = await fetch(url, {
       method: "POST",
@@ -52,7 +52,7 @@ const useClienteAcciones = () => {
     updatedData: Partial<Cliente>
   ): Promise<Cliente> => {
     const token = getValidToken();
-    const url = `https://apiyuntas.yuntasproducciones.com/api/v1/clientes/${id}`;
+    const url = `https://apiyuntas.yuntaspublicidad.com/api/v1/clientes/${id}`;
 
     const response = await fetch(url, {
       method: "PUT",
@@ -75,7 +75,7 @@ const useClienteAcciones = () => {
   
   const deleteCliente = async (id: number): Promise<{ message: string }> => {
     const token = getValidToken();
-    const url = `https://apiyuntas.yuntasproducciones.com/api/v1/clientes/${id}`;
+    const url = `https://apiyuntas.yuntaspublicidad.com/api/v1/clientes/${id}`;
 
     const response = await fetch(url, {
       method: "DELETE",

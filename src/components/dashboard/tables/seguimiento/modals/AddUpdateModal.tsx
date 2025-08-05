@@ -36,7 +36,11 @@ const AddUpdateDataModal = ({ isOpen, setIsOpen, cliente, onRefetch }: AddDataMo
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-blue-800 text-white px-10 py-8 rounded-4xl w-3/5">
+     <div
+  style={{ backgroundColor: "#528FC2" }}
+  className="text-white px-10 py-8 rounded-4xl w-3/5"
+>
+
         <h2 className="text-2xl font-bold mb-4">
           {cliente ? "EDITAR CLIENTE" : "AÑADIR CLIENTE"}
         </h2>
@@ -80,14 +84,37 @@ const AddUpdateDataModal = ({ isOpen, setIsOpen, cliente, onRefetch }: AddDataMo
               className="w-full bg-white outline-none p-2 rounded-md text-black"
             />
           </div>
-
+         <div>
+            <label className="block">Sección</label>
+            <input
+              type="text"
+              name="seccion"
+              value={formData.seccion}
+              onChange={handleChange}
+              required
+              className="w-full bg-white outline-none p-2 rounded-md text-black"
+            />
+          </div>
+              <div>
+            <label className="block">Fecha</label>
+            <input
+              type="text"
+              name="fecha"
+              value={formData.created_at}
+              onChange={handleChange}
+              required
+              className="w-full bg-white outline-none p-2 rounded-md text-black"
+            />
+          </div>
           <div className="flex gap-2 mt-8 col-span-2">
-            <button
+           <button
               type="submit"
-              className="px-10 bg-blue-950 py-1 rounded-full text-lg hover:bg-blue-900"
+              style={{ backgroundColor: "#98D8DF" }}
+              className="px-10 py-1 rounded-full text-lg text-white hover:opacity-90 transition"
             >
               {cliente ? "Guardar cambios" : "Añadir cliente"}
             </button>
+
             <button
               onClick={() => setIsOpen(false)} // Cerrar el modal
               type="button"

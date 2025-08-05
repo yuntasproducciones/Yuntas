@@ -6,21 +6,45 @@ body {
   background: linear-gradient(45deg, #0D1030, #053BB8);
 }
 
-/* Aplicar las reglas del contenedor del formulario solo en pantallas a partir de 768px */
+/* Base: siempre empieza fuera */
+.mov-login {
+  transform: translateX(100%);
+  transition: transform 1s ease-in-out;
+  position: absolute;
+  width: 100%;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mov-login.active {
+  transform: translateX(0);
+}
+
+/* Desktop: ajusta a 50% */
 @media (min-width: 768px) {
   .mov-login {
-    position: absolute;
-    width: 50%; /* Ocupa el 50% de la pantalla */
-    right: 0;
-    transform: translateX(100%);
+    width: 50%;
+  }
+}
+
+/* En mobile: NO animación, NO transform */
+@media (max-width: 767px) {
+  .mov-login {
+    position: relative;
+    width: 100%;
+    right: auto;
+    transform: none;
+    transition: none;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 1s ease-in-out;
   }
 
   .mov-login.active {
-    transform: translateX(0); 
+    transform: none;
   }
 }

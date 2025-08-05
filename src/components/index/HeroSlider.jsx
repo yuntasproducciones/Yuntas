@@ -49,18 +49,9 @@ const HeroSlider = () => {
             />
             {/* Texto sobre el slider */}
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-8 pointer-events-none z-20">
-              <div
-                className="bg-cyan-400/95 rounded-full px-8 py-2 mb-4 shadow-lg border-4 border-cyan-300 flex items-center justify-center"
-                style={{
-                  boxShadow: "0 4px 24px 0 rgba(0, 188, 212, 0.25)",
-                  minWidth: "270px",
-                  maxWidth: "90vw",
-                }}
-              >
-                <span className="text-white font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl Montserrat tracking-wide" style={{ letterSpacing: "0.05em" }}>
-                  ESPECIALISTAS
-                </span>
-              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl Montserrat font-bold text-white sombra-title">
+                ESPECIALISTAS
+              </h1>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl Montserrat font-black text-white sombra-title">
                 EN DISEÑAR TU ESPACIO
               </h1>

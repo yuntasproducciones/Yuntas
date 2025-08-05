@@ -12,7 +12,9 @@ export default defineConfig({
     sitemap({
       filter: (page) => 
         !page.includes('/admin/') && 
-        !page.includes('/login/')
+        !page.includes('/login/') &&
+        !page.includes('/blogs/') &&
+        !page.includes('/products/producto/')
     })
   ],
 

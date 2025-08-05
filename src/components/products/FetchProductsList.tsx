@@ -10,18 +10,30 @@ export default function FetchProductsList() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(getApiUrl(config.endpoints.productos.list), {
+        console.log('🚀 Iniciando fetch de productos...');
+        
+        // Llamar directamente a la API de producción para evitar problemas de cache
+        const timestamp = new Date().getTime();
+        const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/v1/productos?_t=${timestamp}`;
+        console.log('📡 URL del endpoint:', apiUrl);
+        
+        const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json"
+            // Removemos headers de cache para evitar problemas CORS
           }
         });
 
-        if (!response.ok) throw new Error("Error al obtener productos de la API");
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('❌ Respuesta no OK:', errorText);
+          throw new Error(`Error al obtener productos de la API: ${response.status} - ${errorText}`);
+        }
 
         const jsonResponse = await response.json();
-        
+
         if (jsonResponse.success && jsonResponse.data?.data) {
           setProducts(jsonResponse.data.data);
         } else {
