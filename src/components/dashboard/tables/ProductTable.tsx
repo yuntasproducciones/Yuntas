@@ -26,29 +26,27 @@ export default function DataTable() {
       },
     });
     const responseData = await respuesta.json();
-    
+
     // Manejar la estructura de respuesta de la API v1
-    const productosData = responseData.data || responseData;
-    const productos = Array.isArray(productosData) ? productosData : [productosData];
-    
+    const productos = responseData.data?.data ?? [];
     setProductos(productos);
   };
 
   const eliminarProducto = async (id: string | number) => {
     const url = getApiUrl(config.endpoints.productos.delete(id));
     const token = localStorage.getItem("token");
-    
+
     // Verificar que el token exista
     if (!token) {
       Swal.fire({
         title: "Error de autenticación",
         text: "No se encontró token de acceso. Por favor inicia sesión nuevamente.",
         icon: "error",
-        confirmButtonText: "Entendido"
+        confirmButtonText: "Entendido",
       });
       return;
     }
-    
+
     const confirmacion = await Swal.fire({
       title: "¿Estás seguro?",
       text: "¡Esta acción no se puede deshacer!",
@@ -62,9 +60,9 @@ export default function DataTable() {
 
     if (confirmacion.isConfirmed) {
       try {
-        console.log('🗑️ Eliminando producto ID:', id);
-        console.log('URL delete:', url);
-        
+        console.log("🗑️ Eliminando producto ID:", id);
+        console.log("URL delete:", url);
+
         // Hacer la petición DELETE
         const respuesta = await fetch(url, {
           method: "DELETE",
@@ -75,9 +73,9 @@ export default function DataTable() {
           },
         });
 
-        console.log('Respuesta status:', respuesta.status);
+        console.log("Respuesta status:", respuesta.status);
         const data = await respuesta.json();
-        console.log('Respuesta data:', data);
+        console.log("Respuesta data:", data);
 
         if (respuesta.ok) {
           Swal.fire("¡Eliminado!", data.message, "success");
@@ -85,27 +83,36 @@ export default function DataTable() {
           obtenerDatos();
         } else {
           // Manejar diferentes tipos de errores
-          let errorMessage = data.message || 'Error desconocido al eliminar';
-          
+          let errorMessage = data.message || "Error desconocido al eliminar";
+
           if (respuesta.status === 401) {
-            errorMessage = 'Token expirado o inválido. Por favor inicia sesión nuevamente.';
+            errorMessage =
+              "Token expirado o inválido. Por favor inicia sesión nuevamente.";
             localStorage.removeItem("token");
           } else if (respuesta.status === 403) {
-            if (data.message?.includes('roles') || data.error?.includes('roles')) {
-              errorMessage = 'No tienes el rol necesario para eliminar productos.';
-            } else if (data.message?.includes('permission') || data.error?.includes('permission')) {
-              errorMessage = 'No tienes el permiso necesario para eliminar productos.';
+            if (
+              data.message?.includes("roles") ||
+              data.error?.includes("roles")
+            ) {
+              errorMessage =
+                "No tienes el rol necesario para eliminar productos.";
+            } else if (
+              data.message?.includes("permission") ||
+              data.error?.includes("permission")
+            ) {
+              errorMessage =
+                "No tienes el permiso necesario para eliminar productos.";
             } else {
-              errorMessage = 'Acceso denegado. Contacta al administrador.';
+              errorMessage = "Acceso denegado. Contacta al administrador.";
             }
           } else if (respuesta.status === 404) {
-            errorMessage = 'El producto no existe o ya fue eliminado.';
+            errorMessage = "El producto no existe o ya fue eliminado.";
           }
-          
+
           Swal.fire("Error", errorMessage, "error");
         }
       } catch (error) {
-        console.error('Error al eliminar producto:', error);
+        console.error("Error al eliminar producto:", error);
         Swal.fire("Error", "No se pudo conectar con el servidor.", "error");
       }
     }
@@ -119,25 +126,29 @@ export default function DataTable() {
   const handleSubmit = async function (formData: FormData) {
     const urlCreate = getApiUrl(config.endpoints.productos.create);
     const token = localStorage.getItem("token");
-    
+
     // Verificar que el token exista y sea válido
     if (!token) {
-      Swal.fire("Error", "No hay token de autenticación. Por favor inicia sesión.", "error");
+      Swal.fire(
+        "Error",
+        "No hay token de autenticación. Por favor inicia sesión.",
+        "error"
+      );
       return;
     }
-    
+
     // Debug: mostrar información del token
-    console.log('Token exists:', !!token);
-    console.log('Token length:', token.length);
-    console.log('Token preview:', token.substring(0, 20) + '...');
-    console.log('FormData entries:', [...formData.entries()]);
-    
+    console.log("Token exists:", !!token);
+    console.log("Token length:", token.length);
+    console.log("Token preview:", token.substring(0, 20) + "...");
+    console.log("FormData entries:", [...formData.entries()]);
+
     try {
       const url = currentProduct
         ? getApiUrl(config.endpoints.productos.update(currentProduct.id))
         : urlCreate;
 
-      console.log('Making request to:', url);
+      console.log("Making request to:", url);
 
       // Revertir: API v1 SÍ requiere autenticación en este caso
       const respuesta = await fetch(url, {
@@ -150,40 +161,43 @@ export default function DataTable() {
         },
         body: formData,
       });
-      
+
       // Debug: log de la respuesta para ver el error específico
-      console.log('Response status:', respuesta.status);
-      console.log('Response headers:', [...respuesta.headers.entries()]);
-      
+      console.log("Response status:", respuesta.status);
+      console.log("Response headers:", [...respuesta.headers.entries()]);
+
       const result = await respuesta.json();
-      console.log('Response data:', result);
-      
+      console.log("Response data:", result);
+
       if (respuesta.ok) {
         Swal.fire({
-          title: `${result.message || 'Producto guardado exitosamente'}`,
+          title: `${result.message || "Producto guardado exitosamente"}`,
           icon: "success",
         });
         setIsOpen(false);
         obtenerDatos();
       } else {
         // Manejar diferentes tipos de errores
-        let errorMessage = result.message || 'Error desconocido';
-        
+        let errorMessage = result.message || "Error desconocido";
+
         if (respuesta.status === 401) {
-          errorMessage = 'Token expirado o inválido. Por favor inicia sesión nuevamente.';
+          errorMessage =
+            "Token expirado o inválido. Por favor inicia sesión nuevamente.";
           // Opcional: limpiar token inválido y redirigir al login
           localStorage.removeItem("token");
           // window.location.href = "/login";
         } else if (respuesta.status === 403) {
-          errorMessage = 'Acceso denegado. Permisos insuficientes.';
+          errorMessage = "Acceso denegado. Permisos insuficientes.";
         } else if (respuesta.status === 422) {
-          errorMessage = 'Datos de entrada inválidos: ' + (result.message || 'Verifica los campos del formulario');
+          errorMessage =
+            "Datos de entrada inválidos: " +
+            (result.message || "Verifica los campos del formulario");
         }
-        
+
         Swal.fire("Error", errorMessage, "error");
       }
     } catch (error) {
-      console.error('Error en la petición:', error);
+      console.error("Error en la petición:", error);
       Swal.fire({
         title: `Hubo un error al insertar el producto`,
         icon: "error",
@@ -208,95 +222,98 @@ export default function DataTable() {
 
   useEffect(() => {
     obtenerDatos();
-    
   }, []);
 
+  useEffect(() => {
+    console.log("📦 Productos cargados:", productos);
+  }, [productos]);
+
   return (
-  <>
-    <div className="flex flex-row gap-4 mb-4">
-      <button
-        onClick={() => {
+    <>
+      <div className="flex flex-row gap-4 mb-4">
+        <button
+          onClick={() => {
+            setCurrentProduct(undefined);
+            setIsOpen(true);
+          }}
+          className="mt-4 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
+        >
+          Añadir Producto
+        </button>
+      </div>
+      <TableContainer tableType="productos">
+        <thead>
+          <tr className="bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold">
+            <th className="px-4 py-2 rounded-md">ID</th>
+            <th className="px-4 py-2 rounded-md">NOMBRE</th>
+            <th className="px-4 py-2 rounded-md">SECCIÓN</th>
+            <th className="px-4 py-2 rounded-md">PRECIO</th>
+            <th className="px-4 py-2 rounded-md">ACCIÓN</th>
+          </tr>
+        </thead>
+        <tbody>
+          {productos.map((item, index) => {
+            const isEven = index % 2 === 0;
+            const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
+            const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
+            const text = "text-gray-900 dark:text-gray-100";
+            const key = item.id ?? `producto-${index}`;
+
+            return (
+              <tr key={key} className={`${bgLight} ${bgDark}`}>
+                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                  {item.id}
+                </td>
+                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                  {item.nombreProducto || item.subtitle || item.nombre}
+                </td>
+                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                  {item.section || item.tagline || item.seccion}
+                </td>
+                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                  ${item.precioProducto || item.precio}
+                </td>
+                <td className={`px-4 py-2 rounded-md ${text}`}>
+                  <div className="flex justify-center gap-4">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+                      title="Editar"
+                    >
+                      <FaRegEdit size={18} />
+                    </button>
+                    <button
+                      onClick={() => eliminarProducto(item.id)}
+                      className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                      title="Eliminar"
+                    >
+                      <FaTrash size={18} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </TableContainer>
+
+      {/* Modal */}
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
           setCurrentProduct(undefined);
-          setIsOpen(true);
         }}
-        className="mt-4 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
+        title={currentProduct ? "Editar Datos" : "Ingresar Datos"}
+        form="eliminentechno3"
+        btnText={currentProduct ? "Guardar Cambios" : "Añadir"}
       >
-        Añadir Producto
-      </button>
-    </div>
-   <TableContainer tableType="productos">
-  <thead>
-    <tr className="bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold">
-      <th className="px-4 py-2 rounded-md">ID</th>
-      <th className="px-4 py-2 rounded-md">NOMBRE</th>
-      <th className="px-4 py-2 rounded-md">SECCIÓN</th>
-      <th className="px-4 py-2 rounded-md">PRECIO</th>
-      <th className="px-4 py-2 rounded-md">ACCIÓN</th>
-    </tr>
-  </thead>
-  <tbody>
-    {productos.map((item, index) => {
-      const isEven = index % 2 === 0;
-      const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
-      const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
-      const text = "text-gray-900 dark:text-gray-100";
-
-      return (
-        <tr key={item.id} className={`${bgLight} ${bgDark}`}>
-          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>{item.id}</td>
-          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
-            {item.nombreProducto || item.subtitle || item.nombre}
-          </td>
-          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
-            {item.section || item.tagline || item.seccion}
-          </td>
-          <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
-            ${item.precioProducto || item.precio}
-          </td>
-          <td className={`px-4 py-2 rounded-md ${text}`}>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => handleEdit(item)}
-                className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
-                title="Editar"
-              >
-                <FaRegEdit size={18} />
-              </button>
-              <button
-                onClick={() => eliminarProducto(item.id)}
-                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                title="Eliminar"
-              >
-                <FaTrash size={18} />
-              </button>
-            </div>
-          </td>
-        </tr>
-      );
-    })}
-  </tbody>
-</TableContainer>
-
-  
-
-    {/* Modal */}
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        setIsOpen(false);
-        setCurrentProduct(undefined);
-      }}
-      title={currentProduct ? "Editar Datos" : "Ingresar Datos"}
-      form="eliminentechno3"
-      btnText={currentProduct ? "Guardar Cambios" : "Añadir"}
-    >
-      <ProductForm
-        initialData={currentProduct}
-        onSubmit={handleSubmit}
-        isEditing={!!currentProduct}
-      />
-    </Modal>
-  </>
-);
-
+        <ProductForm
+          initialData={currentProduct}
+          onSubmit={handleSubmit}
+          isEditing={!!currentProduct}
+        />
+      </Modal>
+    </>
+  );
 }
