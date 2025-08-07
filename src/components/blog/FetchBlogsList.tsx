@@ -6,7 +6,7 @@ interface Blog {
   nombre_producto: string;
   subtitulo: string;
   imagen_principal: string;
-  link: string; // 👈 necesario para navegación
+  link: string;
   imagenes?: { ruta_imagen: string; texto_alt: string }[];
   parrafos?: { parrafo: string }[];
 }
@@ -15,7 +15,21 @@ export default function FetchBlogsList() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024 && window.innerWidth >= 640) {
+        setItemsPerPage(6); // Para 2x3 layout en tablets
+      } else {
+        setItemsPerPage(5); // Para desktop o móvil
+      }
+    };
+
+    handleResize(); 
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -27,7 +41,7 @@ export default function FetchBlogsList() {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-          }
+          },
         });
 
         if (!response.ok) {
@@ -44,28 +58,16 @@ export default function FetchBlogsList() {
         );
 
         setBlogs(validBlogs);
-
       } catch (err) {
         console.error("❌ Error al obtener blogs:", err);
 
         try {
-          const fallbackResponse = await fetch('/api/productos', {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json"
-            }
-          });
-
-          if (fallbackResponse.ok) {
-            const fallbackData = await fallbackResponse.json();
-            const fallbackBlogs = Array.isArray(fallbackData.data) ? fallbackData.data : [fallbackData.data];
-            setBlogs(fallbackBlogs);
-          } else {
-            setBlogs([]);
-          }
+          const fallbackResponse = await fetch("/api/productos");
+          const fallbackData = await fallbackResponse.json();
+          const fallbackBlogs = Array.isArray(fallbackData.data) ? fallbackData.data : [fallbackData.data];
+          setBlogs(fallbackBlogs);
         } catch (fallbackErr) {
-          console.error('❌ Error en fallback:', fallbackErr);
+          console.error("❌ Error en fallback:", fallbackErr);
           setBlogs([]);
         }
       } finally {
@@ -81,61 +83,52 @@ export default function FetchBlogsList() {
   const canGoRight = currentIndex < totalPages - 1;
 
   const goLeft = () => {
-    if (canGoLeft) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    if (canGoLeft) setCurrentIndex(currentIndex - 1);
   };
 
   const goRight = () => {
-    if (canGoRight) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    if (canGoRight) setCurrentIndex(currentIndex + 1);
   };
 
   const getCurrentBlogs = () => {
     const startIndex = currentIndex * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return blogs.slice(startIndex, endIndex);
+    return blogs.slice(startIndex, startIndex + itemsPerPage);
   };
-
-  if (loading) return (
-    <div className="min-h-screen grid place-content-center">
-      <div className="text-center">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-4"></div>
-        <p className="text-white text-2xl font-bold mb-2">Cargando productos...</p>
-      </div>
-    </div>
-  );
 
   const currentBlogs = getCurrentBlogs();
 
+  if (loading) {
+    return (
+      <div className="min-h-screen grid place-content-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-4"></div>
+          <p className="text-white text-2xl font-bold mb-2">Cargando productos...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen  py-16">
+    <div className="min-h-screen py-16">
       {/* Header */}
       <div className="text-center mb-12">
         <h2 className="text-white text-3xl md:text-4xl font-bold uppercase tracking-wide">
-          DESCUBRE MAS SOBRE NUESTROS PRODUCTOS
+          DESCUBRE MÁS SOBRE NUESTROS PRODUCTOS
         </h2>
       </div>
 
-      {/* Cards Container with Carousel */}
+      {/* Cards Container */}
       <div className="max-w-7xl mx-auto px-6 relative">
         <div className="overflow-hidden">
-          <div 
-            className="transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(0%)` }}
-          >
+          <div className="transition-transform duration-500 ease-in-out" style={{ transform: `translateX(0%)` }}>
             {currentBlogs.length > 0 ? (
-              <div className="space-y-8">
-                {/* Primera fila - 3 tarjetas */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {currentBlogs.slice(0, 3).map((blog) => (
-                    <div 
-                      key={blog.id}
-                      className="group cursor-pointer transform transition-all duration-300 "
-                    >
+              <>
+                {/* Layout 2x3 para sm y md */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 place-items-center lg:hidden">
+                  {currentBlogs.map((blog) => (
+                    <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
                       <div className="rounded-2xl p-1">
-                        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden max-w-[250px] ">
+                        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden w-[45vw] max-w-[250px] mx-auto">
                           <BlogCard blog={blog} />
                         </div>
                       </div>
@@ -143,26 +136,37 @@ export default function FetchBlogsList() {
                   ))}
                 </div>
 
-                {/* Segunda fila - 2 tarjetas centradas */}
-                {currentBlogs.length > 3 && (
-                  <div className="flex justify-center mt-12">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-24 max-w-2xl">
-                      {currentBlogs.slice(3, 5).map((blog) => (
-                        <div 
-                          key={blog.id}
-                          className="group cursor-pointer transform transition-all duration-300 "
-                        >
-                          <div className="rounded-2xl p-1">
-                            <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden max-w-[250px] ">
-                              <BlogCard blog={blog} />
-                            </div>
+                {/* Layout 3 arriba + 2 abajo para ≥1024px */}
+                <div className="hidden lg:block space-y-8">
+                  <div className="grid grid-cols-3 gap-8 justify-items-center">
+                    {currentBlogs.slice(0, 3).map((blog) => (
+                      <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
+                        <div className="rounded-2xl p-1">
+                          <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden max-w-[250px]">
+                            <BlogCard blog={blog} />
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
+
+                  {currentBlogs.length > 3 && (
+                    <div className="flex justify-center mt-12">
+                      <div className="grid grid-cols-2 gap-24 max-w-2xl">
+                        {currentBlogs.slice(3, 5).map((blog) => (
+                          <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
+                            <div className="rounded-2xl p-1">
+                              <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden max-w-[250px]">
+                                <BlogCard blog={blog} />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
             ) : (
               <div className="text-center py-12">
                 <p className="text-white/70 text-xl">No hay productos disponibles</p>
@@ -171,61 +175,52 @@ export default function FetchBlogsList() {
           </div>
         </div>
 
-        {/* Navigation Controls */}
+        {/* Navegación */}
         {blogs.length > itemsPerPage && (
-          <div className="flex justify-center items-center mt-16 space-x-8">
-            {/* Botón Izquierda */}
-            <button 
-              onClick={goLeft}
-              disabled={!canGoLeft}
-              className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
-                canGoLeft 
-                  ? 'border-white/50 text-white hover:bg-white/10 hover:border-white cursor-pointer' 
-                  : 'border-white/20 text-white/30 cursor-not-allowed'
-              }`}
-            >
-              <span className="text-2xl font-bold">&lt;</span>
-            </button>
+          <>
+            <div className="flex justify-center items-center mt-16 space-x-8">
+              <button
+                onClick={goLeft}
+                disabled={!canGoLeft}
+                className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
+                  canGoLeft
+                    ? "border-white/50 text-white hover:bg-white/10 hover:border-white cursor-pointer"
+                    : "border-white/20 text-white/30 cursor-not-allowed"
+                }`}
+              >
+                <span className="text-2xl font-bold">&lt;</span>
+              </button>
 
-            {/* Ver más button central */}
-            <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-4 rounded-full">
-              <span className="uppercase tracking-wide font-semibold text-lg">
-                ver más
-              </span>
+              <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-4 rounded-full">
+                <span className="uppercase tracking-wide font-semibold text-lg">ver más</span>
+              </div>
+
+              <button
+                onClick={goRight}
+                disabled={!canGoRight}
+                className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
+                  canGoRight
+                    ? "border-white/50 text-white hover:bg-white/10 hover:border-white cursor-pointer"
+                    : "border-white/20 text-white/30 cursor-not-allowed"
+                }`}
+              >
+                <span className="text-2xl font-bold">&gt;</span>
+              </button>
             </div>
 
-            {/* Botón Derecha */}
-            <button 
-              onClick={goRight}
-              disabled={!canGoRight}
-              className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
-                canGoRight 
-                  ? 'border-white/50 text-white hover:bg-white/10 hover:border-white cursor-pointer' 
-                  : 'border-white/20 text-white/30 cursor-not-allowed'
-              }`}
-            >
-              <span className="text-2xl font-bold">&gt;</span>
-            </button>
-          </div>
-        )}
-
-        {/* Indicadores de página */}
-        {blogs.length > itemsPerPage && (
-          <div className="flex justify-center mt-6 space-x-2">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentIndex(i)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  i === currentIndex 
-                    ? 'bg-white' 
-                    : 'bg-white/30 hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+            {/* Paginación */}
+            <div className="flex justify-center mt-6 space-x-2">
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentIndex(i)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${ i === currentIndex ? "bg-white" : "bg-white/30 hover:bg-white/50" }`}
+                />
+              ))}
+            </div>
+          </>
+)}
+</div>
+</div>
+);
 }

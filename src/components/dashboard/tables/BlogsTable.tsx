@@ -4,18 +4,17 @@ import AddBlogModal from "../AddBlogModel";
 import { config, getApiUrl } from "../../../../config";
 import TableContainer from "./TableContainer";
 
-// Definir el tipo de los datos adaptado a la estructura real de la API
+// Interfaz que coincide exactamente con la respuesta del API
 interface Blog {
   id: number;
-  titulo: string;
-  parrafo: string;
-  descripcion: string;
-  imagenPrincipal: string;
-  tituloBlog?: string;
-  subTituloBlog?: string;
-  videoBlog?: string;
-  tituloVideoBlog?: string;
-  created_at?: string | null;
+  producto_id: number; 
+  nombre_producto: string;
+  subtitulo: string;
+  imagen_principal: string;
+  imagenes?: { ruta_imagen: string; text_alt: string }[];
+  parrafos?: { parrafo: string }[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 const BlogsTable = () => {
@@ -25,29 +24,37 @@ const BlogsTable = () => {
   const [editBlog, setEditBlog] = useState<Blog | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(getApiUrl(config.endpoints.blogs.list));
-        const result = await response.json();
-        console.log("Datos recibidos:", result);
-
-        // Adaptar estructura
-        const adaptedData: Blog[] = (result.data || []).map((item: any) => ({
-          id: item.id,
-          titulo: item.nombre_producto,
-          parrafo: item.parrafos?.map((p: any) => p.contenido).join(" ") || "",
-          descripcion: item.subtitulo || "",
-          imagenPrincipal: item.imagen_principal,
-          created_at: item.created_at,
-        }));
-
-        setData(adaptedData);
-      } catch (error) {
-        console.error("❌ Error al cargar datos:", error);
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(getApiUrl(config.endpoints.blogs.list), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      
+      const result = await response.json();
+      console.log("Datos recibidos:", result);
 
+      // Los datos ya vienen en el formato correcto desde el API
+      if (result.success && result.data) {
+        setData(result.data);
+      } else {
+        console.error("Formato de respuesta inesperado:", result);
+        setData([]);
+      }
+    } catch (error) {
+      console.error("❌ Error al cargar datos:", error);
+      setData([]);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -63,7 +70,8 @@ const BlogsTable = () => {
 
   const handleDelete = async (id: number) => {
     const token = localStorage.getItem("token");
-    const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este elemento?");
+    const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este blog?");
+    
     if (confirmDelete) {
       try {
         const response = await fetch(getApiUrl(config.endpoints.blogs.delete(id)), {
@@ -76,15 +84,34 @@ const BlogsTable = () => {
 
         if (response.ok) {
           setData((prevData) => prevData.filter((item) => item.id !== id));
-          alert("Blog eliminado exitosamente");
+          alert("✅ Blog eliminado exitosamente");
         } else {
-          alert("Error al eliminar el Blog");
+          const errorData = await response.json().catch(() => ({}));
+          alert(`❌ Error al eliminar el blog: ${errorData.message || 'Error desconocido'}`);
         }
       } catch (error) {
         console.error("Error al eliminar:", error);
-        alert("Error al conectar con el servidor");
+        alert("❌ Error al conectar con el servidor");
       }
     }
+  };
+
+  // Función para obtener la URL completa de la imagen
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return '/placeholder-image.jpg';
+    
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    const baseUrl = 'https://apiyuntas.yuntaspublicidad.com';
+    return `${baseUrl}${imagePath}`;
+  };
+
+  // Función para truncar texto largo
+  const truncateText = (text: string, maxLength: number = 50) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
   return (
@@ -94,10 +121,10 @@ const BlogsTable = () => {
           <thead>
             <tr className="bg-blue-950 text-white">
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">ID</th>
-              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">TÍTULO</th>
-              {/* <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">PÁRRAFO</th> */}
-              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">DESCRIPCIÓN</th>
+              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">PRODUCTO</th>
+              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">SUBTÍTULO</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">IMAGEN</th>
+              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">FECHA</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">ACCIÓN</th>
             </tr>
           </thead>
@@ -108,16 +135,28 @@ const BlogsTable = () => {
                   key={item.id}
                   className={`text-center ${item.id % 2 === 0 ? "bg-gray-100" : "bg-gray-300"}`}
                 >
-                  <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">{item.id}</td>
-                  <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">{item.titulo}</td>
-                  {/* <td className="px-4 py-2 rounded-xl border border-gray-300">{item.parrafo}</td> */}
-                  <td className="px-4 py-2 rounded-xl border border-gray-300">{item.descripcion}</td>
+                  <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
+                    {item.id}
+                  </td>
+                  <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
+                    {truncateText(item.nombre_producto || 'Sin nombre', 30)}
+                  </td>
+                  <td className="px-4 py-2 rounded-xl border border-gray-300">
+                    {truncateText(item.subtitulo, 40)}
+                  </td>
                   <td className="px-4 py-2 rounded-xl border border-gray-300">
                     <img
-                      src={item.imagenPrincipal}
-                      alt={item.titulo}
+                      src={getImageUrl(item.imagen_principal)}
+                      alt={item.nombre_producto || 'Blog'}
                       className="w-16 h-16 rounded-md mx-auto object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder-image.jpg';
+                      }}
                     />
+                  </td>
+                  <td className="px-4 py-2 rounded-xl border border-gray-300 text-sm">
+                    {item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : 'N/A'}
                   </td>
                   <td className="px-4 py-2 rounded-xl border border-gray-300">
                     <div className="flex justify-center gap-2 rounded-xl p-1">
@@ -132,6 +171,7 @@ const BlogsTable = () => {
                         className="p-2 text-yellow-600 hover:text-yellow-800 transition"
                         title="Editar"
                         onClick={() => {
+                          console.log("Blog a editar:", item);
                           setEditBlog(item);
                           setIsModalOpen(true);
                         }}
@@ -144,8 +184,8 @@ const BlogsTable = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center py-4 text-gray-500">
-                  Cargando datos...
+                <td colSpan={7} className="text-center py-4 text-gray-500">
+                  {data.length === 0 ? "No hay blogs disponibles" : "Cargando datos..."}
                 </td>
               </tr>
             )}
@@ -153,23 +193,52 @@ const BlogsTable = () => {
         </TableContainer>
 
         {/* Paginación */}
-        <div className="flex justify-center mt-4">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50"
-          >
-            Anterior
-          </button>
-          <span className="mx-4 self-center">{`Página ${currentPage} de ${totalPages}`}</span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50"
-          >
-            Siguiente
-          </button>
-        </div>
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-4 gap-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Anterior
+            </button>
+            
+            <div className="flex gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    className={`px-3 py-2 rounded-md ${
+                      currentPage === pageNum
+                        ? 'bg-blue-950 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Siguiente
+            </button>
+          </div>
+        )}
+        <button onClick={() => {
+            setEditBlog(null);       // Limpia la edición previa
+            setIsModalOpen(true);    // Abre el modal limpio
+          }}
+          className="mt-4 mb-6 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-2 rounded-full"
+        >
+          Añadir Blog
+        </button>
 
         <AddBlogModal
           isOpen={isModalOpen}
@@ -178,7 +247,7 @@ const BlogsTable = () => {
           onSuccess={() => {
             setEditBlog(null);
             setIsModalOpen(false);
-            window.location.reload();
+            fetchData(); // Mejor que window.location.reload()
           }}
         />
       </div>
