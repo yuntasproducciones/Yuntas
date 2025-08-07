@@ -180,6 +180,8 @@ export default function FetchBlogsList() {
           <>
             <div className="flex justify-center items-center mt-16 space-x-8">
               <button
+                aria-label="Página anterior"
+                title="Página anterior"
                 onClick={goLeft}
                 disabled={!canGoLeft}
                 className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
@@ -196,6 +198,8 @@ export default function FetchBlogsList() {
               </div>
 
               <button
+               aria-label="Página siguiente"
+                title="Página siguiente"
                 onClick={goRight}
                 disabled={!canGoRight}
                 className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 ${
@@ -213,6 +217,8 @@ export default function FetchBlogsList() {
               {Array.from({ length: totalPages }, (_, i) => (
                 <button
                   key={i}
+                  aria-label={`Ir a la página ${i + 1}`}
+                  title={`Ir a la página ${i + 1}`}
                   onClick={() => setCurrentIndex(i)}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${ i === currentIndex ? "bg-white" : "bg-white/30 hover:bg-white/50" }`}
                 />
