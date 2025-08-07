@@ -45,7 +45,7 @@ export const config = {
       list: "/api/blogs",
       detail: (id: number | string) => `/api/blogs/${id}`,
       create: "/api/blogs",
-      update: (id: number | string) => `/api/blogs/${id}`,
+      update: (id: number | string) => `/api/blog/${id}`,
       delete: (id: number | string) => `/api/blogs/${id}`,
     },
   },
