@@ -23,30 +23,42 @@ const ProductCard = ({ producto }) => {
     // Forzar siempre la URL de producción para las imágenes
     const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
     
-    return (
-        <a
-            href={`/products/producto/?link=${link}`}
-            className="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group my-2 sm:my-3 md:my-4"
-        >
-        <div className="h-[340px] w-[250px] overflow-hidden rounded-3xl mx-auto">
-            {imagenUrl ? (
-                <img
-                    className="w-full h-full object-cover object-center"
-                    src={`${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
-                    alt={imagenAlt}
-                    style={{ width: '250px', height: '340px' }}
-                />
-            ) : (
-                <div className="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                    <p className="text-white text-xl font-bold">Sin imagen</p>
-                </div>
-            )}
-        </div>
-        <p className="text-black py-2 px-5 text-base sm:text-lg md:text-xl font-bold text-center absolute bottom-2 bg-gradient-to-r from-cyan-600 to-cyan-300 rounded-full">
-            {titulo || "Producto sin título"}
+    // ProductCard modificado para coincidir con el estilo de la imagen
+// ProductCard con el nombre fuera de la card
+// ProductCard modificado para coincidir con el estilo de la imagen
+// ProductCard con el nombre fuera de la card
+return (
+  <a
+    href={`/products/producto/?link=${link}`}
+    className="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group mb-8"
+  >
+    {/* Contenedor principal con dimensiones fijas */}
+    <div className="relative w-[280px] bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700">
+      
+      {/* Imagen del producto */}
+      <div className="h-[200px] w-[280px] overflow-hidden">
+        {imagenUrl ? (
+          <img
+            className="w-full h-full object-cover object-center"
+            src={`${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
+            alt={imagenAlt}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+            <p className="text-white text-xl font-bold">Sin imagen</p>
+          </div>
+        )}
+      </div>
+    </div>
+    {/* Título en la parte inferior */}
+      <div className="p-4 mt-2">
+        <p className="text-white text-center text-sm font-semibold leading-tight">
+          {titulo || "Producto sin título"}
         </p>
-        </a>
-    );
+      </div>
+
+  </a>
+);
 };
 
 export default ProductCard;
