@@ -5,4 +5,4 @@ import logo from "../assets/images/yuntas_publicidad_logo.webp";
 const { variant = "default" } = Astro.props;
 ---
 
-<Navbarjsx logo={logo} variant={variant} client:load />
+<Navbarjsx logo={logo} variant={variant} pathname={Astro.url.pathname} client:load />

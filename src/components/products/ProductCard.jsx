@@ -40,7 +40,7 @@ return (
         {imagenUrl ? (
           <img
             className="w-full h-full object-cover object-center"
-            src={`${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
+            src={`${imagenUrl}`}
             alt={imagenAlt}
           />
         ) : (
