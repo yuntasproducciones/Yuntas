@@ -17,16 +17,9 @@ const ProductCard = ({ producto }) => {
     
     console.log('🔗 Link del producto:', link);
     
-    // Determinar la URL base para las imágenes (local vs desplegada)
-    // const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    // const imageBaseUrl = isLocalDev ? 'http://127.0.0.1:8000' : 'https://apiyuntas.yuntaspublicidad.com';
-    // Forzar siempre la URL de producción para las imágenes
+    
     const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
     
-    // ProductCard modificado para coincidir con el estilo de la imagen
-// ProductCard con el nombre fuera de la card
-// ProductCard modificado para coincidir con el estilo de la imagen
-// ProductCard con el nombre fuera de la card
 return (
   <a
     href={`/products/producto/?link=${link}`}
@@ -40,7 +33,8 @@ return (
         {imagenUrl ? (
           <img
             className="w-full h-full object-cover object-center"
-            src={`${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
+            src={imagenUrl.startsWith('http') ? imagenUrl : `${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
+
             alt={imagenAlt}
           />
         ) : (

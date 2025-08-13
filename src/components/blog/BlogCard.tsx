@@ -33,7 +33,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
 
   const handleCardClick = () => {
     // Navegar a la página de detalle del blog usando la ruta dinámica
-    window.location.href = `/blogs/${blog.id}`;
+    window.location.href = `/blogs/${blog.link}`;
   };
 
   const handleImageError = () => {

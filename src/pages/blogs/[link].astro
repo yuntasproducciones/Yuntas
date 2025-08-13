@@ -1,0 +1,41 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BlogDetail from "../../components/blog/BlogPage.jsx";
+import { blogService } from "../../services/blogService";
+import type BlogAPI from "../../models/Blog";
+
+export async function getStaticPaths() {
+  const response = await blogService.getAllBlogs();
+  const blogs = response.data;
+
+  return blogs
+    .filter(
+      (blog: BlogAPI) =>
+        typeof blog.link === "string" && blog.link.trim() !== ""
+    )
+    .map((blog: BlogAPI) => ({
+      params: { link: blog.link },
+    }));
+}
+
+const { link } = Astro.params;
+
+let article: BlogAPI | null = null;
+let error: string | null = null;
+
+try {
+  const response = await blogService.getBlogByLink(link);
+  article = response.data;
+} catch (err) {
+  console.error("Error obteniendo blog:", err);
+  error = err instanceof Error ? err.message : "Error desconocido";
+}
+
+if (!article) {
+  throw new Error(`Artículo no encontrado: ${link}`);
+}
+---
+
+<Layout title={article.nombre_producto}>
+  <BlogDetail client:load article={article} />
+</Layout>

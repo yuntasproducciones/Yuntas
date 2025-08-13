@@ -44,6 +44,7 @@ export const config = {
       // Endpoints de blogs
       list: "/api/blogs",
       detail: (id: number | string) => `/api/blogs/${id}`,
+      link: (link: string) => `/api/blogs/link/${link}`,
       create: "/api/blogs",
       update: (id: number | string) => `/api/blog/${id}`,
       delete: (id: number | string) => `/api/blogs/${id}`,
