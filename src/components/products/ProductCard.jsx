@@ -33,8 +33,8 @@ return (
         {imagenUrl ? (
           <img
             className="w-full h-full object-cover object-center"
-            src={imagenUrl.startsWith('http') ? imagenUrl : `${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
 
+            src={imagenUrl.startsWith('http') ? imagenUrl : `${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`}
             alt={imagenAlt}
           />
         ) : (
