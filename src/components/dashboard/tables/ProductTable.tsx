@@ -9,6 +9,8 @@ import TableContainer from "./TableContainer";
 
 export default function DataTable() {
   const [productos, setProductos] = useState<Producto[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 8;
   const [isOpen, setIsOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<Producto | undefined>(
     undefined
@@ -28,7 +30,7 @@ export default function DataTable() {
     const responseData = await respuesta.json();
 
     // Manejar la estructura de respuesta de la API v1
-    const productos = responseData.data?.data ?? [];
+    const productos = responseData.data ?? [];
     setProductos(productos);
   };
 
@@ -117,6 +119,15 @@ export default function DataTable() {
       }
     }
   };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = productos.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+  
+  const totalPages = Math.ceil(productos.length / itemsPerPage);
 
   const handleEdit = (producto: Producto) => {
     setCurrentProduct(producto);
@@ -252,7 +263,7 @@ export default function DataTable() {
           </tr>
         </thead>
         <tbody>
-          {productos.map((item, index) => {
+          {currentItems.map((item, index) => {
             const isEven = index % 2 === 0;
             const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
             const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
@@ -296,7 +307,45 @@ export default function DataTable() {
           })}
         </tbody>
       </TableContainer>
+  {/* Paginación */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-4 gap-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Anterior
+            </button>
+            
+            <div className="flex gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    className={`px-3 py-2 rounded-md ${
+                      currentPage === pageNum
+                        ? 'bg-blue-950 text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
 
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Siguiente
+            </button>
+          </div>
+        )}
       {/* Modal */}
       <Modal
         isOpen={isOpen}
