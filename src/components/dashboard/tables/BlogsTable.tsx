@@ -22,9 +22,11 @@ const BlogsTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
   const [editBlog, setEditBlog] = useState<Blog | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(getApiUrl(config.endpoints.blogs.list), {
@@ -51,6 +53,8 @@ const BlogsTable = () => {
     } catch (error) {
       console.error("❌ Error al cargar datos:", error);
       setData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,8 +133,14 @@ const BlogsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.length > 0 ? (
-              currentItems.map((item) => (
+          {loading ? (
+            <tr>
+              <td colSpan={7} className="text-center py-4 text-gray-500">
+                Cargando blogs...
+              </td>
+            </tr>
+          ) : currentItems.length > 0 ? (
+            currentItems.map((item) => (
                 <tr
                   key={item.id}
                   className={`text-center ${item.id % 2 === 0 ? "bg-gray-100" : "bg-gray-300"}`}
@@ -185,7 +195,7 @@ const BlogsTable = () => {
             ) : (
               <tr>
                 <td colSpan={7} className="text-center py-4 text-gray-500">
-                  {data.length === 0 ? "No hay blogs disponibles" : "Cargando datos..."}
+                  No hay blogs disponibles
                 </td>
               </tr>
             )}

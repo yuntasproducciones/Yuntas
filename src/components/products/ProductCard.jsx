@@ -22,7 +22,7 @@ const ProductCard = ({ producto }) => {
     
 return (
   <a
-    href={`/products/producto/?link=${link}`}
+   href={`/products/producto/?link=${encodeURIComponent(link)}`}
     className="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group mb-8"
   >
     {/* Contenedor principal con dimensiones fijas */}

@@ -21,11 +21,16 @@ export default function ProductPage(){
         console.log('Buscando producto con link:', linkParam);
         console.log('URL de API:', getApiUrl(config.endpoints.productos.link(linkParam)));
 
-        fetch(getApiUrl(config.endpoints.productos.link(linkParam)))
-            .then(response => {
-                console.log('Respuesta del servidor:', response.status);
-                return response.json();
-            })
+      fetch(getApiUrl(config.endpoints.productos.link(linkParam)))
+        .then(async response => {
+            console.log('Respuesta del servidor:', response.status);
+            if (!response.ok) {
+            // Intentar obtener texto para debug
+            const text = await response.text();
+            throw new Error(`Error HTTP ${response.status}: ${text.substring(0, 100)}`);
+            }
+            return response.json();
+        })
             .then(data => {
                 console.log('Datos recibidos:', data);
                 
@@ -97,19 +102,64 @@ export default function ProductPage(){
         );
     }
 
-    // Determinar la URL base para las imágenes - usando siempre producción como ProductCard
-    const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
+    // Determinar la URL base para las imágenes
+    const isLocalDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const imageBaseUrl = isLocalDev ? 'http://127.0.0.1:8000' : 'https://apiyuntas.yuntaspublicidad.com';
 
     const { title, subtitle, description, images, specs: allSpecs, benefits, image } = product.data;
 
-    // Función helper para construir URLs de imágenes - ARREGLADA
-    const buildImageUrl = (imagenUrl) => {
-        if (!imagenUrl) return '/placeholder-image.jpg';
-        return imagenUrl.startsWith('http') ? imagenUrl : `${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`;
-    };
+    // Función helper para construir URLs de imágenes (simplificada como BlogDetail)
+const buildImageUrl = (imagePath) => {
+  if (!imagePath) return '/placeholder-image.jpg';
+
+  const path = imagePath?.startsWith('/')
+    ? imagePath
+    : `/${imagePath}`;
+
+  return `${imageBaseUrl}${path}`;
+};
+
+    
+    console.log('=== DEBUGGING COMPLETO ===');
+  console.log('Datos del producto procesados:', {
+  title,
+  images,
+  image,
+  allSpecs,
+  imageUrls: {
+    banner: buildImageUrl(image),
+    specs: images?.[1]?.url_imagen ? buildImageUrl(images[1].url_imagen) : 'No disponible',
+    benefits: images?.[2]?.url_imagen ? buildImageUrl(images[2].url_imagen) : 'No disponible'
+  }
+});
+
+    
+    console.log('=== DEBUGGING IMÁGENES ===');
+    console.log('imageBaseUrl:', imageBaseUrl);
+    console.log('imagen_principal:', image);
+    
+    if (images && images.length > 0) {
+        images.forEach((img, index) => {
+            console.log(`Imagen ${index}:`, {
+                raw: img,
+                url_imagen: img.url_imagen,
+                fullUrl: buildImageUrl(img.url_imagen),
+                existe_url_imagen: !!img.url_imagen
+            });
+        });
+    } else {
+        console.log('No hay imágenes en el array');
+    }
+    
+    console.log('URLs construidas:', {
+        banner: buildImageUrl(image),
+        specs: images?.[1]?.url_imagen ? buildImageUrl(images[1].url_imagen) : 'No disponible - ' + (images?.[1] ? 'imagen existe pero sin url_imagen' : 'no hay imagen en índice 1'),
+        benefits: images?.[2]?.url_imagen ? buildImageUrl(images[2].url_imagen) : 'No disponible - ' + (images?.[2] ? 'imagen existe pero sin url_imagen' : 'no hay imagen en índice 2')
+    });
     
     return (
-        <div className="w-full">
+        <>
+            <div className="w-full">
                 {/* Banner principal */}
                 <img
                     id="product-img"
@@ -121,18 +171,18 @@ export default function ProductPage(){
                 {/* Hero Banner */}
                 <h2 className="font-extrabold text-center text-5xl py-16 px-4 text-blue-950">{title}</h2>
 
-            {/* Sección de Especificaciones */}
-            <div className="bg-indigo-950 py-12 lg:py-20">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Main Content - Especificaciones */}
+                <ProductSection>
+                    {/* Left Column - Gallery */}
                     <motion.div
-                        className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center"
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                        className="space-y-4 w-full max-w-[440px] md:justify-self-end"
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6 }}
                         viewport={{ once: true, amount: 0.2 }}
                     >
-                      {/* Imagen para Especificaciones */}
-                        <div className="mx-auto w-2/3 md:w-full aspect-[1/1] overflow-hidden flex items-center justify-center border-2">
+                        {/* Imagen para Especificaciones */}
+                        <div className="mx-auto w-2/3 md:w-full aspect-[1/1] overflow-hidden flex items-center justify-center border-2 border-red-500">
                             <img
                                 id="product-viewer"
                                 src={
@@ -144,7 +194,7 @@ export default function ProductPage(){
                                 className="w-full rounded-2xl object-contain"
                                 onError={(e) => {
                                     console.error('Error cargando imagen specs:', e.target.src);
-                                    // e.target.style.border = '2px solid red';
+                                    e.target.style.border = '2px solid red';
                                     e.target.alt = 'Error cargando imagen: ' + e.target.src;
                                 }}
                                 onLoad={(e) => {
@@ -152,118 +202,100 @@ export default function ProductPage(){
                                 }}
                             />
                         </div>
+                    </motion.div>
 
-                        {/* Especificaciones */}
-                        <div className="order-1 lg:order-2 text-white">
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 text-center lg:text-left">
-                                Especificaciones
-                            </h2>
-                            <div className="space-y-4">
+                    {/* Right Column - Product Info */}
+                    <motion.div
+                        className="content-center md:justify-self-start"
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                    >
+                        <div className="grid gap-6 md:gap-8 rounded-lg mb-12 md:mb-0 text-white">
+                            <h3 className="font-extrabold mb-2 text-3xl">Especificaciones:</h3>
+                            <ul className="space-y-2" id="specs-list">
                                 {Object.entries(allSpecs)
                                     .filter(([key]) => key.toLowerCase().startsWith('spec'))       
                                     .map(([key, value]) => (
-                                        <div key={key} className="flex items-start gap-3">
-                                            <div className="flex-shrink-0 mt-1">
-                                                <FaRegSquareCheck className="text-cyan-400 text-xl sm:text-2xl" />
-                                            </div>
-                                            <p className="text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed">
-                                                {value}
-                                            </p>
-                                        </div>
+                                        <li className="text-2xl flex items-center" key={key}>
+                                            <FaRegSquareCheck className="mr-3" /> 
+                                            {value}
+                                        </li>
                                     ))}
-                            </div>
+                            </ul>
                         </div>
                     </motion.div>
-                </div>
-            </div>
+                </ProductSection>
 
-            {/* Sección de Información */}
-            <div className="bg-white py-12 lg:py-20">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-950 mb-8">
-                        Información
-                    </h2>
-                    <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 leading-relaxed font-medium">
-                        {description}
-                    </p>
+                <div className="text-center py-16 px-4 text-blue-950">
+                    <p className="font-extrabold text-3xl mb-4">Información</p>
+                    <p className="font-semibold text-xl">{description}</p>
                 </div>
-            </div>
                 
-            {/* Sección de Beneficios */}
-            <div className="bg-indigo-950 py-12 lg:py-20">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Benefit Content */}
+                <ProductSection>
+                    {/* Left Column - Benefits */}
                     <motion.div
-                        className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center"
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                        className="content-center md:justify-self-end my-12"
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6 }}
                         viewport={{ once: true, amount: 0.2 }}
                     >
-                        {/* Beneficios */}
-                        <div className="text-white">
-                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 text-center lg:text-left">
-                                Beneficios:
-                            </h2>
-                            <div className="space-y-4">
+                        <div className="grid gap-6 md:gap-8 rounded-lg mt-12 md:mt-0 text-white">
+                            <h3 className="font-extrabold mb-2 text-3xl">Beneficios:</h3>
+                            <ul className="space-y-2" id="benefits-list">
                                 {Object.entries(allSpecs)
                                     .filter(([key]) => key.toLowerCase().startsWith('beneficio'))
                                     .map(([key, value]) => (
-                                        <div key={key} className="flex items-start gap-3">
-                                            <div className="flex-shrink-0 mt-1">
-                                                <FaRegSquareCheck className="text-cyan-400 text-xl sm:text-2xl" />
-                                            </div>
-                                            <p className="text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed">
-                                                {value}
-                                            </p>
-                                        </div>
+                                        <li className="text-2xl flex items-center" key={key}>
+                                            <FaRegSquareCheck className="mr-3" /> 
+                                            {value}
+                                        </li>
                                     ))}
-                            </div>
-                        </div>
-                        
-                        {/* Imagen de beneficios */}
-                        <div className="flex justify-center lg:justify-end">
-                            <div className="relative max-w-sm w-full">
-                                <div className="aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
-                                    <img
-                                        src={
-                                            images && images.length > 2 && images[2]?.url_imagen
-                                                ? buildImageUrl(images[2].url_imagen)
-                                                : buildImageUrl(image)
-                                        }
-                                        alt={'Beneficios de ' + title}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                {/* Efecto de glow */}
-                                <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-xl opacity-60 -z-10"></div>
-                            </div>
+                            </ul>
                         </div>
                     </motion.div>
-                </div>
-            </div>
-
-            {/* Call To Action */}
-            <div className="bg-indigo-950 py-16 lg:py-20">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    
+                    {/* Right Column - Images */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        className="space-y-4 max-w-[250px] sm:max-w-[300px] py-12 md:justify-self-start"
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
-                        viewport={{ once: true, amount: 0.3 }}
+                        viewport={{ once: true, amount: 0.2 }}
                     >
-                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
-                            ¿Encontraste lo que buscabas?
-                        </h2>
-                        <a 
-                            href="/contact" 
-                            className="inline-block bg-gradient-to-r from-cyan-400 to-cyan-600 hover:from-cyan-500 hover:to-cyan-700 text-white font-bold text-xl sm:text-2xl lg:text-3xl px-12 sm:px-16 lg:px-20 py-4 sm:py-5 lg:py-6 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/50 relative overflow-hidden group"
-                        >
-                            <span className="relative z-10">Cotizar</span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                        </a>
+                        {/* Imagen para Beneficios */}
+                        <div className="overflow-hidden rounded-3xl border-2 border-blue-500">
+                            <img
+                                id="product-benefits-img"
+                                src={
+                                    images && images.length > 2 && images[2]?.url_imagen
+                                        ? buildImageUrl(images[2].url_imagen)
+                                        : buildImageUrl(image)
+                                }
+                                alt={'Beneficios de ' + title}
+                                className="w-full h-[600px] mx-auto my-auto object-cover"
+                                onError={(e) => {
+                                    console.error('Error cargando imagen benefits:', e.target.src);
+                                    e.target.style.border = '2px solid red';
+                                    e.target.alt = 'Error cargando imagen: ' + e.target.src;
+                                }}
+                                onLoad={(e) => {
+                                    console.log('Imagen benefits cargada correctamente:', e.target.src);
+                                }}
+                            />
+                        </div>
                     </motion.div>
-                </div>
+                </ProductSection>
+
+                {/* Call To Action Button */}
+                <div className="flex flex-col justify-center items-center bg-indigo-950 py-12">
+                    <p className="text-white text-3xl font-semibold">¿Encontraste lo que buscabas?</p>
+                    <a href="/contact" className="my-6 text-white font-extrabold bg-gradient-to-l from-cyan-300 to-cyan-600 px-20 py-4 rounded-full text-lg sm:text-2xl hover:from-cyan-600 hover:to-cyan-300">Cotizar</a>
+                </div>  
             </div>
-        </div>
+        </>
     )
 }

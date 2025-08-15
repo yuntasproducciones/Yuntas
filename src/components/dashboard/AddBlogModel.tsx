@@ -78,7 +78,7 @@ const AddBlogModal = ({
 
     if (blogToEdit) {
       setFormData({
-        producto_id: blogToEdit.producto_id.toString(),
+        producto_id: blogToEdit.producto_id?.toString() || "",
         titulo: blogToEdit.titulo || "",
         etiqueta_link: blogToEdit.etiqueta_link || "",
         subtitulo: blogToEdit.subtitulo || "",
@@ -372,12 +372,11 @@ const AddBlogModal = ({
               {/* Subtítulo */}
               <div className="md:col-span-2">
                 <label className="block font-medium mb-1">Subtítulo</label>
-                <textarea
+                <input
                   name="subtitulo"
                   value={formData.subtitulo}
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded px-3 py-2"
-                  rows={3}
                   required
                 />
               </div>

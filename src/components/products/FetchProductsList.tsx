@@ -36,12 +36,13 @@ export default function FetchProductsList() {
 
         const jsonResponse = await response.json();
 
-        if (jsonResponse.success && jsonResponse.data?.data) {
-          setProducts(jsonResponse.data.data);
-        } else {
-          console.error("Error en la respuesta:", jsonResponse.message);
-          setProducts([]);
-        }
+       if (jsonResponse.success && Array.isArray(jsonResponse.data)) {
+        setProducts(jsonResponse.data);
+      } else {
+        console.error("Error en la respuesta:", jsonResponse.message);
+        setProducts([]);
+      }
+
 
       } catch (err) {
         console.error("Error al obtener productos:", err);
