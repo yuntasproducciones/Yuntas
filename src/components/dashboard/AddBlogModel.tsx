@@ -1,12 +1,14 @@
 import { config, getApiUrl } from "../../../config";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 interface BlogPOST {
   producto_id: string;
   titulo: string;
-  etiqueta_link: string;
   subtitulo: string;
   link: string;
+  meta_titulo: string;
+  meta_descripcion: string;
   imagen_principal: File | null;
   alt_imagen_principal: string;
   imagen_card: File | null;
@@ -21,10 +23,10 @@ interface Blog {
   producto_id: number;
   nombre_producto: string;
   titulo?: string;
-  etiqueta_link?: string;
-  resumen?: string;
   subtitulo: string;
   link?: string;
+  meta_titulo?: string;
+  meta_descripcion?: string;
   imagen_principal: string;
   imagen_card?: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];
@@ -38,6 +40,7 @@ interface Blog {
 interface Producto {
   id: number;
   nombre: string;
+  link: string;
 }
 
 interface AddBlogModalProps {
@@ -55,13 +58,20 @@ const AddBlogModal = ({
 }: AddBlogModalProps) => {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [selectedParagraphIndex, setSelectedParagraphIndex] = useState<number | null>(null);
+  const [selectedTextRange, setSelectedTextRange] = useState<{ start: number; end: number } | null>(null);
+  const [selectedText, setSelectedText] = useState("");
+  const [isProductLinkModalOpen, setIsProductLinkModalOpen] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
 
   const defaultFormData: BlogPOST = {
     producto_id: "",
     titulo: "",
-    etiqueta_link: "",
     subtitulo: "",
     link: "",
+    meta_titulo: "",
+    meta_descripcion: "",
     imagen_principal: null,
     alt_imagen_principal: "",
     imagen_card: null,
@@ -80,9 +90,10 @@ const AddBlogModal = ({
       setFormData({
         producto_id: blogToEdit.producto_id?.toString() || "",
         titulo: blogToEdit.titulo || "",
-        etiqueta_link: blogToEdit.etiqueta_link || "",
         subtitulo: blogToEdit.subtitulo || "",
         link: blogToEdit.link || "",
+        meta_titulo: blogToEdit.meta_titulo || "",
+        meta_descripcion: blogToEdit.meta_descripcion || "",
         imagen_principal: null,
         alt_imagen_principal: blogToEdit.alt_imagen_principal || "",
         imagen_card: null,
@@ -98,14 +109,27 @@ const AddBlogModal = ({
           blogToEdit.parrafos?.[1]?.parrafo || "",
           blogToEdit.parrafos?.[2]?.parrafo || "",
         ],
-
       });
     } else {
-      setFormData(defaultFormData);
+      setFormData({
+        producto_id: "",
+        titulo: "",
+        subtitulo: "",
+        link: "",
+        meta_titulo: "",
+        meta_descripcion: "",
+        imagen_principal: null,
+        alt_imagen_principal: "",
+        imagen_card: null,
+        alt_imagen_card: "",
+        imagenes_secundarias: [null, null, null],
+        alt_imagenes_secundarias: ["", "", ""],
+        parrafos: ["", "", ""],
+      });
     }
   }, [isOpen, blogToEdit]);
 
-// ✅ useEffect para cargar productos usando el nuevo endpoint
+  // Cargar productos
   useEffect(() => {
     const fetchProductos = async () => {
       if (!isOpen) return;
@@ -114,7 +138,6 @@ const AddBlogModal = ({
       try {
         const token = localStorage.getItem("token");
         
-        // ✅ CAMBIADO: Usar el endpoint específico para select
         const res = await fetch(getApiUrl(config.endpoints.productos.list), {
           method: 'GET',
           headers: {
@@ -129,17 +152,16 @@ const AddBlogModal = ({
         }
         
         const data = await res.json();
-        console.log("Respuesta de productos/select:", data); // ✅ Debug
+        console.log("Respuesta de productos/select:", data);
         
-        // ✅ Manejo simplificado - ya no hay paginación
-      if (data.success && Array.isArray(data.data)) {
-        setProductos(data.data);
-      } else if (Array.isArray(data)) {
-        setProductos(data);
-      } else {
-        console.error("La respuesta no contiene un array de productos:", data);
-        setProductos([]);
-      }
+        if (data.success && Array.isArray(data.data)) {
+          setProductos(data.data);
+        } else if (Array.isArray(data)) {
+          setProductos(data);
+        } else {
+          console.error("La respuesta no contiene un array de productos:", data);
+          setProductos([]);
+        }
 
       } catch (error) {
         console.error("Error al obtener productos:", error);
@@ -152,6 +174,7 @@ const AddBlogModal = ({
 
     fetchProductos();
   }, [isOpen]);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -198,7 +221,117 @@ const AddBlogModal = ({
     setFormData({ ...formData, parrafos: updated });
   };
 
-  const closeModal = () => setIsOpen(false);
+  // ✅ Función para abrir el modal de enlace manual
+  const handleInsertLinkClick = (index: number) => {
+    const textarea = document.getElementById(`parrafo-${index}`) as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    if (start === end) {
+      Swal.fire(
+        "Selecciona texto",
+        "Por favor selecciona una palabra o frase antes de insertar el enlace.",
+        "warning"
+      );
+      return;
+    }
+
+    const selected = textarea.value.substring(start, end);
+    setSelectedParagraphIndex(index);
+    setSelectedTextRange({ start, end });
+    setSelectedText(selected);
+    setIsLinkModalOpen(true);
+  };
+
+  // ✅ Función para insertar enlace manual
+  const handleInsertManualLink = () => {
+    if (selectedParagraphIndex === null || selectedTextRange === null || !linkUrl.trim()) {
+      alert("❌ Faltan datos para insertar el enlace");
+      return;
+    }
+
+    const currentText = formData.parrafos[selectedParagraphIndex];
+    const linkedText = `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer">${selectedText}</a>`;
+
+    const newText =
+      currentText.slice(0, selectedTextRange.start) +
+      linkedText +
+      currentText.slice(selectedTextRange.end);
+
+    const updatedParrafos = [...formData.parrafos];
+    updatedParrafos[selectedParagraphIndex] = newText;
+
+    setFormData({ ...formData, parrafos: updatedParrafos });
+    
+    // Limpiar estados
+    setSelectedParagraphIndex(null);
+    setSelectedTextRange(null);
+    setSelectedText("");
+    setLinkUrl("");
+    setIsLinkModalOpen(false);
+  };
+
+  // ✅ Función para abrir selector de producto
+  const handleProductLinkClick = (index: number) => {
+    const textarea = document.getElementById(`parrafo-${index}`) as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.substring(start, end);
+
+    if (!selected) {
+      Swal.fire(
+        "Selecciona texto",
+        "Por favor selecciona una palabra o frase para enlazar a un producto.",
+        "warning"
+      );
+      return;
+    }
+
+    setSelectedParagraphIndex(index);
+    setSelectedTextRange({ start, end });
+    setSelectedText(selected);
+    setIsProductLinkModalOpen(true);
+  };
+
+  // ✅ Función para insertar enlace a producto
+  const handleInsertProductLink = (producto: Producto) => {
+    if (selectedParagraphIndex === null || selectedTextRange === null) return;
+
+    const currentText = formData.parrafos[selectedParagraphIndex];
+    const link = producto.link;
+    const linkedText = `<a href="/products/producto/?link=${encodeURIComponent(link)}">${selectedText}</a>`;
+
+    const newText =
+      currentText.slice(0, selectedTextRange.start) +
+      linkedText +
+      currentText.slice(selectedTextRange.end);
+
+    const updatedParrafos = [...formData.parrafos];
+    updatedParrafos[selectedParagraphIndex] = newText;
+
+    setFormData({ ...formData, parrafos: updatedParrafos });
+    
+    // Limpiar estados
+    setSelectedParagraphIndex(null);
+    setSelectedTextRange(null);
+    setSelectedText("");
+    setIsProductLinkModalOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    // Limpiar todos los estados relacionados
+    setSelectedParagraphIndex(null);
+    setSelectedTextRange(null);
+    setSelectedText("");
+    setIsLinkModalOpen(false);
+    setIsProductLinkModalOpen(false);
+    setLinkUrl("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -259,9 +392,11 @@ const AddBlogModal = ({
       const endpoint = isEdit
         ? getApiUrl(config.endpoints.blogs.update(blogToEdit.id))
         : getApiUrl(config.endpoints.blogs.create);
-
+      
+      console.log("👉 Endpoint blogs:", endpoint);
+      
       const res = await fetch(endpoint, {
-        method: "POST",
+        method: isEdit ? "PUT" : "POST",
         body: formDataToSend,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -305,47 +440,45 @@ const AddBlogModal = ({
             <h3 className="text-lg font-semibold text-blue-800 mb-4">
               Información Principal & SEO
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Producto */}
-           <div className="col-span-2">
-              <label className="block mb-2">Selecciona un Producto</label>
-              <select
-                name="producto_id"
-                value={formData.producto_id}
-                onChange={handleSelectChange}
-                required
-                className="w-full bg-white text-black p-2 rounded-md"
-                disabled={loading}
-              >
-                <option value="">
-                  {loading ? "Cargando productos..." : "-- Selecciona un producto --"}
-                </option>
-              {Array.isArray(productos) && productos.length > 0 ? (
-              productos.map((producto) => (
-                <option key={producto.id} value={producto.id}>
-                  {producto.nombre || `Producto ${producto.id}`}
-                </option>
-              ))
-            ) : (
-              !loading && (
-                <option value="" disabled>
-                  No hay productos disponibles
-                </option>
-              )
-            )}
-
-              </select>
-              
-              {/* ✅ Info de debug - puedes remover esto después */}
-              {productos.length > 0 && (
-                <p className="text-xs text-green-400 mt-1">
-                  ✅ {productos.length} productos cargados desde /select
-                </p>
-              )}
-            </div>
+              <div className="col-span-4">
+                <label className="block mb-2">Selecciona un Producto</label>
+                <select
+                  name="producto_id"
+                  value={formData.producto_id}
+                  onChange={handleSelectChange}
+                  required
+                  className="w-full bg-white text-black p-2 rounded-md"
+                  disabled={loading}
+                >
+                  <option value="">
+                    {loading ? "Cargando productos..." : "-- Selecciona un producto --"}
+                  </option>
+                  {Array.isArray(productos) && productos.length > 0 ? (
+                    productos.map((producto) => (
+                      <option key={producto.id} value={producto.id}>
+                        {producto.nombre || `Producto ${producto.id}`}
+                      </option>
+                    ))
+                  ) : (
+                    !loading && (
+                      <option value="" disabled>
+                        No hay productos disponibles
+                      </option>
+                    )
+                  )}
+                </select>
+                
+                {productos.length > 0 && (
+                  <p className="text-xs text-green-400 mt-1">
+                    ✅ {productos.length} productos cargados
+                  </p>
+                )}
+              </div>
 
               {/* Título */}
-              <div>
+              <div className="md:col-span-2">
                 <label className="block font-medium mb-1">Título</label>
                 <input
                   type="text"
@@ -354,18 +487,6 @@ const AddBlogModal = ({
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded px-3 py-2"
                   required
-                />
-              </div>
-
-              {/* Etiqueta Link */}
-              <div>
-                <label className="block font-medium mb-1">Etiqueta Link</label>
-                <input
-                  type="text"
-                  name="etiqueta_link"
-                  value={formData.etiqueta_link}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
                 />
               </div>
 
@@ -381,8 +502,40 @@ const AddBlogModal = ({
                 />
               </div>
 
-              {/* Link */}
+              {/* Meta Título */}
               <div className="md:col-span-2">
+                <label className="block font-medium mb-1">Meta Título (SEO)</label>
+                <input
+                  type="text"
+                  name="meta_titulo"
+                  value={formData.meta_titulo}
+                  onChange={handleInputChange}
+                  placeholder="Título optimizado para SEO"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Recomendado: 50-60 caracteres
+                </p>
+              </div>
+
+              {/* Meta Descripción */}
+              <div className="md:col-span-2">
+                <label className="block font-medium mb-1">Meta Descripción (SEO)</label>
+                <textarea
+                  name="meta_descripcion"
+                  value={formData.meta_descripcion}
+                  onChange={handleInputChange}
+                  placeholder="Descripción optimizada para motores de búsqueda"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  rows={3}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Recomendado: 150-160 caracteres
+                </p>
+              </div>
+
+              {/* Link */}
+              <div className="md:col-span-4">
                 <label className="block font-medium mb-1">
                   Link (URL amigable)
                 </label>
@@ -395,30 +548,6 @@ const AddBlogModal = ({
                   className="w-full border border-gray-300 rounded px-3 py-2"
                 />
               </div>
-
-              {/* Meta Título
-              <div className="md:col-span-2">
-                <label className="block font-medium mb-1">Meta Título</label>
-                <input
-                  type="text"
-                  name="meta_titulo"
-                  value={formData.meta_titulo}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-              </div> */}
-
-              {/* Meta Descripción */}
-              {/* <div className="md:col-span-2">
-                <label className="block font-medium mb-1">Meta Descripción</label>
-                <textarea
-                  name="meta_descripcion"
-                  value={formData.meta_descripcion}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  rows={3}
-                />
-              </div> */}
             </div>
           </div>
 
@@ -488,18 +617,66 @@ const AddBlogModal = ({
           </div>
 
           {/* Párrafos */}
-          <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+          <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 relative">
             <h3 className="text-lg font-semibold text-yellow-800 mb-4">Párrafos</h3>
             {formData.parrafos.map((p, i) => (
-              <textarea
-                key={i}
-                value={p}
-                onChange={(e) => handleParrafoChange(e, i)}
-                className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-                rows={4}
-                placeholder={`Párrafo ${i + 1}`}
-                required
-              />
+              <div key={i} className="relative mb-6">
+                <textarea
+                  id={`parrafo-${i}`}
+                  value={p}
+                  onChange={(e) => handleParrafoChange(e, i)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 pr-20"
+                  rows={4}
+                  placeholder={`Párrafo ${i + 1}`}
+                  required
+                />
+
+                {/* Botones para insertar enlaces */}
+                <div className="absolute top-2 right-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleInsertLinkClick(i)}
+                    title="Insertar enlace manual"
+                    className="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition-all duration-200"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleProductLinkClick(i)}
+                    title="Enlazar a producto"
+                    className="bg-green-500 hover:bg-green-700 text-white p-2 rounded-full shadow-lg transition-all duration-200"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
 
@@ -521,6 +698,87 @@ const AddBlogModal = ({
             </button>
           </div>
         </form>
+
+        {/* Modal para enlace manual */}
+        {isLinkModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[60]">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+              <h3 className="text-lg font-bold mb-4">Insertar Enlace</h3>
+              <p className="text-sm text-gray-600 mb-2">
+                Texto seleccionado: <strong>"{selectedText}"</strong>
+              </p>
+              <div className="mb-4">
+                <label className="block font-medium mb-1">URL del enlace</label>
+                <input
+                  type="url"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  placeholder="https://ejemplo.com"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setIsLinkModalOpen(false)}
+                  className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleInsertManualLink}
+                  disabled={!linkUrl.trim()}
+                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white px-4 py-2 rounded"
+                >
+                  Insertar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal para enlace a producto */}
+        {isProductLinkModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[60]">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+              <h3 className="text-lg font-bold mb-4">Enlazar a Producto</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Texto seleccionado: <strong>"{selectedText}"</strong>
+              </p>
+              <div className="mb-4">
+                <label className="block font-medium mb-1">Selecciona un producto</label>
+                <select
+                  onChange={(e) => {
+                    const selectedId = parseInt(e.target.value);
+                    const selectedProduct = productos.find(p => p.id === selectedId);
+                    if (selectedProduct) {
+                      handleInsertProductLink(selectedProduct);
+                    }
+                  }}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                >
+                  <option value="">-- Seleccionar producto --</option>
+                  {productos.map((producto) => (
+                    <option key={producto.id} value={producto.id}>
+                      {producto.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsProductLinkModalOpen(false)}
+                  className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
