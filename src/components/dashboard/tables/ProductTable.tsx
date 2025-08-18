@@ -1,4 +1,4 @@
-import { FaTrash, FaRegEdit } from "react-icons/fa";
+import { FaTrash, FaRegEdit, FaTags } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Modal from "../../Modal";
@@ -6,33 +6,37 @@ import ProductForm from "../../products/ProductForm";
 import type Producto from "../../../models/Product";
 import { config, getApiUrl } from "../../../../config";
 import TableContainer from "./TableContainer";
+import { useProducts } from "../../../hooks/useProducts";
+import type { Product } from "../../../models/Product";
 
 export default function DataTable() {
-  const [productos, setProductos] = useState<Producto[]>([]);
+  const { productos, loading, createProduct, updateProduct, error, refetch } = useProducts();
+
+  //const [productos, setProductos] = useState<Producto[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 8;
   const [isOpen, setIsOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Producto | undefined>(
+  const [currentProduct, setCurrentProduct] = useState<Product | undefined>(
     undefined
   );
 
-  const obtenerDatos = async () => {
-    const url = getApiUrl(config.endpoints.productos.list);
-    const token = localStorage.getItem("token");
-    const respuesta = await fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-        "X-Requested-With": "XMLHttpRequest",
-      },
-    });
-    const responseData = await respuesta.json();
+  // const obtenerDatos = async () => {
+  //   const url = getApiUrl(config.endpoints.productos.list);
+  //   const token = localStorage.getItem("token");
+  //   const respuesta = await fetch(url, {
+  //     method: "GET",
+  //     headers: {
+  //       Accept: "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //       "X-Requested-With": "XMLHttpRequest",
+  //     },
+  //   });
+  //   const responseData = await respuesta.json();
 
-    // Manejar la estructura de respuesta de la API v1
-    const productos = responseData.data ?? [];
-    setProductos(productos);
-  };
+  //   // Manejar la estructura de respuesta de la API v1
+  //   const productos = responseData.data ?? [];
+  //   setProductos(productos);
+  // };
 
   const eliminarProducto = async (id: string | number) => {
     const url = getApiUrl(config.endpoints.productos.delete(id));
@@ -82,7 +86,8 @@ export default function DataTable() {
         if (respuesta.ok) {
           Swal.fire("¡Eliminado!", data.message, "success");
           // Actualizar la lista de productos
-          obtenerDatos();
+          //obtenerDatos();
+          refetch();
         } else {
           // Manejar diferentes tipos de errores
           let errorMessage = data.message || "Error desconocido al eliminar";
@@ -126,10 +131,10 @@ export default function DataTable() {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-  
+
   const totalPages = Math.ceil(productos.length / itemsPerPage);
 
-  const handleEdit = (producto: Producto) => {
+  const handleEdit = (producto: Product) => {
     setCurrentProduct(producto);
     setIsOpen(true);
   };
@@ -186,7 +191,7 @@ export default function DataTable() {
           icon: "success",
         });
         setIsOpen(false);
-        obtenerDatos();
+        refetch();
       } else {
         // Manejar diferentes tipos de errores
         let errorMessage = result.message || "Error desconocido";
@@ -232,7 +237,7 @@ export default function DataTable() {
   }, [isOpen]);
 
   useEffect(() => {
-    obtenerDatos();
+    //obtenerDatos();
   }, []);
 
   useEffect(() => {
@@ -263,89 +268,118 @@ export default function DataTable() {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item, index) => {
-            const isEven = index % 2 === 0;
-            const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
-            const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
-            const text = "text-gray-900 dark:text-gray-100";
-            const key = item.id ?? `producto-${index}`;
+          {loading ? (
+            <tr>
+              <td colSpan={5} className="text-center py-12">
+                <div className="flex justify-center items-center gap-3">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-500"></div>
+                  <span className="text-teal-500 font-medium">Cargando productos...</span>
+                </div>
+              </td>
+            </tr>
+          ) : currentItems.length > 0 ? (
+            currentItems.map((item, index) => {
+              const isEven = index % 2 === 0;
+              const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
+              const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
+              const text = "text-gray-900 dark:text-gray-100";
+              const key = item.id ?? `producto-${index}`;
 
-            return (
-              <tr key={key} className={`${bgLight} ${bgDark}`}>
-                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                  {item.id}
-                </td>
-                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                  {item.nombreProducto || item.subtitle || item.nombre}
-                </td>
-                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                  {item.section || item.tagline || item.seccion}
-                </td>
-                <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                  ${item.precioProducto || item.precio}
-                </td>
-                <td className={`px-4 py-2 rounded-md ${text}`}>
-                  <div className="flex justify-center gap-4">
-                    <button
-                      onClick={() => handleEdit(item)}
-                      className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
-                      title="Editar"
-                    >
-                      <FaRegEdit size={18} />
-                    </button>
-                    <button
-                      onClick={() => eliminarProducto(item.id)}
-                      className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                      title="Eliminar"
-                    >
-                      <FaTrash size={18} />
-                    </button>
+              return (
+                <tr key={key} className={`${bgLight} ${bgDark}`}>
+                  <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                    {item.id}
+                  </td>
+                  <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                    {/* {item.nombreProducto || item.subtitle || item.nombre} */}
+                    {item.nombre}
+                  </td>
+                  <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                    {/* {item.section || item.tagline || item.seccion} */}
+                    {item.seccion}
+                  </td>
+                  <td className={`px-4 py-2 font-bold rounded-md ${text}`}>
+                    {/* ${item.precioProducto || item.precio} */}
+                    ${item.precio ? item.precio.toFixed(2) : ''}
+                  </td>
+                  <td className={`px-4 py-2 rounded-md ${text}`}>
+                    <div className="flex justify-center gap-4">
+                      <button
+                        onClick={() => handleEdit(item)}
+                        className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+                        title="Editar"
+                      >
+                        <FaRegEdit size={18} />
+                      </button>
+                      <button
+                        onClick={() => eliminarProducto(item.id)}
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
+                        title="Eliminar"
+                      >
+                        <FaTrash size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={5} className="text-center py-16 text-gray-500">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <div className="bg-teal-50 p-6 rounded-full">
+                    <FaTags className="h-10 w-10 text-teal-300" />
                   </div>
-                </td>
-              </tr>
-            );
-          })}
+                  <p className="text-xl font-medium text-gray-600 mt-4">
+                    {"No hay productos registrados"}
+                  </p>
+                  <p className="text-gray-400 max-w-md mx-auto">
+                    {"Comienza agregando productos a tu catálogo con el botón 'Añadir Producto'"}
+                  </p>
+                </div>
+              </td>
+            </tr>
+          )}
         </tbody>
       </TableContainer>
-  {/* Paginación */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center mt-4 gap-2">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Anterior
-            </button>
-            
-            <div className="flex gap-1">
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                const pageNum = i + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageChange(pageNum)}
-                    className={`px-3 py-2 rounded-md ${
-                      currentPage === pageNum
-                        ? 'bg-blue-950 text-white'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-            </div>
+      {/* Paginación */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-4 gap-2">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Anterior
+          </button>
 
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Siguiente
-            </button>
+          <div className="flex gap-1">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              const pageNum = i + 1;
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => handlePageChange(pageNum)}
+                  className={`px-3 py-2 rounded-md ${currentPage === pageNum
+                      ? 'bg-blue-950 text-white'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
           </div>
-        )}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Siguiente
+          </button>
+        </div>
+      )}
       {/* Modal */}
       <Modal
         isOpen={isOpen}
@@ -354,8 +388,8 @@ export default function DataTable() {
           setCurrentProduct(undefined);
         }}
         title={currentProduct ? "Editar Datos" : "Ingresar Datos"}
-        form="eliminentechno3"
-        btnText={currentProduct ? "Guardar Cambios" : "Añadir"}
+      //form="eliminentechno3"
+      //btnText={currentProduct ? "Guardar Cambios" : "Añadir"}
       >
         <ProductForm
           initialData={currentProduct}

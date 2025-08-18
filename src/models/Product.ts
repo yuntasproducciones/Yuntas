@@ -29,7 +29,9 @@ export default interface Producto {
   precio?: string;        // Se mapea desde precioProducto
   stock?: number;         // Se mapea desde stockProducto
   section?: string;       // Se mapea desde seccion (para compatibilidad)
+  titulo?: string;       // Se mapea desde title
   titulo_hero?: string;   // Se mapea desde title
+  descripcion?: string; // Se mapea desde description
   descripcion_informacion?: string; // Se mapea desde description
   
   // Para mantener compatibilidad con el formulario
@@ -42,6 +44,32 @@ export default interface Producto {
     beneficios?: {url_imagen: string, texto_alt_SEO: string};
   };
   relacionados?: string[];
+  etiqueta?: {
+    meta_titulo: string;
+    meta_descripcion: string;
+  };
 }
 
 
+export interface Product {
+  id: number;
+  link: string;
+  nombre: string;
+  titulo: string;
+  descripcion: string;
+  precio?: number;
+  seccion: string;
+  imagen_principal: string;
+  especificaciones: Array<{id?: string, texto: string}>;
+  beneficios: Array<{id?: string, texto: string}>;
+  imagenes: { id: string, url_imagen: string, texto_alt_SEO: string }[];
+  etiqueta: {
+    meta_titulo: string;
+    meta_descripcion: string;
+  }
+}
+
+export interface ProductoForm extends Omit<Product, 'id' | 'imagen_principal'> {
+  imagen_principal_file?: File | null;
+  imagenes_files?: File[] | null;
+};

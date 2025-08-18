@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type Producto from "../../models/Product";
 import Input from "../Input";
+import type { Product } from "../../models/Product";
 
 interface ImagenLegacy {
   id: string;
@@ -9,33 +10,53 @@ interface ImagenLegacy {
 }
 
 interface Props {
-  initialData?: Producto;
+  initialData?: Product;
   onSubmit: (formData: FormData) => Promise<void>;
   isEditing?: boolean;
 }
 
 const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
+  useEffect(() => {
+    if (initialData) {
+      console.log("Inicializando especificaciones y beneficios desde specs:", initialData.especificaciones);
+
+      const specs = initialData.especificaciones
+        ? Object.entries(initialData.especificaciones)
+          .filter(([key]) => key.startsWith("spec_"))
+          .map(([, value]) => String(value).trim())
+        : [];
+
+      setEspecificaciones(specs.length > 0 ? specs : [""]);
+
+      const benefits = initialData.especificaciones
+        ? Object.entries(initialData.especificaciones)
+          .filter(([key]) => key.startsWith("beneficio_"))
+          .map(([, value]) => String(value).trim())
+        : [];
+
+      setBeneficios(benefits.length > 0 ? benefits : [""]);
+    };
+
+  }, [initialData]);
+
+
   // Estados para imágenes existentes (legacy) - convertir desde la estructura v1
-  const [imagenesExistentes, setImagenesExistentes] = useState<ImagenLegacy[]>(
-    initialData?.images?.map((url, index) => ({
-      id: `img_${index}`,
-      url_imagen: url,
-      texto_alt_SEO: `Imagen ${index + 1}`
-    })) || []
+  const [imagenesExistentes, setImagenesExistentes] = useState(
+    initialData?.imagenes || []
   );
   const [idsAEliminar, setIdsAEliminar] = useState<string[]>([]);
 
   // Estados para productos relacionados - convertir desde relatedProducts
   const [relacionadoInput, setRelacionadoInput] = useState("");
-  const [relacionados, setRelacionados] = useState<string[]>(
-    initialData?.relatedProducts?.map(id => String(id)) || []
-  );
+  // const [relacionados, setRelacionados] = useState<string[]>(
+  //   initialData?.relatedProducts?.map(id => String(id)) || []
+  // );
 
   // Estados para especificaciones - extraer desde specs
   const [especificaciones, setEspecificaciones] = useState<string[]>(
     (() => {
-      if (!initialData?.specs) return [""];
-      const specs = Object.entries(initialData.specs)
+      if (!initialData?.especificaciones) return [""];
+      const specs = Object.entries(initialData.especificaciones)
         .filter(([key]) => key.startsWith('spec_'))
         .map(([, value]) => String(value));
       return specs.length > 0 ? specs : [""];
@@ -45,8 +66,8 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
   // Estados para beneficios - extraer desde specs
   const [beneficios, setBeneficios] = useState<string[]>(
     (() => {
-      if (!initialData?.specs) return [""];
-      const benefits = Object.entries(initialData.specs)
+      if (!initialData?.especificaciones) return [""];
+      const benefits = Object.entries(initialData.especificaciones)
         .filter(([key]) => key.startsWith('beneficio_'))
         .map(([, value]) => String(value));
       return benefits.length > 0 ? benefits : [""];
@@ -54,16 +75,16 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
   );
 
   // Funciones para manejar productos relacionados
-  const handleAddRelacionado = () => {
-    if (relacionadoInput.trim()) {
-      setRelacionados([...relacionados, relacionadoInput.trim()]);
-      setRelacionadoInput("");
-    }
-  };
+  // const handleAddRelacionado = () => {
+  //   if (relacionadoInput.trim()) {
+  //     setRelacionados([...relacionados, relacionadoInput.trim()]);
+  //     setRelacionadoInput("");
+  //   }
+  // };
 
-  const handleRemoveRelacionado = (id: string) => {
-    setRelacionados(relacionados.filter((r) => r !== id));
-  };
+  // const handleRemoveRelacionado = (id: string) => {
+  //   setRelacionados(relacionados.filter((r) => r !== id));
+  // };
 
   // Funciones para manejar imágenes existentes
   const deleteExistImage = (id: string) => {
@@ -117,29 +138,29 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
     // Crear FormData con los campos exactos que espera el backend
     const finalFormData = new FormData();
-    
+
     // CAMPOS REQUERIDOS por StoreProductoRequest
     finalFormData.append('nombre', formData.get('nombre') as string);
     finalFormData.append('link', formData.get('link') as string);
     finalFormData.append('titulo', formData.get('titulo_hero') as string);
     finalFormData.append('stock', formData.get('stock') as string);
-    
+
     // Limpiar el precio (quitar el símbolo $)
     const precioValue = (formData.get('precio') as string).replace('$', '').trim();
     finalFormData.append('precio', precioValue);
-    
+
     // CAMPOS OPCIONALES
     finalFormData.append('subtitulo', formData.get('nombre') as string); // Usar nombre como subtítulo
-    finalFormData.append('lema', formData.get('seccion') as string); // Usar sección como lema
+    //finalFormData.append('lema', formData.get('seccion') as string); // Usar sección como lema
     finalFormData.append('descripcion', formData.get('descripcion_informacion') as string);
     finalFormData.append('seccion', formData.get('seccion') as string);
-    
+
     // IMAGEN PRINCIPAL (para catálogo/lista) - NO es la imagen Hero
     const imagenListaProductos = formData.get('imagen_lista_productos') as File;
     if (imagenListaProductos && imagenListaProductos.size > 0) {
       finalFormData.append('imagen_principal', imagenListaProductos);
     }
-    
+
     // ESPECIFICACIONES como array asociativo
     const especificacionesObj: any = {};
     especificaciones.forEach((esp, index) => {
@@ -147,21 +168,21 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
         especificacionesObj[`spec_${index + 1}`] = esp.trim();
       }
     });
-    
+
     // Agregar beneficios a especificaciones
     beneficios.forEach((ben, index) => {
       if (ben.trim()) {
         especificacionesObj[`beneficio_${index + 1}`] = ben.trim();
       }
     });
-    
+
     // Solo agregar especificaciones si hay alguna
     if (Object.keys(especificacionesObj).length > 0) {
       Object.entries(especificacionesObj).forEach(([key, value]) => {
         finalFormData.append(`especificaciones[${key}]`, value as string);
       });
     }
-    
+
     // IMÁGENES ADICIONALES como array - ORDEN CORRECTO SEGÚN DISEÑO
     // Orden: [0] = HERO, [1] = Especificaciones, [2] = Beneficios
     const imagenesEnOrden = [
@@ -169,7 +190,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       { key: 'imagen_especificaciones', file: formData.get('imagen_especificaciones') as File },
       { key: 'imagen_beneficios', file: formData.get('imagen_beneficios') as File }
     ];
-    
+
     // ENVIAR SOLO LAS IMÁGENES QUE TIENEN ARCHIVOS VÁLIDOS
     // pero mantener la información de qué tipo de imagen es cada una
     imagenesEnOrden.forEach((imagen, originalIndex) => {
@@ -183,15 +204,28 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
         console.log(`Imagen ${originalIndex} (${imagen.key}) no tiene archivo o está vacía`);
       }
     });
-    
+
     // PRODUCTOS RELACIONADOS
-    const relacionadosValidos = relacionados
-      .filter(rel => rel.trim())
-      .map(rel => parseInt(rel.trim()))
-      .filter(rel => !isNaN(rel));
-    
-    relacionadosValidos.forEach((id, index) => {
-      finalFormData.append(`relacionados[${index}]`, id.toString());
+    // const relacionadosValidos = relacionados
+    //   .filter(rel => rel.trim())
+    //   .map(rel => parseInt(rel.trim()))
+    //   .filter(rel => !isNaN(rel));
+
+    // relacionadosValidos.forEach((id, index) => {
+    //   finalFormData.append(`relacionados[${index}]`, id.toString());
+    // });
+
+    // etiqueta
+    const metaTitulo = formData.get('meta_título') as string;
+    const metaDescripcion = formData.get('meta_descripcion') as string;
+    if (metaTitulo.trim() || metaDescripcion.trim()) {
+      finalFormData.append('etiqueta[meta_titulo]', metaTitulo.trim());
+      finalFormData.append('etiqueta[meta_descripcion]', metaDescripcion.trim());
+    }
+
+
+    finalFormData.forEach((value, key) => {
+      console.log(`Campo: ${key}, Valor: ${value}`);
     });
 
     if (isEditing) {
@@ -210,9 +244,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: DATOS PARA DASHBOARD */}
       <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
         <h3 className="text-lg font-semibold text-blue-800 mb-4 flex items-center">
-           Datos para Dashboard (Gestión Interna)
+          Datos para Dashboard (Gestión Interna)
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -220,38 +254,38 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             </label>
             <input
               name="nombre"
-              defaultValue={initialData?.nombreProducto || initialData?.subtitle}
+              defaultValue={initialData?.nombre || initialData?.titulo}
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Sección/Categoría <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
             </label>
             <input
               name="seccion"
-              defaultValue={initialData?.section || initialData?.tagline}
+              defaultValue={initialData?.seccion }
               placeholder="ej: Letreros LED, Sillas LED, Pisos LED, etc."
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Precio <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
             </label>
             <input
               name="precio"
-              defaultValue={initialData?.precioProducto ? `$${initialData.precioProducto}` : initialData?.precio}
+              defaultValue={initialData?.precio ? `$${initialData.precio}` : initialData?.precio}
               placeholder="ej: $500.00"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Stock <span className="text-blue-600 text-sm">(Control de inventario)</span>
@@ -259,22 +293,49 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             <input
               type="number"
               name="stock"
-              defaultValue={initialData?.stockProducto || initialData?.stock}
+              // defaultValue={initialData?.stockProducto || initialData?.stock}
               min="0"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
           </div>
-          
+
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Link/URL <span className="text-blue-600 text-sm">(ej: letreros-neon-led)</span>
             </label>
             <input
               name="link"
-              defaultValue={initialData?.link || (initialData?.title ? initialData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '') : '')}
+              defaultValue={initialData?.link || (initialData?.titulo ? initialData.titulo.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '') : '')}
               placeholder="letreros-neon-led"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Meta Título <span className="text-blue-600 text-sm">(SEO)</span>
+            </label>
+            <input
+              name="meta_título"
+              defaultValue={initialData?.etiqueta?.meta_titulo || ""}
+              placeholder="Título para SEO del producto"
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Meta Descripción <span className="text-blue-600 text-sm">(SEO)</span>
+            </label>
+            <textarea
+              name="meta_descripcion"
+              defaultValue={initialData?.etiqueta?.meta_descripcion || ""}
+              rows={3}
+              className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Descripción breve del producto para SEO..."
               required
             />
           </div>
@@ -284,9 +345,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: DATOS PARA PÁGINA DE PRODUCTO */}
       <div className="bg-green-50 p-6 rounded-lg border border-green-200">
         <h3 className="text-lg font-semibold text-green-800 mb-4 flex items-center">
-           Datos para Página de Producto (Frontend)
+          Datos para Página de Producto (Frontend)
         </h3>
-        
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -294,13 +355,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             </label>
             <input
               name="titulo_hero"
-              defaultValue={initialData?.title || initialData?.titulo_hero}
+              defaultValue={initialData?.titulo }
               placeholder="ej: Letreros Neón LED"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Descripción <span className="text-green-600 text-sm">(Sección "Información")</span>
@@ -308,7 +369,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             <textarea
               rows={4}
               name="descripcion_informacion"
-              defaultValue={initialData?.description || initialData?.descripcion_informacion}
+              defaultValue={initialData?.descripcion }
               placeholder="Describe el producto, sus usos y características principales..."
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
@@ -319,9 +380,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: ESPECIFICACIONES */}
       <div className="bg-purple-50 p-6 rounded-lg border border-purple-200">
         <h3 className="text-lg font-semibold text-purple-800 mb-4 flex items-center">
-           Especificaciones (Checkmarks en el producto)
+          Especificaciones (Checkmarks en el producto)
         </h3>
-        
+
         <div className="space-y-3">
           {especificaciones.map((esp, index) => (
             <div key={index} className="flex gap-2 items-center">
@@ -356,9 +417,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: BENEFICIOS */}
       <div className="bg-orange-50 p-6 rounded-lg border border-orange-200">
         <h3 className="text-lg font-semibold text-orange-800 mb-4 flex items-center">
-           Beneficios (Lista en el producto)
+          Beneficios (Lista en el producto)
         </h3>
-        
+
         <div className="space-y-3">
           {beneficios.map((beneficio, index) => (
             <div key={index} className="flex gap-2 items-center">
@@ -393,9 +454,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       {/* SECCIÓN: IMÁGENES */}
       <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
         <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-           Imágenes del Producto (4 imágenes específicas requeridas)
+          Imágenes del Producto (4 imágenes específicas requeridas)
         </h3>
-        
+
         {/* Imágenes existentes */}
         {imagenesExistentes.length > 0 && (
           <div className="mb-6">
@@ -407,7 +468,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                   className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm border hover:shadow-md transition"
                 >
                   <img
-                    src={`https://apiyuntas.yuntaspublicidad.com${img.url_imagen}`}
+                    src={`${img.url_imagen}`}
                     alt={img.texto_alt_SEO}
                     className="w-32 h-32 object-cover rounded-lg mb-2"
                   />
@@ -432,7 +493,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen para lista de productos */}
           <div className="bg-white p-4 rounded-lg border border-blue-200">
             <h4 className="text-md font-semibold text-blue-700 mb-3">
-               Imagen para Lista de Productos <span className="text-red-500">*</span>
+              Imagen para Lista de Productos <span className="text-red-500">*</span>
             </h4>
             <p className="text-sm text-gray-600 mb-3">Esta imagen aparece en la página "Nuestros Productos" y es <strong>obligatoria</strong></p>
             <div className="space-y-2">
@@ -440,7 +501,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 type="file"
                 accept="image/*"
                 name="imagen_lista_productos"
-                required
+                required={!isEditing}
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
               <input
@@ -455,7 +516,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen Hero */}
           <div className="bg-white p-4 rounded-lg border border-green-200">
             <h4 className="text-md font-semibold text-green-700 mb-3">
-               🎯 Imagen Hero del Producto <span className="text-sm text-gray-500">(Banner Principal)</span>
+              🎯 Imagen Hero del Producto <span className="text-sm text-gray-500">(Banner Principal)</span>
             </h4>
             <p className="text-sm text-gray-600 mb-3">Imagen de fondo grande en la página individual del producto - <strong>Banner superior principal</strong></p>
             <div className="space-y-2">
@@ -477,7 +538,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Especificaciones */}
           <div className="bg-white p-4 rounded-lg border border-purple-200">
             <h4 className="text-md font-semibold text-purple-700 mb-3">
-               📋 Imagen para Especificaciones <span className="text-sm text-gray-500">(Sección Izquierda)</span>
+              📋 Imagen para Especificaciones <span className="text-sm text-gray-500">(Sección Izquierda)</span>
             </h4>
             <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de especificaciones - <strong>Lado izquierdo de la página</strong></p>
             <div className="space-y-2">
@@ -499,7 +560,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Beneficios */}
           <div className="bg-white p-4 rounded-lg border border-orange-200">
             <h4 className="text-md font-semibold text-orange-700 mb-3">
-               🎁 Imagen para Beneficios <span className="text-sm text-gray-500">(Sección Derecha)</span>
+              🎁 Imagen para Beneficios <span className="text-sm text-gray-500">(Sección Derecha)</span>
             </h4>
             <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de beneficios - <strong>Lado derecho de la página</strong></p>
             <div className="space-y-2">
@@ -521,21 +582,21 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
         <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-sm text-yellow-800">
-            <strong>💡 Estructura CORRECTA de imágenes:</strong><br/>
-            📸 <strong>Lista Productos:</strong> Imagen para vista de catálogo (imagen_principal)<br/>
-            🎯 <strong>Hero:</strong> Banner principal superior (images[0])<br/>
-            📋 <strong>Especificaciones:</strong> Acompaña características (images[1])<br/>
+            <strong>💡 Estructura CORRECTA de imágenes:</strong><br />
+            📸 <strong>Lista Productos:</strong> Imagen para vista de catálogo (imagen_principal)<br />
+            🎯 <strong>Hero:</strong> Banner principal superior (images[0])<br />
+            📋 <strong>Especificaciones:</strong> Acompaña características (images[1])<br />
             🎁 <strong>Beneficios:</strong> Acompaña ventajas (images[2])
           </p>
         </div>
       </div>
 
       {/* SECCIÓN: PRODUCTOS RELACIONADOS */}
-      <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
+      {/* <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
         <h3 className="text-lg font-semibold text-indigo-800 mb-4 flex items-center">
-           Productos Relacionados
+          Productos Relacionados
         </h3>
-        
+
         <div className="space-y-4">
           <div className="flex gap-2">
             <input
@@ -553,7 +614,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               Agregar
             </button>
           </div>
-          
+
           <div className="flex flex-wrap gap-2">
             {relacionados.map((id, idx) => (
               <span
@@ -572,7 +633,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* BOTONES DE ACCIÓN */}
       <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
