@@ -5,6 +5,7 @@ import AddDataModal from "./modals/AddUpdateModal.tsx";
 import DeleteClienteModal from "./modals/DeleteModal.tsx";
 import useClientes from "../../../../hooks/Seguimiento/useClientes.ts";
 import Paginator from "../../Paginator.tsx";
+import TableContainer from "../TableContainer.tsx";
 
 const DataTable = () => {
   const [refetchTrigger, setRefetchTrigger] = useState(false); // Estado para forzar la recarga de datos
@@ -65,67 +66,91 @@ const DataTable = () => {
   };
 
   return (
-    <>
-      <table className="w-full border-separate border-spacing-2">
-        <thead>
-          <tr className="bg-blue-900 text-white">
-            <th className="px-4 py-2 rounded-xl">ID</th>
-            <th className="px-4 py-2 rounded-xl">NOMBRE</th>
-            <th className="px-4 py-2 rounded-xl">GMAIL</th>
-            <th className="px-4 py-2 rounded-xl">TELÉFONO</th>
-            <th className="px-4 py-2 rounded-xl">SECCIÓN</th>
-            <th className="px-4 py-2 rounded-xl">FECHA</th>
-            <th className="px-4 py-2 rounded-xl">ACCIÓN</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clientes.length === 0 ? (
-            <tr>
-              <td colSpan={7} className="text-center py-4 text-gray-500">
-                No hay clientes disponibles.
-              </td>
-            </tr>
-          ) : (
-            clientes.map((item, index) => (
-              <tr
-                key={item.id}
-                className={`text-center ${
-                  index % 2 === 0 ? "bg-gray-100" : "bg-gray-300"
-                }`}
-              >
-                <td className="px-4 font-bold rounded-xl">{item.id}</td>
-                <td className="px-4 font-bold rounded-xl">{item.name}</td>
-                <td className="px-4 rounded-xl">{item.email}</td>
-                <td className="px-4 font-bold rounded-xl">{item.celular}</td>
-                <td className="px-4 font-bold rounded-xl">
-                  {item.seccion || "N/A"}
-                </td>
-                <td className="px-4 font-bold rounded-xl">{item.created_at}</td>
-                <td className="px-4 rounded-xl">
-                  <div className="flex justify-center gap-2 rounded-xl p-1">
-                    <button
-                      className="p-2 text-red-600 hover:text-red-800 transition"
-                      title="Eliminar"
-                      onClick={() => openDeleteModal(item.id)}
-                    >
-                      <FaTrash size={18} />
-                    </button>
-                    <button
-                      className="p-2 text-green-600 hover:text-green-800 transition"
-                      title="Editar"
-                      onClick={() => openModalForEdit(item)}
-                    >
-                      <GrUpdate size={18} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+    <div className="overflow-x-auto p-4">
 
-      {
+    <TableContainer tableType="seguimiento">
+      <thead>
+        <tr>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >ID</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+          >Nombre</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Gmail</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Teléfono</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Sección</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Fecha</th>
+          <th
+            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+            >Acción</th>
+        </tr>
+      </thead>
+   <tbody>
+  {clientes.length === 0 ? (
+    <tr>
+      <td colSpan={7} className="text-center py-4 text-gray-500">
+        No hay clientes disponibles.
+      </td>
+    </tr>
+  ) : (
+    clientes.map((item, index) => {
+      const rowBg = index % 2 === 0 ? "bg-[#d9d9d9]" : "bg-[#d9d9d94d]";
+
+      return (
+        <tr key={item.id} className={`text-center ${rowBg}`}>
+          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
+            {item.id}
+          </td>
+          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
+            {item.name}
+          </td>
+          <td className="px-4 py-2 rounded-xl border border-gray-300">
+            {item.email}
+          </td>
+          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
+            {item.celular}
+          </td>
+          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
+            {item.seccion || "N/A"}
+          </td>
+          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
+            {item.created_at}
+          </td>
+          <td className="px-4 py-2 rounded-xl border border-gray-300">
+            <div className="flex justify-center gap-2 rounded-xl p-1">
+              <button
+                className="p-2 text-red-600 hover:text-red-800 transition"
+                title="Eliminar"
+                onClick={() => openDeleteModal(item.id)}
+              >
+                <FaTrash size={18} />
+              </button>
+              <button
+                className="p-2 text-green-600 hover:text-green-800 transition"
+                title="Editar"
+                onClick={() => openModalForEdit(item)}
+              >
+                <GrUpdate size={18} />
+              </button>
+            </div>
+          </td>
+        </tr>
+      );
+    })
+  )}
+</tbody>
+
+    </TableContainer>
+    {
       /**
        * Botón para agregar un nuevo cliente.
        */
@@ -174,7 +199,7 @@ const DataTable = () => {
         totalPages={totalPages}
         onPageChange={(page) => setCurrentPage(page)}
       />
-    </>
+  </div>
   );
 };
 

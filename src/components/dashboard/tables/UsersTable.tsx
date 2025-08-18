@@ -3,23 +3,42 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import type { User } from "../../../models/User";
 import AddUserModal from "./modals/AddUserModal";
+import TableContainer from "./TableContainer";
+import { tr } from "framer-motion/client";
 
 export default function UsersTable() {
+  const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editUser, setEditUser] = useState<User | null>(null);
 
   const obtenerUsuarios = async () => {
-    const token = localStorage.getItem("token");
-    const respuesta = await fetch("https://apiyuntas.yuntaspublicidad.com/api/v1/users", {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-    });
-    const data = await respuesta.json();
-    setUsers(data.data || []);
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const respuesta = await fetch(
+        "https://apiyuntas.yuntaspublicidad.com/api/v1/users",
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await respuesta.json();
+      setUsers(data.data || []);
+    } catch (error) {
+      console.error("Error al obtener usuarios:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un error al cargar los usuarios",
+        confirmButtonColor: "#14b8a6",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const eliminarUsuario = async (userId: number) => {
@@ -32,21 +51,27 @@ export default function UsersTable() {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "Cancelar"
+      cancelButtonText: "Cancelar",
     });
     if (!confirm.isConfirmed) return;
+
     try {
-      const response = await fetch(`https://apiyuntas.yuntaspublicidad.com/api/v1/users/${userId}`, {
-        method: "DELETE",
-        headers: {
-          "Accept": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://apiyuntas.yuntaspublicidad.com/api/v1/users/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || "Error al eliminar usuario");
       }
+
       await obtenerUsuarios();
       Swal.fire("Eliminado", "El usuario ha sido eliminado.", "success");
     } catch (err: any) {
@@ -59,14 +84,94 @@ export default function UsersTable() {
   }, []);
 
   return (
-    <div>
+    <div className="p-4">
+      {/* Título */}
       <h2 className="text-2xl font-bold mb-4">Usuarios</h2>
-      <button
-        className="bg-blue-600 text-white px-4 py-2 rounded-xl mb-4 font-semibold hover:bg-blue-700 transition"
-        onClick={() => setShowAddModal(true)}
-      >
-        Agregar usuario
-      </button>
+      {/* Tabla */}
+      <TableContainer tableType="usuarios">
+        <thead>
+          <tr>
+            <th className="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md">
+              ID
+            </th>
+            <th className="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md">
+              Nombre
+            </th>
+            <th className="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md">
+              Email
+            </th>
+            <th className="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md">
+              Acción
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {isLoading ? (
+            <tr>
+              <td colSpan={4} className="text-center py-2">
+                <div className="flex justify-center items-center gap-3">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-500"></div>
+                  <span className="text-teal-500 font-medium">Cargando usuarios...</span>
+                </div>
+              </td>
+            </tr>
+          ) : users.length > 0 ? (
+            users.map((user, index) => {
+              const isEven = index % 2 === 0;
+              const lightBg = isEven ? "bg-gray-100" : "bg-gray-200";
+              const darkBg = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
+              const textColor = "text-gray-900 dark:text-gray-100";
+              const cellClass = `px-4 py-2 rounded-md font-bold ${lightBg} ${darkBg} ${textColor}`;
+
+              return (
+                <tr key={user.id}>
+                  <td className={cellClass}>{user.id}</td>
+                  <td className={cellClass}>{user.name}</td>
+                  <td className={cellClass}>{user.email}</td>
+                  <td
+                    className={`px-4 py-2 rounded-md ${lightBg} ${darkBg} ${textColor}`}
+                  >
+                    <div className="flex justify-center gap-4">
+                      <button
+                        className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 transition cursor-pointer"
+                        title="Editar"
+                        onClick={() => setEditUser(user)}
+                      >
+                        <FaRegEdit size={18} />
+                      </button>
+                      <button
+                        className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition cursor-pointer"
+                        title="Eliminar"
+                        onClick={() => eliminarUsuario(user.id)}
+                      >
+                        <FaTrash size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={4} className="text-center py-12">
+                <span className="text-gray-500">No hay usuarios registrados</span>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </TableContainer>
+
+      {/* Botón para agregar usuario (debajo de la tabla) */}
+      <div className="mt-4">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-xl font-semibold hover:bg-blue-700 transition"
+          onClick={() => setShowAddModal(true)}
+        >
+          Agregar usuario
+        </button>
+      </div>
+
+      {/* Modales */}
       {showAddModal && (
         <AddUserModal
           onClose={() => setShowAddModal(false)}
@@ -81,46 +186,6 @@ export default function UsersTable() {
           isEditing={true}
         />
       )}
-      <table className="w-full border-separate border-spacing-2">
-        <thead>
-          <tr className="bg-blue-950 text-white">
-            <th className="px-4 py-2 rounded-xl">ID</th>
-            <th className="px-4 py-2 rounded-xl">Nombre</th>
-            <th className="px-4 py-2 rounded-xl">Email</th>
-            <th className="px-4 py-2 rounded-xl">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr
-              key={user.id}
-              className={`text-center ${index % 2 === 0 ? "bg-gray-100" : "bg-gray-300"}`}
-            >
-              <td className="p-2 font-bold rounded-xl">{user.id}</td>
-              <td className="p-2 font-bold rounded-xl">{user.name}</td>
-              <td className="p-2 font-bold rounded-xl">{user.email}</td>
-              <td className="p-2 rounded-xl">
-                <div className="flex justify-center gap-5 rounded-xl">
-                  <button
-                    className="text-green-600 hover:text-green-800 transition cursor-pointer"
-                    title="Editar"
-                    onClick={() => setEditUser(user)}
-                  >
-                    <FaRegEdit size={18} />
-                  </button>
-                  <button
-                    className="text-red-600 hover:text-red-800 transition cursor-pointer"
-                    title="Eliminar"
-                    onClick={() => eliminarUsuario(user.id)}
-                  >
-                    <FaTrash size={18} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }

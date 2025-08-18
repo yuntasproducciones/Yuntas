@@ -1,0 +1,12 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BlogDashboard from "../../components/dashboard/BlogDashboard";
+---
+
+<Layout title="Dashboard - Gestión de Blogs">
+  <div class="min-h-screen bg-gray-100">
+    <div class="container mx-auto py-8">
+      <BlogDashboard client:load />
+    </div>
+  </div>
+</Layout>

@@ -3,7 +3,10 @@ import Layout from "../layouts/Layout.astro";
 import fondo from "../assets/images/contact/principal.webp";
 ---
 
-<Layout title="Contacto">
+<Layout
+  title="EXPERTOS EN LETREROS LUMINOSOS, NEÓN LED, HOLOGRAMAS 3D"
+  description="Contacta a Yuntas Publicidad para una asesoría personalizada en diseño y tecnología LED. Recibe un presupuesto a medida y soluciones para transformar tus espacios."
+>
   <section
     class="relative w-full h-dvh flex flex-col justify-center items-center"
   >
@@ -121,7 +124,7 @@ import fondo from "../assets/images/contact/principal.webp";
 
       <!-- Correo Electrónico -->
       <div class="flex flex-col items-center mt-8 md:mt-0 flex-1">
-        <a href="mailto:yuntasproducciones@gmail.com">
+        <a href="mailto:yuntaspublicidad@gmail.com">
           <div
             class="group bg-[#23C1DE] hover:bg-white w-16 h-16 p-2 rounded-2xl mb-2 transition-colors"
           >
@@ -141,13 +144,15 @@ import fondo from "../assets/images/contact/principal.webp";
             </svg>
           </div>
         </a>
-        <p><span>yuntasproducciones</span><span>@gmail.com</span></p>
+        <p><span>yuntaspublicidad</span><span>@gmail.com</span></p>
       </div>
     </div>
 
     <!-- Mensaje Final -->
     <div class="flex flex-col items-center my-8">
-      <p class="bg-gradient-to-r from-blue-700 to-cyan-500 text-center py-4 px-6 sm:px-20 rounded-3xl text-2xl sm:text-3xl font-extrabold mb-12 cursor-default">
+      <p
+        class="bg-gradient-to-r from-blue-700 to-cyan-500 text-center py-4 px-6 sm:px-20 rounded-3xl text-2xl sm:text-3xl font-extrabold mb-12 cursor-default"
+      >
         ¡HOLA!
         <span class="text-lg sm:text-xl font-normal block mt-2">
           Déjanos tus datos y agenda una visita a nuestro local.
@@ -155,22 +160,59 @@ import fondo from "../assets/images/contact/principal.webp";
       </p>
 
       <!-- Formulario de Contacto -->
-      <div class="max-w-4xl md:max-w-6xl w-full bg-[#FDEEE8] rounded-3xl p-4 sm:p-6 shadow-2xl mt-0 mb-12 mx-auto flex flex-col items-center justify-center">
-        <h2 class="text-xl sm:text-2xl font-semibold text-center mb-6 text-black">Solicita información</h2>
+      <div
+        class="max-w-4xl md:max-w-6xl w-full bg-[#FDEEE8] rounded-3xl p-4 sm:p-6 shadow-2xl mt-0 mb-12 mx-auto flex flex-col items-center justify-center"
+      >
+        <h2
+          class="text-xl sm:text-2xl font-semibold text-center mb-6 text-black"
+        >
+          Solicita información
+        </h2>
 
         <form>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="text" placeholder="Nombre*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
-            <input type="text" placeholder="Apellidos*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
-            <input type="tel" placeholder="Teléfono*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
-            <input type="text" placeholder="Distrito*" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md" required>
+            <input
+              type="text"
+              placeholder="Nombre*"
+              class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Apellidos*"
+              class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md"
+              required
+            />
+            <input
+              type="tel"
+              placeholder="Teléfono*"
+              class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Distrito*"
+              class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none rounded-md"
+              required
+            />
           </div>
 
-          <input type="text" placeholder="Detalle de reclamación" class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4 rounded-md">
-          <textarea placeholder="Mensaje" rows="4" class="text-black p-3 w-full bg-gray-300 border border-gray-400 placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4 rounded-md"></textarea>
+          <input
+            type="text"
+            placeholder="Detalle de reclamación"
+            class="border text-black border-gray-400 p-3 w-full bg-transparent placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4 rounded-md"
+          />
+          <textarea
+            placeholder="Mensaje"
+            rows="4"
+            class="text-black p-3 w-full bg-gray-300 border border-gray-400 placeholder-gray-500 focus:border-blue-600 focus:outline-none mt-4 rounded-md"
+          ></textarea>
 
           <div class="mt-6 flex justify-center">
-            <button type="submit" class="bg-[#1D2C5E] hover:bg-[#141B40] text-lg text-white font-semibold py-2 px-10 rounded-full transition-all cursor-pointer">
+            <button
+              type="submit"
+              class="bg-[#1D2C5E] hover:bg-[#141B40] text-lg text-white font-semibold py-2 px-10 rounded-full transition-all cursor-pointer"
+            >
               Enviar
             </button>
           </div>
@@ -183,14 +225,13 @@ import fondo from "../assets/images/contact/principal.webp";
       <h2 class="text-center text-4xl font-bold">CADA VEZ MÁS CERCA DE TI</h2>
       <div class="mt-6 flex justify-center">
         <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.255255812076!2d-76.94464365943126!3d-12.025940110892334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c97c8934a213%3A0x7f6ccb249e86b5e6!2sYuntas%20Producciones!5e0!3m2!1ses-419!2spe!4v1739596969950!5m2!1ses-419!2spe"
-            width="600"
-            height="450"
-            class="rounded-3xl w-full md:max-w-6xl max-w-4xl"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            style="border:0;"
-        ></iframe>
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3902.255255812076!2d-76.94464365943126!3d-12.025940110892334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c97c8934a213%3A0x7f6ccb249e86b5e6!2sYuntas%20Producciones!5e0!3m2!1ses-419!2spe!4v1739596969950!5m2!1ses-419!2spe"
+          width="600"
+          height="450"
+          class="rounded-3xl w-full md:max-w-6xl max-w-4xl"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          style="border:0;"></iframe>
       </div>
     </div>
   </section>

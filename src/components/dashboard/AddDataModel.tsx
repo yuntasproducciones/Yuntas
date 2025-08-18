@@ -48,7 +48,7 @@ const AddDataModal = () => {
       console.log("Respuesta del servidor:", data); // Verifica la respuesta
 
       if (response.ok) {
-        alert("✅ Usuario registrado exitosamente");
+        alert(" Usuario registrado exitosamente");
         setIsOpen(false); // Cerrar modal
       } else {
         alert(`❌ Error: ${data.message}`);

@@ -12,3 +12,85 @@
 @utility text-shadow-white {
     text-shadow: 0px 0px 9.6px rgba(255, 255, 255, 1);
 }
+
+.adaptable-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #00eaff 0%, #00cfff 100%);
+  color: #fff;
+  font-weight: bold;
+  font-size: 2rem;
+  padding: 0.5em 1.5em;
+  border: none;
+  border-radius: 2em;
+  text-align: center;
+  white-space: pre-line;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.adaptable-btn:hover {
+  background: linear-gradient(90deg, #00cfff 0%, #00eaff 100%);
+}
+/* Agregar al final de tu global.css */
+
+/* Transiciones suaves para el dark mode */
+* {
+  transition: background-color 0.4s ease-in-out, 
+              color 0.4s ease-in-out, 
+              border-color 0.3s ease-in-out,
+              box-shadow 0.3s ease-in-out !important;
+}
+
+:root {
+  --text-color: #1f2937; /* gris oscuro */
+  --background-color: #ffffff;
+}
+
+html.dark {
+  --text-color: #f3f4f6;
+  --background-color: #1a1a2c;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+
+/* Transiciones para headers, navs, aside */
+header, nav, aside, main {
+  transition: background-color 0.4s ease-in-out, 
+              color 0.4s ease-in-out,
+              background-image 0.4s ease-in-out !important;
+}
+
+/* Transiciones para links y botones */
+a, button {
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out,
+              transform 0.2s ease-in-out !important;
+}
+
+/* Transiciones para inputs y forms */
+input, textarea, select {
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out !important;
+}
+
+/* Transiciones para divs con backgrounds */
+div {
+  transition: background-color 0.4s ease-in-out, 
+              color 0.4s ease-in-out !important;
+}
+
+/* Excepciones para animaciones que no deben tener transición larga */
+.no-dark-transition, .no-dark-transition * {
+  transition: transform 0.2s ease-in-out !important;
+}
+
+/* Transiciones específicas para gradientes */
+.bg-gradient-to-b, .bg-gradient-to-r, .bg-gradient-to-l, .bg-gradient-to-t {
+  transition: background-image 0.5s ease-in-out !important;
+}

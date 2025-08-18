@@ -1,247 +1,402 @@
 import { config, getApiUrl } from "../../../config";
-import {useEffect, useState} from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import type Blog from "../../models/Blog.ts";
-
-
-interface ImagenAdicional {
-  url_imagen: File | null;
-  parrafo_imagen: string;
-}
 
 interface BlogPOST {
-  producto_id: number;
+  producto_id: string;
   titulo: string;
+  subtitulo: string;
   link: string;
-  parrafo: string;
-  descripcion: string;
+  meta_titulo: string;
+  meta_descripcion: string;
   imagen_principal: File | null;
-  titulo_blog: string;
-  subtitulo_beneficio: string;
-  url_video: string;
-  titulo_video: string;
-  imagenes: ImagenAdicional[];
+  alt_imagen_principal: string;
+  imagen_card: File | null;
+  alt_imagen_card: string;
+  imagenes_secundarias: (File | null)[];
+  alt_imagenes_secundarias: string[];
+  parrafos: string[];
+}
+
+interface Blog {
+  id: number;
+  producto_id: number;
+  nombre_producto: string;
+  titulo?: string;
+  subtitulo: string;
+  link?: string;
+  meta_titulo?: string;
+  meta_descripcion?: string;
+  imagen_principal: string;
+  imagen_card?: string;
+  imagenes?: { ruta_imagen: string; text_alt: string }[];
+  parrafos?: { parrafo: string }[];
+  alt_imagen_card?: string;
+  alt_imagen_principal?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface Producto {
+  id: number;
+  nombre: string;
+  link: string;
 }
 
 interface AddBlogModalProps {
-  onBlogAdded?: () => void;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  blogToEdit?: Blog | null;
+  onSuccess?: () => void;
 }
 
-const AddBlogModal: React.FC<AddBlogModalProps> = ({ onBlogAdded }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [productos, setProductos] = useState<any[]>([]);
-  const [formData, setFormData] = useState<BlogPOST>({
-    producto_id: 0,
+const AddBlogModal = ({
+  isOpen,
+  setIsOpen,
+  blogToEdit,
+  onSuccess,
+}: AddBlogModalProps) => {
+  const [productos, setProductos] = useState<Producto[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [selectedParagraphIndex, setSelectedParagraphIndex] = useState<number | null>(null);
+  const [selectedTextRange, setSelectedTextRange] = useState<{ start: number; end: number } | null>(null);
+  const [selectedText, setSelectedText] = useState("");
+  const [isProductLinkModalOpen, setIsProductLinkModalOpen] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+
+  const defaultFormData: BlogPOST = {
+    producto_id: "",
     titulo: "",
+    subtitulo: "",
     link: "",
-    parrafo: "",
-    descripcion: "",
+    meta_titulo: "",
+    meta_descripcion: "",
     imagen_principal: null,
-    titulo_blog: "",
-    subtitulo_beneficio: "",
-    url_video: "",
-    titulo_video: "",
-    imagenes: [
-      {
-        url_imagen: null,
-        parrafo_imagen: "",
-      },
-      {
-        url_imagen: null,
-        parrafo_imagen: "",
-      },
-    ], // 👈 inicializamos como un arreglo vacío
-  });
+    alt_imagen_principal: "",
+    imagen_card: null,
+    alt_imagen_card: "",
+    imagenes_secundarias: [null, null, null],
+    alt_imagenes_secundarias: ["", "", ""],
+    parrafos: ["", "", ""],
+  };
+
+  const [formData, setFormData] = useState<BlogPOST>(defaultFormData);
+
   useEffect(() => {
-    if (isOpen) {
-      fetch(getApiUrl(config.endpoints.blogs.list), {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          Accept: "application/json",
-        },
-      })
-          .then((res) => res.json())
-          .then((data) => {
-            const linksUsados = data?.data
-                ?.map((b: any) => parseInt(b.link))
-                .filter((n: number) => Number.isInteger(n) && n > 0);
+    if (!isOpen) return;
 
-            const linkLibre = obtenerPrimerNumeroLibre(linksUsados || []);
-            setFormData((prev) => ({ ...prev, link: String(linkLibre) }));
-          })
-          .catch((err) => console.error("Error al obtener blogs:", err));
-    }
-  }, [isOpen]);
-  useEffect(() => {
-    if (isOpen) {
-      fetch(getApiUrl(config.endpoints.productos.list), {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          Accept: "application/json",
-        },
-      })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("Respuesta productos:", data);
-            setProductos(data || []); // ← Usamos `data` directamente
-          })
-          .catch((err) => console.error("Error al obtener productos:", err));
-    }
-  }, [isOpen]);
-
-  function obtenerPrimerNumeroLibre(numeros: number[]): number {
-    const set = new Set(numeros);
-    let i = 1;
-    while (set.has(i)) {
-      i++;
-    }
-    return i;
-  }
-  // Manejar cambios en los inputs de texto
-  const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-
-    if (name === "link") {
-      const sanitized = value
-          .normalize("NFD") // descompone letras acentuadas
-          .replace(/[\u0300-\u036f]/g, "") // elimina las marcas diacríticas
-          .toLowerCase()
-          .replaceAll(" ", "-");
-
-      setFormData((prev) => ({
-        ...prev,
-        link: sanitized,
-      }));
+    if (blogToEdit) {
+      setFormData({
+        producto_id: blogToEdit.producto_id?.toString() || "",
+        titulo: blogToEdit.titulo || "",
+        subtitulo: blogToEdit.subtitulo || "",
+        link: blogToEdit.link || "",
+        meta_titulo: blogToEdit.meta_titulo || "",
+        meta_descripcion: blogToEdit.meta_descripcion || "",
+        imagen_principal: null,
+        alt_imagen_principal: blogToEdit.alt_imagen_principal || "",
+        imagen_card: null,
+        alt_imagen_card: blogToEdit.alt_imagen_card || "",
+        imagenes_secundarias: [null, null, null],
+        alt_imagenes_secundarias: [
+          blogToEdit.imagenes?.[0]?.text_alt || "",
+          blogToEdit.imagenes?.[1]?.text_alt || "",
+          blogToEdit.imagenes?.[2]?.text_alt || "",
+        ],
+        parrafos: [
+          blogToEdit.parrafos?.[0]?.parrafo || "",
+          blogToEdit.parrafos?.[1]?.parrafo || "",
+          blogToEdit.parrafos?.[2]?.parrafo || "",
+        ],
+      });
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData({
+        producto_id: "",
+        titulo: "",
+        subtitulo: "",
+        link: "",
+        meta_titulo: "",
+        meta_descripcion: "",
+        imagen_principal: null,
+        alt_imagen_principal: "",
+        imagen_card: null,
+        alt_imagen_card: "",
+        imagenes_secundarias: [null, null, null],
+        alt_imagenes_secundarias: ["", "", ""],
+        parrafos: ["", "", ""],
+      });
+    }
+  }, [isOpen, blogToEdit]);
+
+  // Cargar productos
+  useEffect(() => {
+    const fetchProductos = async () => {
+      if (!isOpen) return;
+      
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        
+        const res = await fetch(getApiUrl(config.endpoints.productos.list), {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        console.log("Respuesta de productos/select:", data);
+        
+        if (data.success && Array.isArray(data.data)) {
+          setProductos(data.data);
+        } else if (Array.isArray(data)) {
+          setProductos(data);
+        } else {
+          console.error("La respuesta no contiene un array de productos:", data);
+          setProductos([]);
+        }
+
+      } catch (error) {
+        console.error("Error al obtener productos:", error);
+        setProductos([]);
+        alert("❌ Error al cargar los productos. Por favor, intenta de nuevo.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductos();
+  }, [isOpen]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof BlogPOST
+  ) => {
+    if (e.target.files?.[0]) {
+      setFormData({ ...formData, [field]: e.target.files[0] });
     }
   };
 
-
-  // Manejar cambios en la imagen (file input)
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, imagen_principal: e.target.files[0] });
-    }
-  };
-
-  const handleFileChangeAdicional = (
+  const handleImagenSecundariaChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    if (e.target.files && e.target.files[0]) {
-      const nuevoArray = [...formData.imagenes];
+    const updated = [...formData.imagenes_secundarias];
+    updated[index] = e.target.files?.[0] || null;
+    setFormData({ ...formData, imagenes_secundarias: updated });
+  };
 
-      // Agregar el archivo y su parrafo
-      nuevoArray[index] = {
-        ...nuevoArray[index],
-        url_imagen: e.target.files[0],
-      };
-
-      setFormData({ ...formData, imagenes: nuevoArray });
-    }
+  const handleAltImagenSecundariaChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const updated = [...formData.alt_imagenes_secundarias];
+    updated[index] = e.target.value;
+    setFormData({ ...formData, alt_imagenes_secundarias: updated });
   };
 
   const handleParrafoChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => {
-    const nuevoArray = [...formData.imagenes];
-    nuevoArray[index] = {
-      ...nuevoArray[index],
-      parrafo_imagen: e.target.value,
-    };
-    setFormData({ ...formData, imagenes: nuevoArray });
+    const updated = [...formData.parrafos];
+    updated[index] = e.target.value;
+    setFormData({ ...formData, parrafos: updated });
+  };
+
+  // ✅ Función para abrir el modal de enlace manual
+  const handleInsertLinkClick = (index: number) => {
+    const textarea = document.getElementById(`parrafo-${index}`) as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    if (start === end) {
+      Swal.fire(
+        "Selecciona texto",
+        "Por favor selecciona una palabra o frase antes de insertar el enlace.",
+        "warning"
+      );
+      return;
+    }
+
+    const selected = textarea.value.substring(start, end);
+    setSelectedParagraphIndex(index);
+    setSelectedTextRange({ start, end });
+    setSelectedText(selected);
+    setIsLinkModalOpen(true);
+  };
+
+  // ✅ Función para insertar enlace manual
+  const handleInsertManualLink = () => {
+    if (selectedParagraphIndex === null || selectedTextRange === null || !linkUrl.trim()) {
+      alert("❌ Faltan datos para insertar el enlace");
+      return;
+    }
+
+    const currentText = formData.parrafos[selectedParagraphIndex];
+    const linkedText = `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer">${selectedText}</a>`;
+
+    const newText =
+      currentText.slice(0, selectedTextRange.start) +
+      linkedText +
+      currentText.slice(selectedTextRange.end);
+
+    const updatedParrafos = [...formData.parrafos];
+    updatedParrafos[selectedParagraphIndex] = newText;
+
+    setFormData({ ...formData, parrafos: updatedParrafos });
+    
+    // Limpiar estados
+    setSelectedParagraphIndex(null);
+    setSelectedTextRange(null);
+    setSelectedText("");
+    setLinkUrl("");
+    setIsLinkModalOpen(false);
+  };
+
+  // ✅ Función para abrir selector de producto
+  const handleProductLinkClick = (index: number) => {
+    const textarea = document.getElementById(`parrafo-${index}`) as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.substring(start, end);
+
+    if (!selected) {
+      Swal.fire(
+        "Selecciona texto",
+        "Por favor selecciona una palabra o frase para enlazar a un producto.",
+        "warning"
+      );
+      return;
+    }
+
+    setSelectedParagraphIndex(index);
+    setSelectedTextRange({ start, end });
+    setSelectedText(selected);
+    setIsProductLinkModalOpen(true);
+  };
+
+  // ✅ Función para insertar enlace a producto
+  const handleInsertProductLink = (producto: Producto) => {
+    if (selectedParagraphIndex === null || selectedTextRange === null) return;
+
+    const currentText = formData.parrafos[selectedParagraphIndex];
+    const link = producto.link;
+    const linkedText = `<a href="/products/producto/?link=${encodeURIComponent(link)}">${selectedText}</a>`;
+
+    const newText =
+      currentText.slice(0, selectedTextRange.start) +
+      linkedText +
+      currentText.slice(selectedTextRange.end);
+
+    const updatedParrafos = [...formData.parrafos];
+    updatedParrafos[selectedParagraphIndex] = newText;
+
+    setFormData({ ...formData, parrafos: updatedParrafos });
+    
+    // Limpiar estados
+    setSelectedParagraphIndex(null);
+    setSelectedTextRange(null);
+    setSelectedText("");
+    setIsProductLinkModalOpen(false);
   };
 
   const closeModal = () => {
     setIsOpen(false);
-    setFormData({
-      producto_id: 0,
-      titulo: "",
-      link: "",
-      parrafo: "",
-      descripcion: "",
-      imagen_principal: null,
-      titulo_blog: "",
-      subtitulo_beneficio: "",
-      url_video: "",
-      titulo_video: "",
-      imagenes: [
-        {
-          url_imagen: null,
-          parrafo_imagen: "",
-        },
-        {
-          url_imagen: null,
-          parrafo_imagen: "",
-        },
-      ],
-    });
+    // Limpiar todos los estados relacionados
+    setSelectedParagraphIndex(null);
+    setSelectedTextRange(null);
+    setSelectedText("");
+    setIsLinkModalOpen(false);
+    setIsProductLinkModalOpen(false);
+    setLinkUrl("");
   };
 
-  // Enviar los datos a la API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const isEdit = !!blogToEdit;
 
-    // Validar campos requeridos
-    if (
-        !formData.titulo ||
-        !formData.link ||
-        !formData.parrafo ||
-        !formData.descripcion ||
-        !formData.subtitulo_beneficio ||
-        !formData.titulo_blog ||
-        !formData.titulo_video ||
-        !formData.url_video ||
-        !formData.imagen_principal ||
-        formData.imagenes.some((img) => !img.url_imagen)
-    ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Campos obligatorios",
-        text: "⚠️ Todos los campos son obligatorios.",
-      });
+    if (!formData.titulo || !formData.subtitulo) {
+      return alert("⚠️ Título y subtítulo son obligatorios.");
+    }
 
-      return;
+    if (!isEdit && !formData.imagen_principal) {
+      return alert("⚠️ La imagen principal es obligatoria para crear.");
+    }
+
+    if (formData.parrafos.some((p) => !p.trim())) {
+      return alert("⚠️ Todos los párrafos deben estar completos.");
+    }
+
+    const urlRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    if (formData.link && !urlRegex.test(formData.link)) {
+      return alert(
+        "⚠️ El link debe ser URL-friendly (solo minúsculas, guiones y números)."
+      );
     }
 
     try {
       const token = localStorage.getItem("token");
       const formDataToSend = new FormData();
 
+      if (isEdit) formDataToSend.append("_method", "PUT");
 
-      console.log("Producto ID a enviar:", formData.producto_id);
-      if (formData.producto_id && !isNaN(formData.producto_id)) {
-        formDataToSend.append("producto_id", String(formData.producto_id));
-      } else {
-        alert("⚠️ Debes seleccionar un producto válido.");
-        return;
-      }
-      formDataToSend.append("titulo", formData.titulo);
-      formDataToSend.append("link", formData.link);
-      formDataToSend.append("parrafo", formData.parrafo);
-      formDataToSend.append("descripcion", formData.descripcion);
-      formDataToSend.append("subtitulo_beneficio", formData.subtitulo_beneficio);
-      formDataToSend.append("titulo_blog", formData.titulo_blog);
-      formDataToSend.append("titulo_video", formData.titulo_video);
-      formDataToSend.append("url_video", formData.url_video);
-      formDataToSend.append("imagen_principal", formData.imagen_principal as File);
-
-      formData.imagenes.forEach((item, index) => {
-        if (item.url_imagen) {
-          formDataToSend.append(`imagenes[${index}][imagen]`, item.url_imagen as File);
+      // Campos simples
+      for (const key in formData) {
+        if (
+          key === "imagenes_secundarias" ||
+          key === "alt_imagenes_secundarias" ||
+          key === "parrafos"
+        )
+          continue;
+        const value = (formData as any)[key];
+        if (value instanceof File) {
+          formDataToSend.append(key, value);
+        } else {
+          formDataToSend.append(key, value ?? "");
         }
-        formDataToSend.append(`imagenes[${index}][parrafo_imagen]`, item.parrafo_imagen);
+      }
+
+      // Imagenes secundarias + ALT
+      formData.imagenes_secundarias.forEach((img) => {
+        if (img) formDataToSend.append("imagenes[]", img);
+      });
+      formData.alt_imagenes_secundarias.forEach((alt) => {
+        formDataToSend.append("alt_imagenes[]", alt);
       });
 
-      const response = await fetch(getApiUrl(config.endpoints.blogs.create), {
-        method: "POST",
+      // Párrafos
+      formData.parrafos.forEach((p) => formDataToSend.append("parrafos[]", p));
+
+      const endpoint = isEdit
+        ? getApiUrl(config.endpoints.blogs.update(blogToEdit.id))
+        : getApiUrl(config.endpoints.blogs.create);
+      
+      console.log("👉 Endpoint blogs:", endpoint);
+      
+      const res = await fetch(endpoint, {
+        method: isEdit ? "PUT" : "POST",
         body: formDataToSend,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -249,211 +404,383 @@ const AddBlogModal: React.FC<AddBlogModalProps> = ({ onBlogAdded }) => {
         },
       });
 
+      const contentType = res.headers.get("content-type");
+      const data = contentType?.includes("json")
+        ? await res.json()
+        : await res.text();
 
-      const data = await response.json();
-      console.log("Respuesta del servidor:", data);
-
-      if (response.ok) {await Swal.fire({
-        icon: "success",
-        title: "Blog añadido exitosamente",
-        showConfirmButton: true,
-      });
-        closeModal(); // Cerrar modal
-      } else {Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `❌ Error: ${data.message}`,
-      });
-
+      if (res.ok) {
+        alert(`✅ Blog ${isEdit ? "actualizado" : "creado"} correctamente.`);
+        closeModal();
+        onSuccess?.();
+      } else {
+        alert(`❌ Error: ${data.message || data}`);
       }
-      if (onBlogAdded) onBlogAdded();
-    } catch (error) {
-      console.error("Error al enviar los datos:", error);
-      alert(`❌ Error: ${error}`);
+    } catch (err) {
+      console.error(err);
+      alert("❌ Error en la solicitud.");
     }
   };
 
-  // @ts-ignore
+  if (!isOpen) return null;
+
   return (
-    <>
-      {/* Botón para abrir el modal */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="mt-4 bg-blue-950 hover:bg-blue-950 text-white text-lg px-10 py-1.5 rounded-full flex items-center gap-2"
-      >
-        Añadir Blog
-      </button>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+      <div className="bg-white text-black px-8 py-6 rounded-lg max-h-[90vh] overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-6">
+          {blogToEdit ? "Editar Blog" : "Añadir Blog"}
+        </h2>
+        <form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          className="space-y-8 max-w-3xl mx-auto"
+        >
+          {/* Información Principal & SEO */}
+          <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <h3 className="text-lg font-semibold text-blue-800 mb-4">
+              Información Principal & SEO
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Producto */}
+              <div className="col-span-4">
+                <label className="block mb-2">Selecciona un Producto</label>
+                <select
+                  name="producto_id"
+                  value={formData.producto_id}
+                  onChange={handleSelectChange}
+                  required
+                  className="w-full bg-white text-black p-2 rounded-md"
+                  disabled={loading}
+                >
+                  <option value="">
+                    {loading ? "Cargando productos..." : "-- Selecciona un producto --"}
+                  </option>
+                  {Array.isArray(productos) && productos.length > 0 ? (
+                    productos.map((producto) => (
+                      <option key={producto.id} value={producto.id}>
+                        {producto.nombre || `Producto ${producto.id}`}
+                      </option>
+                    ))
+                  ) : (
+                    !loading && (
+                      <option value="" disabled>
+                        No hay productos disponibles
+                      </option>
+                    )
+                  )}
+                </select>
+                
+                {productos.length > 0 && (
+                  <p className="text-xs text-green-400 mt-1">
+                    ✅ {productos.length} productos cargados
+                  </p>
+                )}
+              </div>
 
-      {/* Modal */}
-      {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-          <div className="h-3/4 overflow-y-scroll bg-blue-950 text-white px-10 py-8 rounded-4xl w-3/5">
-            <h2 className="text-3xl font-bold text-white mb-4">Añadir Nuevo Blog</h2>
-
-            {/* Formulario */}
-            <form
-              encType="multipart/form-data"
-              onSubmit={handleSubmit}
-              className="grid grid-cols-2 gap-4 gap-x-12"
-            >
-              <div>
-                <label className="block">Título</label>
+              {/* Título */}
+              <div className="md:col-span-2">
+                <label className="block font-medium mb-1">Título</label>
                 <input
                   type="text"
                   name="titulo"
                   value={formData.titulo}
-                  onChange={handleChange}
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-              <div>
-                <label className="block">Link</label>
-                <input
-                    type="text"
-                    name="link"
-                    value={formData.link}
-                    onChange={handleChange}
-                    className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-              <div>
-                <label className="block">Párrafo</label>
-                <input
-                  type="text"
-                  name="parrafo"
-                  value={formData.parrafo}
-                  onChange={handleChange}
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block">Descripción</label>
-                <input
-                  type="text"
-                  name="descripcion"
-                  value={formData.descripcion}
-                  onChange={handleChange}
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block">Subtítulo Beneficio</label>
-                <input
-                  type="text"
-                  name="subtitulo_beneficio"
-                  value={formData.subtitulo_beneficio}
-                  onChange={handleChange}
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-
-              <div>
-                <label className="block">Título Blog</label>
-                <input
-                  type="text"
-                  name="titulo_blog"
-                  value={formData.titulo_blog}
-                  onChange={handleChange}
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-
-              <div>
-                <label className="block">Título Video</label>
-                <input
-                  type="text"
-                  name="titulo_video"
-                  value={formData.titulo_video}
-                  onChange={handleChange}
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block">URL del Video</label>
-                <input
-                  type="text"
-                  name="url_video"
-                  value={formData.url_video}
-                  onChange={handleChange}
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
-                />
-              </div>
-              <div className="col-span-2">
-                <label className="block">Producto</label>
-                <select
-                    name="producto_id"
-                    value={formData.producto_id || ""} // En blanco si es 0
-                    onChange={(e) =>
-                        setFormData({ ...formData, producto_id: Number(e.target.value) })
-                    }
-                    required
-                    className="w-full bg-white outline-none p-2 rounded-md text-black"
-                >
-                  <option value="">Selecciona un producto</option>
-                  {productos.map((producto) => (
-                      <option key={producto.id} value={producto.id}>
-                        {producto.nombre || producto.titulo}
-                      </option>
-                  ))}
-                </select>
-              </div>
-
-
-              <div className="col-span-2">
-                <label className="block">Imagen Principal</label>
-                <input
-                  type="file"
-                  accept="image/png, image/jpeg, image/jpg"
-                  name="imagen_principal"
-                  onChange={handleFileChange}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
                   required
-                  className="w-full bg-white outline-none p-2 rounded-md text-black"
                 />
               </div>
-              {formData.imagenes.map((imagen, index) => (
-                <div key={index} className="col-span-2">
-                  <label className="block">Imagen {index + 1}</label>
+
+              {/* Subtítulo */}
+              <div className="md:col-span-2">
+                <label className="block font-medium mb-1">Subtítulo</label>
+                <input
+                  name="subtitulo"
+                  value={formData.subtitulo}
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  required
+                />
+              </div>
+
+              {/* Meta Título */}
+              <div className="md:col-span-2">
+                <label className="block font-medium mb-1">Meta Título (SEO)</label>
+                <input
+                  type="text"
+                  name="meta_titulo"
+                  value={formData.meta_titulo}
+                  onChange={handleInputChange}
+                  placeholder="Título optimizado para SEO"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Recomendado: 50-60 caracteres
+                </p>
+              </div>
+
+              {/* Meta Descripción */}
+              <div className="md:col-span-2">
+                <label className="block font-medium mb-1">Meta Descripción (SEO)</label>
+                <textarea
+                  name="meta_descripcion"
+                  value={formData.meta_descripcion}
+                  onChange={handleInputChange}
+                  placeholder="Descripción optimizada para motores de búsqueda"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  rows={3}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Recomendado: 150-160 caracteres
+                </p>
+              </div>
+
+              {/* Link */}
+              <div className="md:col-span-4">
+                <label className="block font-medium mb-1">
+                  Link (URL amigable)
+                </label>
+                <input
+                  type="text"
+                  name="link"
+                  value={formData.link}
+                  onChange={handleInputChange}
+                  placeholder="ejemplo: mi-blog-post"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Imágenes */}
+          <div className="bg-green-50 p-6 rounded-lg border border-green-200">
+            <h3 className="text-lg font-semibold text-green-800 mb-4">Imágenes</h3>
+
+            {/* Imagen Principal + ALT */}
+            <div>
+              <label className="block font-medium mb-1">Imagen Principal</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileChange(e, "imagen_principal")}
+                className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
+              />
+              <input
+                type="text"
+                name="alt_imagen_principal"
+                placeholder="Texto ALT para SEO"
+                value={formData.alt_imagen_principal}
+                onChange={handleInputChange}
+                className="mt-2 w-full border border-gray-300 rounded px-3 py-2"
+              />
+            </div>
+
+            {/* Imagen Card + ALT */}
+            <div className="mt-4">
+              <label className="block font-medium mb-1">Imagen Card</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileChange(e, "imagen_card")}
+                className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
+              />
+              <input
+                type="text"
+                name="alt_imagen_card"
+                placeholder="Texto ALT para SEO"
+                value={formData.alt_imagen_card}
+                onChange={handleInputChange}
+                className="mt-2 w-full border border-gray-300 rounded px-3 py-2"
+              />
+            </div>
+
+            {/* Imágenes Secundarias + ALT */}
+            <div className="mt-6 space-y-6">
+              <label className="block font-semibold">Imágenes Secundarias</label>
+              {formData.imagenes_secundarias.map((_, i) => (
+                <div key={i} className="space-y-1">
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => {
-                      handleFileChangeAdicional(e, index);
-                    }}
-                    required
-                    className="w-full bg-white outline-none p-2 rounded-md text-black"
+                    onChange={(e) => handleImagenSecundariaChange(e, i)}
+                    className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
                   />
-                  <textarea
-                    onChange={(e) => {
-                      handleParrafoChange(e, index);
-                    }}
-                    required
-                    placeholder="Descripción de la imagen..."
-                    className="w-full bg-white outline-none p-2 rounded-md text-black mt-2 min-h-36"
+                  <input
+                    type="text"
+                    placeholder={`Texto ALT imagen secundaria #${i + 1}`}
+                    value={formData.alt_imagenes_secundarias[i]}
+                    onChange={(e) => handleAltImagenSecundariaChange(e, i)}
+                    className="w-full border border-gray-300 rounded px-3 py-2"
                   />
                 </div>
               ))}
+            </div>
+          </div>
 
-              {/* Botones */}
-              <div className="flex gap-2 mt-8">
-                <button type="submit" className="admin-act-btn">
-                  Añadir Blog
+          {/* Párrafos */}
+          <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 relative">
+            <h3 className="text-lg font-semibold text-yellow-800 mb-4">Párrafos</h3>
+            {formData.parrafos.map((p, i) => (
+              <div key={i} className="relative mb-6">
+                <textarea
+                  id={`parrafo-${i}`}
+                  value={p}
+                  onChange={(e) => handleParrafoChange(e, i)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 pr-20"
+                  rows={4}
+                  placeholder={`Párrafo ${i + 1}`}
+                  required
+                />
+
+                {/* Botones para insertar enlaces */}
+                <div className="absolute top-2 right-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleInsertLinkClick(i)}
+                    title="Insertar enlace manual"
+                    className="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition-all duration-200"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleProductLinkClick(i)}
+                    title="Enlazar a producto"
+                    className="bg-green-500 hover:bg-green-700 text-white p-2 rounded-full shadow-lg transition-all duration-200"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Botones */}
+          <div className="flex justify-end space-x-4">
+            <button
+              type="button"
+              onClick={closeModal}
+              className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+            >
+              {blogToEdit ? "Actualizar" : "Crear"}
+            </button>
+          </div>
+        </form>
+
+        {/* Modal para enlace manual */}
+        {isLinkModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[60]">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+              <h3 className="text-lg font-bold mb-4">Insertar Enlace</h3>
+              <p className="text-sm text-gray-600 mb-2">
+                Texto seleccionado: <strong>"{selectedText}"</strong>
+              </p>
+              <div className="mb-4">
+                <label className="block font-medium mb-1">URL del enlace</label>
+                <input
+                  type="url"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  placeholder="https://ejemplo.com"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setIsLinkModalOpen(false)}
+                  className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                >
+                  Cancelar
                 </button>
                 <button
-                  onClick={closeModal}
                   type="button"
-                  className="cancel-btn"
+                  onClick={handleInsertManualLink}
+                  disabled={!linkUrl.trim()}
+                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white px-4 py-2 rounded"
+                >
+                  Insertar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal para enlace a producto */}
+        {isProductLinkModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[60]">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+              <h3 className="text-lg font-bold mb-4">Enlazar a Producto</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Texto seleccionado: <strong>"{selectedText}"</strong>
+              </p>
+              <div className="mb-4">
+                <label className="block font-medium mb-1">Selecciona un producto</label>
+                <select
+                  onChange={(e) => {
+                    const selectedId = parseInt(e.target.value);
+                    const selectedProduct = productos.find(p => p.id === selectedId);
+                    if (selectedProduct) {
+                      handleInsertProductLink(selectedProduct);
+                    }
+                  }}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                >
+                  <option value="">-- Seleccionar producto --</option>
+                  {productos.map((producto) => (
+                    <option key={producto.id} value={producto.id}>
+                      {producto.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsProductLinkModalOpen(false)}
+                  className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
                 >
                   Cancelar
                 </button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
-      )}
-    </>
+        )}
+      </div>
+    </div>
   );
 };
 

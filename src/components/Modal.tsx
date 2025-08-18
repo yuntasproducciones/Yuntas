@@ -5,42 +5,29 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
-  form: string;
-  btnText: string;
 }
 
-const Modal = ({ children, isOpen, onClose, title, form, btnText }: Props) => {
+const Modal = ({ children, isOpen, onClose, title }: Props) => {
   if (!isOpen) return null;
+
   return (
-    <div className="flex items-center justify-center fixed inset-0  bg-black/40 ">
-      <div className="relative bg-white px-3 py-4 rounded-xl max-w-5xl sm:min-w-2xl mx-auto">
-        {title && <h2 className="text-2xl font-bold mb-4 pl-3">{title}</h2>}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 overflow-y-auto">
+      <div className="relative bg-white dark:bg-gray-900 px-5 py-6 rounded-xl max-w-4xl w-full mx-4 my-10 shadow-lg">
+        {/* Título */}
+        {title && <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">{title}</h2>}
+        
+        {/* Botón cerrar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-7 cursor-pointer text-2xl bg-white rounded-full"
+          className="absolute top-4 right-5 text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white text-xl"
+          aria-label="Cerrar"
         >
           ✕
         </button>
-        <div className="overflow-y-auto max-h-[700px] px-3">
-          
+
+        {/* Contenido con scroll interno si es muy largo */}
+        <div className="overflow-y-auto max-h-[75vh] pr-2">
           {children}
-        </div>
-        <div className="flex">
-          <div className="ml-auto space-x-2 mt-4 col-span-2">
-            <button
-              type="submit"
-              form={form}
-              className="bg-blue-600 text-white font-semibold px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-200 cursor-pointer"
-            >
-              {btnText}
-            </button>
-            <button
-              onClick={onClose}
-              className="bg-gray-300 text-gray-800 font-semibold px-5 py-2 rounded-lg hover:bg-gray-400 transition duration-200 cursor-pointer"
-            >
-              Cancelar
-            </button>
-          </div>
         </div>
       </div>
     </div>

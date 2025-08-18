@@ -6,11 +6,12 @@
  **/
 export const config = {
 
-  apiUrl: "https://apiyuntas.yuntaspublicidad.com", //import.meta.env.PUBLIC_API_URL, // URL de la API
+  // apiUrl: "http://localhost:8000", // API local para desarrollo
+  apiUrl: "https://apiyuntas.yuntaspublicidad.com", // API desplegada (comentada para desarrollo)
   environment: import.meta.env.MODE || "development", // Entorno de la aplicación, por defecto development
   endpoints: {
     auth: {
-      // Endpoints de autenticaci贸n
+      // Endpoints de autenticaci贸
       login: "/api/v1/auth/login",
       logout: "/api/v1/auth/logout",
     },
@@ -32,17 +33,18 @@ export const config = {
     },
     productos: {
       // Endpoints de productos
-      list: '/api/v2/productos',
-      detail: (id: string | number) => `/api/v2/productos/${id}`,
-      link: (link: string) => `/api/v2/productos/link/${link}`,
-      create: "/api/v2/productos",
-      update: (id: number | string) => `/api/v2/productos/${id}`,
-      delete: (id: number | string) => `/api/v2/productos/${id}`,
+      list: '/api/v1/productos',
+      detail: (id: string | number) => `/api/v1/productos/${id}`,
+      link: (link: string) => `/api/v1/productos/link/${link}`,
+      create: "/api/v1/productos",
+      update: (id: number | string) => `/api/v1/productos/${id}`,
+      delete: (id: number | string) => `/api/v1/productos/${id}`,
     },
     blogs: {
       // Endpoints de blogs
       list: "/api/blogs",
       detail: (id: number | string) => `/api/blogs/${id}`,
+      link: (link: string) => `/api/blogs/link/${link}`,
       create: "/api/blogs",
       update: (id: number | string) => `/api/blogs/${id}`,
       delete: (id: number | string) => `/api/blogs/${id}`,
