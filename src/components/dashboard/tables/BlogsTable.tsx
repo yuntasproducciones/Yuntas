@@ -9,6 +9,8 @@ interface Blog {
   id: number;
   producto_id: number; 
   nombre_producto: string;
+  meta_titulo?: string;
+  meta_descripcion?: string;
   subtitulo: string;
   imagen_principal: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];
