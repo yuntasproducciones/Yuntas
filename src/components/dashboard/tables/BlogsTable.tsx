@@ -9,8 +9,10 @@ interface Blog {
   id: number;
   producto_id: number; 
   nombre_producto: string;
-  meta_titulo?: string;
-  meta_descripcion?: string;
+  etiqueta: {
+    meta_titulo: string;
+    meta_descripcion: string;
+  }
   subtitulo: string;
   imagen_principal: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];
@@ -129,7 +131,7 @@ const BlogsTable = () => {
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">ID</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">PRODUCTO</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">SUBTÍTULO</th>
-              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">IMAGEN</th>
+              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">IMAGEN</th> 
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">FECHA</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">ACCIÓN</th>
             </tr>
@@ -156,7 +158,7 @@ const BlogsTable = () => {
                   <td className="px-4 py-2 rounded-xl border border-gray-300">
                     {truncateText(item.subtitulo, 40)}
                   </td>
-                  <td className="px-4 py-2 rounded-xl border border-gray-300">
+                   <td className="px-4 py-2 rounded-xl border border-gray-300">
                     <img
                       src={getImageUrl(item.imagen_principal)}
                       alt={item.nombre_producto || 'Blog'}
@@ -166,7 +168,7 @@ const BlogsTable = () => {
                         target.src = '/placeholder-image.jpg';
                       }}
                     />
-                  </td>
+                  </td>  
                   <td className="px-4 py-2 rounded-xl border border-gray-300 text-sm">
                     {item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : 'N/A'}
                   </td>
