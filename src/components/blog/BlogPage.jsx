@@ -1,5 +1,6 @@
 import { a } from "framer-motion/client";
 import React from "react";
+import useBlogSEO from "../../hooks/useBlogSEO";
 
 export default function BlogDetail({ article }) {
   const imageBaseUrl =
@@ -7,13 +8,14 @@ export default function BlogDetail({ article }) {
     (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
       ? "http://127.0.0.1:8000"
       : "https://apiyuntas.yuntaspublicidad.com";
-
+  // 🧠 Hook para aplicar meta título y descripción
+  useBlogSEO(article);
   // Función para armar la URL correcta de la imagen
    const buildImageUrl = (path) => {
     if (!path) return null;
     return path.startsWith("http") ? path : imageBaseUrl + path;
   };
-  
+  console.log("🌟 article:", article);
   return (
     <>
       {/* Imagen principal con encabezado */}

@@ -9,6 +9,10 @@ interface Blog {
   id: number;
   producto_id: number; 
   nombre_producto: string;
+  etiqueta: {
+    meta_titulo: string;
+    meta_descripcion: string;
+  }
   subtitulo: string;
   imagen_principal: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];
@@ -118,29 +122,39 @@ const BlogsTable = () => {
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
+  // Función para abrir modal de nuevo blog
+  const handleAddNewBlog = () => {
+    setEditBlog(null);
+    setIsModalOpen(true);
+  };
+
   return (
     <>
       <div className="overflow-x-auto p-4">
-        <TableContainer tableType="blogs">
+        <TableContainer 
+          tableType="blogs"
+          exportData={data} // ✅ Pasar todos los datos para exportar
+          onAddNew={handleAddNewBlog} // ✅ Función para agregar nuevo blog
+        >
           <thead>
             <tr className="bg-blue-950 text-white">
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">ID</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">PRODUCTO</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">SUBTÍTULO</th>
-              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">IMAGEN</th>
+              <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">IMAGEN</th> 
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">FECHA</th>
               <th className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md">ACCIÓN</th>
             </tr>
           </thead>
           <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan={7} className="text-center py-4 text-gray-500">
-                Cargando blogs...
-              </td>
-            </tr>
-          ) : currentItems.length > 0 ? (
-            currentItems.map((item) => (
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="text-center py-4 text-gray-500">
+                  Cargando blogs...
+                </td>
+              </tr>
+            ) : currentItems.length > 0 ? (
+              currentItems.map((item) => (
                 <tr
                   key={item.id}
                   className={`text-center ${item.id % 2 === 0 ? "bg-gray-100" : "bg-gray-300"}`}
@@ -154,7 +168,7 @@ const BlogsTable = () => {
                   <td className="px-4 py-2 rounded-xl border border-gray-300">
                     {truncateText(item.subtitulo, 40)}
                   </td>
-                  <td className="px-4 py-2 rounded-xl border border-gray-300">
+                   <td className="px-4 py-2 rounded-xl border border-gray-300">
                     <img
                       src={getImageUrl(item.imagen_principal)}
                       alt={item.nombre_producto || 'Blog'}
@@ -164,7 +178,7 @@ const BlogsTable = () => {
                         target.src = '/placeholder-image.jpg';
                       }}
                     />
-                  </td>
+                  </td>   
                   <td className="px-4 py-2 rounded-xl border border-gray-300 text-sm">
                     {item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : 'N/A'}
                   </td>
@@ -194,7 +208,7 @@ const BlogsTable = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={7} className="text-center py-4 text-gray-500">
+                <td colSpan={6} className="text-center py-4 text-gray-500">
                   No hay blogs disponibles
                 </td>
               </tr>
@@ -208,7 +222,7 @@ const BlogsTable = () => {
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-800 transition-colors"
             >
               Anterior
             </button>
@@ -224,7 +238,7 @@ const BlogsTable = () => {
                       currentPage === pageNum
                         ? 'bg-blue-950 text-white'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
+                    } transition-colors`}
                   >
                     {pageNum}
                   </button>
@@ -235,20 +249,12 @@ const BlogsTable = () => {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-800 transition-colors"
             >
               Siguiente
             </button>
           </div>
         )}
-        <button onClick={() => {
-            setEditBlog(null);       // Limpia la edición previa
-            setIsModalOpen(true);    // Abre el modal limpio
-          }}
-          className="mt-4 mb-6 bg-blue-950 hover:bg-blue-800 text-white text-lg px-10 py-2 rounded-full"
-        >
-          Añadir Blog
-        </button>
 
         <AddBlogModal
           isOpen={isModalOpen}

@@ -4,14 +4,12 @@ import Swal from "sweetalert2";
 
 interface BlogPOST {
   producto_id: string;
-  titulo: string;
   subtitulo: string;
   link: string;
-  meta_titulo: string;
-  meta_descripcion: string;
+  meta_titulo?: string;
+  meta_descripcion?: string;
   imagen_principal: File | null;
-  alt_imagen_principal: string;
-  imagen_card: File | null;
+  text_alt_principal: string;
   alt_imagen_card: string;
   imagenes_secundarias: (File | null)[];
   alt_imagenes_secundarias: string[];
@@ -22,17 +20,14 @@ interface Blog {
   id: number;
   producto_id: number;
   nombre_producto: string;
-  titulo?: string;
   subtitulo: string;
   link?: string;
-  meta_titulo?: string;
-  meta_descripcion?: string;
+  etiqueta?: { meta_titulo: string; meta_descripcion: string };
   imagen_principal: string;
-  imagen_card?: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];
   parrafos?: { parrafo: string }[];
   alt_imagen_card?: string;
-  alt_imagen_principal?: string;
+  text_alt_principal?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -57,6 +52,7 @@ const AddBlogModal = ({
   onSuccess,
 }: AddBlogModalProps) => {
   const [productos, setProductos] = useState<Producto[]>([]);
+  const [nombreProducto, setNombreProducto] = useState("");
   const [loading, setLoading] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [selectedParagraphIndex, setSelectedParagraphIndex] = useState<number | null>(null);
@@ -67,14 +63,12 @@ const AddBlogModal = ({
 
   const defaultFormData: BlogPOST = {
     producto_id: "",
-    titulo: "",
     subtitulo: "",
     link: "",
     meta_titulo: "",
     meta_descripcion: "",
     imagen_principal: null,
-    alt_imagen_principal: "",
-    imagen_card: null,
+    text_alt_principal: "",
     alt_imagen_card: "",
     imagenes_secundarias: [null, null, null],
     alt_imagenes_secundarias: ["", "", ""],
@@ -87,16 +81,23 @@ const AddBlogModal = ({
     if (!isOpen) return;
 
     if (blogToEdit) {
+      console.log("📝 Editando blog:", {
+        id: blogToEdit.id,
+        producto_id: blogToEdit.producto_id,
+        nombre_producto: blogToEdit.nombre_producto
+      });
+      
+      // ✅ ASEGURAR que producto_id se cargue correctamente
+      const productoIdString = blogToEdit.producto_id?.toString() || "";
+      
       setFormData({
-        producto_id: blogToEdit.producto_id?.toString() || "",
-        titulo: blogToEdit.titulo || "",
+        producto_id: productoIdString,
         subtitulo: blogToEdit.subtitulo || "",
         link: blogToEdit.link || "",
-        meta_titulo: blogToEdit.meta_titulo || "",
-        meta_descripcion: blogToEdit.meta_descripcion || "",
+        meta_titulo: blogToEdit.etiqueta?.meta_titulo || "",
+        meta_descripcion: blogToEdit.etiqueta?.meta_descripcion || "",
         imagen_principal: null,
-        alt_imagen_principal: blogToEdit.alt_imagen_principal || "",
-        imagen_card: null,
+        text_alt_principal: blogToEdit.text_alt_principal || "",
         alt_imagen_card: blogToEdit.alt_imagen_card || "",
         imagenes_secundarias: [null, null, null],
         alt_imagenes_secundarias: [
@@ -110,22 +111,14 @@ const AddBlogModal = ({
           blogToEdit.parrafos?.[2]?.parrafo || "",
         ],
       });
+
+      setNombreProducto(blogToEdit.nombre_producto || "");
+      
+      console.log("✅ FormData inicializado con producto_id:", productoIdString);
     } else {
-      setFormData({
-        producto_id: "",
-        titulo: "",
-        subtitulo: "",
-        link: "",
-        meta_titulo: "",
-        meta_descripcion: "",
-        imagen_principal: null,
-        alt_imagen_principal: "",
-        imagen_card: null,
-        alt_imagen_card: "",
-        imagenes_secundarias: [null, null, null],
-        alt_imagenes_secundarias: ["", "", ""],
-        parrafos: ["", "", ""],
-      });
+      console.log("➕ Creando nuevo blog");
+      setFormData(defaultFormData);
+      setNombreProducto("");
     }
   }, [isOpen, blogToEdit]);
 
@@ -221,7 +214,7 @@ const AddBlogModal = ({
     setFormData({ ...formData, parrafos: updated });
   };
 
-  // ✅ Función para abrir el modal de enlace manual
+  // Función para abrir el modal de enlace manual
   const handleInsertLinkClick = (index: number) => {
     const textarea = document.getElementById(`parrafo-${index}`) as HTMLTextAreaElement;
     if (!textarea) return;
@@ -245,7 +238,7 @@ const AddBlogModal = ({
     setIsLinkModalOpen(true);
   };
 
-  // ✅ Función para insertar enlace manual
+  // Función para insertar enlace manual
   const handleInsertManualLink = () => {
     if (selectedParagraphIndex === null || selectedTextRange === null || !linkUrl.trim()) {
       alert("❌ Faltan datos para insertar el enlace");
@@ -273,7 +266,7 @@ const AddBlogModal = ({
     setIsLinkModalOpen(false);
   };
 
-  // ✅ Función para abrir selector de producto
+  // Función para abrir selector de producto
   const handleProductLinkClick = (index: number) => {
     const textarea = document.getElementById(`parrafo-${index}`) as HTMLTextAreaElement;
     if (!textarea) return;
@@ -297,13 +290,13 @@ const AddBlogModal = ({
     setIsProductLinkModalOpen(true);
   };
 
-  // ✅ Función para insertar enlace a producto
+  // Función para insertar enlace a producto
   const handleInsertProductLink = (producto: Producto) => {
     if (selectedParagraphIndex === null || selectedTextRange === null) return;
 
     const currentText = formData.parrafos[selectedParagraphIndex];
     const link = producto.link;
-    const linkedText = `<a href="/products/producto/?link=${encodeURIComponent(link)}">${selectedText}</a>`;
+    const linkedText = `<a href="/products/producto/?link=${link}" style="color: blue; text-decoration: underline;">${selectedText}</a>`;
 
     const newText =
       currentText.slice(0, selectedTextRange.start) +
@@ -331,22 +324,41 @@ const AddBlogModal = ({
     setIsLinkModalOpen(false);
     setIsProductLinkModalOpen(false);
     setLinkUrl("");
+    setFormData(defaultFormData);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const isEdit = !!blogToEdit;
 
-    if (!formData.titulo || !formData.subtitulo) {
-      return alert("⚠️ Título y subtítulo son obligatorios.");
+    console.log("🚀 Iniciando envío:", { isEdit, blogToEdit: blogToEdit?.id });
+
+    // ✅ VALIDACIONES MEJORADAS
+    if (!formData.producto_id || formData.producto_id.trim() === "") {
+      return alert("⚠️ Debe seleccionar un producto.");
+    }
+
+    // Debug para verificar el producto_id en edición
+    if (isEdit) {
+      console.log("🔍 Verificando producto_id en edición:", {
+        formData_producto_id: formData.producto_id,
+        blogToEdit_producto_id: blogToEdit.producto_id,
+        nombreProducto: nombreProducto
+      });
+    }
+
+    if (!formData.subtitulo || formData.subtitulo.trim() === "") {
+      return alert("⚠️ El subtítulo es obligatorio.");
     }
 
     if (!isEdit && !formData.imagen_principal) {
       return alert("⚠️ La imagen principal es obligatoria para crear.");
     }
 
-    if (formData.parrafos.some((p) => !p.trim())) {
-      return alert("⚠️ Todos los párrafos deben estar completos.");
+    // Verificar que hay al menos un párrafo con contenido
+    const parrafosConContenido = formData.parrafos.filter(p => p.trim());
+    if (parrafosConContenido.length === 0) {
+      return alert("⚠️ Debe haber al menos un párrafo con contenido.");
     }
 
     const urlRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -357,46 +369,100 @@ const AddBlogModal = ({
     }
 
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       const formDataToSend = new FormData();
 
-      if (isEdit) formDataToSend.append("_method", "PUT");
+      // ✅ CAMPOS OBLIGATORIOS - SIEMPRE ENVIAR
+      formDataToSend.append('producto_id', formData.producto_id);
+      formDataToSend.append('subtitulo', formData.subtitulo);
 
-      // Campos simples
-      for (const key in formData) {
-        if (
-          key === "imagenes_secundarias" ||
-          key === "alt_imagenes_secundarias" ||
-          key === "parrafos"
-        )
-          continue;
-        const value = (formData as any)[key];
-        if (value instanceof File) {
-          formDataToSend.append(key, value);
-        } else {
-          formDataToSend.append(key, value ?? "");
-        }
+      // ✅ CAMPOS OPCIONALES - ENVIAR SOLO SI TIENEN VALOR
+      if (formData.link?.trim()) {
+        formDataToSend.append('link', formData.link.trim());
+      }
+      // if (formData.meta_titulo?.trim()) {
+      //   formDataToSend.append('meta_titulo', formData.meta_titulo.trim());
+      // }
+      // if (formData.meta_descripcion?.trim()) {
+      //   formDataToSend.append('meta_descripcion', formData.meta_descripcion.trim());
+      // }
+      // ✅ Enviar los campos de etiqueta como array asociativo anidado
+      const etiqueta = {
+      meta_titulo: formData.meta_titulo?.trim() || "",
+      meta_descripcion: formData.meta_descripcion?.trim() || ""
+      };
+
+      // Solo enviarlo si al menos uno tiene contenido
+      if (etiqueta.meta_titulo || etiqueta.meta_descripcion) {
+        formDataToSend.append('etiqueta', JSON.stringify(etiqueta));
       }
 
-      // Imagenes secundarias + ALT
-      formData.imagenes_secundarias.forEach((img) => {
-        if (img) formDataToSend.append("imagenes[]", img);
-      });
-      formData.alt_imagenes_secundarias.forEach((alt) => {
-        formDataToSend.append("alt_imagenes[]", alt);
+
+      if (formData.text_alt_principal?.trim()) {
+        formDataToSend.append('text_alt_principal', formData.text_alt_principal.trim());
+      }
+      if (formData.alt_imagen_card?.trim()) {
+        formDataToSend.append('alt_imagen_card', formData.alt_imagen_card.trim());
+      }
+
+      // ✅ IMAGEN PRINCIPAL
+      if (formData.imagen_principal) {
+        formDataToSend.append("imagen_principal", formData.imagen_principal);
+        console.log("📷 Imagen principal agregada");
+      }
+
+      // ✅ IMÁGENES SECUNDARIAS - SOLO LAS QUE TIENEN ARCHIVO
+      const imagenesConArchivo = formData.imagenes_secundarias.filter((img, index) => {
+        const tieneArchivo = img !== null;
+        if (tieneArchivo) {
+          console.log(`📷 Imagen secundaria ${index + 1} agregada`);
+        }
+        return tieneArchivo;
       });
 
-      // Párrafos
-      formData.parrafos.forEach((p) => formDataToSend.append("parrafos[]", p));
+      imagenesConArchivo.forEach((img) => {
+        formDataToSend.append("imagenes[]", img as File);
+      });
+
+      // ✅ ALT TEXTS PARA IMÁGENES SECUNDARIAS
+      formData.alt_imagenes_secundarias.forEach((alt, index) => {
+        if (formData.imagenes_secundarias[index] !== null || (isEdit && alt.trim())) {
+          formDataToSend.append("alt_imagenes[]", alt.trim());
+        }
+      });
+
+      // ✅ PÁRRAFOS - SOLO LOS QUE TIENEN CONTENIDO
+      parrafosConContenido.forEach((parrafo) => {
+        formDataToSend.append("parrafos[]", parrafo.trim());
+      });
+
+      // Debug: Mostrar lo que se va a enviar
+      console.log("=== DATOS A ENVIAR ===");
+      console.log("Modo:", isEdit ? "EDICIÓN" : "CREACIÓN");
+      console.log("Blog ID:", blogToEdit?.id);
+      
+      for (let [key, value] of formDataToSend.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}: [File] ${value.name} (${value.size} bytes)`);
+        } else {
+          console.log(`${key}: "${value}"`);
+        }
+      }
 
       const endpoint = isEdit
         ? getApiUrl(config.endpoints.blogs.update(blogToEdit.id))
         : getApiUrl(config.endpoints.blogs.create);
       
-      console.log("👉 Endpoint blogs:", endpoint);
+      console.log("🎯 Endpoint:", endpoint);
+      console.log("🔄 Método:", isEdit ? "PUT" : "POST");
       
+      if (isEdit) {
+      formDataToSend.append("_method", "PUT"); // Necesario para Laravel y similares
+      }
+
       const res = await fetch(endpoint, {
-        method: isEdit ? "PUT" : "POST",
+        method: "POST", // Siempre POST
         body: formDataToSend,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -404,21 +470,44 @@ const AddBlogModal = ({
         },
       });
 
-      const contentType = res.headers.get("content-type");
-      const data = contentType?.includes("json")
-        ? await res.json()
-        : await res.text();
+
+      console.log("📊 Response status:", res.status);
+      
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        data = await res.text();
+      }
+
+      console.log("📋 Response data:", data);
 
       if (res.ok) {
         alert(`✅ Blog ${isEdit ? "actualizado" : "creado"} correctamente.`);
         closeModal();
         onSuccess?.();
       } else {
-        alert(`❌ Error: ${data.message || data}`);
+        console.error("❌ Error response:", data);
+        
+        // Mostrar errores de validación específicos
+        if (data.errors) {
+          let errorMessage = "❌ Errores de validación:\n";
+          Object.keys(data.errors).forEach(field => {
+            const errors = Array.isArray(data.errors[field]) 
+              ? data.errors[field] 
+              : [data.errors[field]];
+            errorMessage += `• ${field}: ${errors.join(', ')}\n`;
+          });
+          alert(errorMessage);
+        } else {
+          alert(`❌ Error (${res.status}): ${data.message || JSON.stringify(data)}`);
+        }
       }
     } catch (err) {
-      console.error(err);
-      alert("❌ Error en la solicitud.");
+      console.error("❌ Error en la solicitud:", err);
+      alert("❌ Error en la conexión con el servidor.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -442,57 +531,55 @@ const AddBlogModal = ({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Producto */}
-              <div className="col-span-4">
-                <label className="block mb-2">Selecciona un Producto</label>
-                <select
-                  name="producto_id"
-                  value={formData.producto_id}
-                  onChange={handleSelectChange}
-                  required
-                  className="w-full bg-white text-black p-2 rounded-md"
-                  disabled={loading}
-                >
-                  <option value="">
-                    {loading ? "Cargando productos..." : "-- Selecciona un producto --"}
-                  </option>
-                  {Array.isArray(productos) && productos.length > 0 ? (
-                    productos.map((producto) => (
-                      <option key={producto.id} value={producto.id}>
-                        {producto.nombre || `Producto ${producto.id}`}
-                      </option>
-                    ))
-                  ) : (
-                    !loading && (
-                      <option value="" disabled>
-                        No hay productos disponibles
-                      </option>
-                    )
-                  )}
-                </select>
-                
-                {productos.length > 0 && (
-                  <p className="text-xs text-green-400 mt-1">
-                    ✅ {productos.length} productos cargados
-                  </p>
-                )}
-              </div>
+           <div className="col-span-4">
+            <label className="block mb-2 font-medium">
+              Producto <span className="text-red-500">*</span>
+            </label>
 
-              {/* Título */}
-              <div className="md:col-span-2">
-                <label className="block font-medium mb-1">Título</label>
-                <input
-                  type="text"
-                  name="titulo"
-                  value={formData.titulo}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  required
-                />
-              </div>
+            <select
+              name="producto_id"
+              value={formData.producto_id}
+              onChange={handleSelectChange}
+              required
+              className="w-full bg-white text-black p-2 rounded-md border border-gray-300"
+              disabled={loading} // Solo deshabilitar cuando está cargando
+            >
+              <option value="">
+                {loading ? "Cargando productos..." : "-- Selecciona un producto --"}
+              </option>
+              {Array.isArray(productos) && productos.length > 0 ? (
+                productos.map((producto) => (
+                  <option key={producto.id} value={producto.id.toString()}>
+                    {producto.nombre || `Producto ${producto.id}`}
+                  </option>
+                ))
+              ) : (
+                !loading && (
+                  <option value="" disabled>
+                    No hay productos disponibles
+                  </option>
+                )
+              )}
+            </select>
+
+            {nombreProducto && (
+              <p className="text-xs text-gray-500 mt-1">
+                Producto seleccionado: <strong>{nombreProducto}</strong>
+              </p>
+            )}
+
+            {productos.length > 0 && (
+              <p className="text-xs text-green-600 mt-1">
+                ✅ {productos.length} productos cargados
+              </p>
+            )}
+          </div>
 
               {/* Subtítulo */}
               <div className="md:col-span-2">
-                <label className="block font-medium mb-1">Subtítulo</label>
+                <label className="block font-medium mb-1">
+                  Subtítulo <span className="text-red-500">*</span>
+                </label>
                 <input
                   name="subtitulo"
                   value={formData.subtitulo}
@@ -502,36 +589,32 @@ const AddBlogModal = ({
                 />
               </div>
 
-              {/* Meta Título */}
+              {/* Meta título */}
               <div className="md:col-span-2">
-                <label className="block font-medium mb-1">Meta Título (SEO)</label>
+                <label className="block font-medium mb-1">Meta título</label>
                 <input
                   type="text"
                   name="meta_titulo"
-                  value={formData.meta_titulo}
+                  value={formData.meta_titulo || ""}
                   onChange={handleInputChange}
                   placeholder="Título optimizado para SEO"
                   className="w-full border border-gray-300 rounded px-3 py-2"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Recomendado: 50-60 caracteres
-                </p>
+                <p className="text-xs text-gray-500 mt-1">Recomendado: 50-60 caracteres</p>
               </div>
 
-              {/* Meta Descripción */}
+              {/* Meta descripción */}
               <div className="md:col-span-2">
-                <label className="block font-medium mb-1">Meta Descripción (SEO)</label>
-                <textarea
+                <label className="block font-medium mb-1">Meta descripción</label>
+                <input
+                  type="text"
                   name="meta_descripcion"
-                  value={formData.meta_descripcion}
+                  value={formData.meta_descripcion || ""}
                   onChange={handleInputChange}
-                  placeholder="Descripción optimizada para motores de búsqueda"
+                  placeholder="Descripción optimizada para SEO"
                   className="w-full border border-gray-300 rounded px-3 py-2"
-                  rows={3}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Recomendado: 150-160 caracteres
-                </p>
+                <p className="text-xs text-gray-500 mt-1">Recomendado: 100-160 caracteres</p>
               </div>
 
               {/* Link */}
@@ -555,9 +638,20 @@ const AddBlogModal = ({
           <div className="bg-green-50 p-6 rounded-lg border border-green-200">
             <h3 className="text-lg font-semibold text-green-800 mb-4">Imágenes</h3>
 
-            {/* Imagen Principal + ALT */}
-            <div>
-              <label className="block font-medium mb-1">Imagen Principal</label>
+            {/* Imagen Principal */}
+            <div className="border border-green-400 rounded p-4 mb-8">
+              <label className="block font-medium mb-2">
+                Imagen Principal {!blogToEdit && <span className="text-red-500">*</span>}
+              </label>
+
+              {blogToEdit && blogToEdit.imagen_principal && (
+                <img
+                  src={blogToEdit.imagen_principal}
+                  alt={formData.text_alt_principal || "Imagen principal"}
+                  className="w-full h-64 object-cover rounded mb-4 border"
+                />
+              )}
+
               <input
                 type="file"
                 accept="image/*"
@@ -566,59 +660,54 @@ const AddBlogModal = ({
               />
               <input
                 type="text"
-                name="alt_imagen_principal"
+                name="text_alt_principal"
                 placeholder="Texto ALT para SEO"
-                value={formData.alt_imagen_principal}
+                value={formData.text_alt_principal}
                 onChange={handleInputChange}
                 className="mt-2 w-full border border-gray-300 rounded px-3 py-2"
               />
             </div>
 
-            {/* Imagen Card + ALT */}
-            <div className="mt-4">
-              <label className="block font-medium mb-1">Imagen Card</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleFileChange(e, "imagen_card")}
-                className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
-              />
-              <input
-                type="text"
-                name="alt_imagen_card"
-                placeholder="Texto ALT para SEO"
-                value={formData.alt_imagen_card}
-                onChange={handleInputChange}
-                className="mt-2 w-full border border-gray-300 rounded px-3 py-2"
-              />
-            </div>
-
-            {/* Imágenes Secundarias + ALT */}
-            <div className="mt-6 space-y-6">
-              <label className="block font-semibold">Imágenes Secundarias</label>
-              {formData.imagenes_secundarias.map((_, i) => (
-                <div key={i} className="space-y-1">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImagenSecundariaChange(e, i)}
-                    className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
-                  />
-                  <input
-                    type="text"
-                    placeholder={`Texto ALT imagen secundaria #${i + 1}`}
-                    value={formData.alt_imagenes_secundarias[i]}
-                    onChange={(e) => handleAltImagenSecundariaChange(e, i)}
-                    className="w-full border border-gray-300 rounded px-3 py-2"
-                  />
-                </div>
-              ))}
+            {/* Imágenes Secundarias */}
+            <div className="border border-green-400 rounded p-4">
+              <label className="block font-semibold mb-4">Imágenes Secundarias</label>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {formData.imagenes_secundarias.map((_, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    {blogToEdit?.imagenes?.[i]?.ruta_imagen && (
+                      <img
+                        src={blogToEdit.imagenes[i].ruta_imagen}
+                        alt={formData.alt_imagenes_secundarias[i] || `Imagen secundaria #${i + 1}`}
+                        className="w-full h-32 object-cover rounded mb-2 border"
+                      />
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImagenSecundariaChange(e, i)}
+                      className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
+                    />
+                    <input
+                      type="text"
+                      placeholder={`Texto ALT imagen secundaria #${i + 1}`}
+                      value={formData.alt_imagenes_secundarias[i]}
+                      onChange={(e) => handleAltImagenSecundariaChange(e, i)}
+                      className="w-full border border-gray-300 rounded px-3 py-2 mt-2"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Párrafos */}
           <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 relative">
-            <h3 className="text-lg font-semibold text-yellow-800 mb-4">Párrafos</h3>
+            <h3 className="text-lg font-semibold text-yellow-800 mb-4">
+              Párrafos <span className="text-red-500">*</span>
+            </h3>
+            <p className="text-sm text-yellow-700 mb-4">
+              * Al menos un párrafo debe tener contenido
+            </p>
             {formData.parrafos.map((p, i) => (
               <div key={i} className="relative mb-6">
                 <textarea
@@ -627,8 +716,7 @@ const AddBlogModal = ({
                   onChange={(e) => handleParrafoChange(e, i)}
                   className="w-full border border-gray-300 rounded px-3 py-2 pr-20"
                   rows={4}
-                  placeholder={`Párrafo ${i + 1}`}
-                  required
+                  placeholder={`Párrafo ${i + 1} (opcional)`}
                 />
 
                 {/* Botones para insertar enlaces */}
@@ -686,15 +774,16 @@ const AddBlogModal = ({
               type="button"
               onClick={closeModal}
               className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+              disabled={loading}
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded disabled:opacity-50"
             >
-              {blogToEdit ? "Actualizar" : "Crear"}
+              {loading ? "Procesando..." : (blogToEdit ? "Actualizar" : "Crear")}
             </button>
           </div>
         </form>
