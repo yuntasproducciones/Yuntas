@@ -9,7 +9,7 @@ interface BlogPOST {
   meta_titulo?: string;
   meta_descripcion?: string;
   imagen_principal: File | null;
-  alt_imagen_principal: string;
+  text_alt_principal: string;
   alt_imagen_card: string;
   imagenes_secundarias: (File | null)[];
   alt_imagenes_secundarias: string[];
@@ -22,13 +22,12 @@ interface Blog {
   nombre_producto: string;
   subtitulo: string;
   link?: string;
-  meta_titulo?: string;
-  meta_descripcion?: string;
+  etiqueta?: { meta_titulo: string; meta_descripcion: string };
   imagen_principal: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];
   parrafos?: { parrafo: string }[];
   alt_imagen_card?: string;
-  alt_imagen_principal?: string;
+  text_alt_principal?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -69,7 +68,7 @@ const AddBlogModal = ({
     meta_titulo: "",
     meta_descripcion: "",
     imagen_principal: null,
-    alt_imagen_principal: "",
+    text_alt_principal: "",
     alt_imagen_card: "",
     imagenes_secundarias: [null, null, null],
     alt_imagenes_secundarias: ["", "", ""],
@@ -95,10 +94,10 @@ const AddBlogModal = ({
         producto_id: productoIdString,
         subtitulo: blogToEdit.subtitulo || "",
         link: blogToEdit.link || "",
-        meta_titulo: blogToEdit.meta_titulo || "",
-        meta_descripcion: blogToEdit.meta_descripcion || "",
+        meta_titulo: blogToEdit.etiqueta?.meta_titulo || "",
+        meta_descripcion: blogToEdit.etiqueta?.meta_descripcion || "",
         imagen_principal: null,
-        alt_imagen_principal: blogToEdit.alt_imagen_principal || "",
+        text_alt_principal: blogToEdit.text_alt_principal || "",
         alt_imagen_card: blogToEdit.alt_imagen_card || "",
         imagenes_secundarias: [null, null, null],
         alt_imagenes_secundarias: [
@@ -400,8 +399,8 @@ const AddBlogModal = ({
       }
 
 
-      if (formData.alt_imagen_principal?.trim()) {
-        formDataToSend.append('alt_imagen_principal', formData.alt_imagen_principal.trim());
+      if (formData.text_alt_principal?.trim()) {
+        formDataToSend.append('text_alt_principal', formData.text_alt_principal.trim());
       }
       if (formData.alt_imagen_card?.trim()) {
         formDataToSend.append('alt_imagen_card', formData.alt_imagen_card.trim());
@@ -648,7 +647,7 @@ const AddBlogModal = ({
               {blogToEdit && blogToEdit.imagen_principal && (
                 <img
                   src={blogToEdit.imagen_principal}
-                  alt={formData.alt_imagen_principal || "Imagen principal"}
+                  alt={formData.text_alt_principal || "Imagen principal"}
                   className="w-full h-64 object-cover rounded mb-4 border"
                 />
               )}
@@ -661,9 +660,9 @@ const AddBlogModal = ({
               />
               <input
                 type="text"
-                name="alt_imagen_principal"
+                name="text_alt_principal"
                 placeholder="Texto ALT para SEO"
-                value={formData.alt_imagen_principal}
+                value={formData.text_alt_principal}
                 onChange={handleInputChange}
                 className="mt-2 w-full border border-gray-300 rounded px-3 py-2"
               />
