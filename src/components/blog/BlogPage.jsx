@@ -1,16 +1,71 @@
-import { a } from "framer-motion/client";
-import React from "react";
+import { useState, useEffect } from 'react';
+import { blogService } from '../../services/blogService';
 import useBlogSEO from "../../hooks/useBlogSEO";
-
-export default function BlogDetail({ article }) {
-  const imageBaseUrl =
-    typeof window !== "undefined" &&
-    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-      ? "http://127.0.0.1:8000"
-      : "https://apiyuntas.yuntaspublicidad.com";
-  // 🧠 Hook para aplicar meta título y descripción
+export default function BlogPage() {
+  const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+ // Usar el hook de SEO
   useBlogSEO(article);
-  // Función para armar la URL correcta de la imagen
+  useEffect(() => {
+    // Obtener el parámetro 'link' de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const link = urlParams.get('link');
+    
+    console.log('🔗 Link obtenido desde URL:', link);
+
+    if (!link) {
+      setError('No se proporcionó un link de blog');
+      setLoading(false);
+      return;
+    }
+
+    // Cargar el blog
+    const loadBlog = async () => {
+      try {
+        setLoading(true);
+        const response = await blogService.getBlogByLink(link);
+        
+        console.log('📝 Respuesta del servicio:', response);
+        
+        if (!response.success) {
+          console.error('Error en la respuesta:', response.message);
+          setError(response.message || 'Error al cargar el blog');
+          setLoading(false);
+          return;
+        }
+
+        setArticle(response.data);
+        console.log('✅ Blog cargado correctamente:', response.data);
+      } catch (err) {
+        console.error('❌ Error cargando blog:', err);
+        setError(err instanceof Error ? err.message : 'Error desconocido');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBlog();
+  }, []);
+
+  if (loading) {
+    return <p className="grid min-h-screen place-content-center text-5xl font-extrabold animate-pulse bg-blue-200">Cargando...</p>
+  }
+
+  if (error || !article) {
+    return (
+      <div className="grid min-h-screen place-content-center text-center bg-blue-200">
+        <div>
+          <p className="text-5xl font-extrabold mb-4">Blog no encontrado</p>
+          <p className="text-xl">{error || 'El artículo solicitado no existe o ha sido eliminado.'}</p>
+          <a href="/blogs" className="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Volver al blog
+          </a>
+            </div>
+          </div>
+    );
+  }
+// Función para armar la URL correcta de la imagen
    const buildImageUrl = (path) => {
     if (!path) return null;
     return path.startsWith("http") ? path : imageBaseUrl + path;
@@ -139,19 +194,6 @@ export default function BlogDetail({ article }) {
                 </div>
 
                 {/* Aquí irá el iframe del video cuando se implemente */}
-                
-                {/* 
-                {article.video_url && (
-                <div className="relative z-10 max-w-6xl mx-auto mt-12 w-full aspect-video">
-                  <iframe 
-                    src={article.video_url}
-                    className="w-full h-full rounded-xl border border-white/10"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title="Video del producto"
-                  ></iframe>
-                </div>
-              )}*/}
               </div>
 
               {/* Overlay de efectos en las esquinas */}
@@ -167,33 +209,6 @@ export default function BlogDetail({ article }) {
             <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-purple-400/40 rounded-full animate-bounce delay-500"></div>
             <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-indigo-400/40 rounded-full animate-bounce delay-700"></div>
           </div>
-
-          {/* Información adicional del video con íconos */}
-          {/* <div className="text-center mt-10 animate-fade-in delay-500">
-            <div className="flex justify-center items-center space-x-8 text-white/60 text-sm mb-4">
-              <span className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93z"/>
-                </svg>
-                <span>HD Quality</span>
-              </span>
-              <span className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                <span>Contenido Premium</span>
-              </span>
-              <span className="flex items-center space-x-2 bg-white/5 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-                </svg>
-                <span>Subtítulos disponibles</span>
-              </span>
-            </div>
-            <p className="text-white/40 text-xs">
-              Duración aproximada: 3-5 minutos
-            </p>
-          </div> */}
         </div>
 
         {/* Línea divisoria decorativa */}
