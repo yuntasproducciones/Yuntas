@@ -14,7 +14,7 @@ const rutas = [
   { link: "/contact", texto: "CONTACTO" },
 ];
 
-const Navbarjsx = ({ logo, variant = "default", pathname }) => { // pathname dinámico desde navbar.astro
+const Navbarjsx = ({ logo, variant = "default", pathname }) => {
   // const [pathname, setPathname] = useState("/");
   const [menuOpen, setMenuOpen] = useState(false);
   const { darkMode } = useDarkMode();
@@ -38,7 +38,7 @@ const Navbarjsx = ({ logo, variant = "default", pathname }) => { // pathname din
   return (
     <header className={headerClasses}>
       <nav
-        className={`relative w-full flex justify-between items-center h-40 px-10 lg:px-10 py-4 font-semibold ${navClasses}`}
+        className={`relative w-full flex justify-between items-center h-20 px-10 lg:px-10 py-4 font-semibold ${navClasses}`}
       >
         {/* <RxHamburgerMenu
           className="block lg:hidden text-3xl cursor-pointer"

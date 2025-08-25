@@ -35,11 +35,9 @@ const { title } = Astro.props;
     <Navbar variant="admin" />
 
     <!-- MAIN WRAPPER: Sidebar + Content -->
-    <main class="flex w-full">
+    <main class="flex w-full relative">
       <!-- SIDEBAR IZQUIERDO -->
-      <aside class="w-64 hidden lg:block h-full">
-        <Sidebar client:load />
-      </aside>
+      <Sidebar client:load />
 
       <!-- CONTENIDO PRINCIPAL -->
       <section
