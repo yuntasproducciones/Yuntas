@@ -14,6 +14,7 @@ interface BlogPOST {
   imagenes_secundarias: (File | null)[];
   alt_imagenes_secundarias: string[];
   parrafos: string[];
+  url_video: string;
 }
 
 interface Blog {
@@ -28,6 +29,7 @@ interface Blog {
   parrafos?: { parrafo: string }[];
   alt_imagen_card?: string;
   text_alt_principal?: string;
+  url_video: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -73,6 +75,7 @@ const AddBlogModal = ({
     imagenes_secundarias: [null, null, null],
     alt_imagenes_secundarias: ["", "", ""],
     parrafos: ["", "", ""],
+    url_video: ""
   };
 
   const [formData, setFormData] = useState<BlogPOST>(defaultFormData);
@@ -110,6 +113,7 @@ const AddBlogModal = ({
           blogToEdit.parrafos?.[1]?.parrafo || "",
           blogToEdit.parrafos?.[2]?.parrafo || "",
         ],
+        url_video: blogToEdit.url_video || ""
       });
 
       setNombreProducto(blogToEdit.nombre_producto || "");
@@ -124,6 +128,7 @@ const AddBlogModal = ({
 
   // Cargar productos
   useEffect(() => {
+    console.log("hola")
     const fetchProductos = async () => {
       if (!isOpen) return;
       
@@ -376,6 +381,9 @@ const AddBlogModal = ({
       // ✅ CAMPOS OBLIGATORIOS - SIEMPRE ENVIAR
       formDataToSend.append('producto_id', formData.producto_id);
       formDataToSend.append('subtitulo', formData.subtitulo);
+
+      
+      formDataToSend.append('url_video', formData.url_video );
 
       // ✅ CAMPOS OPCIONALES - ENVIAR SOLO SI TIENEN VALOR
       if (formData.link?.trim()) {
@@ -699,6 +707,25 @@ const AddBlogModal = ({
               </div>
             </div>
           </div>
+
+          {/* Video */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  URL del Video *
+                </label>
+                <input
+                  type="url"
+                  name="url_video"
+                  value={formData.url_video}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              
+            </div>
 
           {/* Párrafos */}
           <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 relative">
