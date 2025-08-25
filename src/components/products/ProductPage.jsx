@@ -44,20 +44,28 @@ export default function ProductPage(){
 
                 const productData = data.data;
 
-                // Convertir especificaciones array a objeto con claves spec_
-                let specsObject = {};
-                if (productData.especificaciones && Array.isArray(productData.especificaciones)) {
+                // Inicializar objeto de especificaciones/beneficios
+                let specsObject = {};   
+
+                // Caso: especificaciones viene como objeto (tu backend actual)
+                if (productData.especificaciones && typeof productData.especificaciones === "object" && !Array.isArray(productData.especificaciones)) {
+                    specsObject = { ...productData.especificaciones };
+                }
+
+                // Caso: especificaciones viene como array (por si en el futuro cambias backend)
+                else if (Array.isArray(productData.especificaciones)) {
                     productData.especificaciones.forEach((spec, index) => {
                         specsObject[`spec_${index + 1}`] = spec;
                     });
                 }
 
-                // Convertir beneficios array a objeto con claves beneficio_
+                // Beneficios: si el backend devuelve un array extra de beneficios
                 if (productData.beneficios && Array.isArray(productData.beneficios)) {
                     productData.beneficios.forEach((beneficio, index) => {
                         specsObject[`beneficio_${index + 1}`] = beneficio;
                     });
                 }
+
 
                 // Mapear los campos para que coincidan con lo que espera el componente
                 const mappedProduct = {
