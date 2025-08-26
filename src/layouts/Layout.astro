@@ -64,7 +64,7 @@ const {
 
     <slot />
     <Footer />
-    <ScrollModal client:load />
+    {Astro.url.pathname === "/" && <ScrollModal client:load />}
     <WhatsApp />
   </body>
 </html>

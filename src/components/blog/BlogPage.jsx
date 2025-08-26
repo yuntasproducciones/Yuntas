@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { blogService } from '../../services/blogService';
 import useBlogSEO from "../../hooks/useBlogSEO";
+
 export default function BlogPage() {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- // Usar el hook de SEO
+
+  // Usar el hook de SEO
   useBlogSEO(article);
+  
   useEffect(() => {
     // Obtener el parámetro 'link' de la URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -61,16 +64,36 @@ export default function BlogPage() {
           <a href="/blogs" className="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             Volver al blog
           </a>
-            </div>
-          </div>
+        </div>
+      </div>
     );
   }
-// Función para armar la URL correcta de la imagen
-   const buildImageUrl = (path) => {
+
+  // Función para armar la URL correcta de la imagen
+  const buildImageUrl = (path) => {
     if (!path) return null;
     return path.startsWith("http") ? path : imageBaseUrl + path;
   };
+  
   console.log("🌟 article:", article);
+  
+  // Convierte una URL de YouTube a formato embebido
+  const getEmbeddedVideoUrl = (url) => {
+    if (!url) return null;
+    
+    const match = url.match(/(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&]+)/);
+    
+    if (match && match[1]) {
+      return `https://www.youtube.com/embed/${match[1]}`;
+    }
+
+    const shortMatch = url.match(/youtu\.be\/([^?]+)/);
+    if (shortMatch && shortMatch[1]) {
+      return `https://www.youtube.com/embed/${shortMatch[1]}`;
+    }
+    return url;
+  };
+
   return (
     <>
       {/* Imagen principal con encabezado */}
@@ -94,55 +117,54 @@ export default function BlogPage() {
         )}
       </section>
 
-        {/* Título principal */}
-        <div className="w-full bg-white text-blue-950 text-center py-6 sm:py-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold">
-            {article.nombre_producto}
-          </h2>
-        </div>
-
+      {/* Título principal */}
+      <div className="w-full bg-white text-blue-950 text-center py-6 sm:py-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold">
+          {article.nombre_producto}
+        </h2>
+      </div>
 
       {/* Contenido del blog */}
       <section className="px-4 sm:px-8 md:px-12 lg:px-24 py-16 text-white bg-gradient-to-b from-blue-900 to-indigo-950 flex flex-col">
-  <div className="Montserrat relative z-10 max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-    {/* Header animado */}
-    <div className="text-center mb-16 animate-fade-in">
-      <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white animate-float">
-        {article.subtitulo || "Descubre nuestro blog"}
-      </h1>
-    </div>
+        <div className="Montserrat relative z-10 max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+          {/* Header animado */}
+          <div className="text-center mb-16 animate-fade-in">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white animate-float">
+              {article.subtitulo || "Descubre nuestro blog"}
+            </h1>
+          </div>
 
-        {/* Secciones dinámicas */}
-        <div className="space-y-12 mb-16">
-          {article.parrafos?.map((p, index) => {
-            const image = article.imagenes?.[index % article.imagenes.length];
-            const isEven = index % 2 === 0;
-            return (
-              <div
-                key={index}
-                className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-6 sm:gap-8 lg:gap-12 p-6 lg:p-8 rounded-3xl hover:scale-105 hover:shadow-2xl group cursor-pointer`}
-              >
-                {image && (
-                  <div className="flex-none w-full lg:w-80 h-48 lg:h-56 order-1 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-cyan-500/30">
-                    <img
-                      src={buildImageUrl(image.ruta_imagen)}
-                      alt={image.texto_alt || "Imagen del blog"}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          {/* Secciones dinámicas */}
+          <div className="space-y-12 mb-16">
+            {article.parrafos?.map((p, index) => {
+              const image = article.imagenes?.[index % article.imagenes.length];
+              const isEven = index % 2 === 0;
+              return (
+                <div
+                  key={index}
+                  className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} items-center gap-6 sm:gap-8 lg:gap-12 p-6 lg:p-8 rounded-3xl hover:scale-105 hover:shadow-2xl group cursor-pointer`}
+                >
+                  {image && (
+                    <div className="flex-none w-full lg:w-80 h-48 lg:h-56 order-1 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 group-hover:shadow-cyan-500/30">
+                      <img
+                        src={buildImageUrl(image.ruta_imagen)}
+                        alt={image.texto_alt || "Imagen del blog"}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 order-2">
+                    <p 
+                      className="text-base sm:text-lg leading-relaxed text-white/90 text-justify"
+                      dangerouslySetInnerHTML={{ __html: p.parrafo }}
                     />
                   </div>
-                )}
-                <div className="flex-1 order-2">
-                  <p 
-                    className="text-base sm:text-lg leading-relaxed text-white/90 text-justify"
-                    dangerouslySetInnerHTML={{ __html: p.parrafo }}
-                  />
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
       {/* Sección de Video */}
       <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-20 px-4 overflow-hidden">
@@ -192,8 +214,16 @@ export default function BlogPage() {
                     <p className="text-white/50 text-sm">Haz clic para reproducir cuando esté disponible</p>
                   </div>
                 </div>
-
-                {/* Aquí irá el iframe del video cuando se implemente */}
+                {/*article.url_video */}
+                {article.url_video && (
+                  <iframe
+                    src={getEmbeddedVideoUrl(article.url_video)}
+                    title="Video"
+                    className="absolute inset-0 w-full h-full"
+                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                    allowFullScreen
+                  ></iframe>
+                )}
               </div>
 
               {/* Overlay de efectos en las esquinas */}

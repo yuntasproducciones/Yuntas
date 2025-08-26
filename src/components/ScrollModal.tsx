@@ -177,9 +177,7 @@ const ScrollModal = () => {
 
     return (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4 modal-overlay">
-          <div
-    ref={modalRef}
-    className={`bg-white flex flex-col sm:flex-row overflow-hidden shadow-lg w-[90%] max-w-md sm:max-w-3xl relative ${isClosing ? "animate-slideOut" : "animate-slideIn"}`}
+          <div ref={modalRef} className={`bg-white flex flex-col sm:flex-row overflow-hidden shadow-lg w-[90%] max-w-md sm:max-w-3xl relative ${isClosing ? "animate-slideOut" : "animate-slideIn"}`}
 >
                 {/* Imagen */}
                 <div className="hidden sm:block w-2/5 relative">
@@ -196,7 +194,7 @@ const ScrollModal = () => {
                         <button
                             onClick={closeModal}
                             aria-label="Cerrar modal"
-                            className="absolute top-4 right-5 text-md text-white hover:text-gray-300 cursor-pointer"
+                           className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
                         >
                             X
                         </button>
