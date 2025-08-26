@@ -5,9 +5,9 @@ import logo from "../../assets/images/yuntas_publicidad_logo.webp";
 <header
   class="col-span-2 bg-blue-950 text-white py-4 px-4 flex justify-between items-center relative"
 >
-  <!-- boton hamburguesa -->
+  <!-- boton hamburguesa admin -->
   <button
-    id="menu-toggle"
+    id="admin-menu-toggle"
     class="lg:hidden absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center"
     onclick="document.body.classList.toggle('sidebar-open')"
   >
@@ -27,11 +27,14 @@ import logo from "../../assets/images/yuntas_publicidad_logo.webp";
     </svg>
   </button>
 
+  <!-- logo -->
   <div class="flex items-center space-x-4 ml-12 lg:ml-0">
     <img src={logo.src} alt="Logo" class="h-12 w-12" />
     <h1 class="text-2xl lg:text-3xl font-semibold">Yuntas</h1>
   </div>
-  <h2 class="text-lg lg:text-3xl font-bold tracking-wide text-center w-full">
+
+  <!-- titulo -->
+  <h2 class="hidden md:block text-lg lg:text-3xl font-bold tracking-wide text-center flex-1">
     SECCION PRINCIPAL
   </h2>
 </header>

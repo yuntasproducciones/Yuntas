@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import Navbar from "../components/Navbar.astro";
 import Sidebar from "../components/dashboard/Sidebar";
+import Header from "../components/dashboard/Header.astro";
 import Footer from "../components/Footer.astro";
 
 interface Props {
@@ -31,15 +32,18 @@ const { title } = Astro.props;
     id="admin-body"
     class="grid min-h-[100dvh] grid-rows-[auto_1fr_auto] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
   >
-    <!-- NAVBAR -->
-    <Navbar variant="admin" />
+    <!-- FILA SUPERIOR: Navbar + Header -->
+    <div class="w-full">
+      <Navbar variant="admin" />
+      <Header />
+    </div>
 
-    <!-- MAIN WRAPPER: Sidebar + Content -->
+    <!-- FILA CENTRAL: Sidebar + Contenido -->
     <main class="flex w-full relative">
-      <!-- SIDEBAR IZQUIERDO -->
+      <!-- Sidebar -->
       <Sidebar client:load />
 
-      <!-- CONTENIDO PRINCIPAL -->
+      <!-- Contenido -->
       <section
         id="main-content"
         class="flex-1 p-6 overflow-x-auto bg-gray-50 dark:bg-gray-800"
@@ -48,7 +52,24 @@ const { title } = Astro.props;
       </section>
     </main>
 
-    <!-- FOOTER -->
-    <Footer />
+    <!-- FILA INFERIOR: Footer -->
+    <footer class="col-span-full w-full">
+      <Footer />
+    </footer>
+
+    <!-- Script abrir/cerrar sidebar -->
+    <script is:inline>
+      const toggleBtn = document.getElementById("admin-menu-toggle");
+
+      toggleBtn?.addEventListener("click", () => {
+        document.body.classList.toggle("admin-sidebar-open");
+      });
+
+      document.querySelectorAll("[data-close-sidebar]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.body.classList.remove("admin-sidebar-open");
+        });
+      });
+    </script>
   </body>
 </html>

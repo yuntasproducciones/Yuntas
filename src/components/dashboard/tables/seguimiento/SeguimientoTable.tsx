@@ -8,18 +8,29 @@ import Paginator from "../../Paginator.tsx";
 import TableContainer from "../TableContainer.tsx";
 
 const DataTable = () => {
-  const [refetchTrigger, setRefetchTrigger] = useState(false); // Estado para forzar la recarga de datos
-  const [currentPage, setCurrentPage] = useState(1); // Estado para manejar la página actual
+  // Estado para forzar la recarga de datos
+  const [refetchTrigger, setRefetchTrigger] = useState(false);
+
+  // Estado de paginación
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Hook para obtener la lista de clientes
   const { clientes, totalPages, loading, error } = useClientes(
     refetchTrigger,
     currentPage
-  ); // Hook para obtener la lista de clientes
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para manejar la apertura y cierre del modal
-  const [selectedCliente, setSelectedCliente] = useState<any>(null); // Estado para manejar el cliente seleccionado
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Estado para manejar la apertura y cierre del modal de eliminación
-  const [clienteIdToDelete, setClienteIdToDelete] = useState<number | null>(
-    null
-  ); // Estado para manejar el ID del cliente a eliminar
+  );
+
+  // Estado del modal de agregar/editar cliente
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Cliente seleccionado para edición
+  const [selectedCliente, setSelectedCliente] = useState<any>(null);
+
+  // Estado del modal de eliminación
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  // ID del cliente a eliminar
+  const [clienteIdToDelete, setClienteIdToDelete] = useState<number | null>(null);
 
   /**
    * Manejo de errores en la solicitud y carga.
@@ -42,7 +53,7 @@ const DataTable = () => {
   };
 
   /**
-   * Función para abrir el modal de creacion de cliente.
+   * Función para abrir el modal de creación de cliente.
    */
   const openModalForCreate = () => {
     setSelectedCliente(null);
@@ -58,103 +69,96 @@ const DataTable = () => {
   };
 
   /**
-   * Función para manejar el cierre del modal de eliminación.
+   * Función para manejar el éxito al guardar/editar un cliente.
    */
   const handleClienteFormSuccess = () => {
-    handleRefetch(); // Recarga la lista de clientes
-    setIsModalOpen(false); // Cierra el modal después de añadir o editar un cliente
+    handleRefetch();
+    setIsModalOpen(false);
   };
 
   return (
     <div className="overflow-x-auto p-4">
-
-    <TableContainer tableType="seguimiento">
-      <thead>
-        <tr>
-          <th
-            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-            >ID</th>
-          <th
-            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-          >Nombre</th>
-          <th
-            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-            >Gmail</th>
-          <th
-            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-            >Teléfono</th>
-          <th
-            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-            >Sección</th>
-          <th
-            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-            >Fecha</th>
-          <th
-            className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-            >Acción</th>
-        </tr>
-      </thead>
-   <tbody>
-  {clientes.length === 0 ? (
-    <tr>
-      <td colSpan={7} className="text-center py-4 text-gray-500">
-        No hay clientes disponibles.
-      </td>
-    </tr>
-  ) : (
-    clientes.map((item, index) => {
-      const rowBg = index % 2 === 0 ? "bg-[#d9d9d9]" : "bg-[#d9d9d94d]";
-
-      return (
-        <tr key={item.id} className={`text-center ${rowBg}`}>
-          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
-            {item.id}
-          </td>
-          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
-            {item.name}
-          </td>
-          <td className="px-4 py-2 rounded-xl border border-gray-300">
-            {item.email}
-          </td>
-          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
-            {item.celular}
-          </td>
-          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
-            {item.seccion || "N/A"}
-          </td>
-          <td className="px-4 py-2 font-bold rounded-xl border border-gray-300">
-            {item.created_at}
-          </td>
-          <td className="px-4 py-2 rounded-xl border border-gray-300">
-            <div className="flex justify-center gap-2 rounded-xl p-1">
-              <button
-                className="p-2 text-red-600 hover:text-red-800 transition"
-                title="Eliminar"
-                onClick={() => openDeleteModal(item.id)}
+      {/* Tabla contenedor con estilos */}
+      <TableContainer tableType="seguimiento">
+        {/* Cabecera visible solo en pantallas medianas en adelante */}
+        <thead className="hidden md:table-header-group">
+          <tr>
+            {["ID", "Nombre", "Gmail", "Teléfono", "Sección", "Fecha", "Acción"].map((header) => (
+              <th
+                key={header}
+                className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
               >
-                <FaTrash size={18} />
-              </button>
-              <button
-                className="p-2 text-green-600 hover:text-green-800 transition"
-                title="Editar"
-                onClick={() => openModalForEdit(item)}
-              >
-                <GrUpdate size={18} />
-              </button>
-            </div>
-          </td>
-        </tr>
-      );
-    })
-  )}
-</tbody>
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
 
-    </TableContainer>
-    {
-      /**
-       * Botón para agregar un nuevo cliente.
-       */
-      }
+        <tbody>
+          {/* Si no hay clientes mostramos mensaje */}
+          {clientes.length === 0 ? (
+            <tr>
+              <td colSpan={7} className="text-center py-4 text-gray-500">
+                No hay clientes disponibles.
+              </td>
+            </tr>
+          ) : (
+            clientes.map((item, index) => {
+              const rowBg = index % 2 === 0 ? "bg-[#d9d9d9]" : "bg-[#d9d9d94d]";
+
+              return (
+                <tr
+                  key={item.id}
+                  className={`text-center md:table-row block md:mb-0 mb-4 rounded-lg shadow-sm ${rowBg}`}
+                >
+                  {/* Cada celda lleva un data-label para móviles */}
+                  <td data-label="ID" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
+                    {item.id}
+                  </td>
+                  <td data-label="Nombre" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
+                    {item.name}
+                  </td>
+                  <td data-label="Gmail" className="px-4 py-2 border border-gray-300 block md:table-cell">
+                    {item.email}
+                  </td>
+                  <td data-label="Teléfono" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
+                    {item.celular}
+                  </td>
+                  <td data-label="Sección" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
+                    {item.seccion || "N/A"}
+                  </td>
+                  <td data-label="Fecha" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
+                    {item.created_at}
+                  </td>
+                  <td
+                    data-label="Acción"
+                    className="px-4 py-2 border border-gray-300 block md:table-cell"
+                  >
+                    <div className="flex flex-col md:flex-row justify-center gap-2 rounded-xl p-1">
+                      <button
+                        className="p-2 text-red-600 hover:text-red-800 transition"
+                        title="Eliminar"
+                        onClick={() => openDeleteModal(item.id)}
+                      >
+                        <FaTrash size={18} />
+                      </button>
+                      <button
+                        className="p-2 text-green-600 hover:text-green-800 transition"
+                        title="Editar"
+                        onClick={() => openModalForEdit(item)}
+                      >
+                        <GrUpdate size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })
+          )}
+        </tbody>
+      </TableContainer>
+
+      {/* Botón para agregar un cliente nuevo */}
       <button
         className="mt-4 ml-2 p-2 pl-4 bg-blue-900 text-white rounded-lg"
         onClick={openModalForCreate}
@@ -162,11 +166,7 @@ const DataTable = () => {
         Agregar Cliente
       </button>
 
-      {
-      /**
-       * Modal para agregar o editar un cliente.
-       */
-      }
+      {/* Modal para agregar o editar cliente */}
       <AddDataModal
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
@@ -174,11 +174,7 @@ const DataTable = () => {
         onRefetch={handleClienteFormSuccess}
       />
 
-      {
-      /**
-       * Modal para eliminar un cliente.
-       */
-      }
+      {/* Modal de eliminación */}
       {clienteIdToDelete !== null && (
         <DeleteClienteModal
           isOpen={isDeleteModalOpen}
@@ -188,18 +184,13 @@ const DataTable = () => {
         />
       )}
 
-      {
-      /**
-       * Componente de paginación para navegar entre las páginas de clientes.
-       * Se muestra solo si hay más de una página.
-       */
-      }
+      {/* Paginador */}
       <Paginator
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(page) => setCurrentPage(page)}
       />
-  </div>
+    </div>
   );
 };
 

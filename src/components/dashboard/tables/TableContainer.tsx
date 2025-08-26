@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { type ReactNode, isValidElement } from "react";
 import { exportToCSV, exportToExcelSimple, exportToPDF, printTable } from "../../../utils/exportUtils";
 
 interface TableContainerProps {
@@ -9,17 +9,16 @@ interface TableContainerProps {
   onAddNew?: () => void; // Función para agregar nuevo elemento
 }
 
-export default function TableContainer({ 
-  children, 
-  tableType = "default", 
-  headerContent, 
+export default function TableContainer({
+  children,
+  tableType = "default",
+  headerContent,
   exportData = [],
-  onAddNew
+  onAddNew,
 }: TableContainerProps) {
-  
   const handleExportCSV = () => {
     if (exportData.length === 0) {
-      alert('No hay datos para exportar');
+      alert("No hay datos para exportar");
       return;
     }
     exportToCSV(exportData);
@@ -27,16 +26,15 @@ export default function TableContainer({
 
   const handleExportExcel = () => {
     if (exportData.length === 0) {
-      alert('No hay datos para exportar');
+      alert("No hay datos para exportar");
       return;
     }
-    // Usar la función más simple y compatible
     exportToExcelSimple(exportData);
   };
 
   const handleExportPDF = () => {
     if (exportData.length === 0) {
-      alert('No hay datos para exportar');
+      alert("No hay datos para exportar");
       return;
     }
     exportToPDF(exportData);
@@ -44,7 +42,7 @@ export default function TableContainer({
 
   const handlePrint = () => {
     if (exportData.length === 0) {
-      alert('No hay datos para imprimir');
+      alert("No hay datos para imprimir");
       return;
     }
     printTable(exportData);
@@ -70,111 +68,37 @@ export default function TableContainer({
         );
 
       case "blogs":
-        return (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {onAddNew && (
-              <button 
-                onClick={onAddNew}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-              >
-                PUBLICAR
-              </button>
-            )}
-            <button 
-              onClick={handleExportCSV}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              EXPORTAR A CSV
-            </button>
-            <button 
-              onClick={handleExportExcel}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              EXPORTAR A EXCEL
-            </button>
-            <button 
-              onClick={handleExportPDF}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              EXPORTAR A PDF
-            </button>
-            <button 
-              onClick={handlePrint}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              IMPRIMIR
-            </button>
-          </div>
-        );
-
       case "productos":
-        return (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {onAddNew && (
-              <button 
-                onClick={onAddNew}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-              >
-                PUBLICAR
-              </button>
-            )}
-            <button 
-              onClick={handleExportCSV}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              EXPORTAR A CSV
-            </button>
-            <button 
-              onClick={handleExportExcel}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              EXPORTAR A EXCEL
-            </button>
-            <button 
-              onClick={handleExportPDF}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              EXPORTAR A PDF
-            </button>
-            <button 
-              onClick={handlePrint}
-              className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
-            >
-              IMPRIMIR
-            </button>
-          </div>
-        );
-
       case "usuarios":
         return (
           <div className="flex flex-wrap gap-2 mb-4">
             {onAddNew && (
-              <button 
+              <button
                 onClick={onAddNew}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
               >
                 PUBLICAR
               </button>
             )}
-            <button 
+            <button
               onClick={handleExportCSV}
               className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
             >
               EXPORTAR A CSV
             </button>
-            <button 
+            <button
               onClick={handleExportExcel}
               className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
             >
               EXPORTAR A EXCEL
             </button>
-            <button 
+            <button
               onClick={handleExportPDF}
               className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
             >
               EXPORTAR A PDF
             </button>
-            <button 
+            <button
               onClick={handlePrint}
               className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-xl font-semibold transition-colors"
             >
@@ -194,14 +118,35 @@ export default function TableContainer({
     }
   };
 
+  // Separar los nodos hijos entre elementos de tabla y extras
+  const tableChildren: ReactNode[] = [];
+  const outsideChildren: ReactNode[] = [];
+
+  (Array.isArray(children) ? children : [children]).forEach((child) => {
+    if (
+      isValidElement(child) &&
+      ["thead", "tbody", "tfoot", "tr"].includes((child.type as string) || "")
+    ) {
+      tableChildren.push(child);
+    } else {
+      outsideChildren.push(child);
+    }
+  });
+
   return (
     <div className="w-full">
       {renderHeaderContent()}
+
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-center border-separate border-spacing-x-2 border-spacing-y-2">
-          {children}
+          {tableChildren}
         </table>
       </div>
+
+      {/* Renderizamos cualquier contenido extra fuera de la tabla */}
+      {outsideChildren.length > 0 && (
+        <div className="mt-2 space-y-2">{outsideChildren}</div>
+      )}
     </div>
   );
 }
