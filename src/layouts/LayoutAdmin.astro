@@ -59,17 +59,20 @@ const { title } = Astro.props;
 
     <!-- Script abrir/cerrar sidebar -->
     <script is:inline>
-      const toggleBtn = document.getElementById("admin-menu-toggle");
+      window.addEventListener("DOMContentLoaded", () => {
+        const toggleBtn = document.getElementById("admin-menu-toggle");
 
-      toggleBtn?.addEventListener("click", () => {
-        document.body.classList.toggle("admin-sidebar-open");
-      });
+        toggleBtn?.addEventListener("click", () => {
+          document.body.classList.toggle("admin-sidebar-open");
+        });
 
-      document.querySelectorAll("[data-close-sidebar]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document.body.classList.remove("admin-sidebar-open");
+        document.querySelectorAll("[data-close-sidebar]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document.body.classList.remove("admin-sidebar-open");
+          });
         });
       });
     </script>
+
   </body>
 </html>
