@@ -207,9 +207,9 @@ const BlogsTable = () => {
                             }}
                         />
                       </td>
-                      <td className="px-4 py-2 rounded-xl border border-gray-300 text-sm">
+                      {/* <td className="px-4 py-2 rounded-xl border border-gray-300 text-sm">
                         {item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : 'N/A'}
-                      </td>
+                      </td> */}
                       <td
                           data-label="Fecha"
                           className="px-4 py-2 rounded-xl border border-gray-300 text-sm"

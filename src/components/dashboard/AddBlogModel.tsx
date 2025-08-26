@@ -6,6 +6,7 @@ interface BlogPOST {
   producto_id: string;
   subtitulo: string;
   link: string;
+  url_video: string;
   meta_titulo?: string;
   meta_descripcion?: string;
   imagen_principal: File | null;
@@ -14,7 +15,6 @@ interface BlogPOST {
   imagenes_secundarias: (File | null)[];
   alt_imagenes_secundarias: string[];
   parrafos: string[];
-  url_video: string;
 }
 
 interface Blog {
@@ -23,13 +23,13 @@ interface Blog {
   nombre_producto: string;
   subtitulo: string;
   link?: string;
+  url_video?: string;
   etiqueta?: { meta_titulo: string; meta_descripcion: string };
   imagen_principal: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];
   parrafos?: { parrafo: string }[];
   alt_imagen_card?: string;
   text_alt_principal?: string;
-  url_video: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -67,6 +67,7 @@ const AddBlogModal = ({
     producto_id: "",
     subtitulo: "",
     link: "",
+    url_video: "",
     meta_titulo: "",
     meta_descripcion: "",
     imagen_principal: null,
@@ -75,7 +76,6 @@ const AddBlogModal = ({
     imagenes_secundarias: [null, null, null],
     alt_imagenes_secundarias: ["", "", ""],
     parrafos: ["", "", ""],
-    url_video: ""
   };
 
   const [formData, setFormData] = useState<BlogPOST>(defaultFormData);
@@ -97,6 +97,7 @@ const AddBlogModal = ({
         producto_id: productoIdString,
         subtitulo: blogToEdit.subtitulo || "",
         link: blogToEdit.link || "",
+        url_video: blogToEdit.url_video || "",
         meta_titulo: blogToEdit.etiqueta?.meta_titulo || "",
         meta_descripcion: blogToEdit.etiqueta?.meta_descripcion || "",
         imagen_principal: null,
@@ -113,7 +114,6 @@ const AddBlogModal = ({
           blogToEdit.parrafos?.[1]?.parrafo || "",
           blogToEdit.parrafos?.[2]?.parrafo || "",
         ],
-        url_video: blogToEdit.url_video || ""
       });
 
       setNombreProducto(blogToEdit.nombre_producto || "");
@@ -372,6 +372,13 @@ const AddBlogModal = ({
         "⚠️ El link debe ser URL-friendly (solo minúsculas, guiones y números)."
       );
     }
+    //validacion url_video
+    const urlRegexVideo = /^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,}([\/\w\-._~:?#[\]@!$&'()*+,;=]*)?$/i;
+    if (formData.url_video && !urlRegexVideo.test(formData.url_video)) {
+      return alert(
+        "⚠️ El link del video debe ser URL-friendly (solo minúsculas, guiones y números)."
+      );
+    } 
 
     try {
       setLoading(true);
@@ -388,6 +395,9 @@ const AddBlogModal = ({
       // ✅ CAMPOS OPCIONALES - ENVIAR SOLO SI TIENEN VALOR
       if (formData.link?.trim()) {
         formDataToSend.append('link', formData.link.trim());
+      }
+      if (formData.url_video?.trim()) {
+        formDataToSend.append('url_video', formData.url_video.trim());
       }
       // if (formData.meta_titulo?.trim()) {
       //   formDataToSend.append('meta_titulo', formData.meta_titulo.trim());
@@ -636,6 +646,20 @@ const AddBlogModal = ({
                   value={formData.link}
                   onChange={handleInputChange}
                   placeholder="ejemplo: mi-blog-post"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+              </div>
+              {/* URL Video */}
+              <div className="md:col-span-4">
+                <label className="block font-medium mb-1">
+                  URL Video
+                </label>
+                <input
+                  type="text"
+                  name="url_video"
+                  value={formData.url_video}
+                  onChange={handleInputChange}
+                  placeholder="ejemplo: mi-video"
                   className="w-full border border-gray-300 rounded px-3 py-2"
                 />
               </div>

@@ -3,6 +3,7 @@ import { config, getApiUrl } from "../../../config";
 import { FaRegSquareCheck } from "react-icons/fa6";
 import ProductSection from "./ProductSection.jsx";
 import { motion } from "framer-motion";
+import Emergente from "./Emergente"; 
 
 export default function ProductPage(){
     const [product, setProduct] = useState(null)
@@ -124,6 +125,9 @@ export default function ProductPage(){
     
     return (
         <div className="w-full">
+            {/* Componente Emergente - se mostrará automáticamente */}
+            <Emergente producto={product} />
+
                 {/* Banner principal */}
                 <img
                     id="product-img"
