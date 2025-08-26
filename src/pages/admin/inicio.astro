@@ -1,136 +1,113 @@
 ---
 import LayoutAdmin from "../../layouts/LayoutAdmin.astro";
 import AdminDashboard from "../../components/admin/Admin";
+
 const tiempoTranscurrido = Date.now();
 const hoy = new Date(tiempoTranscurrido);
+
+// Ejemplo de datos reales (puedes conectar con la API luego)
+const data = [
+  { id: 1, nombre: "Kiara", gmail: "namelose@gmail.com", telefono: "941825478", seccion: "WAOS", fecha: "25/01/2025" }
+];
+
+// Generamos filas vacías para mantener la tabla uniforme
+const extraRows = Array.from({ length: 9 }).map((_, i) => {
+  const id = i + 2;
+  const isEven = id % 2 === 0;
+  const lightBg = isEven ? "bg-gray-100" : "bg-gray-200";
+  const darkBg = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
+  const textColor = "text-gray-900 dark:text-gray-100";
+  return { id, classes: `${lightBg} ${darkBg} ${textColor}` };
+});
 ---
 
 <LayoutAdmin title="VENTAS">
   <!-- Componente de autenticación que se ejecuta primero -->
   <AdminDashboard client:only="react" />
+
   <p class="text-2xl text-red-500 font-bold text-center mt-10">
     Bienvenido al Dashboard de Administrador. {hoy.toLocaleDateString()}
   </p>
-  <div class="overflow-x-auto p-4">
-    <table
-      class="min-w-full text-sm text-center border-separate border-spacing-x-2 border-spacing-y-2"
-    >
+
+  <!-- version tabla para pantallas medianas en adelante -->
+  <div class="hidden md:block overflow-x-auto p-4">
+    <table class="min-w-full text-sm text-center border-separate border-spacing-x-2 border-spacing-y-2">
       <thead>
         <tr>
-          <th
-            class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
-            >ID</th
-          >
-          <th
-            class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
-            >Nombre</th
-          >
-          <th
-            class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
-            >Gmail</th
-          >
-          <th
-            class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
-            >Teléfono</th
-          >
-          <th
-            class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
-            >Sección</th
-          >
-          <th
-            class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
-            >Fecha</th
-          >
-          <th
-            class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
-            >Acción</th
-          >
+          {["ID","Nombre","Gmail","Teléfono","Sección","Fecha","Acción"].map((header) => (
+            <th
+              class="px-4 py-2 bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold rounded-md"
+            >
+              {header}
+            </th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        <!-- Fila con datos impar (1) -->
-        <tr>
-          <td
-            class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >1</td
-          >
-          <td
-            class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >Kiara</td
-          >
-          <td
-            class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >namelose@gmail.com</td
-          >
-          <td
-            class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >941825478</td
-          >
-          <td
-            class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >WAOS</td
-          >
-          <td
-            class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            >25/01/2025</td
-          >
-          <td
-            class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 flex justify-center gap-2"
-          >
-            <button
-              class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-              >🗑️</button
-            >
-            <button
-              class="text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
-              >✅</button
-            >
-          </td>
-        </tr>
+        {data.map((item) => (
+          <tr>
+            <td class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">{item.id}</td>
+            <td class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">{item.nombre}</td>
+            <td class="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">{item.gmail}</td>
+            <td class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">{item.telefono}</td>
+            <td class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">{item.seccion}</td>
+            <td class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">{item.fecha}</td>
+            <td class="px-4 py-2 rounded-md font-bold bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 flex justify-center gap-2">
+              <button class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">🗑️</button>
+              <button class="text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300">✅</button>
+            </td>
+          </tr>
+        ))}
 
-        <!-- Filas vacías con estilo alternado -->
-        {
-          Array.from({ length: 9 }).map((_, i) => {
-            const isEven = (i + 2) % 2 === 0;
-            // Colores para modo claro y oscuro
-            const lightBg = isEven ? "bg-gray-100" : "bg-gray-200";
-            const darkBg = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
-            const textColor = "text-gray-900 dark:text-gray-100";
-            const combinedClasses = `px-4 py-2 rounded-md font-bold ${lightBg} ${darkBg} ${textColor}`;
-
-            return (
-              <tr>
-                <td class={combinedClasses}>{i + 2}</td>
-                <td
-                  class={`px-4 py-2 rounded-md ${lightBg} ${darkBg} ${textColor}`}
-                />
-                <td
-                  class={`px-4 py-2 rounded-md ${lightBg} ${darkBg} ${textColor}`}
-                />
-                <td
-                  class={`px-4 py-2 rounded-md ${lightBg} ${darkBg} ${textColor}`}
-                />
-                <td
-                  class={`px-4 py-2 rounded-md ${lightBg} ${darkBg} ${textColor}`}
-                />
-                <td
-                  class={`px-4 py-2 rounded-md ${lightBg} ${darkBg} ${textColor}`}
-                />
-                <td
-                  class={`px-4 py-2 rounded-md ${lightBg} ${darkBg} ${textColor} flex justify-center gap-2`}
-                >
-                  <button class="text-red-400 dark:text-red-500 cursor-not-allowed opacity-50">
-                    🗑️
-                  </button>
-                  <button class="text-green-400 dark:text-green-500 cursor-not-allowed opacity-50">
-                    ✅
-                  </button>
-                </td>
-              </tr>
-            );
-          })
-        }
+        <!-- filas vacías con estilo alternado -->
+        {extraRows.map((row) => (
+          <tr>
+            <td class={`px-4 py-2 rounded-md font-bold ${row.classes}`}>{row.id}</td>
+            <td class={`px-4 py-2 rounded-md ${row.classes}`} />
+            <td class={`px-4 py-2 rounded-md ${row.classes}`} />
+            <td class={`px-4 py-2 rounded-md ${row.classes}`} />
+            <td class={`px-4 py-2 rounded-md ${row.classes}`} />
+            <td class={`px-4 py-2 rounded-md ${row.classes}`} />
+            <td class={`px-4 py-2 rounded-md ${row.classes} flex justify-center gap-2`}>
+              <button class="text-red-400 dark:text-red-500 cursor-not-allowed opacity-50">🗑️</button>
+              <button class="text-green-400 dark:text-green-500 cursor-not-allowed opacity-50">✅</button>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
+  </div>
+
+  <!-- version cards para moviles -->
+  <div class="md:hidden flex flex-col gap-4 p-4">
+    {data.map((item) => (
+      <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <p class="font-semibold text-gray-600 dark:text-gray-300">ID:</p>
+          <p class="font-bold">{item.id}</p>
+
+          <p class="font-semibold text-gray-600 dark:text-gray-300">Nombre:</p>
+          <p>{item.nombre}</p>
+
+          <p class="font-semibold text-gray-600 dark:text-gray-300">Gmail:</p>
+          <p>{item.gmail}</p>
+
+          <p class="font-semibold text-gray-600 dark:text-gray-300">Teléfono:</p>
+          <p>{item.telefono}</p>
+
+          <p class="font-semibold text-gray-600 dark:text-gray-300">Sección:</p>
+          <p>{item.seccion}</p>
+
+          <p class="font-semibold text-gray-600 dark:text-gray-300">Fecha:</p>
+          <p>{item.fecha}</p>
+        </div>
+
+        <!-- acciones -->
+        <div class="flex justify-end gap-3 mt-4">
+          <button class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">🗑️</button>
+          <button class="text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300">✅</button>
+        </div>
+      </div>
+    ))}
   </div>
 </LayoutAdmin>

@@ -18,10 +18,10 @@ async function logout() {
       localStorage.removeItem("token")
       window.location.href = "/"
     } else {
-      alert(data.message || "Error al cerrar sesion")
+      alert(data.message || "Error al cerrar sesión")
     }
   } catch (error) {
-    alert("Error de conexion con el servidor")
+    alert("Error de conexión con el servidor")
   }
 }
 
@@ -39,14 +39,24 @@ const Sidebar = () => {
   return (
     <aside
       className={`sidebar fixed lg:static top-0 left-0 z-50 w-64 h-full transform transition-transform duration-300 ease-in-out
+        -translate-x-full lg:translate-x-0
         ${darkMode ? "bg-[#1e1e2f] text-white" : "bg-gray-200 text-gray-800"}`}
     >
+      {/* Botón cerrar (solo mobile) */}
+      <div className="flex justify-end lg:hidden p-2">
+        <button
+          data-close-sidebar
+          className="text-2xl p-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-700"
+        >
+          ✕
+        </button>
+      </div>
+
       <div className="p-4 space-y-6">
-        
         {/* nav de enlaces */}
         <nav>
           <ul className="space-y-1">
-            <li className="font-bold text-lg">★ Administracion</li>
+            <li className="font-bold text-lg">★ Administración</li>
             {items.map((item, index) => (
               <li key={index}>
                 <a
@@ -122,11 +132,10 @@ const Sidebar = () => {
                   : "bg-blue-900 hover:bg-teal-600 text-white"
               }`}
             >
-              Cerrar sesion
+              Cerrar sesión
             </button>
           </div>
         </div>
-
       </div>
     </aside>
   )
