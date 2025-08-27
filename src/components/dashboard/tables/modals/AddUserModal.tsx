@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Input from "../../../Input";
-import type { User } from "../../../models/User";
+import type { User } from "../../../../models/User";
 
 interface AddUserModalProps {
   onClose: () => void;

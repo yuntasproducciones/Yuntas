@@ -1,18 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+/* fuentes personalizadas */
 .Montserrat {
     font-family: 'Montserrat', sans-serif;
 }
 
-.sombra-title{
+/* sombra de titulos */
+.sombra-title {
     text-shadow: 4px 4px 3px rgba(0,0,0,1);
 }
 
+/* utilidad de texto blanco con sombra */
 @utility text-shadow-white {
     text-shadow: 0px 0px 9.6px rgba(255, 255, 255, 1);
 }
 
+/* boton adaptable con gradiente */
 .adaptable-btn {
   display: inline-block;
   background: linear-gradient(90deg, #00eaff 0%, #00cfff 100%);
@@ -31,9 +35,8 @@
 .adaptable-btn:hover {
   background: linear-gradient(90deg, #00cfff 0%, #00eaff 100%);
 }
-/* Agregar al final de tu global.css */
 
-/* Transiciones suaves para el dark mode */
+/* transiciones suaves para dark mode */
 * {
   transition: background-color 0.4s ease-in-out, 
               color 0.4s ease-in-out, 
@@ -56,15 +59,14 @@ body {
   color: var(--text-color);
 }
 
-
-/* Transiciones para headers, navs, aside */
+/* transiciones para headers nav aside main */
 header, nav, aside, main {
   transition: background-color 0.4s ease-in-out, 
               color 0.4s ease-in-out,
               background-image 0.4s ease-in-out !important;
 }
 
-/* Transiciones para links y botones */
+/* transiciones para links y botones */
 a, button {
   transition: background-color 0.3s ease-in-out, 
               color 0.3s ease-in-out,
@@ -72,25 +74,189 @@ a, button {
               transform 0.2s ease-in-out !important;
 }
 
-/* Transiciones para inputs y forms */
+/* transiciones para inputs */
 input, textarea, select {
   transition: background-color 0.3s ease-in-out, 
               color 0.3s ease-in-out,
               border-color 0.3s ease-in-out !important;
 }
 
-/* Transiciones para divs con backgrounds */
+/* transiciones para divs */
 div {
   transition: background-color 0.4s ease-in-out, 
               color 0.4s ease-in-out !important;
 }
 
-/* Excepciones para animaciones que no deben tener transición larga */
+/* excepciones de animaciones */
 .no-dark-transition, .no-dark-transition * {
   transition: transform 0.2s ease-in-out !important;
 }
 
-/* Transiciones específicas para gradientes */
+/* transiciones especificas de gradientes */
 .bg-gradient-to-b, .bg-gradient-to-r, .bg-gradient-to-l, .bg-gradient-to-t {
   transition: background-image 0.5s ease-in-out !important;
+}
+
+/* === sidebar en desktop === */
+.sidebar {
+  width: 16rem; /* 256px */
+  height: 100vh;
+  position: static;
+  transform: translateX(-100%); /* cerrado por defecto */
+}
+
+/* === sidebar responsive en tablets y moviles hasta 1023px === */
+@media (max-width: 1023px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transition: transform 0.3s ease-in-out;
+    z-index: 50;
+  }
+
+  body.sidebar-open .sidebar,
+  body.admin-sidebar-open .sidebar {
+    transform: translateX(0); /* visible al abrir */
+  }
+
+  /* overlay oscuro cuando sidebar esta abierto */
+  body.sidebar-open::after,
+  body.admin-sidebar-open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 40;
+  }
+}
+
+/* en escritorio siempre visible */
+@media (min-width: 1024px) {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
+}
+
+/* === tablas responsive === */
+.responsive-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table,
+  .responsive-table tbody,
+  .responsive-table tr,
+  .responsive-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .responsive-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: var(--background-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+  }
+
+  .responsive-table td {
+    text-align: left;
+    padding: 0.75rem;
+    position: relative;
+    border: none !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .responsive-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-transform: uppercase;
+    flex: 1;
+    color: var(--text-color);
+  }
+
+  .responsive-table td > * {
+    flex: 2;
+    text-align: right;
+  }
+}
+
+/* === ajustes generales cross device === */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* viewport fix */
+:root {
+  --vh: 100vh;
+}
+@supports (height: 100dvh) {
+  :root {
+    --vh: 100dvh;
+  }
+}
+body {
+  min-height: var(--vh);
+}
+
+/* fuentes escalables segun pantalla */
+@media (max-width: 480px) {
+  body { font-size: 14px; }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  body { font-size: 15px; }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  body { font-size: 16px; }
+}
+@media (min-width: 1025px) and (max-width: 1440px) {
+  body { font-size: 16px; }
+}
+@media (min-width: 1441px) {
+  body { font-size: 18px; }
+}
+
+/* safe areas para notch en ios y android */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+}
+
+/* fix safari ios para zoom en inputs */
+input, select, textarea {
+  font-size: 16px;
+}
+
+
+/* sidebar cerrado en mobile */
+.sidebar {
+  transform: translateX(-100%);
+}
+
+/* sidebar abierto cuando el body tiene la clase */
+.admin-sidebar-open .sidebar {
+  transform: translateX(0);
+}
+
+/* en escritorio siempre visible */
+@media (min-width: 1024px) {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
 }

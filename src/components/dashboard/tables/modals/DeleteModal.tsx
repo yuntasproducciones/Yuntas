@@ -21,8 +21,8 @@ const DeleteClienteModal = ({
     try {
       setIsLoading(true);
       await deleteCliente(clienteId);
-      onRefetch(); // Recarga la lista o tabla de clientes
-      setIsOpen(false); // Cierra el modal
+      onRefetch();
+      setIsOpen(false);
     } catch (error) {
       console.error("Error al eliminar cliente:", error);
       alert("No se pudo eliminar el cliente");
@@ -35,15 +35,16 @@ const DeleteClienteModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-md w-full text-center">
-        <h2 className="text-xl font-bold text-red-600 mb-4">
+      <div className="bg-white p-6 rounded-xl shadow-lg w-[90%] sm:w-[400px] text-center">
+        <h2 className="text-lg sm:text-xl font-bold text-red-600 mb-4">
           ¿Eliminar cliente?
         </h2>
-        <p className="text-gray-700 mb-6">
+
+        <p className="text-gray-700 mb-6 text-sm sm:text-base">
           Esta acción es permanente y no se puede deshacer.
         </p>
 
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
           <button
             onClick={handleDelete}
             disabled={isLoading}

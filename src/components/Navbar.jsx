@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { IoPerson } from "react-icons/io5";
 import { useDarkMode } from "../hooks/darkmode/useDarkMode";
 import "../styles/navbar.css";
@@ -14,18 +13,11 @@ const rutas = [
   { link: "/contact", texto: "CONTACTO" },
 ];
 
-const Navbarjsx = ({ logo, variant = "default", pathname }) => { // pathname dinámico desde navbar.astro
-  // const [pathname, setPathname] = useState("/");
+const Navbarjsx = ({ logo, variant = "default", pathname }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { darkMode } = useDarkMode();
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     setPathname(window.location.pathname);
-  //   }
-  // }, []);
-
-  // Cambiar clases según modo oscuro y variante
+  // Estilos según modo oscuro y variante (admin / default)
   const navClasses =
     variant === "admin"
       ? darkMode
@@ -38,69 +30,50 @@ const Navbarjsx = ({ logo, variant = "default", pathname }) => { // pathname din
   return (
     <header className={headerClasses}>
       <nav
-        className={`relative w-full flex justify-between items-center h-40 px-10 lg:px-10 py-4 font-semibold ${navClasses}`}
+        className={`relative w-full flex justify-between items-center h-20 px-6 lg:px-10 py-4 font-semibold ${navClasses}`}
       >
-        {/* <RxHamburgerMenu
-          className="block lg:hidden text-3xl cursor-pointer"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        /> */}
-        <ToggleNavbar
-          isOpen={menuOpen}
-          setIsOpen={setMenuOpen}
-          controlsId="mobile-nav"
-        />
+        {/* Botón hamburguesa - solo móvil */}
+        <div className="flex items-center lg:hidden">
+          <ToggleNavbar
+            isOpen={menuOpen}
+            setIsOpen={setMenuOpen}
+            controlsId="mobile-nav"
+          />
+        </div>
 
+        {/* Logo */}
         <img
           src={logo.src}
           alt="Logo Yuntas"
           loading="eager"
-          className="h-16 w-auto hidden lg:block cursor-pointer"
+          className="h-14 w-auto cursor-pointer"
         />
 
-        {/* Links - desktop */}
-        <div className="flex justify-between lg:gap-x-6">
+        {/* Links - solo en desktop */}
+        <div className="hidden lg:flex justify-between gap-x-6">
           {rutas.map(({ link, texto }) => (
             <a
               key={link}
               href={link}
-              className={`hidden lg:block relative px-6 py-2 ${pathname === link ? "border-effect" : ""
-                }`}
+              className={`relative px-6 py-2 ${pathname === link ? "border-effect" : ""}`}
             >
               <span className="relative">{texto}</span>
             </a>
           ))}
         </div>
 
-        <a href="/login">
+        {/* Icono login */}
+        <a href="/login" className="ml-4">
           <IoPerson className="text-3xl" aria-label="Login" />
         </a>
       </nav>
 
-      {/* Menú mobile */}
-      {/* <nav
-        className={`lg:hidden ${menuOpen ? "flex" : "hidden"
-          } flex-col gap-y-4 absolute top-20 left-0 right-0 justify-center items-center w-full ${darkMode
-            ? "bg-gray-900/95"
-            : "bg-gradient-to-b from-slate-900/85 to-transparent"
-          } text-white font-bold py-8`}
-      >
-        {rutas.map(({ link, texto }) => (
-          <a
-            key={link}
-            href={link}
-            className={`relative px-6 py-2 ${pathname === link ? "border-effect" : ""
-              }`}
-            onClick={() => setMenuOpen(false)}
-          >
-            {texto}
-          </a>
-        ))}
-      </nav> */}
+      {/* Menú móvil */}
       <MobileMenu
         isOpen={menuOpen}
         items={rutas}
         logo={logo}
+        onClose={() => setMenuOpen(false)} // tu mejora: cerrar desde links/botón
       />
     </header>
   );

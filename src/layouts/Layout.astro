@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import Navbar from "../components/Navbar.astro";
+import ScrollModal from "../components/ScrollModal";
 import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 import WhatsApp from "../components/ui/whatsapp.astro";
@@ -56,7 +57,6 @@ const {
       />
     </noscript>
 
-
     <ClientRouter />
   </head>
   <body>
@@ -64,6 +64,7 @@ const {
 
     <slot />
     <Footer />
+    {Astro.url.pathname === "/" && <ScrollModal client:load />}
     <WhatsApp />
   </body>
 </html>
