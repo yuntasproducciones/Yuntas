@@ -12,6 +12,7 @@ import imagenEmergente9 from "../../assets/images/emergente/em9.webp";
 import imagenEmergente10 from "../../assets/images/emergente/em10.webp";
 import imagenEmergente11 from "../../assets/images/emergente/em11.webp";
 import imagenEmergente12 from "../../assets/images/emergente/em12.webp";
+import imagenEmergente13 from "../../assets/images/emergente/em13.webp";
 
 const emergenteData = {
 "letreros-acrilicos": {titulo: "Obtén", destacado: "Asesoría", subtitulo: "gratuita", imagen: imagenEmergente1, button: "Aprovecha ahora",
@@ -20,9 +21,9 @@ const emergenteData = {
 },
 "letreros-neon-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
 },
-"pisos-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
+"pisos-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente13, button: "Cotiza ahora",
 },
-"pantallas-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
+"pantallas-led": {titulo: "Accede", destacado: "Ofertas Exclusivas", subtitulo: "", imagen: imagenEmergente11, button: "Registrate ya",
 },
 "techos-led": {titulo: "Envío", destacado: "Gratis", subtitulo: "en todo lima", imagen: imagenEmergente12, button: "Aprovecha ahora",
 },
@@ -131,6 +132,7 @@ return (
             src={data.imagen?.src || data.imagen}
             alt={data.destacado || data.titulo}
             className="h-[250px] sm:h-full w-full object-cover"
+            // className="max-h-[600px] sm:h-full w-full object-cover"
           />
         </div>
 
