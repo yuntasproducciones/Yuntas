@@ -38,8 +38,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`sidebar fixed lg:static top-0 left-0 z-50 w-64 h-full transform transition-transform duration-300 ease-in-out
-        -translate-x-full lg:translate-x-0
+      className={`sidebar fixed lg:static top-0 left-0 z-50 w-64 h-full transition-transform duration-300 ease-in-out
         ${darkMode ? "bg-[#1e1e2f] text-white" : "bg-gray-200 text-gray-800"}`}
     >
       {/* Botón cerrar (solo mobile) */}
