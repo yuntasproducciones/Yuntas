@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { GrUpdate } from "react-icons/gr";
 import AddDataModal from "./modals/AddUpdateModal.tsx";
 import DeleteClienteModal from "./modals/DeleteModal.tsx";
@@ -147,7 +147,7 @@ const DataTable = () => {
                         title="Editar"
                         onClick={() => openModalForEdit(item)}
                       >
-                        <GrUpdate size={18} />
+                        <FaEdit size={18} />
                       </button>
                     </div>
                   </td>

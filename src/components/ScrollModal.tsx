@@ -243,115 +243,114 @@ const ScrollModal = () => {
     if (!showModal) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4 modal-overlay">
-            <div 
-                ref={modalRef} 
-                className={`bg-white flex flex-col sm:flex-row overflow-hidden shadow-lg w-[90%] max-w-md sm:max-w-3xl relative ${isClosing ? "animate-slideOut" : "animate-slideIn"}`}
-            >
-                {/* Imagen */}
-                <div className="hidden sm:block w-2/5 relative">
-                    <img
-                        src={yuleLove.src}
-                        alt="Asesoría"
-                        className="w-full h-full object-cover"
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4 modal-overlay">
+        <div 
+            ref={modalRef} 
+            className={`rounded-2xl bg-white flex flex-col sm:flex-row overflow-hidden shadow-lg w-[90%] max-w-[600px] sm:max-w-3xl relative ${isClosing ? "animate-slideOut" : "animate-slideIn"}`}
+        >
+            {/* Imagen */}
+            <div className="hidden sm:block sm:w-1/2">
+                <img
+                    src={yuleLove.src}
+                    alt="Asesoría"
+                    className="w-full h-full object-cover"
+                />
+            </div>
+
+            {/* Contenido */}
+            <div className="w-full sm:w-1/2 bg-[#293296] text-white relative p-8">
+                <button
+                    onClick={closeModal}
+                    aria-label="Cerrar modal"
+                    className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
+                >
+                    ✕
+                </button>
+                
+                <div className="text-white mb-6">
+                    <p className="text-2xl italic">Gana</p>
+                    <p className="text-7xl font-bold ">
+                        10<span className="text-6xl font-semibold">%</span>{" "}
+                        <span className="text-5xl font-semibold italic">dto.</span>
+                    </p>
+                    <p className="text-2xl">en tu compra</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-1 mt-4">
+                    {/* Campo Nombre */}
+                    <label className="text-lg font-bold">Nombre</label>
+                    <input
+                        name="nombre"
+                        type="text"
+                        value={formData.nombre}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                            errors.nombre ? 'border-2 border-red-500' : ''
+                        }`}
+                        placeholder="Ingresa tu nombre"
                     />
-                </div>
+                    {errors.nombre && (
+                        <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>
+                    )}
 
-                {/* Contenido */}
-                <div className="w-full sm:w-3/5 bg-[#1E2A78] text-white relative">
-                    <div className="py-6 px-4 sm:py-10 mx-2 sm:mx-8 min-h-[420px]">
-                        <button
-                            onClick={closeModal}
-                            aria-label="Cerrar modal"
-                            className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
-                        >
-                            ✕
-                        </button>
-                        
-                        <div className="text-white mb-6">
-                            <p className="text-2xl italic">Gana</p>
-                            <p className="text-7xl font-bold ">
-                                10<span className="text-6xl font-semibold">%</span>{" "}
-                                <span className="text-5xl font-semibold italic">dto.</span>
-                            </p>
-                            <p className="text-2xl">en tu compra</p>
+                    {/* Campo Teléfono */}
+                    <label className="text-lg font-bold">Teléfono</label>
+                    <input
+                        type="tel"
+                        name="telefono"
+                        value={formData.telefono}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                            errors.telefono ? 'border-2 border-red-500' : ''
+                        }`}
+                        placeholder="Ej: 987654321"
+                        maxLength={9}
+                    />
+                    {errors.telefono && (
+                        <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>
+                    )}
+
+                    {/* Campo Correo */}
+                    <label className="text-lg font-bold">Correo</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                            errors.email ? 'border-2 border-red-500' : ''
+                        }`}
+                        placeholder="ejemplo@correo.com"
+                    />
+                    {errors.email && (
+                        <p className="text-red-400 text-sm mb-2">{errors.email}</p>
+                    )}
+
+                    {/* Mensajes */}
+                    {errors.general && (
+                        <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-3">
+                            <p className="text-red-300 text-sm">{errors.general}</p>
                         </div>
+                    )}
+                    {successMessage && (
+                        <div className="bg-green-500/20 border border-green-500 rounded-lg p-3 mb-3">
+                            <p className="text-green-300 text-sm">{successMessage}</p>
+                        </div>
+                    )}
 
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-1">
-                            {/* Campo Nombre */}
-                            <h3 className="text-base sm:text-lg font-bold">Nombre</h3>
-                            <input
-                                name="nombre"
-                                type="text"
-                                value={formData.nombre}
-                                onChange={handleChange}
-                                className={`py-2 px-4 rounded-full bg-white text-black outline-none mb-1 ${
-                                    errors.nombre ? 'border-2 border-red-500' : ''
-                                }`}
-                                placeholder="Ingresa tu nombre"
-                            />
-                            {errors.nombre && (
-                                <p className="text-red-300 text-sm mb-2">{errors.nombre}</p>
-                            )}
-
-                            {/* Campo Teléfono */}
-                            <h3 className="text-base sm:text-lg font-bold">Teléfono</h3>
-                            <input
-                                type="tel"
-                                name="telefono"
-                                value={formData.telefono}
-                                onChange={handleChange}
-                                className={`py-2 px-4 rounded-full bg-white text-black outline-none mb-1 ${
-                                    errors.telefono ? 'border-2 border-red-500' : ''
-                                }`}
-                                placeholder="Ej: 987654321"
-                                maxLength={9}
-                            />
-                            {errors.telefono && (
-                                <p className="text-red-300 text-sm mb-2">{errors.telefono}</p>
-                            )}
-
-                            {/* Campo Correo */}
-                            <h3 className="text-base sm:text-lg font-bold">Correo</h3>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className={`py-2 px-4 rounded-full bg-white text-black outline-none mb-1 ${
-                                    errors.email ? 'border-2 border-red-500' : ''
-                                }`}
-                                placeholder="ejemplo@correo.com"
-                            />
-                            {errors.email && (
-                                <p className="text-red-300 text-sm mb-2">{errors.email}</p>
-                            )}
-
-                            {/* Mensajes de error general y éxito */}
-                            {errors.general && (
-                                <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-3">
-                                    <p className="text-red-300 text-sm">{errors.general}</p>
-                                </div>
-                            )}
-                            {successMessage && (
-                                <div className="bg-green-500/20 border border-green-500 rounded-lg p-3 mb-3">
-                                    <p className="text-green-300 text-sm">{successMessage}</p>
-                                </div>
-                            )}
-
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="bg-blue-950 hover:bg-blue-700 text-white w-full sm:max-w-fit p-3 sm:p-4 text-xl sm:text-3xl font-bold rounded-xl mx-auto text-center border border-white/20 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-                            >
-                                {isSubmitting ? "Enviando..." : "Cotiza ahora"}
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-[#172649] text-white text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isSubmitting ? "Enviando..." : "Cotiza ahora"}
+                    </button>
+                </form>
             </div>
         </div>
-    );
+    </div>
+);
+
 };
 
 export default ScrollModal;
