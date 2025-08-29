@@ -12,6 +12,7 @@ interface Blog {
     meta_titulo: string;
     meta_descripcion: string;
   };
+  url_video: string;
   subtitulo: string;
   imagen_principal: string;
   imagenes?: { ruta_imagen: string; text_alt: string }[];

@@ -8,32 +8,22 @@ import { useState, useEffect } from "react";
 import type Cliente from "../../models/clients.ts";
 
 const useClientes = (trigger: boolean, page: number = 1) => {
-  const [clientes, setClientes] = useState<Cliente[]>([]); // Cambia el tipo a Cliente[] para reflejar la estructura de datos
-  const [totalPages, setTotalPages] = useState<number>(1); // Número total de páginas
-  const [loading, setLoading] = useState<boolean>(true); // Estado de carga
-  const [error, setError] = useState<string | null>(null); // Mensaje de error
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    /**
-     * Función para obtener la lista de clientes desde la API.
-     * Maneja el estado de carga y errores.
-     */
     const fetchClientes = async () => {
       setLoading(true);
       setError(null);
 
-      /**
-       * Obtiene el token de autenticación del localStorage y realiza la solicitud a la API.
-       * Si no se encuentra el token, lanza un error.
-       */
       try {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No se encontró el token de autenticación");
 
-        /**
-         * Realiza la solicitud a la API para obtener la lista de clientes.
-         */
-        const response = await fetch("https://apiyuntas.yuntaspublicidad.com/api/v1/clientes", {
+        // Agregar parámetro de página a la URL
+        const response = await fetch(`https://apiyuntas.yuntaspublicidad.com/api/v1/clientes?page=${page}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -44,24 +34,22 @@ const useClientes = (trigger: boolean, page: number = 1) => {
         if (!response.ok)
           throw new Error(`Error al obtener clientes: ${response.statusText}`);
 
-        /**
-         * Convierte la respuesta a JSON y maneja los datos.
-         */
-        const data = await response.json();
-        console.log("🚀 Datos obtenidos:", data.data);
-        /**
-         * Extrae la lista de clientes y el número total de páginas de la respuesta.
-         * Si no hay datos, establece un array vacío y una página total de 1.
-         */
-        const clientesArray = data.data || [];
+        const result = await response.json();
+        console.log("🚀 Respuesta completa:", result);
+        
+        // Acceder a los datos dentro de la estructura de respuesta
+        const responseData = result.data || {};
+        const clientesArray = responseData.data || [];
+        const total = responseData.total || 0;
+        const lastPage = responseData.last_page || 1;
+        
         console.log("🚀 Clientes obtenidos:", clientesArray);
-        const totalPages = Math.ceil(data.total / 10) || 1;
+        console.log("🚀 Total:", total);
+        console.log("🚀 Última página:", lastPage);
+        
         setClientes(clientesArray);
-        setTotalPages(totalPages);
+        setTotalPages(lastPage);
 
-        /**
-         * Manejo de errores en la solicitud y respuesta.
-         */
       } catch (err) {
         console.error("🚨 Error en fetchClientes:", err);
         setError(
@@ -73,14 +61,13 @@ const useClientes = (trigger: boolean, page: number = 1) => {
     };
 
     fetchClientes();
-  }, [trigger, page]); //
+  }, [trigger, page]);
 
   return {
-    clientes, // Lista de clientes
-    totalPages, // Número total de páginas
-    loading, // Estado de carga
-    error, // Mensaje de error
+    clientes,
+    totalPages,
+    loading,
+    error,
   };
 };
-
 export default useClientes;
