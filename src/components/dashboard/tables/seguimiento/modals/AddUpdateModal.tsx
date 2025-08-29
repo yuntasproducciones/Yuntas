@@ -129,4 +129,5 @@ const AddUpdateDataModal = ({ isOpen, setIsOpen, cliente, onRefetch }: AddDataMo
   );
 };
 
+
 export default AddUpdateDataModal;
