@@ -1,124 +1,121 @@
 /**
  * @file AddUpdateModal.tsx
- * @description Este componente es un modal que se utiliza para añadir o editar clientes.
- * Muestra un formulario con campos para el nombre, teléfono y correo electrónico.
+ * @description Modal responsive para añadir o editar clientes.
  */
 
 import useClienteForm from "../../../../../hooks/Seguimiento/useClientesForm";
 import type Cliente from "../../../../../models/clients";
 
-{
-  /* Interfaz de modals, Typescript */
-}
 interface AddDataModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  cliente: Cliente | null; // Cliente a editar o null para añadir uno nuevo
-  onRefetch: () => void; // Función para actualizar la lista después de agregar o editar
+  cliente: Cliente | null;
+  onRefetch: () => void;
 }
 
-const AddUpdateDataModal = ({ isOpen, setIsOpen, cliente, onRefetch }: AddDataModalProps) => {
-  
-  {
-    /* 
-    * Hook para manejar el formulario de cliente, y la lógica de añadir o editar clientes 
-    */
-  }
+const AddUpdateDataModal = ({
+  isOpen,
+  setIsOpen,
+  cliente,
+  onRefetch,
+}: AddDataModalProps) => {
   const { formData, handleChange, handleSubmit } = useClienteForm(
     cliente,
     () => {
-      onRefetch(); // Llamar al callback para actualizar la lista de clientes
-      setIsOpen(false); // Cerrar el modal después de guardar
+      onRefetch();
+      setIsOpen(false);
     }
   );
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-     <div
-  style={{ backgroundColor: "#528FC2" }}
-  className="text-white px-10 py-8 rounded-4xl w-3/5"
->
-
-        <h2 className="text-2xl font-bold mb-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-2 sm:p-4">
+      <div
+        style={{ backgroundColor: "#528FC2" }}
+        className="text-white px-6 py-6 sm:px-10 sm:py-8 rounded-2xl w-full max-w-lg sm:max-w-2xl"
+      >
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center sm:text-left">
           {cliente ? "EDITAR CLIENTE" : "AÑADIR CLIENTE"}
         </h2>
 
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-2 gap-4 gap-x-12"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4"
         >
           <div>
-            <label className="block">Nombres</label>
+            <label className="block text-sm mb-1">Nombres</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full bg-white outline-none p-2 rounded-md text-black"
+              className="w-full bg-white outline-none p-2 rounded-md text-black text-sm sm:text-base"
             />
           </div>
 
           <div>
-            <label className="block">Teléfono</label>
+            <label className="block text-sm mb-1">Teléfono</label>
             <input
               type="text"
               name="celular"
               value={formData.celular}
               onChange={handleChange}
               required
-              className="w-full bg-white outline-none p-2 rounded-md text-black"
+              className="w-full bg-white outline-none p-2 rounded-md text-black text-sm sm:text-base"
             />
           </div>
 
-          <div className="col-span-2">
-            <label className="block">Gmail</label>
+          <div className="sm:col-span-2">
+            <label className="block text-sm mb-1">Gmail</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full bg-white outline-none p-2 rounded-md text-black"
+              className="w-full bg-white outline-none p-2 rounded-md text-black text-sm sm:text-base"
             />
           </div>
-         <div>
-            <label className="block">Sección</label>
+
+          <div>
+            <label className="block text-sm mb-1">Sección</label>
             <input
               type="text"
               name="seccion"
               value={formData.seccion}
               onChange={handleChange}
               required
-              className="w-full bg-white outline-none p-2 rounded-md text-black"
+              className="w-full bg-white outline-none p-2 rounded-md text-black text-sm sm:text-base"
             />
           </div>
-              <div>
-            <label className="block">Fecha</label>
+
+          <div>
+            <label className="block text-sm mb-1">Fecha</label>
             <input
               type="text"
               name="fecha"
               value={formData.created_at}
               onChange={handleChange}
               required
-              className="w-full bg-white outline-none p-2 rounded-md text-black"
+              className="w-full bg-white outline-none p-2 rounded-md text-black text-sm sm:text-base"
             />
           </div>
-          <div className="flex gap-2 mt-8 col-span-2">
-           <button
+
+          <div className="flex flex-col sm:flex-row gap-2 mt-6 sm:col-span-2">
+            <button
               type="submit"
               style={{ backgroundColor: "#98D8DF" }}
-              className="px-10 py-1 rounded-full text-lg text-white hover:opacity-90 transition"
+              className="flex-1 sm:flex-none px-6 py-2 rounded-full text-base text-white hover:opacity-90 transition"
             >
               {cliente ? "Guardar cambios" : "Añadir cliente"}
             </button>
 
             <button
-              onClick={() => setIsOpen(false)} // Cerrar el modal
+              onClick={() => setIsOpen(false)}
               type="button"
-              className="px-10 bg-gray-400 py-1 rounded-full text-lg hover:bg-gray-500"
+              className="flex-1 sm:flex-none px-6 py-2 bg-gray-400 rounded-full text-base hover:bg-gray-500 transition"
             >
               Cancelar
             </button>
