@@ -1,193 +1,326 @@
 import { useRef, useEffect, useState } from 'react';
+import { config, getApiUrl } from "../../../config";
 import { z } from "zod";  
 import imagenEmergente1 from "../../assets/images/emergente/yuleLove.jpg";
-import imagenEmergente2 from "../../assets/images/emergente/em2.jpg";
-import imagenEmergente3 from "../../assets/images/emergente/em3.webp";
-import imagenEmergente4 from "../../assets/images/emergente/em4.jpg";
-import imagenEmergente5 from "../../assets/images/emergente/em5.webp";
-import imagenEmergente6 from "../../assets/images/emergente/em6.webp";
-import imagenEmergente7 from "../../assets/images/emergente/em7.webp";
-import imagenEmergente8 from "../../assets/images/emergente/em8.webp";
-import imagenEmergente9 from "../../assets/images/emergente/em9.webp";
-import imagenEmergente10 from "../../assets/images/emergente/em10.webp";
-import imagenEmergente11 from "../../assets/images/emergente/em11.webp";
-import imagenEmergente12 from "../../assets/images/emergente/em12.webp";
-import imagenEmergente13 from "../../assets/images/emergente/em13.webp";
+import imagenEmergente2 from "../../assets/images/emergente/panelesled.png";
+import imagenEmergente3 from "../../assets/images/emergente/doradayplateada.png";
+import imagenEmergente4 from "../../assets/images/emergente/barraspixedled.png";
+import imagenEmergente5 from "../../assets/images/emergente/reloj.png";
+import imagenEmergente6 from "../../assets/images/emergente/menuboard.png";
+import imagenEmergente7 from "../../assets/images/emergente/mdf.png";
+import imagenEmergente8 from "../../assets/images/emergente/9-3.webp";
+import imagenEmergente9 from "../../assets/images/emergente/hologramas3d.png";
+import imagenEmergente10 from "../../assets/images/emergente/7-1.webp";
+import imagenEmergente11 from "../../assets/images/emergente/pantallasled.png";
+import imagenEmergente12 from "../../assets/images/emergente/techosled.png";
+import imagenEmergente13 from "../../assets/images/emergente/pisosled.png";
+import imagenEmergente14 from "../../assets/images/emergente/em2.jpg";
+import imagenEmergente15 from "../../assets/images/emergente/letreros-neon-led.webp";
+import imagenEmergente16 from "../../assets/images/emergente/tyler-casey-EINdJQ8wTbk-unsplash-1.webp";
+import imagenEmergente17 from "../../assets/images/emergente/LETREROS LUMINOSOS.png";
+import imagenEmergente18 from "../../assets/images/emergente/8-2.webp";
 
 const emergenteData = {
-"letreros-acrilicos": {titulo: "Obtén", destacado: "Asesoría", subtitulo: "gratuita", imagen: imagenEmergente1, button: "Aprovecha ahora",
-},
-"paneles-led-electronicos": {titulo: "Disfruta Nuestros", destacado: "Beneficios", subtitulo: "", imagen: imagenEmergente2, button: "Cotiza ahora",
-},
-"letreros-neon-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
-},
-"pisos-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente13, button: "Cotiza ahora",
-},
-"pantallas-led": {titulo: "Accede", destacado: "Ofertas Exclusivas", subtitulo: "", imagen: imagenEmergente11, button: "Registrate ya",
-},
-"techos-led": {titulo: "Envío", destacado: "Gratis", subtitulo: "en todo lima", imagen: imagenEmergente12, button: "Aprovecha ahora",
-},
-"mesas-y-sillas-led": {titulo: "Obtén", destacado: "Asesoría gratuita", subtitulo: "", imagen: imagenEmergente2, button: "Aprovecha ahora",
-},
-"barras-pixel-led": {titulo: "Recibe", destacado: "Envio Gratis", subtitulo: "", imagen: imagenEmergente4, button: "Deja tus datos",
-},
-"letras-pintadas-en-mdf": {titulo: "Accede", destacado: "Ofertas Exclusivas", subtitulo: "", imagen: imagenEmergente7, button: "Registrate",
-},  
-"menu-board": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente6, button: "Cotiza ahora",
-},
-"neon-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
-},
-"letreros-luminosos": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
-},  
-"Hologramas-3D": {titulo: "Disfruta", destacado: "Nuestros Beneficios", subtitulo: "", imagen: imagenEmergente9, button: "Aprovecha ahora",
-},
-"ventiladores holograficos": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
-},
-
-default: {titulo: "Bienvenido", destacado: "a Yuntas", subtitulo: "Elige tu producto ideal", imagen: imagenEmergente1, button: "Contáctanos",
-}
+  default: { titulo: "Brilla con un", destacado: "10% dto", subtitulo: "en tu compra", imagen: imagenEmergente1, button: "Contáctanos", id: null },
+  "letreros-acrilicos": { titulo: "Posiciónate", destacado: "Envío Gratis", subtitulo: "", imagen: imagenEmergente16, button: "Deja tus datos", id: 2 },
+  "paneles-led-electronicos": { titulo: "Solicita", destacado: "Asesoría Gratuita", subtitulo: "", imagen: imagenEmergente2, button: "Regístrate", id: 3 },
+  "letreros-neon-led": { titulo: "Deslumbra con", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente15, button: "Cotiza ahora", id: 4 },
+  "relojes-digitales": { titulo: "Obtén", destacado: "Descuento Especial", subtitulo: "", imagen: imagenEmergente5, button: "Cotiza ahora", id: 5 },
+  "pisos-led": { titulo: "Haz", destacado: "Brillar", subtitulo: "tu ambiente", imagen: imagenEmergente13, button: "Regístrate ya", id: 7 },
+  "pantallas-led": { titulo: "Cotiza tus", destacado: "Pantallas", subtitulo: "ahora", imagen: imagenEmergente11, button: "Aprovecha ahora", id: 8 },
+  "techos-led": { titulo: "Transforma tus ", destacado: "Techos Hoy", subtitulo: "", imagen: imagenEmergente12, button: "Aprovecha ahora", id: 9 },
+  "Mesas-y-sillas-LED-(Sillas Luminosas)": { titulo: "Dale estilo", destacado: "A tu evento ahora", subtitulo: "", imagen: imagenEmergente14, button: "Cotiza ahora", id: 10 },
+  "barras-pixel-led": { titulo: "Ilumina con nuestras", destacado: "Ofetas Exclusivas", subtitulo: "", imagen: imagenEmergente4, button: "Regístrate ya", id: 11 },
+  "letras-pintadas-en-mdf": { titulo: "Envío", destacado: "Gratis", subtitulo: "Destaca tu negocio", imagen: imagenEmergente7, button: "Cotiza ahora", id: 14 },
+  "impresion-en-vinilo": { titulo: "Decora con nuestras", destacado: "Ofertas Exclusivas", subtitulo: "", imagen: imagenEmergente10, button: "Regístrate", id: 15 },
+  "menu-board": { titulo: "Descubrelo con tu", destacado: "Asesoría Gratuita", subtitulo: "", imagen: imagenEmergente6, button: "Aprovecha ahora", id: 16 },
+  "neon-led": { titulo: "Envío", destacado: "Gratis", subtitulo: "dale vida a tus espacios", imagen: imagenEmergente18, button: "Aprovecha ahora", id: 17 },
+  "letreros-luminosos": { titulo: "Brilla con tu", destacado: "Primera Compra", subtitulo: "", imagen: imagenEmergente17, button: "Regístrate", id: 18 },
+  "Hologramas-3D": { titulo: "Programa tu", destacado: "Asesoría Gratuita", subtitulo: "", imagen: imagenEmergente9, button: "Aprovecha ahora", id: 19 },
+  "letras doradas y plateadas": { titulo: "Brilla", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente3, button: "Cotiza ahora", id: 20 },
+  "monitores-digitales": { titulo: "Impacta con", destacado: "15%", subtitulo: "de descuento", imagen: imagenEmergente8, button: "Aprovecha ahora", id: 26 }
 };
+
+
 const schema = z.object({
-    nombre: z.string().min(1, "El nombre es obligatorio"),
-    correo: z.string().email("Correo inválido"),
+    nombre: z
+        .string()
+        .min(1, "El nombre es obligatorio")
+        .max(100, "El nombre no puede exceder 100 caracteres")
+        .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/, "El nombre solo puede contener letras y espacios"),
+    email: z
+        .string()
+        .min(1, "El email es obligatorio")
+        .email("El formato del correo electrónico es inválido")
+        .max(100, "El email no puede exceder 100 caracteres"),
     telefono: z
         .string()
-        .min(7, "El número de teléfono es demasiado corto")
-        .max(15, "El número de teléfono es demasiado largo")
-        .regex(
-            /^\+?\d+$/,
-            "El teléfono debe contener solo números (y opcionalmente +)"
-        ),
+        .regex(/^[0-9]{9}$/, "El celular debe tener exactamente 9 dígitos")
+        .regex(/^[0-9]{9}$/, "El celular solo puede contener números"),
 });
+
 const Emergente = ({ producto }) => {
-const dialogRef = useRef(null);
-const [formData, setFormData] = useState({
+  const link = producto?.data?.link || "default";
+  const data = emergenteData[link] || emergenteData["default"];
+  const dialogRef = useRef(null);
+  
+  const [formData, setFormData] = useState({
     nombre: "",
     telefono: "",
-    correo: "",
+    email: "",
+    producto_id: data.id || producto?.data?.id || ""
   });
+  
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const link = producto?.data?.link || "default";
-const data = emergenteData[link] || emergenteData["default"];
-
-useEffect(() => {
-  if (dialogRef.current) {
-    dialogRef.current.showModal();
-  }
-}, []);
-
-const onClose = () => {
-  dialogRef.current?.close();
-};
- const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      const fieldErrors = result.error.format();
-      setErrors({
-        nombre: fieldErrors.nombre?._errors[0],
-        telefono: fieldErrors.telefono?._errors[0],
-        correo: fieldErrors.correo?._errors[0],
-      });
-      return;
+  useEffect(() => {
+    if (dialogRef.current) {
+      dialogRef.current.showModal();
     }
+  }, []);
 
-    setErrors({});
-    console.log("Formulario válido:", formData);
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      producto_id: data.id || producto?.data?.id || ""
+    }));
+  }, [link, data.id, producto?.data?.id]);
 
-    // Aquí podrías enviar el formulario o cerrar el modal, etc.
+  const onClose = () => {
+    dialogRef.current?.close();
   };
 
-const renderTitle = () => (
-  <h2 className="text-xl sm:text-4xl font-semibold italic">
-    {data.titulo}
-    {data.destacado && (
-      <>
-        <br />
-        <span className="text-2xl sm:text-5xl font-bold">{data.destacado}</span>
-      </>
-    )}
-    {data.subtitulo && (
-      <>
-        <br />
-        {data.subtitulo}
-      </>
-    )}
-  </h2>
-);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-return (
-    <dialog
-      ref={dialogRef}
-      className="rounded-2xl fixed top-[50%] left-[50%] ml-[-300px] sm:ml-[-384px] mt-[-250px] sm:mt-[-225px]"
-    >
-      <div className="flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg max-w-[600px] sm:max-w-3xl overflow-hidden sm:mx-[0px]">
+    setErrors({});
+    setSuccessMessage("");
 
-        {/* Imagen */}
-        <div className="sm:w-1/2">
-          <img
-            src={data.imagen?.src || data.imagen}
-            alt={data.destacado || data.titulo}
-            className="h-[250px] sm:h-full w-full object-cover"
-            // className="max-h-[600px] sm:h-full w-full object-cover"
-          />
-        </div>
+    const result = schema.safeParse(formData);
+    if (!result.success) {
+        const fieldErrors = {};
+        result.error.errors.forEach(err => {
+            const fieldName = err.path[0];
+            fieldErrors[fieldName] = err.message;
+        });
+        setErrors(fieldErrors);
+        return;
+    }
 
-        {/* Texto y formulario */}
-        <div className="sm:w-1/2 bg-[#293296] p-8 text-white relative">
-          <button
-            onClick={onClose}
-            aria-label="Cerrar modal"
-            className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
-          >
-            ✕
-          </button>
+    setIsSubmitting(true);
 
-          {renderTitle()}
+    try {
+        const payload = new FormData();
+        payload.append("name", result.data.nombre);
+        payload.append("email", result.data.email);
+        payload.append("celular", result.data.telefono);
+        payload.append("producto_id", formData.producto_id);
 
-          <form className="mt-4" onSubmit={handleSubmit}>
-            <label className="block text-lg font-bold">Nombre</label>
-            <input
-              type="text"
-              value={formData.nombre}
-              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-              className="w-full px-4 py-2 rounded-full bg-white text-black mb-1"
-            />
-            {errors.nombre && <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>}
+        console.log("Enviando datos:", {
+          name: result.data.nombre,
+          email: result.data.email,
+          celular: result.data.telefono,
+          producto_id: formData.producto_id
+        });
 
-            <label className="block text-lg font-bold">Teléfono</label>
-            <input
-              type="text"
-              value={formData.telefono}
-              onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-              className="w-full px-4 py-2 rounded-full bg-white text-black mb-1"
-            />
-            {errors.telefono && <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>}
+        const response = await fetch(getApiUrl(config.endpoints.clientes.create), {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: payload,
+        });
 
-            <label className="block text-lg font-bold">Correo</label>
-            <input
-              type="email"
-              value={formData.correo}
-              onChange={(e) => setFormData({ ...formData, correo: e.target.value })}
-              className="w-full px-4 py-2 rounded-full bg-white text-black mb-1"
-            />
-            {errors.correo && <p className="text-red-400 text-sm mb-4">{errors.correo}</p>}
+        if (response.type === 'opaque' || response.url !== getApiUrl(config.endpoints.clientes.create)) {
+            throw new Error("Error de configuración del servidor. Por favor contacta al administrador.");
+        }
 
-            <button
-              type="submit"
-              className="w-full bg-[#172649] text-white text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-8"
-            >
-              {data.button}
-            </button>
-          </form>
-        </div>
-      </div>
-    </dialog>
+        let responseData;
+        try {
+            const responseText = await response.text();
+            if (!responseText) {
+                throw new Error("Respuesta vacía del servidor");
+            }
+            responseData = JSON.parse(responseText);
+        } catch (parseError) {
+            console.error("[Emergente] Error parsing response:", parseError);
+            console.error("[Emergente] Response status:", response.status);
+            console.error("[Emergente] Response headers:", response.headers);
+            throw new Error("Error al procesar la respuesta del servidor");
+        }
+
+        if (!response.ok) {
+            if (response.status === 422 && responseData.errors) {
+                const validationErrors = {};
+                if (responseData.errors.name) {
+                    validationErrors.nombre = Array.isArray(responseData.errors.name) 
+                        ? responseData.errors.name[0] 
+                        : responseData.errors.name;
+                }
+                if (responseData.errors.email) {
+                    validationErrors.email = Array.isArray(responseData.errors.email) 
+                        ? responseData.errors.email[0] 
+                        : responseData.errors.email;
+                }
+                if (responseData.errors.celular) {
+                    validationErrors.telefono = Array.isArray(responseData.errors.celular) 
+                        ? responseData.errors.celular[0] 
+                        : responseData.errors.celular;
+                }
+
+                setErrors(validationErrors);
+                return;
+            }
+
+            throw new Error(responseData.message || `Error ${response.status}: ${response.statusText}`);
+        }
+
+        setSuccessMessage("✅ Información enviada con éxito");
+        setFormData({ 
+          nombre: "", 
+          email: "", 
+          telefono: "",
+          producto_id: data.id || ""
+        });
+
+        setTimeout(() => {
+            onClose();
+            setSuccessMessage("");
+        }, 2000);
+
+    } catch (err) {
+        console.error("[Emergente] Error:", err);
+        
+        if (err.name === 'TypeError' && (err.message.includes('fetch') || err.message.includes('CORS'))) {
+            setErrors({ general: "Error de conexión con el servidor. Por favor intenta nuevamente." });
+        } else if (err.message.includes('configuración del servidor')) {
+            setErrors({ general: "Error de configuración del servidor. Contacta al administrador." });
+        } else {
+            setErrors({ general: err.message || "Error desconocido al enviar la información." });
+        }
+    } finally {
+        setIsSubmitting(false);
+    }
+  };
+
+  const renderTitle = () => (
+    <h2 className="text-xl sm:text-4xl font-semibold italic">
+      {data.titulo}
+      {data.destacado && (
+        <>
+          <br />
+          <span className="text-2xl sm:text-5xl font-bold">{data.destacado}</span>
+        </>
+      )}
+      {data.subtitulo && (
+        <>
+          <br />
+          {data.subtitulo}
+        </>
+      )}
+    </h2>
   );
 
+  return (
+  <dialog
+  ref={dialogRef}
+  className="rounded-2xl fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto"
+>
+
+      <div className="flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg max-w-[90vw] sm:max-w-5xl overflow-hidden">
+
+        {/* Imagen */}
+     <div className="sm:w-1/2 aspect-[4/3] overflow-hidden">
+  <img
+    src={data.imagen?.src || data.imagen}
+    alt={data.destacado || data.titulo}
+    className="w-full h-full object-cover"
+  />
+</div>
+
+
+          {/* Texto y formulario */}
+          <div className="sm:w-1/2 bg-[#293296] p-8 text-white relative">
+            <button
+              onClick={onClose}
+              aria-label="Cerrar modal"
+              className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
+            >
+              ✕
+            </button>
+
+            {renderTitle()}
+
+            <form className="mt-4" onSubmit={handleSubmit}>
+              <label className="block text-lg font-bold">Nombre</label>
+              <input
+                type="text"
+                value={formData.nombre}
+                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                  errors.nombre ? 'border-2 border-red-500' : ''
+                }`}
+                placeholder="Ingresa tu nombre"
+              />
+              {errors.nombre && <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>}
+
+              <label className="block text-lg font-bold">Teléfono</label>
+              <input
+                type="tel"
+                value={formData.telefono}
+                onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                  errors.telefono ? 'border-2 border-red-500' : ''
+                }`}
+                placeholder="Ej: 987654321"
+                maxLength={9}
+              />
+              {errors.telefono && <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>}
+
+              <label className="block text-lg font-bold">Correo</label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                  errors.email ? 'border-2 border-red-500' : ''
+                }`}
+                placeholder="ejemplo@correo.com"
+              />
+              {errors.email && <p className="text-red-400 text-sm mb-2">{errors.email}</p>}
+
+              {/* Mensajes de error y éxito */}
+              {errors.general && (
+                <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-3">
+                  <p className="text-red-300 text-sm">{errors.general}</p>
+                </div>
+              )}
+              {successMessage && (
+                <div className="bg-green-500/20 border border-green-500 rounded-lg p-3 mb-3">
+                  <p className="text-green-300 text-sm">{successMessage}</p>
+                </div>
+              )}
+
+              {/* Campo para debug - mostrar el producto_id actual */}
+              <div className="text-xs text-gray-300 mb-2">
+                Debug: producto_id = {formData.producto_id || "null"} (link: {link})
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-[#172649] text-white text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Enviando..." : data.button}
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+    );
 };
 
 export default Emergente;
