@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { GrUpdate } from "react-icons/gr";
 import AddDataModal from "./modals/AddUpdateModal.tsx";
 import DeleteClienteModal from "./modals/DeleteModal.tsx";
 import useClientes from "../../../../hooks/Seguimiento/useClientes.ts";
@@ -83,7 +82,7 @@ const DataTable = () => {
         {/* Cabecera visible solo en pantallas medianas en adelante */}
         <thead className="hidden md:table-header-group">
           <tr>
-            {["ID", "Nombre", "Gmail", "Teléfono", "Sección", "Fecha", "Acción"].map((header) => (
+            {["ID", "Nombre", "Gmail", "Teléfono", "Producto", "Fecha", "Acción"].map((header) => (
               <th
                 key={header}
                 className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
@@ -124,9 +123,10 @@ const DataTable = () => {
                   <td data-label="Teléfono" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
                     {item.celular}
                   </td>
-                  <td data-label="Sección" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
-                    {item.seccion || "N/A"}
+                  <td data-label="Producto" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
+                    {item.nombre_producto || "N/A"}
                   </td>
+
                   <td data-label="Fecha" className="px-4 py-2 font-bold border border-gray-300 block md:table-cell">
                     {item.created_at}
                   </td>

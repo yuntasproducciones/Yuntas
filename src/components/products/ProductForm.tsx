@@ -157,9 +157,22 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
     // IMAGEN PRINCIPAL (para catálogo/lista) - NO es la imagen Hero
     const imagenListaProductos = formData.get('imagen_lista_productos') as File;
-    if (imagenListaProductos && imagenListaProductos.size > 0) {
+    const imagenHero = formData.get('imagen_hero') as File;
+    const imagenEspecificaciones = formData.get('imagen_especificaciones') as File;
+    const imagenBeneficios = formData.get('imagen_beneficios') as File;
+    const imagenPopups = formData.get('imagen_popups') as File;
+
+    if (
+      imagenListaProductos &&
+      imagenListaProductos.size > 0 &&
+      imagenListaProductos !== imagenHero &&
+      imagenListaProductos !== imagenEspecificaciones &&
+      imagenListaProductos !== imagenBeneficios &&
+      imagenListaProductos !== imagenPopups
+    ) {
       finalFormData.append('imagen_principal', imagenListaProductos);
     }
+
 
     // ESPECIFICACIONES como array asociativo
     const especificacionesObj: any = {};
@@ -184,11 +197,12 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
     }
 
     // IMÁGENES ADICIONALES como array - ORDEN CORRECTO SEGÚN DISEÑO
-    // Orden: [0] = HERO, [1] = Especificaciones, [2] = Beneficios
+    // Orden: [0] = HERO, [1] = Especificaciones, [2] = Beneficios, [3] = Popups
     const imagenesEnOrden = [
       { key: 'imagen_hero', file: formData.get('imagen_hero') as File },
       { key: 'imagen_especificaciones', file: formData.get('imagen_especificaciones') as File },
-      { key: 'imagen_beneficios', file: formData.get('imagen_beneficios') as File }
+      { key: 'imagen_beneficios', file: formData.get('imagen_beneficios') as File },
+      { key: 'imagen_popups', file: formData.get('imagen_popups') as File }
     ];
 
     // ENVIAR SOLO LAS IMÁGENES QUE TIENEN ARCHIVOS VÁLIDOS
@@ -578,18 +592,41 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               />
             </div>
           </div>
-        </div>
+            {/* Imagen de Popups*/}
+            <div className="bg-white p-4 rounded-lg border border-yellow-200">
+              <h4 className="text-md font-semibold text-yellow-700 mb-3">
+                💬 Imagen para Popups
+              </h4>
+              <p className="text-sm text-gray-600 mb-3">Imagen que acompaña los popups de registro clientes</p>
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="imagen_popups"
+                  className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"
+                />
+                <input
+                  type="text"
+                  name="alt_imagen_popups"
+                  placeholder="Texto ALT para SEO"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
+                />
+              </div>
+            </div>
 
-        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800">
-            <strong>💡 Estructura CORRECTA de imágenes:</strong><br />
-            📸 <strong>Lista Productos:</strong> Imagen para vista de catálogo (imagen_principal)<br />
-            🎯 <strong>Hero:</strong> Banner principal superior (images[0])<br />
-            📋 <strong>Especificaciones:</strong> Acompaña características (images[1])<br />
-            🎁 <strong>Beneficios:</strong> Acompaña ventajas (images[2])
-          </p>
-        </div>
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-sm text-yellow-800">
+              <strong>💡 Estructura CORRECTA de imágenes:</strong><br />
+              📸 <strong>Lista Productos:</strong> Imagen para vista de catálogo (imagen_principal)<br />
+              🎯 <strong>Hero:</strong> Banner principal superior (images[0])<br />
+              📋 <strong>Especificaciones:</strong> Acompaña características (images[1])<br />
+              🎁 <strong>Beneficios:</strong> Acompaña ventajas (images[2])<br />
+              💬 <strong>Popups:</strong> Acompaña popups registro (images[3]) 
+            </p>
+          </div>
+          </div>
       </div>
+
 
       {/* SECCIÓN: PRODUCTOS RELACIONADOS */}
       {/* <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
