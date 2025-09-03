@@ -1,46 +1,22 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import { config, getApiUrl } from "../../../config";
 import { z } from "zod";  
-import imagenEmergente1 from "../../assets/images/emergente/yuleLove.jpg";
-import imagenEmergente2 from "../../assets/images/emergente/panelesled.png";
-import imagenEmergente3 from "../../assets/images/emergente/doradayplateada.png";
-import imagenEmergente4 from "../../assets/images/emergente/barraspixedled.png";
-import imagenEmergente5 from "../../assets/images/emergente/reloj.png";
-import imagenEmergente6 from "../../assets/images/emergente/menuboard.png";
-import imagenEmergente7 from "../../assets/images/emergente/mdf.png";
-import imagenEmergente8 from "../../assets/images/emergente/9-3.webp";
-import imagenEmergente9 from "../../assets/images/emergente/hologramas3d.png";
-import imagenEmergente10 from "../../assets/images/emergente/7-1.webp";
-import imagenEmergente11 from "../../assets/images/emergente/pantallasled.png";
-import imagenEmergente12 from "../../assets/images/emergente/techosled.png";
-import imagenEmergente13 from "../../assets/images/emergente/pisosled.png";
-import imagenEmergente14 from "../../assets/images/emergente/em2.jpg";
-import imagenEmergente15 from "../../assets/images/emergente/letreros-neon-led.webp";
-import imagenEmergente16 from "../../assets/images/emergente/tyler-casey-EINdJQ8wTbk-unsplash-1.webp";
-import imagenEmergente17 from "../../assets/images/emergente/LETREROS LUMINOSOS.png";
-import imagenEmergente18 from "../../assets/images/emergente/8-2.webp";
 
-const emergenteData = {
-  default: { titulo: "Brilla con un", destacado: "10% dto", subtitulo: "en tu compra", imagen: imagenEmergente1, button: "Contáctanos", id: null },
-  "letreros-acrilicos": { titulo: "Posiciónate", destacado: "Envío Gratis", subtitulo: "", imagen: imagenEmergente16, button: "Deja tus datos", id: 2 },
-  "paneles-led-electronicos": { titulo: "Solicita", destacado: "Asesoría Gratuita", subtitulo: "", imagen: imagenEmergente2, button: "Regístrate", id: 3 },
-  "letreros-neon-led": { titulo: "Deslumbra con", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente15, button: "Cotiza ahora", id: 4 },
-  "relojes-digitales": { titulo: "Obtén", destacado: "Descuento Especial", subtitulo: "", imagen: imagenEmergente5, button: "Cotiza ahora", id: 5 },
-  "pisos-led": { titulo: "Haz", destacado: "Brillar", subtitulo: "tu ambiente", imagen: imagenEmergente13, button: "Regístrate ya", id: 7 },
-  "pantallas-led": { titulo: "Cotiza tus", destacado: "Pantallas", subtitulo: "ahora", imagen: imagenEmergente11, button: "Aprovecha ahora", id: 8 },
-  "techos-led": { titulo: "Transforma tus ", destacado: "Techos Hoy", subtitulo: "", imagen: imagenEmergente12, button: "Aprovecha ahora", id: 9 },
-  "Mesas-y-sillas-LED-(Sillas Luminosas)": { titulo: "Dale estilo", destacado: "A tu evento ahora", subtitulo: "", imagen: imagenEmergente14, button: "Cotiza ahora", id: 10 },
-  "barras-pixel-led": { titulo: "Ilumina con nuestras", destacado: "Ofetas Exclusivas", subtitulo: "", imagen: imagenEmergente4, button: "Regístrate ya", id: 11 },
-  "letras-pintadas-en-mdf": { titulo: "Envío", destacado: "Gratis", subtitulo: "Destaca tu negocio", imagen: imagenEmergente7, button: "Cotiza ahora", id: 14 },
-  "impresion-en-vinilo": { titulo: "Decora con nuestras", destacado: "Ofertas Exclusivas", subtitulo: "", imagen: imagenEmergente10, button: "Regístrate", id: 15 },
-  "menu-board": { titulo: "Descubrelo con tu", destacado: "Asesoría Gratuita", subtitulo: "", imagen: imagenEmergente6, button: "Aprovecha ahora", id: 16 },
-  "neon-led": { titulo: "Envío", destacado: "Gratis", subtitulo: "dale vida a tus espacios", imagen: imagenEmergente18, button: "Aprovecha ahora", id: 17 },
-  "letreros-luminosos": { titulo: "Brilla con tu", destacado: "Primera Compra", subtitulo: "", imagen: imagenEmergente17, button: "Regístrate", id: 18 },
-  "Hologramas-3D": { titulo: "Programa tu", destacado: "Asesoría Gratuita", subtitulo: "", imagen: imagenEmergente9, button: "Aprovecha ahora", id: 19 },
-  "letras doradas y plateadas": { titulo: "Brilla", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente3, button: "Cotiza ahora", id: 20 },
-  "monitores-digitales": { titulo: "Impacta con", destacado: "15%", subtitulo: "de descuento", imagen: imagenEmergente8, button: "Aprovecha ahora", id: 26 }
-};
-
+//textos promocionales
+const textosPromocionales = [
+  { titulo: "Brilla con un", destacado: "10% dto", subtitulo: "en tu compra", button: "Contáctanos" },
+  { titulo: "Posiciónate", destacado: "Envío Gratis", subtitulo: "", button: "Deja tus datos" },
+  { titulo: "Solicita", destacado: "Asesoría Gratuita", subtitulo: "", button: "Regístrate" },
+  { titulo: "Deslumbra con", destacado: "10% dto.", subtitulo: "en tu compra", button: "Cotiza ahora" },
+  { titulo: "Obtén", destacado: "Descuento Especial", subtitulo: "", button: "Cotiza ahora" },
+  { titulo: "Haz", destacado: "Brillar", subtitulo: "tu ambiente", button: "Regístrate ya" },
+  { titulo: "Cotiza tus", destacado: "Pantallas", subtitulo: "ahora", button: "Aprovecha ahora" },
+  { titulo: "Transforma", destacado: "Tu Espacio Hoy", subtitulo: "", button: "Aprovecha ahora" },
+  { titulo: "Dale estilo", destacado: "A tu evento ahora", subtitulo: "", button: "Cotiza ahora" },
+  { titulo: "Ilumina con", destacado: "Ofertas Exclusivas", subtitulo: "", button: "Regístrate ya" },
+  { titulo: "Envío", destacado: "Gratis", subtitulo: "Destaca tu negocio", button: "Cotiza ahora" },
+  { titulo: "Programa tu", destacado: "Asesoría Gratuita", subtitulo: "", button: "Aprovecha ahora" }
+];
 
 const schema = z.object({
     nombre: z
@@ -60,15 +36,60 @@ const schema = z.object({
 });
 
 const Emergente = ({ producto }) => {
-  const link = producto?.data?.link || "default";
-  const data = emergenteData[link] || emergenteData["default"];
   const dialogRef = useRef(null);
   
+  // Función para construir URLs de imágenes
+  const imageBaseUrl = 'http://localhost:8000';
+  const buildImageUrl = (imagenUrl) => {
+    if (!imagenUrl) return null;
+    return imagenUrl.startsWith('http') ? imagenUrl : `${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`;
+  };
+
+  // Obtener datos del producto directamente
+  const productoId = producto?.data?.id;
+  const productoTitulo = producto?.data?.title || producto?.data?.nombre;
+  
+  // Obtener la imagen de popup del producto (índice 3)
+  const getPopupImage = () => {
+    const images = producto?.data?.images || [];
+    
+    // Prioridad 1: Imagen de popups (índice 3)
+    if (images.length > 3 && images[3]?.url_imagen) {
+      console.log('Usando imagen de popup del producto (índice 3):', images[3].url_imagen);
+      return buildImageUrl(images[3].url_imagen);
+    }
+    
+    // Prioridad 2: Imagen principal del producto
+    if (producto?.data?.image) {
+      console.log('Usando imagen principal del producto como fallback:', producto.data.image);
+      return buildImageUrl(producto.data.image);
+    }
+    
+    // Prioridad 3: Placeholder o imagen por defecto
+    console.log('Sin imagen disponible, usando placeholder');
+    return '/placeholder-image.jpg';
+  };
+
+  // Seleccionar texto promocional aleatorio o basado en algún criterio
+  const getTextoPromocional = () => {
+    // Opción 1: Aleatorio
+    const indiceAleatorio = Math.floor(Math.random() * textosPromocionales.length);
+    return textosPromocionales[indiceAleatorio];
+    
+    // Opción 2: Basado en el ID del producto (más consistente)
+    // const indice = (productoId || 0) % textosPromocionales.length;
+    // return textosPromocionales[indice];
+  };
+
+  const imagenPopup = getPopupImage();
+ const textoData = useMemo(() => getTextoPromocional(), []);
+
+
   const [formData, setFormData] = useState({
     nombre: "",
     telefono: "",
     email: "",
-    producto_id: data.id || producto?.data?.id || ""
+    producto_id: productoId || ""
   });
   
   const [errors, setErrors] = useState({});
@@ -84,9 +105,9 @@ const Emergente = ({ producto }) => {
   useEffect(() => {
     setFormData(prev => ({
       ...prev,
-      producto_id: data.id || producto?.data?.id || ""
+      producto_id: productoId || ""
     }));
-  }, [link, data.id, producto?.data?.id]);
+  }, [productoId]);
 
   const onClose = () => {
     dialogRef.current?.close();
@@ -178,12 +199,12 @@ const Emergente = ({ producto }) => {
             throw new Error(responseData.message || `Error ${response.status}: ${response.statusText}`);
         }
 
-        setSuccessMessage("✅ Información enviada con éxito");
+        setSuccessMessage("Información enviada con éxito");
         setFormData({ 
           nombre: "", 
           email: "", 
           telefono: "",
-          producto_id: data.id || ""
+          producto_id: productoId || ""
         });
 
         setTimeout(() => {
@@ -208,119 +229,127 @@ const Emergente = ({ producto }) => {
 
   const renderTitle = () => (
     <h2 className="text-xl sm:text-4xl font-semibold italic">
-      {data.titulo}
-      {data.destacado && (
+      {textoData.titulo}
+      {textoData.destacado && (
         <>
           <br />
-          <span className="text-2xl sm:text-5xl font-bold">{data.destacado}</span>
+          <span className="text-2xl sm:text-5xl font-bold">{textoData.destacado}</span>
         </>
       )}
-      {data.subtitulo && (
+      {textoData.subtitulo && (
         <>
           <br />
-          {data.subtitulo}
+          {textoData.subtitulo}
         </>
       )}
     </h2>
   );
 
   return (
-  <dialog
-  ref={dialogRef}
-  className="rounded-2xl fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto"
->
-
+    <dialog
+      ref={dialogRef}
+      className="rounded-2xl fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto"
+    >
       <div className="flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg max-w-[90vw] sm:max-w-5xl overflow-hidden">
 
-        {/* Imagen */}
-     <div className="sm:w-1/2 aspect-[4/3] overflow-hidden">
-  <img
-    src={data.imagen?.src || data.imagen}
-    alt={data.destacado || data.titulo}
-    className="w-full h-full object-cover"
-  />
-</div>
-
-
-          {/* Texto y formulario */}
-          <div className="sm:w-1/2 bg-[#293296] p-8 text-white relative">
-            <button
-              onClick={onClose}
-              aria-label="Cerrar modal"
-              className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
-            >
-              ✕
-            </button>
-
-            {renderTitle()}
-
-            <form className="mt-4" onSubmit={handleSubmit}>
-              <label className="block text-lg font-bold">Nombre</label>
-              <input
-                type="text"
-                value={formData.nombre}
-                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
-                  errors.nombre ? 'border-2 border-red-500' : ''
-                }`}
-                placeholder="Ingresa tu nombre"
-              />
-              {errors.nombre && <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>}
-
-              <label className="block text-lg font-bold">Teléfono</label>
-              <input
-                type="tel"
-                value={formData.telefono}
-                onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-                className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
-                  errors.telefono ? 'border-2 border-red-500' : ''
-                }`}
-                placeholder="Ej: 987654321"
-                maxLength={9}
-              />
-              {errors.telefono && <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>}
-
-              <label className="block text-lg font-bold">Correo</label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
-                  errors.email ? 'border-2 border-red-500' : ''
-                }`}
-                placeholder="ejemplo@correo.com"
-              />
-              {errors.email && <p className="text-red-400 text-sm mb-2">{errors.email}</p>}
-
-              {/* Mensajes de error y éxito */}
-              {errors.general && (
-                <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-3">
-                  <p className="text-red-300 text-sm">{errors.general}</p>
-                </div>
-              )}
-              {successMessage && (
-                <div className="bg-green-500/20 border border-green-500 rounded-lg p-3 mb-3">
-                  <p className="text-green-300 text-sm">{successMessage}</p>
-                </div>
-              )}
-
-              {/* Campo para debug - mostrar el producto_id actual */}
-              <div className="text-xs text-gray-300 mb-2">
-                Debug: producto_id = {formData.producto_id || "null"} (link: {link})
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[#172649] text-white text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Enviando..." : data.button}
-              </button>
-            </form>
-          </div>
+        {/* Imagen - USA DIRECTAMENTE LA IMAGEN DEL PRODUCTO */}
+        <div className="sm:w-1/2 aspect-[4/3] overflow-hidden">
+          <img
+            src={imagenPopup}
+            alt={`Popup de ${productoTitulo || 'producto'}`}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              console.error('Error cargando imagen popup:', e.target.src);
+              e.target.src = '';
+            }}
+            onLoad={(e) => {
+              console.log('Imagen popup cargada correctamente:', e.target.src);
+            }}
+          />
         </div>
-      </dialog>
-    );
+
+        {/* Texto y formulario */}
+        <div className="sm:w-1/2 bg-[#293296] p-8 text-white relative">
+          <button
+            onClick={onClose}
+            aria-label="Cerrar modal"
+            className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
+          >
+            ✕
+          </button>
+
+          {renderTitle()}
+
+          <form className="mt-4" onSubmit={handleSubmit}>
+            <label className="block text-lg font-bold">Nombre</label>
+            <input
+              type="text"
+              value={formData.nombre}
+              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+              className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                errors.nombre ? 'border-2 border-red-500' : ''
+              }`}
+              placeholder="Ingresa tu nombre"
+            />
+            {errors.nombre && <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>}
+
+            <label className="block text-lg font-bold">Teléfono</label>
+            <input
+              type="tel"
+              value={formData.telefono}
+              onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+              className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                errors.telefono ? 'border-2 border-red-500' : ''
+              }`}
+              placeholder="Ej: 987654321"
+              maxLength={9}
+            />
+            {errors.telefono && <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>}
+
+            <label className="block text-lg font-bold">Correo</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
+                errors.email ? 'border-2 border-red-500' : ''
+              }`}
+              placeholder="ejemplo@correo.com"
+            />
+            {errors.email && <p className="text-red-400 text-sm mb-2">{errors.email}</p>}
+
+            {/* Mensajes de error y éxito */}
+            {errors.general && (
+              <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-3">
+                <p className="text-red-300 text-sm">{errors.general}</p>
+              </div>
+            )}
+            {successMessage && (
+              <div className="bg-green-500/20 border border-green-500 rounded-lg p-3 mb-3">
+                <p className="text-green-300 text-sm">{successMessage}</p>
+              </div>
+            )}
+
+            {/* Debug info */}
+            <div className="text-xs text-gray-300 mb-2">
+              Debug: producto_id = {formData.producto_id || "null"} | 
+              título: {productoTitulo || "null"} | 
+              imgs: {producto?.data?.images?.length || 0} | 
+              popup_img: {imagenPopup ? 'OK' : 'FAIL'}
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-[#172649] text-white text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Enviando..." : textoData.button}
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+  );
 };
 
 export default Emergente;
