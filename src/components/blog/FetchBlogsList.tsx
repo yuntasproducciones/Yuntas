@@ -16,6 +16,8 @@ export default function FetchBlogsList() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalBlogs, setTotalBlogs] = useState(0); // Nuevo estado para el total
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,9 +35,14 @@ export default function FetchBlogsList() {
 
   useEffect(() => {
     const fetchBlogs = async () => {
+      setLoading(true);
       try {
+        const page = currentIndex + 1;
         const timestamp = new Date().getTime();
-        const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/blogs?_t=${timestamp}`;
+        
+        // CLAVE: Enviar parámetros de paginación al backend
+        const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/blogs?page=${page}&perPage=${itemsPerPage}&_t=${timestamp}`;
+        
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -50,25 +57,97 @@ export default function FetchBlogsList() {
         }
 
         const jsonResponse = await response.json();
-        const blogData = jsonResponse.data || jsonResponse;
-        const blogsArray = Array.isArray(blogData) ? blogData : [blogData];
+        console.log('Blog API Response:', jsonResponse); // Debug
 
-        const validBlogs = blogsArray.filter(blog =>
-          blog && (blog.id || blog.title || blog.nombre_producto)
-        );
+        if (jsonResponse.success) {
+          // Los datos paginados vienen en jsonResponse.data
+          const blogData = jsonResponse.data || [];
+          const blogsArray = Array.isArray(blogData) ? blogData : [blogData];
 
-        setBlogs(validBlogs);
+          const validBlogs = blogsArray.filter(blog =>
+            blog && (blog.id || blog.title || blog.nombre_producto)
+          );
+
+          setBlogs(validBlogs);
+          
+          // **SECCIÓN MEJORADA**: Calcular paginación
+          let lastPage = 1;
+          let total = 0;
+          
+          // Primero intentar obtener de meta
+          if (jsonResponse.meta?.last_page) {
+            lastPage = jsonResponse.meta.last_page;
+            total = jsonResponse.meta.total || 0;
+          } 
+          // Luego intentar obtener directamente
+          else if (jsonResponse.last_page) {
+            lastPage = jsonResponse.last_page;
+            total = jsonResponse.total || 0;
+          } 
+          // Si no hay información de paginación, intentar calcular
+          else {
+            // Si tenemos el total, calcularlo
+            total = jsonResponse.total || jsonResponse.meta?.total || 0;
+            
+            if (total > 0) {
+              lastPage = Math.ceil(total / itemsPerPage);
+            } else {
+              // **NUEVO**: Si no tenemos total, hacer una petición para obtenerlo
+              // O usar una lógica de detección basada en los resultados
+              if (validBlogs.length === itemsPerPage) {
+                // Si tenemos exactamente itemsPerPage, probablemente hay más páginas
+                // Hacer una estimación conservadora
+                lastPage = Math.max(currentIndex + 2, 2);
+              } else if (validBlogs.length < itemsPerPage && currentIndex === 0) {
+                // Si en la primera página tenemos menos items, solo hay una página
+                lastPage = 1;
+              } else if (validBlogs.length < itemsPerPage) {
+                // Si tenemos menos items en una página posterior, es la última
+                lastPage = currentIndex + 1;
+              } else {
+                // Caso por defecto
+                lastPage = Math.max(currentIndex + 1, 1);
+              }
+              
+              // Estimar el total basado en los resultados
+              if (validBlogs.length < itemsPerPage) {
+                total = (currentIndex * itemsPerPage) + validBlogs.length;
+              } else {
+                total = (currentIndex + 1) * itemsPerPage; // Estimación mínima
+              }
+            }
+          }
+          
+          setTotalPages(lastPage);
+          setTotalBlogs(total);
+          console.log('Blog pagination info:', { 
+            currentPage: currentIndex + 1, 
+            lastPage, 
+            total, 
+            itemsPerPage, 
+            blogsInCurrentPage: validBlogs.length 
+          }); // Debug mejorado
+          
+        } else {
+          setBlogs([]);
+          setTotalPages(1);
+          setTotalBlogs(0);
+        }
+        
       } catch (err) {
         console.error("❌ Error al obtener blogs:", err);
 
+        // Fallback simplificado
         try {
           const fallbackResponse = await fetch("/api/productos");
           const fallbackData = await fallbackResponse.json();
           const fallbackBlogs = Array.isArray(fallbackData.data) ? fallbackData.data : [fallbackData.data];
           setBlogs(fallbackBlogs);
+          setTotalPages(1);
         } catch (fallbackErr) {
           console.error("❌ Error en fallback:", fallbackErr);
           setBlogs([]);
+          setTotalPages(1);
         }
       } finally {
         setLoading(false);
@@ -76,11 +155,15 @@ export default function FetchBlogsList() {
     };
 
     fetchBlogs();
-  }, []);
+  }, [currentIndex, itemsPerPage]); // Se ejecuta cuando cambia la página o items per page
 
-  const totalPages = Math.ceil(blogs.length / itemsPerPage);
+  // **NUEVO**: Función para detectar si hay más páginas
+  const hasMorePages = () => {
+    return blogs.length === itemsPerPage || currentIndex < totalPages - 1;
+  };
+
   const canGoLeft = currentIndex > 0;
-  const canGoRight = currentIndex < totalPages - 1;
+  const canGoRight = hasMorePages() && (currentIndex < totalPages - 1);
 
   const goLeft = () => {
     if (canGoLeft) setCurrentIndex(currentIndex - 1);
@@ -90,12 +173,8 @@ export default function FetchBlogsList() {
     if (canGoRight) setCurrentIndex(currentIndex + 1);
   };
 
-  const getCurrentBlogs = () => {
-    const startIndex = currentIndex * itemsPerPage;
-    return blogs.slice(startIndex, startIndex + itemsPerPage);
-  };
-
-  const currentBlogs = getCurrentBlogs();
+  // Ya no necesitamos getCurrentBlogs() porque los blogs ya vienen paginados del servidor
+  const currentBlogs = blogs;
 
   if (loading) {
     return (
@@ -175,8 +254,8 @@ export default function FetchBlogsList() {
           </div>
         </div>
 
-        {/* Navegación */}
-        {blogs.length > itemsPerPage && (
+        {/* Navegación - Mostrar siempre si hay más de una página o más items disponibles */}
+        {(totalPages > 1 || hasMorePages()) && (
           <>
             <div className="flex justify-center items-center mt-16 space-x-8">
               <button
@@ -212,21 +291,23 @@ export default function FetchBlogsList() {
               </button>
             </div>
 
-            {/* Paginación */}
-            <div className="flex justify-center mt-6 space-x-2">
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  aria-label={`Ir a la página ${i + 1}`}
-                  title={`Ir a la página ${i + 1}`}
-                  onClick={() => setCurrentIndex(i)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${ i === currentIndex ? "bg-white" : "bg-white/30 hover:bg-white/50" }`}
-                />
-              ))}
-            </div>
+            {/* Paginación - Solo mostrar si conocemos el número total de páginas */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-6 space-x-2">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    aria-label={`Ir a la página ${i + 1}`}
+                    title={`Ir a la página ${i + 1}`}
+                    onClick={() => setCurrentIndex(i)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${ i === currentIndex ? "bg-white" : "bg-white/30 hover:bg-white/50" }`}
+                  />
+                ))}
+              </div>
+            )}
           </>
-)}
-</div>
-</div>
-);
+        )}
+      </div>
+    </div>
+  );
 }

@@ -39,7 +39,7 @@ const Emergente = ({ producto }) => {
   const dialogRef = useRef(null);
   
   // Función para construir URLs de imágenes
-  const imageBaseUrl = 'http://localhost:8000';
+  const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
   const buildImageUrl = (imagenUrl) => {
     if (!imagenUrl) return null;
     return imagenUrl.startsWith('http') ? imagenUrl : `${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`;
@@ -329,14 +329,6 @@ const Emergente = ({ producto }) => {
                 <p className="text-green-300 text-sm">{successMessage}</p>
               </div>
             )}
-
-            {/* Debug info */}
-            <div className="text-xs text-gray-300 mb-2">
-              Debug: producto_id = {formData.producto_id || "null"} | 
-              título: {productoTitulo || "null"} | 
-              imgs: {producto?.data?.images?.length || 0} | 
-              popup_img: {imagenPopup ? 'OK' : 'FAIL'}
-            </div>
 
             <button
               type="submit"
