@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { z } from "zod";  
+import { z } from "zod";
 import imagenEmergente1 from "../../assets/images/emergente/yuleLove.jpg";
 import imagenEmergente2 from "../../assets/images/emergente/em2.jpg";
 import imagenEmergente3 from "../../assets/images/emergente/em3.webp";
@@ -31,13 +31,13 @@ const emergenteData = {
 "barras-pixel-led": {titulo: "Recibe", destacado: "Envio Gratis", subtitulo: "", imagen: imagenEmergente4, button: "Deja tus datos",
 },
 "letras-pintadas-en-mdf": {titulo: "Accede", destacado: "Ofertas Exclusivas", subtitulo: "", imagen: imagenEmergente7, button: "Registrate",
-},  
+},
 "menu-board": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente6, button: "Cotiza ahora",
 },
 "neon-led": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
 },
 "letreros-luminosos": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
-},  
+},
 "Hologramas-3D": {titulo: "Disfruta", destacado: "Nuestros Beneficios", subtitulo: "", imagen: imagenEmergente9, button: "Aprovecha ahora",
 },
 "ventiladores holograficos": {titulo: "Gana", destacado: "10% dto.", subtitulo: "en tu compra", imagen: imagenEmergente4, button: "Cotiza ahora",
@@ -79,7 +79,7 @@ useEffect(() => {
 const onClose = () => {
   dialogRef.current?.close();
 };
- const handleSubmit = (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
 
     const result = schema.safeParse(formData);
@@ -96,8 +96,6 @@ const onClose = () => {
 
     setErrors({});
     console.log("Formulario válido:", formData);
-
-    // Aquí podrías enviar el formulario o cerrar el modal, etc.
   };
 
 const renderTitle = () => (
@@ -119,73 +117,88 @@ const renderTitle = () => (
 );
 
 return (
-    <dialog
-      ref={dialogRef}
-      className="rounded-2xl fixed top-[50%] left-[50%] ml-[-300px] sm:ml-[-384px] mt-[-250px] sm:mt-[-225px]"
+  <dialog
+  ref={dialogRef}
+  aria-modal="true"
+  role="dialog"
+  className="m-0 p-0 bg-transparent [&::backdrop]:bg-black/60 [&::backdrop]:backdrop-blur-sm"
+>
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+  {/* MODIFICADO: Responsive y scroll */}
+  <div className="w-full max-w-[min(100vw-2rem,56rem)] sm:max-w-3xl max-h-none sm:max-h-[85vh] overflow-y-visible rounded-2xl shadow-2xl bg-white">
+<div className="grid grid-cols-1 sm:grid-cols-2">
+  <div className="hidden sm:block sm:order-1">
+    <img
+      src={data.imagen?.src || data.imagen}
+      alt={data.destacado || data.titulo}
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  <div className="sm:order-2 bg-[#293296] text-white relative flex">
+    <button
+      onClick={onClose}
+      aria-label="Cerrar modal"
+      className="absolute top-3 right-3 bg-white text-black rounded-full w-9 h-9 flex items-center justify-center hover:bg-gray-200 transition-colors"
     >
-      <div className="flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg max-w-[600px] sm:max-w-3xl overflow-hidden sm:mx-[0px]">
+      ✕
+    </button>
 
-        {/* Imagen */}
-        <div className="sm:w-1/2">
-          <img
-            src={data.imagen?.src || data.imagen}
-            alt={data.destacado || data.titulo}
-            className="h-[250px] sm:h-full w-full object-cover"
+    <div className="w-full max-w-md mx-auto p-5 sm:p-8 flex flex-col justify-center">
+      <h2 className="text-2xl sm:text-4xl font-semibold italic leading-tight text-center sm:text-left">
+        {data.titulo}
+        {data.destacado && (<><br/><span className="text-3xl sm:text-5xl font-bold">{data.destacado}</span></>)}
+        {data.subtitulo && (<><br/>{data.subtitulo}</>)}
+      </h2>
+
+      <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
+        <div>
+          <label className="block text-base sm:text-lg font-bold">Nombre</label>
+          <input
+            type="text"
+            value={formData.nombre}
+            onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+            className="w-full px-4 py-2 rounded-full bg-white text-black"
           />
+          {errors.nombre && <p className="text-red-300 text-sm mt-1">{errors.nombre}</p>}
         </div>
 
-        {/* Texto y formulario */}
-        <div className="sm:w-1/2 bg-[#293296] p-8 text-white relative">
-          <button
-            onClick={onClose}
-            aria-label="Cerrar modal"
-            className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
-          >
-            ✕
-          </button>
-
-          {renderTitle()}
-
-          <form className="mt-4" onSubmit={handleSubmit}>
-            <label className="block text-lg font-bold">Nombre</label>
-            <input
-              type="text"
-              value={formData.nombre}
-              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-              className="w-full px-4 py-2 rounded-full bg-white text-black mb-1"
-            />
-            {errors.nombre && <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>}
-
-            <label className="block text-lg font-bold">Teléfono</label>
-            <input
-              type="text"
-              value={formData.telefono}
-              onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-              className="w-full px-4 py-2 rounded-full bg-white text-black mb-1"
-            />
-            {errors.telefono && <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>}
-
-            <label className="block text-lg font-bold">Correo</label>
-            <input
-              type="email"
-              value={formData.correo}
-              onChange={(e) => setFormData({ ...formData, correo: e.target.value })}
-              className="w-full px-4 py-2 rounded-full bg-white text-black mb-1"
-            />
-            {errors.correo && <p className="text-red-400 text-sm mb-4">{errors.correo}</p>}
-
-            <button
-              type="submit"
-              className="w-full bg-[#172649] text-white text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-8"
-            >
-              {data.button}
-            </button>
-          </form>
+        <div>
+          <label className="block text-base sm:text-lg font-bold">Teléfono</label>
+          <input
+            type="text"
+            value={formData.telefono}
+            onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+            className="w-full px-4 py-2 rounded-full bg-white text-black"
+          />
+          {errors.telefono && <p className="text-red-300 text-sm mt-1">{errors.telefono}</p>}
         </div>
-      </div>
-    </dialog>
+
+        <div>
+          <label className="block text-base sm:text-lg font-bold">Correo</label>
+          <input
+            type="email"
+            value={formData.correo}
+            onChange={(e) => setFormData({ ...formData, correo: e.target.value })}
+            className="w-full px-4 py-2 rounded-full bg-white text-black"
+          />
+          {errors.correo && <p className="text-red-300 text-sm mt-1">{errors.correo}</p>}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-[#172649] text-white text-lg sm:text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-4"
+        >
+          {data.button}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</dialog>
   );
-
 };
-
 export default Emergente;
