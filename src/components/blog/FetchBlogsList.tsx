@@ -17,7 +17,7 @@ export default function FetchBlogsList() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalBlogs, setTotalBlogs] = useState(0); // Nuevo estado para el total
+  const [totalBlogs, setTotalBlogs] = useState(0); 
 
   useEffect(() => {
     const handleResize = () => {
@@ -39,8 +39,7 @@ export default function FetchBlogsList() {
       try {
         const page = currentIndex + 1;
         const timestamp = new Date().getTime();
-        
-        // CLAVE: Enviar parámetros de paginación al backend
+      
         const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/blogs?page=${page}&perPage=${itemsPerPage}&_t=${timestamp}`;
         
         const response = await fetch(apiUrl, {
@@ -70,16 +69,13 @@ export default function FetchBlogsList() {
 
           setBlogs(validBlogs);
           
-          // **SECCIÓN MEJORADA**: Calcular paginación
           let lastPage = 1;
           let total = 0;
           
-          // Primero intentar obtener de meta
           if (jsonResponse.meta?.last_page) {
             lastPage = jsonResponse.meta.last_page;
             total = jsonResponse.meta.total || 0;
           } 
-          // Luego intentar obtener directamente
           else if (jsonResponse.last_page) {
             lastPage = jsonResponse.last_page;
             total = jsonResponse.total || 0;
@@ -92,8 +88,6 @@ export default function FetchBlogsList() {
             if (total > 0) {
               lastPage = Math.ceil(total / itemsPerPage);
             } else {
-              // **NUEVO**: Si no tenemos total, hacer una petición para obtenerlo
-              // O usar una lógica de detección basada en los resultados
               if (validBlogs.length === itemsPerPage) {
                 // Si tenemos exactamente itemsPerPage, probablemente hay más páginas
                 // Hacer una estimación conservadora
@@ -120,14 +114,6 @@ export default function FetchBlogsList() {
           
           setTotalPages(lastPage);
           setTotalBlogs(total);
-          console.log('Blog pagination info:', { 
-            currentPage: currentIndex + 1, 
-            lastPage, 
-            total, 
-            itemsPerPage, 
-            blogsInCurrentPage: validBlogs.length 
-          }); // Debug mejorado
-          
         } else {
           setBlogs([]);
           setTotalPages(1);
@@ -155,9 +141,8 @@ export default function FetchBlogsList() {
     };
 
     fetchBlogs();
-  }, [currentIndex, itemsPerPage]); // Se ejecuta cuando cambia la página o items per page
+  }, [currentIndex, itemsPerPage]); 
 
-  // **NUEVO**: Función para detectar si hay más páginas
   const hasMorePages = () => {
     return blogs.length === itemsPerPage || currentIndex < totalPages - 1;
   };
@@ -173,7 +158,6 @@ export default function FetchBlogsList() {
     if (canGoRight) setCurrentIndex(currentIndex + 1);
   };
 
-  // Ya no necesitamos getCurrentBlogs() porque los blogs ya vienen paginados del servidor
   const currentBlogs = blogs;
 
   if (loading) {

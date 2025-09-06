@@ -3,7 +3,7 @@ export default interface Cliente {
     name: string;
     email: string;
     celular: string;
-    producto_id: number;
+    producto_id: number | null; 
     nombre_producto: string;
     created_at: string;
-  }
+}
