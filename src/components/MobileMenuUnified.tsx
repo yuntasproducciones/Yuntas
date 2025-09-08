@@ -12,9 +12,14 @@ interface MobileMenuUnifiedProps {
 const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) => {
   const [isMobile, setIsMobile] = useState(true);
   const [adminOpen, setAdminOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [hasToken, setHasToken] = useState(false);
   const { darkMode, toggleDarkMode } = useDarkMode();
 
   useEffect(() => {
+    setMounted(true);
+    setHasToken(!!localStorage.getItem("token"));
+    
     const handleResize = () => setIsMobile(window.innerWidth <= 1023);
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -102,31 +107,33 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
           </a>
         ))}
 
-        {/* Admin con desplegable */}
-        <div className="border-b border-gray-100">
-          <button
-            onClick={() => setAdminOpen(!adminOpen)}
-            className="w-full flex justify-between items-center px-8 py-4 text-white text-xl font-medium hover:text-indigo-200"
-          >
-            Admin
-            <span>{adminOpen ? "▲" : "▼"}</span>
-          </button>
-          {adminOpen && (
-            <div className="flex flex-col pl-12 pb-2">
-              {adminLinks.map((item, index) => (
-                <a
-                  key={index}
-                  href={item.path}
-                  onClick={onClose}
-                  className="flex items-center gap-2 py-2 text-white hover:text-indigo-200"
-                >
-                  <FaRegFolder />
-                  {item.name}
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Admin con desplegable - Solo se renderiza en cliente después de montar */}
+        {mounted && hasToken && (
+          <div className="border-b border-gray-100">
+            <button
+              onClick={() => setAdminOpen(!adminOpen)}
+              className="w-full flex justify-between items-center px-8 py-4 text-white text-xl font-medium hover:text-indigo-200"
+            >
+              Admin
+              <span>{adminOpen ? "▲" : "▼"}</span>
+            </button>
+            {adminOpen && (
+              <div className="flex flex-col pl-12 pb-2">
+                {adminLinks.map((item, index) => (
+                  <a
+                    key={index}
+                    href={item.path}
+                    onClick={onClose}
+                    className="flex items-center gap-2 py-2 text-white hover:text-indigo-200"
+                  >
+                    <FaRegFolder />
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </nav>
 
       {/* Dark Mode */}
@@ -202,22 +209,24 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
         </a>
       </div>
 
-      {/* Perfil + logout */}
-      <div className="border-t border-gray-400 pt-4 text-center px-6 pb-8">
-        <div className="flex flex-col items-center space-y-1">
-          <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-gray-500 text-white">
-            👤
+      {/* Perfil + logout (solo si está logeado) - Solo se renderiza en cliente después de montar */}
+      {mounted && hasToken && (
+        <div className="border-t border-gray-400 pt-4 text-center px-6 pb-8">
+          <div className="flex flex-col items-center space-y-1">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-gray-500 text-white">
+              👤
+            </div>
+            <p className="font-semibold text-white">Bienvenido</p>
+            <p className="text-sm text-gray-300">Administrador</p>
+            <button
+              onClick={logout}
+              className="mt-2 w-full py-2 rounded-full transition bg-blue-800 hover:bg-blue-600 text-white"
+            >
+              Cerrar sesión
+            </button>
           </div>
-          <p className="font-semibold text-white">Bienvenido</p>
-          <p className="text-sm text-gray-300">Administrador</p>
-          <button
-            onClick={logout}
-            className="mt-2 w-full py-2 rounded-full transition bg-blue-800 hover:bg-blue-600 text-white"
-          >
-            Cerrar sesión
-          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 };
