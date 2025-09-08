@@ -3,9 +3,17 @@ import { config } from '../../config';
 import type Blog from '../models/Blog';
 import type { BlogFormData, BlogCreateRequest } from '../models/Blog';
 
+interface BlogPagination {
+  data: Blog[];
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
+}
+
 interface BlogListResponse {
   success: boolean;
-  data: Blog[];
+  data: BlogPagination; // ✅ aquí está el arreglo real
   message: string;
   status: number;
 }
@@ -22,7 +30,7 @@ class BlogService {
   // Obtener todos los blogs (público)
   async getAllBlogs(): Promise<BlogListResponse> {
     try {
-      const response = await httpService.get<Blog[]>(config.endpoints.blogs.list);
+      const response = await httpService.get<BlogPagination>(config.endpoints.blogs.list);
       return response;
     } catch (error) {
       console.error('[BlogService] Error obteniendo blogs:', error);
