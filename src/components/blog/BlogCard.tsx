@@ -43,9 +43,9 @@ export default function BlogCard({ blog }: BlogCardProps) {
   return (
     <div 
       onClick={handleCardClick}
-      className="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 cursor-pointer transform hover:scale-105 max-w-[250px] w-full"
+      className="group relative overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 cursor-pointer hover:scale-105 w-[260px] h-[320px] flex flex-col"
     >
-      <div className="relative h-52 w-full overflow-hidden">
+      <div className="relative w-full h-[150px] overflow-hidden flex-shrink-0">
         {!imageError ? (
           <img
             src={getImageUrl(blog.imagen_principal)}
@@ -75,13 +75,12 @@ export default function BlogCard({ blog }: BlogCardProps) {
           </div>
         )}
       </div>
-      <div className="p-4">
-        <h3 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 uppercase">
+      <div className="px-6 py-2 flex-1 flex flex-col justify-center items-center min-h-[70px] max-h-[110px] text-center">
+        <h3 className="w-full text-base font-semibold text-gray-800 mb-1 text-center uppercase leading-tight line-clamp-2 max-h-[48px]">
           {blog.nombre_producto}
         </h3>
-
         {blog.subtitulo && (
-          <p className="text-gray-600 text-xs line-clamp-2 min-h-[2.5rem]">
+          <p className="w-full text-gray-600 text-sm text-center leading-tight line-clamp-2 max-h-[36px]">
             {blog.subtitulo}
           </p>
         )}
