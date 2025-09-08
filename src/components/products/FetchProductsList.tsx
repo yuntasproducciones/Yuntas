@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type Producto from "../../models/Product.ts";
-import { config, getApiUrl } from "../../../config";
+import { config, getApiUrl } from "../../../config.ts";
 import ProductCard from "./ProductCard.jsx";
 
 export default function FetchProductsList() {

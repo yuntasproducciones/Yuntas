@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import BlogCard from "../../components/blog/BlogCard.tsx";
+import BlogCard from "./BlogCard.tsx";
 
 interface Blog {
   id: number;
