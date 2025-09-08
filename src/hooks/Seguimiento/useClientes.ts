@@ -5,7 +5,8 @@
  */
 
 import { useState, useEffect } from "react";
-import type Cliente from "../../models/clients.ts";
+import type Cliente from "../../models/clients";
+import { config, getApiUrl } from "../../../config"; // Importar la configuración
 
 const useClientes = (trigger: boolean, page: number = 1) => {
   const [clientes, setClientes] = useState<Cliente[]>([]);
@@ -22,8 +23,11 @@ const useClientes = (trigger: boolean, page: number = 1) => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No se encontró el token de autenticación");
 
-        // Agregar parámetro de página a la URL
-        const response = await fetch(`https://apiyuntas.yuntaspublicidad.com/api/v1/clientes?page=${page}`, {
+        // Usar configuración centralizada
+        const endpoint = `${config.endpoints.clientes.list}?page=${page}`;
+        const url = getApiUrl(endpoint);
+
+        const response = await fetch(url, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -31,25 +35,22 @@ const useClientes = (trigger: boolean, page: number = 1) => {
           },
         });
 
-        if (!response.ok)
-          throw new Error(`Error al obtener clientes: ${response.statusText}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error al obtener clientes: ${response.status} - ${errorText}`);
+        }
 
         const result = await response.json();
         console.log("🚀 Respuesta completa:", result);
-        
+
         // Acceder a los datos dentro de la estructura de respuesta
         const responseData = result.data || {};
         const clientesArray = responseData.data || [];
         const total = responseData.total || 0;
         const lastPage = responseData.last_page || 1;
-        
-        console.log("🚀 Clientes obtenidos:", clientesArray);
-        console.log("🚀 Total:", total);
-        console.log("🚀 Última página:", lastPage);
-        
+
         setClientes(clientesArray);
         setTotalPages(lastPage);
-
       } catch (err) {
         console.error("🚨 Error en fetchClientes:", err);
         setError(
@@ -70,4 +71,5 @@ const useClientes = (trigger: boolean, page: number = 1) => {
     error,
   };
 };
+
 export default useClientes;
