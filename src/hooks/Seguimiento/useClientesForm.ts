@@ -93,7 +93,7 @@ const useClienteForm = (cliente?: Cliente | null, onSuccess?: () => void) => {
         /**
          * Si estamos editando un cliente, llamamos a la función de actualización.
          */
-        await updateCliente(cliente!.id, { name, celular, email });
+       await updateCliente(cliente!.id, { name, celular, email, producto_id: formData.producto_id });
         alert(" Cliente actualizado correctamente");
       } else {
         /**

@@ -80,11 +80,11 @@ const AddUpdateDataModal = ({
           </div>
 
           <div>
-            <label className="block text-sm mb-1">Sección</label>
+            <label className="block text-sm mb-1">Producto ID</label>
             <input
               type="text"
               name="producto_id"
-              value={formData.producto_id}
+              value={formData.producto_id ?? ""}
               onChange={handleChange}
               required
               className="w-full bg-white outline-none p-2 rounded-md text-black text-sm sm:text-base"

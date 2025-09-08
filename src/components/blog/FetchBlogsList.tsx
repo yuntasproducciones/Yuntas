@@ -59,8 +59,8 @@ export default function FetchBlogsList() {
         console.log('Blog API Response:', jsonResponse); // Debug
 
         if (jsonResponse.success) {
-          // Los datos paginados vienen en jsonResponse.data
-          const blogData = jsonResponse.data || [];
+          // ✅ Aquí está el arreglo real de blogs
+          const blogData = jsonResponse.data?.data || [];
           const blogsArray = Array.isArray(blogData) ? blogData : [blogData];
 
           const validBlogs = blogsArray.filter(blog =>
@@ -68,50 +68,11 @@ export default function FetchBlogsList() {
           );
 
           setBlogs(validBlogs);
-          
-          let lastPage = 1;
-          let total = 0;
-          
-          if (jsonResponse.meta?.last_page) {
-            lastPage = jsonResponse.meta.last_page;
-            total = jsonResponse.meta.total || 0;
-          } 
-          else if (jsonResponse.last_page) {
-            lastPage = jsonResponse.last_page;
-            total = jsonResponse.total || 0;
-          } 
-          // Si no hay información de paginación, intentar calcular
-          else {
-            // Si tenemos el total, calcularlo
-            total = jsonResponse.total || jsonResponse.meta?.total || 0;
-            
-            if (total > 0) {
-              lastPage = Math.ceil(total / itemsPerPage);
-            } else {
-              if (validBlogs.length === itemsPerPage) {
-                // Si tenemos exactamente itemsPerPage, probablemente hay más páginas
-                // Hacer una estimación conservadora
-                lastPage = Math.max(currentIndex + 2, 2);
-              } else if (validBlogs.length < itemsPerPage && currentIndex === 0) {
-                // Si en la primera página tenemos menos items, solo hay una página
-                lastPage = 1;
-              } else if (validBlogs.length < itemsPerPage) {
-                // Si tenemos menos items en una página posterior, es la última
-                lastPage = currentIndex + 1;
-              } else {
-                // Caso por defecto
-                lastPage = Math.max(currentIndex + 1, 1);
-              }
-              
-              // Estimar el total basado en los resultados
-              if (validBlogs.length < itemsPerPage) {
-                total = (currentIndex * itemsPerPage) + validBlogs.length;
-              } else {
-                total = (currentIndex + 1) * itemsPerPage; // Estimación mínima
-              }
-            }
-          }
-          
+
+          // ✅ Aquí están los metadatos
+          const lastPage = jsonResponse.data?.last_page || 1;
+          const total = jsonResponse.data?.total || 0;
+
           setTotalPages(lastPage);
           setTotalBlogs(total);
         } else {
@@ -119,6 +80,7 @@ export default function FetchBlogsList() {
           setTotalPages(1);
           setTotalBlogs(0);
         }
+
         
       } catch (err) {
         console.error("❌ Error al obtener blogs:", err);
