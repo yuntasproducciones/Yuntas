@@ -1,8 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import BlogDetail from "../../components/blog/BlogPage.jsx";
-import { blogService } from "../../services/blogService";
-import type BlogAPI from "../../models/Blog";
+import { blogService } from "../../services/blogService.js";
+import type BlogAPI from "../../models/Blog.js";
 
 export async function getStaticPaths() {
   const response = await blogService.getAllBlogs();

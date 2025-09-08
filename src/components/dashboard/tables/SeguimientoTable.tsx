@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { GrUpdate } from "react-icons/gr";
-import AddDataModal from "../../dashboard/tables/modals/AddUpdateModal.tsx";
-import DeleteClienteModal from "../../dashboard/tables/modals/DeleteModal.tsx";
+import AddDataModal from "./modals/AddUpdateModal.tsx";
+import DeleteClienteModal from "./modals/DeleteModal.tsx";
 import useClientes from "../../../hooks/admin/seguimiento/useClientes.ts";
-import Paginator from "../../../components/dashboard/Paginator.tsx";
+import Paginator from "../Paginator.tsx";
 
 const DataTable = () => {
   const [refetchTrigger, setRefetchTrigger] = useState(false); // Estado para forzar la recarga de datos

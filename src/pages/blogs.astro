@@ -1,11 +1,11 @@
 ---
 // Importaciones
-import SearchBar from "../pages/blogs/_SearchBar";
+import SearchBar from "./blogs/_SearchBar.tsx";
 import Layout from "../layouts/Layout.astro";
 import imagen1 from "../assets/images/blog/banner_blog.webp";
-import { blogService } from "../services/blogService";
+import { blogService } from "../services/blogService.ts";
 import FetchBlogsList from "../components/blog/FetchBlogsList.tsx";
-import type Blog from "../models/Blog";
+import type Blog from "../models/Blog.ts";
 
 // Metadatos específicos para la página general del blog
 const generalMetadata = {

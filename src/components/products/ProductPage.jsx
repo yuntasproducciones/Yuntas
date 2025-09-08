@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { config, getApiUrl } from "../../../config";
+import { config, getApiUrl } from "../../../config.js";
 import { FaRegSquareCheck } from "react-icons/fa6";
 import ProductSection from "./ProductSection.jsx";
 import { motion } from "framer-motion";
-import Emergente from "./Emergente"; 
+import Emergente from "./Emergente.jsx"; 
 
 export default function ProductPage(){
     const [product, setProduct] = useState(null)
