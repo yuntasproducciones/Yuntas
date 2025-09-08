@@ -16,6 +16,8 @@ export default function FetchBlogsList() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalBlogs, setTotalBlogs] = useState(0); 
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,9 +35,13 @@ export default function FetchBlogsList() {
 
   useEffect(() => {
     const fetchBlogs = async () => {
+      setLoading(true);
       try {
+        const page = currentIndex + 1;
         const timestamp = new Date().getTime();
-        const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/blogs?_t=${timestamp}`;
+      
+        const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/blogs?page=${page}&perPage=${itemsPerPage}&_t=${timestamp}`;
+        
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -50,25 +56,46 @@ export default function FetchBlogsList() {
         }
 
         const jsonResponse = await response.json();
-        const blogData = jsonResponse.data || jsonResponse;
-        const blogsArray = Array.isArray(blogData) ? blogData : [blogData];
+        console.log('Blog API Response:', jsonResponse); // Debug
 
-        const validBlogs = blogsArray.filter(blog =>
-          blog && (blog.id || blog.title || blog.nombre_producto)
-        );
+        if (jsonResponse.success) {
+          // ✅ Aquí está el arreglo real de blogs
+          const blogData = jsonResponse.data?.data || [];
+          const blogsArray = Array.isArray(blogData) ? blogData : [blogData];
 
-        setBlogs(validBlogs);
+          const validBlogs = blogsArray.filter(blog =>
+            blog && (blog.id || blog.title || blog.nombre_producto)
+          );
+
+          setBlogs(validBlogs);
+
+          // ✅ Aquí están los metadatos
+          const lastPage = jsonResponse.data?.last_page || 1;
+          const total = jsonResponse.data?.total || 0;
+
+          setTotalPages(lastPage);
+          setTotalBlogs(total);
+        } else {
+          setBlogs([]);
+          setTotalPages(1);
+          setTotalBlogs(0);
+        }
+
+        
       } catch (err) {
         console.error("❌ Error al obtener blogs:", err);
 
+        // Fallback simplificado
         try {
           const fallbackResponse = await fetch("/api/productos");
           const fallbackData = await fallbackResponse.json();
           const fallbackBlogs = Array.isArray(fallbackData.data) ? fallbackData.data : [fallbackData.data];
           setBlogs(fallbackBlogs);
+          setTotalPages(1);
         } catch (fallbackErr) {
           console.error("❌ Error en fallback:", fallbackErr);
           setBlogs([]);
+          setTotalPages(1);
         }
       } finally {
         setLoading(false);
@@ -76,11 +103,14 @@ export default function FetchBlogsList() {
     };
 
     fetchBlogs();
-  }, []);
+  }, [currentIndex, itemsPerPage]); 
 
-  const totalPages = Math.ceil(blogs.length / itemsPerPage);
+  const hasMorePages = () => {
+    return blogs.length === itemsPerPage || currentIndex < totalPages - 1;
+  };
+
   const canGoLeft = currentIndex > 0;
-  const canGoRight = currentIndex < totalPages - 1;
+  const canGoRight = hasMorePages() && (currentIndex < totalPages - 1);
 
   const goLeft = () => {
     if (canGoLeft) setCurrentIndex(currentIndex - 1);
@@ -90,12 +120,7 @@ export default function FetchBlogsList() {
     if (canGoRight) setCurrentIndex(currentIndex + 1);
   };
 
-  const getCurrentBlogs = () => {
-    const startIndex = currentIndex * itemsPerPage;
-    return blogs.slice(startIndex, startIndex + itemsPerPage);
-  };
-
-  const currentBlogs = getCurrentBlogs();
+  const currentBlogs = blogs;
 
   if (loading) {
     return (
@@ -175,8 +200,8 @@ export default function FetchBlogsList() {
           </div>
         </div>
 
-        {/* Navegación */}
-        {blogs.length > itemsPerPage && (
+        {/* Navegación - Mostrar siempre si hay más de una página o más items disponibles */}
+        {(totalPages > 1 || hasMorePages()) && (
           <>
             <div className="flex justify-center items-center mt-16 space-x-8">
               <button
@@ -212,21 +237,23 @@ export default function FetchBlogsList() {
               </button>
             </div>
 
-            {/* Paginación */}
-            <div className="flex justify-center mt-6 space-x-2">
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  aria-label={`Ir a la página ${i + 1}`}
-                  title={`Ir a la página ${i + 1}`}
-                  onClick={() => setCurrentIndex(i)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${ i === currentIndex ? "bg-white" : "bg-white/30 hover:bg-white/50" }`}
-                />
-              ))}
-            </div>
+            {/* Paginación - Solo mostrar si conocemos el número total de páginas */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-6 space-x-2">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    aria-label={`Ir a la página ${i + 1}`}
+                    title={`Ir a la página ${i + 1}`}
+                    onClick={() => setCurrentIndex(i)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${ i === currentIndex ? "bg-white" : "bg-white/30 hover:bg-white/50" }`}
+                  />
+                ))}
+              </div>
+            )}
           </>
-)}
-</div>
-</div>
-);
+        )}
+      </div>
+    </div>
+  );
 }
