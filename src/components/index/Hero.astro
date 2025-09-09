@@ -1,0 +1,95 @@
+---
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/pagination";
+import "./HeroSlider.css";
+import imagen1 from "../../assets/images/inicio/slider/diseño-luces-led-en-tunel.webp";
+import imagen2 from "../../assets/images/inicio/slider/estructura-iluminada-con-luces-led-para-exteriores.webp";
+import imagen3 from "../../assets/images/inicio/slider/slider_3.webp";
+import { Image } from "astro:assets";
+
+// Configuración estructurada de slides con metadatos completos
+const slidersData = [
+  {
+    src: imagen1,
+    alt: "Túnel iluminado con luces LED, diseño moderno de iluminación en espacios urbanos, tecnología visual para entornos impactantes y personalizados.",
+  },
+  {
+    src: imagen2,
+    alt: "Instalación arquitectónica curva, iluminación LED roja, estructura exterior futurista, ideal para eventos nocturnos y espacios públicos envolventes.",
+  },
+  {
+    src: imagen3,
+    alt: "Instalaciones de paneles electrónicos y sistemas visuales para negocios",
+  },
+];
+---
+
+<section class="relative w-full h-screen select-none overflow-hidden bg-black">
+  <div class="hero-swiper">
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        {
+          slidersData.map((slide, index) => (
+            <div class="swiper-slide">
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                widths={[320, 540, 600, slide.src.width]}
+                sizes="(max-width: 420px) 320px, (max-width: 720px) 540px, (max-width: 1024px) 600px, 100vw"
+                quality={60}
+                loading={index === 0 ? "eager" : "lazy"}
+                class="w-full h-full object-cover absolute inset-0"
+              />
+              {/* Texto sobre el slider */}
+              <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-8 pointer-events-none z-20">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl Montserrat font-bold text-white sombra-title">
+                  ESPECIALISTAS
+                </h1>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl Montserrat font-black text-white sombra-title">
+                  EN DISEÑAR TU ESPACIO
+                </h1>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Controles -->
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<style >
+  .hero-swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  import Swiper from "swiper";
+  import { Autoplay, EffectFade, Pagination } from "swiper/modules";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    new Swiper(".swiper", {
+      modules: [Autoplay, Pagination, EffectFade],
+      loop: true,
+      effect: "fade",
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+    });
+  });
+</script>
