@@ -1,12 +1,13 @@
 ---
 // Importaciones
 import Layout from "../layouts/Layout.astro";
-import HeroSlider from "../components/index/HeroSlider.jsx";
+// import HeroSlider from "../components/index/HeroSlider.jsx";
 import { Picture } from "astro:assets";
 import card1 from "../assets/images/inicio/cards/card_1.webp";
 import card2 from "../assets/images/inicio/cards/card_2.webp";
 import bg_comentarios from "../assets/images/inicio/bg_comentarios.webp";
 import CommentSlider from "../components/index/ComentariosSlider.jsx";
+import Hero from "../components/index/Hero.astro";
 
 // Lista de comentarios de usuarios, sin duplicados y con id único
 const comentarios = [
@@ -66,7 +67,8 @@ const comentarios = [
   description="YUNTAS PUBLICIDAD Especialistas en diseñar y transformar tus espacios utilizando tecnología innovadora y soluciones eficientes. Creamos ambientes personalizados."
 >
   <section class="relative h-screen">
-    <HeroSlider client:load />
+    <!-- <HeroSlider client:load /> -->
+    <Hero />
   </section>
 
   <!-- Mensaje central -->
@@ -97,7 +99,9 @@ const comentarios = [
             class="h-64 sm:h-80 md:h-96 w-full rounded-t-4xl object-cover object-center"
             width={685}
             height={384}
-            quality={75}
+            widths={[320, 540, 600, card1.width]}
+            sizes="(max-width: 420px) 300px, (max-width: 720px) 340px, (max-width: 1024px) 420px, 100vw"
+            quality={60}
           />
           <p
             class="w-full text-center italic py-4 px-6 sm:px-14 text-sm sm:text-base cursor-default"
@@ -115,7 +119,9 @@ const comentarios = [
             class="h-64 sm:h-80 md:h-96 w-full rounded-t-4xl object-cover object-center"
             width={685}
             height={384}
-            quality={75}
+            widths={[320, 540, 600, card2.width]}
+            sizes="(max-width: 420px) 320px, (max-width: 720px) 540px, (max-width: 1024px) 600px, 100vw"
+            quality={60}
           />
           <p
             class="w-full text-center italic py-4 px-6 sm:px-14 text-sm sm:text-base cursor-default"
@@ -145,6 +151,7 @@ const comentarios = [
       src={bg_comentarios.src}
       alt="Luminaria LED innovadora para interior de cafetería, estilo contemporáneo, ideal para espacios cálidos y funcionales"
       class="absolute z-0 w-full h-full object-cover"
+      loading="lazy"
     />
     <div class="relative z-10 p-6 w-full">
       <CommentSlider comentarios={comentarios} client:visible />

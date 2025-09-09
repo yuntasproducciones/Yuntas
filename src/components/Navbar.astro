@@ -1,12 +1,12 @@
 ---
 import Navbarjsx from "./Navbar";
-import logo from "../assets/images/yuntas_publicidad_logo.webp";
+// import logo from "../assets/images/yuntas_publicidad_logo.webp";
 
 // Recibe la prop `variant` desde el layout
 const { variant = "default" } = Astro.props;
 ---
 
 <!-- Navbar principal en escritorio -->
-<Navbarjsx logo={logo} variant={variant} pathname={Astro.url.pathname} client:load />
+<Navbarjsx variant={variant} pathname={Astro.url.pathname} client:idle />
 
 

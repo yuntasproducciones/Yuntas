@@ -13,7 +13,7 @@ const rutas = [
   { link: "/contact", texto: "CONTACTO" },
 ];
 
-const Navbarjsx = ({ logo, variant = "default", pathname }) => {
+const Navbarjsx = ({ variant = "default", pathname }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { darkMode } = useDarkMode();
 
@@ -43,10 +43,15 @@ const Navbarjsx = ({ logo, variant = "default", pathname }) => {
 
         {/* Logo */}
         <img
-          src={logo.src}
+          src={'/images/yuntas_publicidad_logo.webp'}
+          width={59}
+          height={56}
+          srcSet={'/images/yuntas_publicidad_logo_mobile.webp 60w, /images/yuntas_publicidad_logo_tablet.webp 125w'}
+          sizes="(max-width: 640px) 60px, 125px"
           alt="Logo Yuntas"
           loading="eager"
           className="h-14 w-auto cursor-pointer"
+          fetchPriority="high"
         />
 
         {/* Links - solo en desktop */}
@@ -71,7 +76,6 @@ const Navbarjsx = ({ logo, variant = "default", pathname }) => {
       {/* Menú móvil unificado */}
       <MobileMenuUnified
         isOpen={menuOpen}
-        logo={logo}
         onClose={() => setMenuOpen(false)}
       />
     </header>

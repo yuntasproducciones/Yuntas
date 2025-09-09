@@ -78,7 +78,9 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
       <div className="flex items-center justify-between p-6">
         {logo && (
           <img
-            src={logo.src}
+            src={'/images/yuntas_publicidad_logo.webp'}
+            srcSet={'/images/yuntas_publicidad_logo_mobile.webp 60w, /images/yuntas_publicidad_logo_tablet.webp 125w'}
+            sizes="(max-width: 640px) 60px, 125px"
             alt="Logo Yuntas"
             width={80}
             height={80}
@@ -145,6 +147,7 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
             className="sr-only peer"
             checked={darkMode}
             onChange={toggleDarkMode}
+            aria-label="Activar modo oscuro"
           />
           <div
             className={`w-10 h-5 rounded-full transition-colors duration-300 ${
