@@ -1,3 +1,4 @@
+// src/components/admin/DataTable.tsx
 import { FaTrash, FaRegEdit, FaTags } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -6,19 +7,15 @@ import ProductForm from "../../products/ProductForm";
 import type { Product } from "../../../models/Product";
 import { config, getApiUrl } from "../../../../config";
 import TableContainer from "./TableContainer";
-import { useProducts } from "../../../hooks/useProducts";
-
+import { useProducts } from "../../../hooks/useProducts"; 
 export default function DataTable() {
-  const { productos, loading, createProduct, updateProduct, error, refetch } =
-    useProducts();
-
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 8;
+  const { productos, loading, createProduct, updateProduct, error, pagination, refetch } =
+  useProducts(); 
   const [isOpen, setIsOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<Product | undefined>(
     undefined
   );
-
+  console.log('Productos cargados:', productos); // Depuración básica
   const eliminarProducto = async (id: string | number) => {
     const url = getApiUrl(config.endpoints.productos.delete(id));
     const token = localStorage.getItem("token");
@@ -59,7 +56,8 @@ export default function DataTable() {
 
         if (respuesta.ok) {
           Swal.fire("¡Eliminado!", data.message, "success");
-          refetch();
+          // Después de eliminar, recargamos la página actual
+          refetch(pagination.current_page); 
         } else {
           let errorMessage = data.message || "Error desconocido al eliminar";
 
@@ -81,16 +79,10 @@ export default function DataTable() {
       }
     }
   };
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = productos.slice(indexOfFirstItem, indexOfLastItem);
-
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+    // Al cambiar de página, llamamos a refetch con la nueva página
+    refetch(pageNumber, pagination.per_page);
   };
-
-  const totalPages = Math.ceil(productos.length / itemsPerPage);
 
   const handleEdit = (producto: Product) => {
     setCurrentProduct(producto);
@@ -133,7 +125,8 @@ export default function DataTable() {
           icon: "success",
         });
         setIsOpen(false);
-        refetch();
+        // Después de guardar/editar, recargamos la página actual
+        refetch(pagination.current_page); 
       } else {
         let errorMessage = result.message || "Error desconocido";
 
@@ -207,8 +200,8 @@ export default function DataTable() {
                     </div>
                   </td>
                 </tr>
-              ) : currentItems.length > 0 ? (
-                currentItems.map((item, index) => {
+              ) : productos.length > 0 ? ( 
+                productos.map((item, index) => {
                   const isEven = index % 2 === 0;
                   const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
                   const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
@@ -273,25 +266,26 @@ export default function DataTable() {
       </TableContainer>
 
       {/* Paginación */}
-      {totalPages > 1 && (
+      {pagination.last_page > 1 && ( 
         <div className="flex justify-center items-center mt-4 gap-2">
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            onClick={() => handlePageChange(pagination.current_page - 1)}
+            disabled={pagination.current_page === 1}
             className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
           </button>
 
           <div className="flex gap-1">
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+            {/* Generamos los botones de página usando pagination.last_page */}
+            {Array.from({ length: pagination.last_page }, (_, i) => {
               const pageNum = i + 1;
               return (
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
                   className={`px-3 py-2 rounded-md ${
-                    currentPage === pageNum
+                    pagination.current_page === pageNum 
                       ? "bg-blue-950 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
@@ -303,8 +297,8 @@ export default function DataTable() {
           </div>
 
           <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(pagination.current_page + 1)}
+            disabled={pagination.current_page === pagination.last_page} 
             className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Siguiente

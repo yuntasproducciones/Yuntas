@@ -127,7 +127,7 @@ export default function FetchBlogsList() {
       <div className="min-h-screen grid place-content-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-4"></div>
-          <p className="text-white text-2xl font-bold mb-2">Cargando productos...</p>
+          <p className="text-white text-2xl font-bold mb-2">Cargando blogs...</p>
         </div>
       </div>
     );
@@ -194,7 +194,7 @@ export default function FetchBlogsList() {
               </>
             ) : (
               <div className="text-center py-12">
-                <p className="text-white/70 text-xl">No hay productos disponibles</p>
+                <p className="text-white/70 text-xl">No hay blogs disponibles</p>
               </div>
             )}
           </div>
