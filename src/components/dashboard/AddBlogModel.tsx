@@ -121,7 +121,7 @@ const AddBlogModal = ({
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(getApiUrl(config.endpoints.productos.list), {
+        const res = await fetch(getApiUrl(config.endpoints.productos.all), {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -129,7 +129,6 @@ const AddBlogModal = ({
             'Content-Type': 'application/json'
           }
         });
-
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
 
