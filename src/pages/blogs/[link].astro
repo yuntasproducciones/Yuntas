@@ -6,7 +6,7 @@ import type BlogAPI from "../../models/Blog";
 
 export async function getStaticPaths() {
   const response = await blogService.getAllBlogs();
-  const blogs = response.data;
+  const blogs = response.data.data;
 
   return blogs
     .filter(

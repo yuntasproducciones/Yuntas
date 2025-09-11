@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoPerson } from "react-icons/io5";
 import { useDarkMode } from "../hooks/darkmode/useDarkMode";
 import "../styles/navbar.css";
-import MobileMenu from "./MobileMenu";
+import MobileMenuUnified from "./MobileMenuUnified"; // reemplazo
 import ToggleNavbar from "./ui/ToggleNavbar";
 
 const rutas = [
@@ -13,7 +13,7 @@ const rutas = [
   { link: "/contact", texto: "CONTACTO" },
 ];
 
-const Navbarjsx = ({ logo, variant = "default", pathname }) => {
+const Navbarjsx = ({ variant = "default", pathname }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { darkMode } = useDarkMode();
 
@@ -43,10 +43,15 @@ const Navbarjsx = ({ logo, variant = "default", pathname }) => {
 
         {/* Logo */}
         <img
-          src={logo.src}
+          src={'/images/yuntas_publicidad_logo.webp'}
+          width={59}
+          height={56}
+          srcSet={'/images/yuntas_publicidad_logo_mobile.webp 60w, /images/yuntas_publicidad_logo_tablet.webp 125w'}
+          sizes="(max-width: 640px) 60px, 125px"
           alt="Logo Yuntas"
           loading="eager"
           className="h-14 w-auto cursor-pointer"
+          fetchPriority="high"
         />
 
         {/* Links - solo en desktop */}
@@ -62,18 +67,16 @@ const Navbarjsx = ({ logo, variant = "default", pathname }) => {
           ))}
         </div>
 
-        {/* Icono login */}
+        {/* Icono login/admin */}
         <a href="/login" className="ml-4">
           <IoPerson className="text-3xl" aria-label="Login" />
         </a>
       </nav>
 
-      {/* Menú móvil */}
-      <MobileMenu
+      {/* Menú móvil unificado */}
+      <MobileMenuUnified
         isOpen={menuOpen}
-        items={rutas}
-        logo={logo}
-        onClose={() => setMenuOpen(false)} // tu mejora: cerrar desde links/botón
+        onClose={() => setMenuOpen(false)}
       />
     </header>
   );
