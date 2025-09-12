@@ -97,10 +97,14 @@ const Emergente = ({ producto }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+  const timer = setTimeout(() => {
     if (dialogRef.current) {
       dialogRef.current.showModal();
     }
-  }, []);
+  }, 16000);
+
+  return () => clearTimeout(timer);
+}, []);
 
   useEffect(() => {
     setFormData(prev => ({
@@ -250,9 +254,14 @@ const Emergente = ({ producto }) => {
       ref={dialogRef}
       className="rounded-2xl fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto"
     >
-      <div className="flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg max-w-[90vw] sm:max-w-5xl overflow-hidden">
+      <div className="flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg max-w-[70vw] sm:max-w-3xl overflow-hidden">
 
-        {/* Imagen - USA DIRECTAMENTE LA IMAGEN DEL PRODUCTO */}
+        {/* Imagen del popup
+          Recomendación a diseño: 
+          - Usar imágenes en relación 4:3 (ej. 1200x900 px).
+          - Formato WEBP optimizado (≤ 200 KB).
+          - Mantener safe area (bordes limpios). 
+          */}
         <div className="sm:w-1/2 aspect-[4/3] overflow-hidden">
           <img
             src={imagenPopup}
