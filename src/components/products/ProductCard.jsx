@@ -1,7 +1,7 @@
 const ProductCard = ({ producto }) => {
   console.log('🎴 ProductCard recibió producto:', producto);
 
-  const imageBaseUrl = 'http://localhost:8000';
+  const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
 
   // 🔍 Usar imagen_principal si está disponible
   const imagenUrl = producto.imagen_principal

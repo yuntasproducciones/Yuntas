@@ -288,13 +288,27 @@ const AddBlogModal = ({
       if (formData.alt_imagen_card?.trim()) formDataToSend.append('alt_imagen_card', formData.alt_imagen_card.trim());
       if (formData.imagen_principal) formDataToSend.append("imagen_principal", formData.imagen_principal);
 
-      const imagenesConArchivo = formData.imagenes_secundarias.filter(img => img !== null);
-      imagenesConArchivo.forEach((img) => formDataToSend.append("imagenes[]", img as File));
+      // const imagenesConArchivo = formData.imagenes_secundarias.filter(img => img !== null);
+      // imagenesConArchivo.forEach((img) => formDataToSend.append("imagenes[]", img as File));
+      // formData.alt_imagenes_secundarias.forEach((alt, index) => {
+      //   if (formData.imagenes_secundarias[index] !== null || (isEdit && alt.trim())) {
+      //     formDataToSend.append("alt_imagenes[]", alt.trim());
+      //   }
+      // });
+      formData.imagenes_secundarias.forEach((img, index) => {
+      if (img !== null) {
+        // Solo enviar la imagen si realmente hay una nueva
+        formDataToSend.append(`imagenes[${index}]`, img as File);
+      }
+     });
+
       formData.alt_imagenes_secundarias.forEach((alt, index) => {
-        if (formData.imagenes_secundarias[index] !== null || (isEdit && alt.trim())) {
-          formDataToSend.append("alt_imagenes[]", alt.trim());
+        // Enviar el alt text para todas las posiciones, incluso las que no tienen imagen nueva
+        // para permitir actualizar solo el alt text
+        if (alt.trim() || (isEdit && blogToEdit?.imagenes?.[index])) {
+          formDataToSend.append(`alt_imagenes[${index}]`, alt.trim());
         }
-      });
+    });
       parrafosConContenido.forEach((parrafo) => formDataToSend.append("parrafos[]", parrafo.trim()));
 
       const endpoint = isEdit
