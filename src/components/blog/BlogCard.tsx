@@ -41,16 +41,16 @@ export default function BlogCard({ blog }: BlogCardProps) {
   };
 
   return (
-    <div 
+    <div
       onClick={handleCardClick}
-      className="group relative overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 cursor-pointer hover:scale-105 w-[260px] h-[320px] flex flex-col"
+      className="group relative overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 cursor-pointer hover:scale-105 w-[250px] h-[320px] flex flex-col"
     >
-      <div className="relative w-full h-[150px] overflow-hidden flex-shrink-0">
+      <div className="relative w-full h-[200px] overflow-hidden flex-shrink-0">
         {!imageError ? (
           <img
             src={getImageUrl(blog.imagen_principal)}
             alt={blog.nombre_producto}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full aspect-square object-cover transition-transform duration-500 group-hover:scale-110"
             onError={handleImageError}
             loading="lazy"
           />
@@ -75,12 +75,12 @@ export default function BlogCard({ blog }: BlogCardProps) {
           </div>
         )}
       </div>
-      <div className="px-6 py-2 flex-1 flex flex-col justify-center items-center min-h-[70px] max-h-[110px] text-center">
-        <h3 className="w-full text-base font-semibold text-gray-800 mb-1 text-center uppercase leading-tight line-clamp-2 max-h-[48px]">
+      <div className="px-4 py-1 flex-1 flex flex-col justify-center items-center min-h-[60px] max-h-[90px] text-center">
+        <h3 className="w-full flex justify-center items-center text-base font-semibold text-gray-800 mb-1 text-center uppercase leading-tight line-clamp-3 max-h-[48px]">
           {blog.nombre_producto}
         </h3>
         {blog.subtitulo && (
-          <p className="w-full text-gray-600 text-sm text-center leading-tight line-clamp-2 max-h-[36px]">
+          <p className="w-full flex justify-center items-center text-gray-600 text-sm text-center leading-tight line-clamp-3 max-h-[36px]">
             {blog.subtitulo}
           </p>
         )}

@@ -153,8 +153,8 @@ export default function FetchBlogsList() {
                   {currentBlogs.map((blog) => (
                     <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
                       <div className="rounded-2xl p-1">
-                        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden w-[45vw] max-w-[250px] mx-auto">
-                          <BlogCard blog={blog} />
+                          <div className="w-full max-w-[320px] mx-auto bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden">
+                            <BlogCard blog={blog} />
                         </div>
                       </div>
                     </div>
@@ -167,7 +167,7 @@ export default function FetchBlogsList() {
                     {currentBlogs.slice(0, 3).map((blog) => (
                       <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
                         <div className="rounded-2xl p-1">
-                          <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden max-w-[250px]">
+                          <div className="w-full max-w-[320px] mx-auto bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden">
                             <BlogCard blog={blog} />
                           </div>
                         </div>
