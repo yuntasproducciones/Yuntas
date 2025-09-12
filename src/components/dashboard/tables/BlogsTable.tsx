@@ -42,48 +42,43 @@ const BlogsTable = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-const fetchData = async (page = 1) => {
-  setLoading(true);
-  try {
-    const token = localStorage.getItem("token");
-    const response = await fetch(
-      `${getApiUrl(config.endpoints.blogs.list)}?page=${page}&per_page=${itemsPerPage}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
+  const fetchData = async (page = 1) => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${getApiUrl(config.endpoints.blogs.list)}?page=${page}&per_page=${itemsPerPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const result = await response.json();
+      if (result.success && result.data && Array.isArray(result.data.data)) {
+        setData(result.data.data);
+        setPaginationData({
+          current_page: result.data.current_page ?? page,
+          last_page: result.data.last_page,
+          per_page: result.data.per_page,
+          total: result.data.total,
+        });
+      } else {
+        setData([]);
+      }
+    } catch (error) {
+      console.error("❌ Error al cargar datos:", error);
+      setData([]);
+    } finally {
+      setLoading(false);
     }
-
-    const result = await response.json();
-    console.log("API Result:", result);
-
- if (result.success && result.data && Array.isArray(result.data.data)) {
-  setData(result.data.data);
-  setPaginationData({
-    current_page: result.data.current_page ?? page,
-    last_page: result.data.last_page,
-    per_page: result.data.per_page,
-    total: result.data.total,
-  });
-} else {
-  console.warn("⚠️ Estructura inesperada:", result.data);
-  setData([]);
-}
-
-  } catch (error) {
-    console.error("❌ Error al cargar datos:", error);
-    setData([]);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   useEffect(() => {
     fetchData(currentPage);
@@ -125,7 +120,7 @@ const fetchData = async (page = 1) => {
             }`
           );
         }
-      } catch (error) {
+      } catch {
         alert("❌ Error al conectar con el servidor");
       }
     }
@@ -159,21 +154,24 @@ const fetchData = async (page = 1) => {
       >
         <thead className="hidden md:table-header-group">
           <tr className="bg-blue-950 text-white">
-            {["ID", "PRODUCTO", "SUBTÍTULO","IMAGEN" ,"FECHA", "ACCIÓN"].map((header) => (
-              <th
-                key={header}
-                className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
-              >
-                {header}
-              </th>
-            ))}
+            {["ID", "PRODUCTO", "SUBTÍTULO", "IMAGEN", "FECHA", "ACCIÓN"].map(
+              (header) => (
+                <th
+                  key={header}
+                  className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+                >
+                  {header}
+                </th>
+              )
+            )}
           </tr>
         </thead>
+
         <tbody>
           {loading ? (
             <tr>
               <td
-                colSpan={5}
+                colSpan={6}
                 className="text-center py-4 text-gray-500 block md:table-cell"
               >
                 Cargando blogs...
@@ -187,38 +185,57 @@ const fetchData = async (page = 1) => {
                   idx % 2 === 0 ? "bg-white" : "bg-gray-50"
                 }`}
               >
-                <td data-label="ID" className="px-4 py-2 border-b font-bold">
+                <td
+                  data-label="ID"
+                  className="block md:table-cell px-4 py-2 border-b font-bold before:content-['ID'] before:font-semibold before:block md:before:hidden"
+                >
                   {item.id}
                 </td>
-                <td data-label="Producto" className="px-4 py-2 border-b font-semibold">
+
+                <td
+                  data-label="Producto"
+                  className="block md:table-cell px-4 py-2 border-b font-semibold before:content-['Producto'] before:font-semibold before:block md:before:hidden"
+                >
                   {truncateText(item.nombre_producto || "Sin nombre", 30)}
                 </td>
-                <td data-label="Subtítulo" className="px-4 py-2 border-b">
+
+                <td
+                  data-label="Subtítulo"
+                  className="block md:table-cell px-4 py-2 border-b before:content-['Subtítulo'] before:font-semibold before:block md:before:hidden"
+                >
                   {truncateText(item.subtitulo, 40)}
                 </td>
-                <td data-label="Fecha" className="px-4 py-2 border-b text-sm">
-                  {item.created_at
-                    ? new Date(item.created_at).toLocaleDateString("es-ES")
-                    : "N/A"}
-                </td>
-                     <td
-                    data-label="Imagen"
-                    className="px-4 py-2 border-b border-gray-200 block md:table-cell relative md:static flex flex-col items-center"
-                  >
-                    <span className="block text-gray-600 font-semibold mb-2 md:hidden">
-                      Imagen
-                    </span>
+
+                <td
+                  data-label="Imagen"
+                  className="block md:table-cell px-4 py-2 border-b border-gray-200 relative flex flex-col items-center md:items-start before:content-['Imagen'] before:font-semibold before:block md:before:hidden"
+                >
+                  <div className="w-full flex justify-center md:justify-start">
                     <img
                       src={getImageUrl(item.imagen_principal)}
                       alt={item.nombre_producto || "Blog"}
-                      className="w-full max-w-[280px] h-40 sm:w-20 sm:h-20 rounded-lg object-cover shadow-md"
+                      className="w-full max-w-[320px] sm:max-w-[120px] h-48 sm:h-20 rounded-lg object-cover shadow-md"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = "/placeholder-image.jpg";
                       }}
                     />
-                  </td> 
-                <td data-label="Acción" className="px-4 py-3">
+                  </div>
+                </td>
+
+                <td
+                  data-label="Fecha"
+                  className="block md:table-cell px-4 py-2 border-b text-sm before:content-['Fecha'] before:font-semibold before:block md:before:hidden"
+                >
+                  {item.created_at
+                    ? new Date(item.created_at).toLocaleDateString("es-ES")
+                    : "N/A"}
+                </td>
+
+                <td
+                  data-label="Acción"
+                  className="block md:table-cell px-4 py-3 border-b before:content-['Acción'] before:font-semibold before:block md:before:hidden"
+                >
                   <div className="flex flex-col sm:flex-row justify-center gap-3 mt-2 sm:mt-0">
                     <button
                       className="flex items-center justify-center gap-2 p-2 text-red-600 hover:text-red-800 transition bg-red-100 rounded-lg shadow-sm"
@@ -245,7 +262,7 @@ const fetchData = async (page = 1) => {
             ))
           ) : (
             <tr>
-              <td colSpan={5} className="text-center py-4 text-gray-500">
+              <td colSpan={6} className="text-center py-4 text-gray-500">
                 No hay blogs disponibles
               </td>
             </tr>
