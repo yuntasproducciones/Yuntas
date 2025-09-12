@@ -4,6 +4,9 @@ import AddBlogModal from "../AddBlogModel";
 import { config, getApiUrl } from "../../../../config";
 import TableContainer from "./TableContainer";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+
 interface Blog {
   id: number;
   producto_id: number;
@@ -206,21 +209,96 @@ const BlogsTable = () => {
                   {truncateText(item.subtitulo, 40)}
                 </td>
 
-                <td
+              <td
                   data-label="Imagen"
-                  className="block md:table-cell px-4 py-2 border-b border-gray-200 relative flex flex-col items-center md:items-start before:content-['Imagen'] before:font-semibold before:block md:before:hidden"
+                  className="block md:table-cell px-4 py-2 border-b border-gray-200 relative md:static before:content-['Imagen'] before:font-semibold before:block md:before:hidden"
                 >
-                  <div className="w-full flex justify-center md:justify-start">
-                    <img
-                      src={getImageUrl(item.imagen_principal)}
-                      alt={item.nombre_producto || "Blog"}
-                      className="w-full max-w-[320px] sm:max-w-[120px] h-48 sm:h-20 rounded-lg object-cover shadow-md"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/placeholder-image.jpg";
-                      }}
-                    />
+                  {/* Swiper para movil */}
+                  <div className="block md:hidden w-full">
+                    <Swiper
+                      modules={[Navigation, Pagination]}
+                      spaceBetween={10}
+                      slidesPerView={1}
+                      pagination={{ clickable: true }}
+                      navigation={true}
+                      className="w-full max-w-[320px] rounded-lg shadow-md"
+                    >
+                      <SwiperSlide>
+                        <img
+                          src={getImageUrl(item.imagen_principal)}
+                          alt={item.nombre_producto || "Blog"}
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                      </SwiperSlide>
+                      {item.imagenes?.map((img, i) => (
+                        <SwiperSlide key={i}>
+                          <img
+                            src={getImageUrl(img.ruta_imagen)}
+                            alt={img.text_alt || "Imagen extra"}
+                            className="w-full h-48 object-cover rounded-lg"
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
                   </div>
+
+                  {/* Swiper para escritorio */}
+                  <div className="hidden md:block w-full">
+                    {(!item.imagenes || item.imagenes.length === 0) ? (
+                      <img
+                        src={getImageUrl(item.imagen_principal)}
+                        alt={item.nombre_producto || "Blog"}
+                        className="w-full max-w-[120px] h-20 object-cover rounded-lg shadow-md"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/placeholder-image.jpg";
+                        }}
+                      />
+                    ) : (
+                      <Swiper
+                        modules={[Pagination, Autoplay]}
+                        spaceBetween={10}
+                        slidesPerView={1}
+                        loop={item.imagenes.length >= 3} 
+                        rewind={item.imagenes.length === 2} 
+                        autoplay={{
+                          delay: 2000,
+                          disableOnInteraction: false, 
+                        }}
+                        pagination={{ clickable: true }}
+                        className="w-full max-w-[120px] h-20 rounded-lg shadow-md"
+                      >
+                        {/* Imagen principal */}
+                        <SwiperSlide>
+                          <img
+                            src={getImageUrl(item.imagen_principal)}
+                            alt={item.nombre_producto || "Blog"}
+                            className="w-full h-20 object-cover rounded-lg"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "/placeholder-image.jpg";
+                            }}
+                          />
+                        </SwiperSlide>
+
+                        {/* Otras imágenes */}
+                        {item.imagenes.map((img, i) => (
+                          <SwiperSlide key={i}>
+                            <img
+                              src={getImageUrl(img.ruta_imagen)}
+                              alt={img.text_alt || "Imagen extra"}
+                              className="w-full h-20 object-cover rounded-lg"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = "/placeholder-image.jpg";
+                              }}
+                            />
+                          </SwiperSlide>
+                        ))}
+                      </Swiper>
+                    )}
+                  </div>
+
                 </td>
 
                 <td
