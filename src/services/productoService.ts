@@ -1,12 +1,14 @@
+// src/services/productoService.ts
 import { config } from '../../config';
 import type { Product, ProductoForm } from '../models/Product';
 import { httpService } from './httpService';
 
 interface ProductoListResponse {
-  success: boolean;
   data: Product[];
-  message: string;
-  status: number;
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
 }
 
 interface ProductoDetailResponse {
@@ -17,14 +19,16 @@ interface ProductoDetailResponse {
 }
 
 class ProductoService {
-    async getAllProductos(): Promise<ProductoListResponse> {
-        try {
-            const response = await httpService.get<Product[]>(config.endpoints.productos.list);
-            return response;
-        } catch (error) {
-            console.error('[ProductoService] Error obteniendo productos:', error);
-            throw error;
-        }
+    async getAllProductos(page: number = 1, perPage: number = 6): Promise<ProductoListResponse> {
+    try {
+        const url = `${config.endpoints.productos.list}?page=${page}&perPage=${perPage}`;
+        const response = await httpService.get<ProductoListResponse>(url); 
+        console.log('response from getAllProductos2:', response);
+        return response; 
+    } catch (error) {
+        console.error('[ProductoService] Error obteniendo productos:', error);
+        throw error;
+    }
     }
 
     async getProductoById(id: number | string): Promise<ProductoDetailResponse> {

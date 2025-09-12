@@ -127,7 +127,7 @@ export default function FetchBlogsList() {
       <div className="min-h-screen grid place-content-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-4"></div>
-          <p className="text-white text-2xl font-bold mb-2">Cargando productos...</p>
+          <p className="text-white text-2xl font-bold mb-2">Cargando blogs...</p>
         </div>
       </div>
     );
@@ -153,8 +153,8 @@ export default function FetchBlogsList() {
                   {currentBlogs.map((blog) => (
                     <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
                       <div className="rounded-2xl p-1">
-                        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden w-[45vw] max-w-[250px] mx-auto">
-                          <BlogCard blog={blog} />
+                          <div className="w-full max-w-[320px] mx-auto bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden">
+                            <BlogCard blog={blog} />
                         </div>
                       </div>
                     </div>
@@ -167,7 +167,7 @@ export default function FetchBlogsList() {
                     {currentBlogs.slice(0, 3).map((blog) => (
                       <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
                         <div className="rounded-2xl p-1">
-                          <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden max-w-[250px]">
+                          <div className="w-full max-w-[320px] mx-auto bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden">
                             <BlogCard blog={blog} />
                           </div>
                         </div>
@@ -194,7 +194,7 @@ export default function FetchBlogsList() {
               </>
             ) : (
               <div className="text-center py-12">
-                <p className="text-white/70 text-xl">No hay productos disponibles</p>
+                <p className="text-white/70 text-xl">No hay blogs disponibles</p>
               </div>
             )}
           </div>

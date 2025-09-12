@@ -1,13 +1,21 @@
+// src/hooks/useProducts.ts
 import { useState, useEffect } from "react";
 import type { Product, ProductoForm } from "../models/Product";
 import { productoService } from "../services/productoService";
-import { s } from "framer-motion/client";
+
+interface PaginationData {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+}
 
 interface UseProductResult {
     productos: Product[];
     loading: boolean;
     error: string | null;
-    refetch: () => Promise<void>;
+    pagination: PaginationData; 
+    refetch: (page?: number, perPage?: number) => Promise<void>; 
     createProduct: (product: ProductoForm) => Promise<Product | null>;
     updateProduct: (id: number | string, product: ProductoForm) => Promise<Product | null>;
 }
@@ -16,35 +24,53 @@ export function useProducts(): UseProductResult {
     const [productos, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [pagination, setPagination] = useState<PaginationData>({
+        current_page: 1,
+        last_page: 1,
+        per_page: 6, 
+        total: 0,
+    });
+    console.log('PRODUCTOS HOOK:', productos); 
+    
+const fetchProducts = async (page: number = 1, perPage: number = pagination.per_page) => {
+  setLoading(true);
+  setError(null);
+  try {
+    const response = await productoService.getAllProductos(page, perPage); 
+    console.log('response from getAllProductos:', response.data);
 
-    const fetchProducts = async () => {
-        setLoading(true);
-        setError(null);
-        try {   
-            const response = await productoService.getAllProductos();
-            setProducts(response.data);
-        } catch (error) {
-            setError(error instanceof Error ? error.message : 'Error desconocido al obtener productos');
-            console.error('Error en useBlogs:', error);
-        } finally {
-            setLoading(false);
-        }
-    }
+    setProducts(response.data); // 👈 el array de productos
+    setPagination({
+      current_page: response.current_page,
+      last_page: response.last_page,
+      per_page: response.per_page,
+      total: response.total,
+    });
 
-    const refetch = async () => {
-        await fetchProducts();
+  } catch (error) {
+    setError(error instanceof Error ? error.message : 'Error desconocido al obtener productos');
+    console.error('Error en useProducts:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+    // refetch ahora puede recibir parámetros para cambiar de página o perPage
+    const refetch = async (page?: number, perPage?: number) => {
+        await fetchProducts(page, perPage);
     };
 
     useEffect(() => {
-        fetchProducts();
-    }, []);
+        // Al cargar el hook, obtenemos la primera página con el per_page por defecto
+        fetchProducts(pagination.current_page, pagination.per_page);
+    }, []); // Dependencias vacías para que se ejecute una sola vez al montar
 
     const createProduct = async (product: ProductoForm): Promise<Product | null> => {
         setLoading(true);
         setError(null);
         try {
             const response = await productoService.createProducto(product);
-            setProducts(prev => [...prev, response.data]);
+            refetch(pagination.current_page); 
             return response.data;
         } catch (error) {
             setError(error instanceof Error ? error.message : 'Error desconocido al crear producto');
@@ -63,6 +89,7 @@ export function useProducts(): UseProductResult {
             if (!response.data) {
                 throw new Error('Producto no encontrado');
             }
+            // Actualizamos solo el producto modificado en el estado local para mantener la reactividad
             setProducts(prev => prev.map(p => p.id === id ? response.data : p));
             return response.data;
         }
@@ -76,5 +103,5 @@ export function useProducts(): UseProductResult {
         }
     };
 
-    return { productos, loading, error, refetch, createProduct, updateProduct }
+    return { productos, loading, error, pagination, refetch, createProduct, updateProduct }
 }
