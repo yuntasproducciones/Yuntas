@@ -39,18 +39,11 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
   }, [initialData]);
 
-
   // Estados para imágenes existentes (legacy) - convertir desde la estructura v1
   const [imagenesExistentes, setImagenesExistentes] = useState(
     initialData?.imagenes || []
   );
   const [idsAEliminar, setIdsAEliminar] = useState<string[]>([]);
-
-  // Estados para productos relacionados - convertir desde relatedProducts
-  const [relacionadoInput, setRelacionadoInput] = useState("");
-  // const [relacionados, setRelacionados] = useState<string[]>(
-  //   initialData?.relatedProducts?.map(id => String(id)) || []
-  // );
 
   // Estados para especificaciones - extraer desde specs
   const [especificaciones, setEspecificaciones] = useState<string[]>(
@@ -73,18 +66,6 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       return benefits.length > 0 ? benefits : [""];
     })()
   );
-
-  // Funciones para manejar productos relacionados
-  // const handleAddRelacionado = () => {
-  //   if (relacionadoInput.trim()) {
-  //     setRelacionados([...relacionados, relacionadoInput.trim()]);
-  //     setRelacionadoInput("");
-  //   }
-  // };
-
-  // const handleRemoveRelacionado = (id: string) => {
-  //   setRelacionados(relacionados.filter((r) => r !== id));
-  // };
 
   // Funciones para manejar imágenes existentes
   const deleteExistImage = (id: string) => {
@@ -151,28 +132,14 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
     // CAMPOS OPCIONALES
     finalFormData.append('subtitulo', formData.get('nombre') as string); // Usar nombre como subtítulo
-    //finalFormData.append('lema', formData.get('seccion') as string); // Usar sección como lema
     finalFormData.append('descripcion', formData.get('descripcion_informacion') as string);
     finalFormData.append('seccion', formData.get('seccion') as string);
 
-    // IMAGEN PRINCIPAL (para catálogo/lista) - NO es la imagen Hero
+    // IMAGEN PRINCIPAL (para catálogo/lista) - Solo si se subió una nueva
     const imagenListaProductos = formData.get('imagen_lista_productos') as File;
-    const imagenHero = formData.get('imagen_hero') as File;
-    const imagenEspecificaciones = formData.get('imagen_especificaciones') as File;
-    const imagenBeneficios = formData.get('imagen_beneficios') as File;
-    const imagenPopups = formData.get('imagen_popups') as File;
-
-    if (
-      imagenListaProductos &&
-      imagenListaProductos.size > 0 &&
-      imagenListaProductos !== imagenHero &&
-      imagenListaProductos !== imagenEspecificaciones &&
-      imagenListaProductos !== imagenBeneficios &&
-      imagenListaProductos !== imagenPopups
-    ) {
+    if (imagenListaProductos && imagenListaProductos.size > 0) {
       finalFormData.append('imagen_principal', imagenListaProductos);
     }
-
 
     // ESPECIFICACIONES como array asociativo
     const especificacionesObj: any = {};
@@ -196,38 +163,44 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       });
     }
 
-    // IMÁGENES ADICIONALES como array - ORDEN CORRECTO SEGÚN DISEÑO
-    // Orden: [0] = HERO, [1] = Especificaciones, [2] = Beneficios, [3] = Popups
-    const imagenesEnOrden = [
-      { key: 'imagen_hero', file: formData.get('imagen_hero') as File },
-      { key: 'imagen_especificaciones', file: formData.get('imagen_especificaciones') as File },
-      { key: 'imagen_beneficios', file: formData.get('imagen_beneficios') as File },
-      { key: 'imagen_popups', file: formData.get('imagen_popups') as File }
+    // IMÁGENES ADICIONALES - Orden específico y solo las que se modificaron
+    const tiposImagenes = [
+      { key: 'imagen_hero', file: formData.get('imagen_hero') as File, index: 0 },
+      { key: 'imagen_especificaciones', file: formData.get('imagen_especificaciones') as File, index: 1 },
+      { key: 'imagen_beneficios', file: formData.get('imagen_beneficios') as File, index: 2 },
+      { key: 'imagen_popups', file: formData.get('imagen_popups') as File, index: 3 }
     ];
 
-    // ENVIAR SOLO LAS IMÁGENES QUE TIENEN ARCHIVOS VÁLIDOS
-    // pero mantener la información de qué tipo de imagen es cada una
-    imagenesEnOrden.forEach((imagen, originalIndex) => {
-      if (imagen.file && imagen.file.size > 0) {
-        console.log(`Agregando imagen ${originalIndex}:`, imagen.key, imagen.file.name);
+    console.log('=== DEBUGGING IMÁGENES FRONTEND ===');
+    let imagenesEnviadas = 0;
+    tiposImagenes.forEach((imagen) => {
+      console.log(`Revisando imagen ${imagen.index} (${imagen.key}):`, {
+        hasFile: imagen.file instanceof File,
+        fileName: imagen.file?.name || 'N/A',
+        fileSize: imagen.file?.size || 0,
+        fileType: imagen.file?.type || 'N/A'
+      });
+
+      if (imagen.file && imagen.file instanceof File && imagen.file.size > 0) {
+        console.log(`✅ Agregando imagen ${imagen.index}:`, imagen.key, imagen.file.name, `(${imagen.file.size} bytes)`);
         // Usar el índice original para mantener el orden correcto
-        finalFormData.append(`imagenes[${originalIndex}]`, imagen.file);
+        finalFormData.append(`imagenes[${imagen.index}]`, imagen.file);
         // También enviar el tipo de imagen para que el backend sepa qué es
-        finalFormData.append(`imagen_tipos[${originalIndex}]`, imagen.key);
+        finalFormData.append(`imagen_tipos[${imagen.index}]`, imagen.key);
+        imagenesEnviadas++;
       } else {
-        console.log(`Imagen ${originalIndex} (${imagen.key}) no tiene archivo o está vacía`);
+        console.log(`❌ Imagen ${imagen.index} (${imagen.key}) no tiene archivo válido o está vacía`);
       }
     });
 
-    // PRODUCTOS RELACIONADOS
-    // const relacionadosValidos = relacionados
-    //   .filter(rel => rel.trim())
-    //   .map(rel => parseInt(rel.trim()))
-    //   .filter(rel => !isNaN(rel));
+    console.log(`Total de imágenes enviadas: ${imagenesEnviadas}`);
 
-    // relacionadosValidos.forEach((id, index) => {
-    //   finalFormData.append(`relacionados[${index}]`, id.toString());
-    // });
+    // Agregar información sobre imágenes a eliminar (para futuras mejoras)
+    if (idsAEliminar.length > 0) {
+      idsAEliminar.forEach((id, index) => {
+        finalFormData.append(`imagenes_eliminar[${index}]`, id);
+      });
+    }
 
     // etiqueta
     const metaTitulo = formData.get('meta_título') as string;
@@ -237,9 +210,14 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       finalFormData.append('etiqueta[meta_descripcion]', metaDescripcion.trim());
     }
 
-
+    // Log para debugging
+    console.log('=== DATOS ENVIADOS AL BACKEND ===');
     finalFormData.forEach((value, key) => {
-      console.log(`Campo: ${key}, Valor: ${value}`);
+      if (value instanceof File) {
+        console.log(`Campo: ${key}, Archivo: ${value.name} (${value.size} bytes)`);
+      } else {
+        console.log(`Campo: ${key}, Valor: ${value}`);
+      }
     });
 
     if (isEditing) {
@@ -280,7 +258,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             </label>
             <input
               name="seccion"
-              defaultValue={initialData?.seccion }
+              defaultValue={initialData?.seccion}
               placeholder="ej: Letreros LED, Sillas LED, Pisos LED, etc."
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
@@ -300,19 +278,19 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Stock <span className="text-blue-600 text-sm">(Control de inventario)</span>
             </label>
             <input
               type="number"
               name="stock"
-              // defaultValue={initialData?.stockProducto || initialData?.stock}
+              defaultValue={initialData?.stock || 0}
               min="0"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
-          </div>
+          </div>  */}
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -336,7 +314,6 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               defaultValue={initialData?.etiqueta?.meta_titulo || ""}
               placeholder="Título para SEO del producto"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
             />
           </div>
 
@@ -350,7 +327,6 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               rows={3}
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Descripción breve del producto para SEO..."
-              required
             />
           </div>
         </div>
@@ -369,7 +345,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             </label>
             <input
               name="titulo_hero"
-              defaultValue={initialData?.titulo }
+              defaultValue={initialData?.titulo}
               placeholder="ej: Letreros Neón LED"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
@@ -383,7 +359,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
             <textarea
               rows={4}
               name="descripcion_informacion"
-              defaultValue={initialData?.descripcion }
+              defaultValue={initialData?.descripcion}
               placeholder="Describe el producto, sus usos y características principales..."
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
@@ -626,52 +602,6 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           </div>
           </div>
       </div>
-
-
-      {/* SECCIÓN: PRODUCTOS RELACIONADOS */}
-      {/* <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
-        <h3 className="text-lg font-semibold text-indigo-800 mb-4 flex items-center">
-          Productos Relacionados
-        </h3>
-
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Ingresa el ID del producto relacionado"
-              value={relacionadoInput}
-              onChange={(e) => setRelacionadoInput(e.target.value)}
-              className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
-            <button
-              type="button"
-              onClick={handleAddRelacionado}
-              className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition"
-            >
-              Agregar
-            </button>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {relacionados.map((id, idx) => (
-              <span
-                key={idx}
-                className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-              >
-                {id}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveRelacionado(id)}
-                  className="text-red-500 hover:text-red-700 font-bold"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div> */}
-
       {/* BOTONES DE ACCIÓN */}
       <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
         <button
