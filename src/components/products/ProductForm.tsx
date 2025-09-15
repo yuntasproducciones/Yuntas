@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type Producto from "../../models/Product";
 import Input from "../Input";
+import Swal from "sweetalert2";
 import type { Product } from "../../models/Product";
 
 interface ImagenLegacy {
@@ -14,6 +15,19 @@ interface Props {
   onSubmit: (formData: FormData) => Promise<void>;
   isEditing?: boolean;
 }
+
+  // Validación de peso de imagen (máx. 2MB)
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.size > 2 * 1024 * 1024) {
+      Swal.fire({
+        icon: "warning",
+        title: "¡Imagen muy grande!",
+        text: "Máx. 2 MB.",
+      });
+      e.target.value = "";
+    }
+  };
 
 const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
   useEffect(() => {
@@ -250,6 +264,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
+            <small className="text-gray-500 block mt-1">Máx. 255 caracteres (letras, números y espacios).</small>
           </div>
 
           <div>
@@ -263,6 +278,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
+            <small className="text-gray-500 block mt-1">Máx. 255 caracteres (letras, números y espacios).</small>
           </div>
 
           <div>
@@ -276,6 +292,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
+            <small className="text-gray-500 block mt-1">Coloca el precio en números (máx. 100 000).</small>
           </div>
 
           {/* <div>
@@ -303,6 +320,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
+            <small className="text-gray-500 block mt-1">Solo minúsculas y guiones. Hasta 255 letras, números o espacios.</small>
           </div>
 
           <div className="md:col-span-2">
@@ -315,6 +333,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               placeholder="Título para SEO del producto"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
+            <small className="text-gray-500 block mt-1">Máx. 70 caracteres (letras, números y espacios).</small>
           </div>
 
           <div className="md:col-span-2">
@@ -328,6 +347,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Descripción breve del producto para SEO..."
             />
+            <small className="text-gray-500 block mt-1">Máx. 160 caracteres (letras, números y espacios).</small>
           </div>
         </div>
       </div>
@@ -350,6 +370,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
+            <small className="text-gray-500 block mt-1">Máx. 255 caracteres (letras, números y espacios).</small>
           </div>
 
           <div>
@@ -364,6 +385,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
+            <small className="text-gray-500 block mt-1">Descripción detallada. 300-600 palabras.</small>
           </div>
         </div>
       </div>
@@ -493,7 +515,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 name="imagen_lista_productos"
                 required={!isEditing}
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                onChange={handleImageFileChange}
               />
+              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
               <input
                 type="text"
                 name="alt_imagen_lista"
@@ -515,7 +539,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 accept="image/*"
                 name="imagen_hero"
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                onChange={handleImageFileChange}
               />
+              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
               <input
                 type="text"
                 name="alt_imagen_hero"
@@ -537,7 +563,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 accept="image/*"
                 name="imagen_especificaciones"
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                onChange={handleImageFileChange}
               />
+              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
               <input
                 type="text"
                 name="alt_imagen_especificaciones"
@@ -559,7 +587,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 accept="image/*"
                 name="imagen_beneficios"
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
+                onChange={handleImageFileChange}
               />
+              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
               <input
                 type="text"
                 name="alt_imagen_beneficios"
@@ -580,7 +610,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                   accept="image/*"
                   name="imagen_popups"
                   className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"
+                  onChange={handleImageFileChange}
                 />
+                <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
                 <input
                   type="text"
                   name="alt_imagen_popups"

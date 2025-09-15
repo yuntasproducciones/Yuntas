@@ -159,12 +159,34 @@ const AddBlogModal = ({
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof BlogPOST) => {
-    if (e.target.files?.[0]) setFormData({ ...formData, [field]: e.target.files[0] });
+    const file = e.target.files?.[0];
+    if (file) {
+      if (field === "imagen_principal" && file.size > 2048 * 1024) {
+        Swal.fire({
+          icon: "warning",
+          title: "¡Imagen muy grande!",
+          text: "Máx. 2 MB.",
+        });
+        if (e.target) e.target.value = "";
+        return;
+      }
+      setFormData({ ...formData, [field]: file });
+    }
   };
 
   const handleImagenSecundariaChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0] || null;
+    if (file && file.size > 2048 * 1024) {
+      Swal.fire({
+        icon: "warning",
+        title: "¡Imagen muy grande!",
+        text: "Máx. 2 MB.",
+      });
+      if (e.target) e.target.value = "";
+      return;
+    }
     const updated = [...formData.imagenes_secundarias];
-    updated[index] = e.target.files?.[0] || null;
+    updated[index] = file;
     setFormData({ ...formData, imagenes_secundarias: updated });
   };
 
@@ -288,27 +310,13 @@ const AddBlogModal = ({
       if (formData.alt_imagen_card?.trim()) formDataToSend.append('alt_imagen_card', formData.alt_imagen_card.trim());
       if (formData.imagen_principal) formDataToSend.append("imagen_principal", formData.imagen_principal);
 
-      // const imagenesConArchivo = formData.imagenes_secundarias.filter(img => img !== null);
-      // imagenesConArchivo.forEach((img) => formDataToSend.append("imagenes[]", img as File));
-      // formData.alt_imagenes_secundarias.forEach((alt, index) => {
-      //   if (formData.imagenes_secundarias[index] !== null || (isEdit && alt.trim())) {
-      //     formDataToSend.append("alt_imagenes[]", alt.trim());
-      //   }
-      // });
-      formData.imagenes_secundarias.forEach((img, index) => {
-      if (img !== null) {
-        // Solo enviar la imagen si realmente hay una nueva
-        formDataToSend.append(`imagenes[${index}]`, img as File);
-      }
-     });
-
+      const imagenesConArchivo = formData.imagenes_secundarias.filter(img => img !== null);
+      imagenesConArchivo.forEach((img) => formDataToSend.append("imagenes[]", img as File));
       formData.alt_imagenes_secundarias.forEach((alt, index) => {
-        // Enviar el alt text para todas las posiciones, incluso las que no tienen imagen nueva
-        // para permitir actualizar solo el alt text
-        if (alt.trim() || (isEdit && blogToEdit?.imagenes?.[index])) {
-          formDataToSend.append(`alt_imagenes[${index}]`, alt.trim());
+        if (formData.imagenes_secundarias[index] !== null || (isEdit && alt.trim())) {
+          formDataToSend.append("alt_imagenes[]", alt.trim());
         }
-    });
+      });
       parrafosConContenido.forEach((parrafo) => formDataToSend.append("parrafos[]", parrafo.trim()));
 
       const endpoint = isEdit
@@ -380,6 +388,7 @@ const AddBlogModal = ({
                   </option>
                 ))}
               </select>
+                <small className="text-gray-500">Selecciona el producto relacionado con este blog. Requerido.</small>
               {nombreProducto && (
                 <p className="text-xs text-gray-500 mt-1">
                   Producto seleccionado: <strong>{nombreProducto}</strong>
@@ -397,6 +406,9 @@ const AddBlogModal = ({
                 className="w-full border border-gray-300 rounded px-3 py-2"
                 required
               />
+              <small className="text-gray-500 block mt-1">
+              Máx. 120 caracteres (letras, números y espacios).
+              </small>
             </div>
 
             {/* Meta título */}
@@ -410,6 +422,9 @@ const AddBlogModal = ({
                 placeholder="Título optimizado para SEO"
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
+              <small className="text-gray-500 block mt-1">
+                Máx. 70 caracteres (letras, números y espacios).
+              </small>
             </div>
 
             {/* Meta descripción */}
@@ -423,6 +438,9 @@ const AddBlogModal = ({
                 placeholder="Descripción optimizada para SEO"
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
+              <small className="text-gray-500 block mt-1">
+              Máx. 160 caracteres (letras, números y espacios).
+              </small>
             </div>
 
             {/* Link */}
@@ -436,6 +454,7 @@ const AddBlogModal = ({
                 placeholder="ejemplo: mi-blog-post"
                 className="w-full border border-gray-300 rounded px-3 py-2"
               />
+                <small className="text-gray-500">Escribe solo minúsculas y guiones. Máx. 255 letras o números.</small>
             </div>
           </div>
         </div>
@@ -456,6 +475,7 @@ const AddBlogModal = ({
                   />
                 )}
                 <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, "imagen_principal")} className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200" />
+                <small className="text-gray-500">Peso máximo: 2 MB.</small>
                 <input
                   type="text"
                   name="text_alt_principal"
@@ -469,6 +489,7 @@ const AddBlogModal = ({
               {/* Imágenes Secundarias */}
               <div className="border border-green-400 rounded p-4">
                 <label className="block font-semibold mb-4">Imágenes Secundarias</label>
+                  <small className="text-gray-500">Imágenes adicionales del artículo. Se creará un registro por archivo en la tabla imagen_blogs.</small>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {formData.imagenes_secundarias.map((_, i) => (
                     <div key={i} className="flex flex-col items-center">
@@ -485,6 +506,7 @@ const AddBlogModal = ({
                         onChange={(e) => handleImagenSecundariaChange(e, i)}
                         className="w-full file:py-2 file:px-3 file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
                       />
+                        <small className="text-gray-500">Archivo de imagen secundaria #{i+1}.<br/>Tamaño máximo: 2 MB.</small>
                       <input
                         type="text"
                         placeholder={`Texto ALT imagen secundaria #${i + 1}`}
@@ -511,6 +533,7 @@ const AddBlogModal = ({
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+              <small className="text-gray-500">Solo minúsculas y guiones. Hasta 255 letras, números o espacios.</small>
           </div>
 
           {/* Párrafos */}
@@ -526,6 +549,7 @@ const AddBlogModal = ({
                   rows={4}
                   placeholder={`Párrafo ${i + 1} (opcional)`}
                 />
+                  <small className="text-gray-500">Máx. 100 caracteres (letras, números y espacios).</small>
                 <div className="absolute top-2 right-2 flex gap-2">
                   <button
                     type="button"
