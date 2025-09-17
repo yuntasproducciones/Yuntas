@@ -359,8 +359,8 @@ const AddBlogModal = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white text-black px-4 sm:px-6 md:px-8 py-6 rounded-lg max-h-[90vh] w-full max-w-5xl mx-2 overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-6 text-center md:text-left">
+      <div className="dark:bg-blue-950 bg-white text-black px-4 sm:px-6 md:px-8 py-6 rounded-lg max-h-[90vh] w-full max-w-5xl mx-2 overflow-y-auto">
+        <h2 className="dark:text-white text-2xl font-bold mb-6 text-center md:text-left">
           {blogToEdit ? "Editar Blog" : "Añadir Blog"}
         </h2>
 
