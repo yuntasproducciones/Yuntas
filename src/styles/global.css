@@ -265,3 +265,7 @@ input, select, textarea {
     transform: translateX(0) !important;
   }
 }
+/* === estilos para popup === */
+.clip-diagonal {
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+}
