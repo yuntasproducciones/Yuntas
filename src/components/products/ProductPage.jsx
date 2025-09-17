@@ -131,10 +131,19 @@ export default function ProductPage(){
                 {/* Banner principal */}
                 <img
                     id="product-img"
-                    src={buildImageUrl(image)}
-                    alt={'Banner de ' + title}
+                    src={
+                        images && images.length > 0 && images[0]?.url_imagen
+                            ? buildImageUrl(images[0].url_imagen)
+                            : buildImageUrl(image)
+                    }
+                    alt={
+                        images && images.length > 0 && images[0]?.texto_alt_SEO
+                            ? images[0].texto_alt_SEO
+                            : 'Banner de ' + title
+                    }
                     className="w-full h-[600px] mx-auto my-auto object-cover"
                 />
+
                 
                 {/* Hero Banner */}
                 <h2 className="font-extrabold text-center text-5xl py-16 px-4 text-blue-950">{title}</h2>

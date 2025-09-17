@@ -244,21 +244,20 @@ const ScrollModal = () => {
 
     return (
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center px-4 modal-overlay">
-        <div 
-            ref={modalRef} 
-            className={`rounded-2xl bg-white flex flex-col sm:flex-row overflow-hidden shadow-lg w-[90%] max-w-[600px] sm:max-w-3xl relative ${isClosing ? "animate-slideOut" : "animate-slideIn"}`}
+        <div
+            ref={modalRef}
+            className={`flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg w-[90vw] sm:w-full max-w-[95vw] sm:max-w-3xl overflow-hidden border-0 outline-none bg-transparent relative ${isClosing ? "animate-slideOut" : "animate-slideIn"}`}
         >
-            {/* Imagen */}
-            <div className="hidden sm:block sm:w-1/2">
+            {/* Imagen solo visible en sm+ */}
+            <div className="hidden sm:block sm:w-1/2 aspect-[4/3] overflow-hidden">
                 <img
                     src={yuleLove.src}
                     alt="Asesoría"
                     className="w-full h-full object-cover"
                 />
             </div>
-
-            {/* Contenido */}
-            <div className="w-full sm:w-1/2 bg-[#293296] text-white relative p-8">
+            {/* Formulario y texto */}
+            <div className="w-full sm:w-1/2 bg-[#293296] p-4 sm:p-8 text-white relative flex flex-col justify-center">
                 <button
                     onClick={closeModal}
                     aria-label="Cerrar modal"
@@ -266,7 +265,7 @@ const ScrollModal = () => {
                 >
                     ✕
                 </button>
-                
+                {/* Título y subtítulo igual que productos */}
                 <div className="text-white mb-6">
                     <p className="text-2xl italic">Gana</p>
                     <p className="text-7xl font-bold ">
@@ -275,10 +274,8 @@ const ScrollModal = () => {
                     </p>
                     <p className="text-2xl">en tu compra</p>
                 </div>
-
-                <form onSubmit={handleSubmit} className="flex flex-col gap-1 mt-4">
-                    {/* Campo Nombre */}
-                    <label className="text-lg font-bold">Nombre</label>
+                <form onSubmit={handleSubmit} className="mt-4">
+                    <label className="block text-lg font-bold">Nombre</label>
                     <input
                         name="nombre"
                         type="text"
@@ -292,9 +289,7 @@ const ScrollModal = () => {
                     {errors.nombre && (
                         <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>
                     )}
-
-                    {/* Campo Teléfono */}
-                    <label className="text-lg font-bold">Teléfono</label>
+                    <label className="block text-lg font-bold">Teléfono</label>
                     <input
                         type="tel"
                         name="telefono"
@@ -309,9 +304,7 @@ const ScrollModal = () => {
                     {errors.telefono && (
                         <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>
                     )}
-
-                    {/* Campo Correo */}
-                    <label className="text-lg font-bold">Correo</label>
+                    <label className="block text-lg font-bold">Correo</label>
                     <input
                         type="email"
                         name="email"
@@ -325,8 +318,7 @@ const ScrollModal = () => {
                     {errors.email && (
                         <p className="text-red-400 text-sm mb-2">{errors.email}</p>
                     )}
-
-                    {/* Mensajes */}
+                    {/* Mensajes de error y éxito */}
                     {errors.general && (
                         <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-3">
                             <p className="text-red-300 text-sm">{errors.general}</p>
@@ -337,7 +329,6 @@ const ScrollModal = () => {
                             <p className="text-green-300 text-sm">{successMessage}</p>
                         </div>
                     )}
-
                     <button
                         type="submit"
                         disabled={isSubmitting}
