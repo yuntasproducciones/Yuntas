@@ -254,101 +254,102 @@ const Emergente = ({ producto }) => {
       ref={dialogRef}
       className="rounded-2xl fixed top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto border-0 outline-none bg-transparent"
     >
-  <div className="flex flex-col-reverse sm:flex-row rounded-2xl shadow-lg w-[90vw] sm:w-full max-w-[95vw] sm:max-w-3xl overflow-hidden border-0 outline-none">
+ <div className="relative bg-white rounded-2xl shadow-lg w-[90vw] max-w-4xl overflow-hidden flex flex-col md:flex-row">
+  {/* Imagen del popup con marco blanco y diagonal */}
+  <div className="relative w-full md:w-1/2 h-64 md:h-auto">
+    <div className="absolute inset-0 border-8 border-white z-10"></div>
+    <div className="absolute top-0 right-0 w-16 h-16 z-20">
+      <div className="absolute top-0 right-0 w-16 h-16 bg-white transform rotate-45 origin-top-right translate-x-8 -translate-y-8"></div>
+    </div>
+    <img
+      src={imagenPopup}
+      alt={`Popup de ${productoTitulo || 'producto'}`}
+      className="w-full h-full object-cover"
+      onError={(e) => {
+        console.error('Error cargando imagen popup:', e.target.src);
+        e.target.src = '';
+      }}
+    />
+  </div>
 
-        {/* Imagen del popup
-          Recomendación a diseño: 
-          - Usar imágenes en relación 4:3 (ej. 1200x900 px).
-          - Formato WEBP optimizado (≤ 200 KB).
-          - Mantener safe area (bordes limpios). 
-        */}
-        <div className="hidden sm:block sm:w-1/2 aspect-[4/3] overflow-hidden">
-          <img
-            src={imagenPopup}
-            alt={`Popup de ${productoTitulo || 'producto'}`}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              console.error('Error cargando imagen popup:', e.target.src);
-              e.target.src = '';
-            }}
-            onLoad={(e) => {
-              console.log('Imagen popup cargada correctamente:', e.target.src);
-            }}
-          />
-        </div>
+  {/* Contenido textual y formulario */}
+  <div className="w-full md:w-1/2 bg-white p-8 flex flex-col justify-center">
+    <button
+      onClick={onClose}
+      aria-label="Cerrar modal"
+      className="absolute top-4 right-4 bg-gray-200 text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-300 transition-colors cursor-pointer z-30"
+    >
+      ✕
+    </button>
 
-        {/* Texto y formulario */}
-        <div className="w-full sm:w-1/2 bg-[#293296] p-4 sm:p-8 text-white relative flex flex-col justify-center">
-          <button
-            onClick={onClose}
-            aria-label="Cerrar modal"
-            className="absolute top-2 right-2 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-200 transition-colors cursor-pointer"
-          >
-            ✕
-          </button>
+    {/* Título principal */}
+    <h2 className="text-3xl font-bold italic text-center mb-2">
+      ¡Un detalle que<br />cambia todo!
+    </h2>
 
-          {renderTitle()}
-
-          <form className="mt-4" onSubmit={handleSubmit}>
-            <label className="block text-lg font-bold">Nombre</label>
-            <input
-              type="text"
-              value={formData.nombre}
-              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-              className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
-                errors.nombre ? 'border-2 border-red-500' : ''
-              }`}
-              placeholder="Ingresa tu nombre"
-            />
-            {errors.nombre && <p className="text-red-400 text-sm mb-2">{errors.nombre}</p>}
-
-            <label className="block text-lg font-bold">Teléfono</label>
-            <input
-              type="tel"
-              value={formData.telefono}
-              onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-              className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
-                errors.telefono ? 'border-2 border-red-500' : ''
-              }`}
-              placeholder="Ej: 987654321"
-              maxLength={9}
-            />
-            {errors.telefono && <p className="text-red-400 text-sm mb-2">{errors.telefono}</p>}
-
-            <label className="block text-lg font-bold">Correo</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className={`w-full px-4 py-2 rounded-full bg-white text-black mb-1 ${
-                errors.email ? 'border-2 border-red-500' : ''
-              }`}
-              placeholder="ejemplo@correo.com"
-            />
-            {errors.email && <p className="text-red-400 text-sm mb-2">{errors.email}</p>}
-
-            {/* Mensajes de error y éxito */}
-            {errors.general && (
-              <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 mb-3">
-                <p className="text-red-300 text-sm">{errors.general}</p>
-              </div>
-            )}
-            {successMessage && (
-              <div className="bg-green-500/20 border border-green-500 rounded-lg p-3 mb-3">
-                <p className="text-green-300 text-sm">{successMessage}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-[#172649] text-white text-2xl border py-3 rounded-lg font-bold hover:bg-[#1a2954] transition-colors mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? "Enviando..." : textoData.button}
-            </button>
-          </form>
-        </div>
+    <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+      <div>
+        <label className="block text-sm font-bold uppercase mb-1">Nombre</label>
+        <input
+          type="text"
+          value={formData.nombre}
+          onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+          className={`w-full px-4 py-3 rounded-md border-2 ${errors.nombre ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          placeholder="Ingresa tu nombre"
+        />
+        {errors.nombre && <p className="text-red-500 text-sm mt-1">{errors.nombre}</p>}
       </div>
+
+      <div>
+        <label className="block text-sm font-bold uppercase mb-1">Teléfono</label>
+        <input
+          type="tel"
+          value={formData.telefono}
+          onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+          className={`w-full px-4 py-3 rounded-md border-2 ${errors.telefono ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          placeholder="Ej: 987654321"
+          maxLength={9}
+        />
+        {errors.telefono && <p className="text-red-500 text-sm mt-1">{errors.telefono}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-bold uppercase mb-1">Correo</label>
+        <input
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          className={`w-full px-4 py-3 rounded-md border-2 ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          placeholder="ejemplo@correo.com"
+        />
+        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+      </div>
+
+      {/* Mensajes de error y éxito */}
+      {errors.general && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <p className="text-sm">{errors.general}</p>
+        </div>
+      )}
+      
+      {successMessage && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+          <p className="text-sm">{successMessage}</p>
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? "Enviando..." : "Empieza a brillar"}
+      </button>
+    </form>
+  </div>
+</div>
+
+
     </dialog>
   );
 };
