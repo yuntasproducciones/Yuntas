@@ -636,12 +636,12 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
       </div>
       {/* BOTONES DE ACCIÓN */}
       <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
-        {/*<button
+        <button
           type="button"
           className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition"
         >
           Cancelar
-        </button>*/}
+        </button>
         <button
           type="submit"
           className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"

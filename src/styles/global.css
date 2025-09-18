@@ -13,12 +13,12 @@
 
 /* sombra de titulos */
 .sombra-title {
-  text-shadow: 4px 4px 3px rgba(0, 0, 0, 1);
+    text-shadow: 4px 4px 3px rgba(0,0,0,1);
 }
 
 /* utilidad de texto blanco con sombra */
 @utility text-shadow-white {
-  text-shadow: 0px 0px 9.6px rgba(255, 255, 255, 1);
+    text-shadow: 0px 0px 9.6px rgba(255, 255, 255, 1);
 }
 
 /* boton adaptable con gradiente */
@@ -33,97 +33,30 @@
   border-radius: 2em;
   text-align: center;
   white-space: pre-line;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   cursor: pointer;
   transition: background 0.2s;
 }
-
 .adaptable-btn:hover {
   background: linear-gradient(90deg, #00cfff 0%, #00eaff 100%);
 }
 
 /* transiciones suaves para dark mode */
 * {
-  transition: background-color 0.4s ease-in-out,
-    color 0.4s ease-in-out,
-    border-color 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out !important;
+  transition: background-color 0.4s ease-in-out, 
+              color 0.4s ease-in-out, 
+              border-color 0.3s ease-in-out,
+              box-shadow 0.3s ease-in-out !important;
 }
 
 :root {
-  --text-color: #1f2937;
-  /* gris oscuro */
+  --text-color: #1f2937; /* gris oscuro */
   --background-color: #ffffff;
 }
 
 html.dark {
   --text-color: #f3f4f6;
   --background-color: #1a1a2c;
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.546 0.245 262.881);
-  --primary-foreground: oklch(0.379 0.146 265.522);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.546 0.245 262.881);
-  --sidebar-primary-foreground: oklch(0.379 0.146 265.522);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
-}
-
-:dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.546 0.245 262.881);
-  --primary-foreground: oklch(0.379 0.146 265.522);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.546 0.245 262.881);
-  --sidebar-primary-foreground: oklch(0.379 0.146 265.522);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
 }
 
 body {
@@ -132,61 +65,49 @@ body {
 }
 
 /* transiciones para headers nav aside main */
-header,
-nav,
-aside,
-main {
-  transition: background-color 0.4s ease-in-out,
-    color 0.4s ease-in-out,
-    background-image 0.4s ease-in-out !important;
+header, nav, aside, main {
+  transition: background-color 0.4s ease-in-out, 
+              color 0.4s ease-in-out,
+              background-image 0.4s ease-in-out !important;
 }
 
 /* transiciones para links y botones */
-a,
-button {
-  transition: background-color 0.3s ease-in-out,
-    color 0.3s ease-in-out,
-    border-color 0.3s ease-in-out,
-    transform 0.2s ease-in-out !important;
+a, button {
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out,
+              transform 0.2s ease-in-out !important;
 }
 
 /* transiciones para inputs */
-input,
-textarea,
-select {
-  transition: background-color 0.3s ease-in-out,
-    color 0.3s ease-in-out,
-    border-color 0.3s ease-in-out !important;
+input, textarea, select {
+  transition: background-color 0.3s ease-in-out, 
+              color 0.3s ease-in-out,
+              border-color 0.3s ease-in-out !important;
 }
 
 /* transiciones para divs */
 div {
-  transition: background-color 0.4s ease-in-out,
-    color 0.4s ease-in-out !important;
+  transition: background-color 0.4s ease-in-out, 
+              color 0.4s ease-in-out !important;
 }
 
 /* excepciones de animaciones */
-.no-dark-transition,
-.no-dark-transition * {
+.no-dark-transition, .no-dark-transition * {
   transition: transform 0.2s ease-in-out !important;
 }
 
 /* transiciones especificas de gradientes */
-.bg-gradient-to-b,
-.bg-gradient-to-r,
-.bg-gradient-to-l,
-.bg-gradient-to-t {
+.bg-gradient-to-b, .bg-gradient-to-r, .bg-gradient-to-l, .bg-gradient-to-t {
   transition: background-image 0.5s ease-in-out !important;
 }
 
 /* === sidebar en desktop === */
 .sidebar {
-  width: 16rem;
-  /* 256px */
+  width: 16rem; /* 256px */
   height: 100vh;
   position: static;
-  transform: translateX(-100%);
-  /* cerrado por defecto */
+  transform: translateX(-100%); /* cerrado por defecto */
 }
 
 /* === sidebar responsive en tablets y moviles hasta 1023px === */
@@ -202,8 +123,7 @@ div {
 
   body.sidebar-open .sidebar,
   body.admin-sidebar-open .sidebar {
-    transform: translateX(0);
-    /* visible al abrir */
+    transform: translateX(0); /* visible al abrir */
   }
 
   /* overlay oscuro cuando sidebar esta abierto */
@@ -212,7 +132,7 @@ div {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.5);
     z-index: 40;
   }
 }
@@ -248,7 +168,7 @@ div {
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
     background: var(--background-color);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     padding: 0.5rem;
   }
 
@@ -270,15 +190,14 @@ div {
     color: var(--text-color);
   }
 
-  .responsive-table td>* {
+  .responsive-table td > * {
     flex: 2;
     text-align: right;
   }
 }
 
 /* === ajustes generales cross device === */
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -290,46 +209,30 @@ body {
 :root {
   --vh: 100vh;
 }
-
 @supports (height: 100dvh) {
   :root {
     --vh: 100dvh;
   }
 }
-
 body {
   min-height: var(--vh);
 }
 
 /* fuentes escalables segun pantalla */
 @media (max-width: 480px) {
-  body {
-    font-size: 14px;
-  }
+  body { font-size: 14px; }
 }
-
 @media (min-width: 481px) and (max-width: 768px) {
-  body {
-    font-size: 15px;
-  }
+  body { font-size: 15px; }
 }
-
 @media (min-width: 769px) and (max-width: 1024px) {
-  body {
-    font-size: 16px;
-  }
+  body { font-size: 16px; }
 }
-
 @media (min-width: 1025px) and (max-width: 1440px) {
-  body {
-    font-size: 16px;
-  }
+  body { font-size: 16px; }
 }
-
 @media (min-width: 1441px) {
-  body {
-    font-size: 18px;
-  }
+  body { font-size: 18px; }
 }
 
 /* safe areas para notch en ios y android */
@@ -341,9 +244,7 @@ body {
 }
 
 /* fix safari ios para zoom en inputs */
-input,
-select,
-textarea {
+input, select, textarea {
   font-size: 16px;
 }
 

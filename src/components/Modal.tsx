@@ -1,5 +1,4 @@
 import { type ReactNode } from "react";
-import { useDarkMode } from "../hooks/darkmode/useDarkMode";
 
 interface Props {
   children: ReactNode;
@@ -9,15 +8,13 @@ interface Props {
 }
 
 const Modal = ({ children, isOpen, onClose, title }: Props) => {
-  const { darkMode, toggleDarkMode } = useDarkMode();
-  
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 overflow-y-auto">
-      <div className={`relative px-5 py-6 rounded-xl max-w-4xl w-full mx-4 my-10 shadow-lg ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+      <div className="relative bg-white dark:bg-gray-900 px-5 py-6 rounded-xl max-w-4xl w-full mx-4 my-10 shadow-lg">
         {/* Título */}
-        {title && <h2 className={`text-2xl font-bold mb-4 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>{title}</h2>}
+        {title && <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">{title}</h2>}
         
         {/* Botón cerrar */}
         <button

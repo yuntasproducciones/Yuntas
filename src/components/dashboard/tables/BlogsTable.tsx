@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import AddBlogModal from "../AddBlogModel";
 import { config, getApiUrl } from "../../../../config";
@@ -6,7 +6,6 @@ import TableContainer from "./TableContainer";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { useDarkMode } from "../../../hooks/darkmode/useDarkMode";
 
 interface Blog {
   id: number;
@@ -42,8 +41,6 @@ const BlogsTable = () => {
     per_page: itemsPerPage,
     total: 0,
   });
-  const { darkMode, toggleDarkMode} = useDarkMode()
-
   const [editBlog, setEditBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -121,7 +118,8 @@ const BlogsTable = () => {
         } else {
           const errorData = await response.json().catch(() => ({}));
           alert(
-            `❌ Error al eliminar el blog: ${errorData.message || "Error desconocido"
+            `❌ Error al eliminar el blog: ${
+              errorData.message || "Error desconocido"
             }`
           );
         }
@@ -158,18 +156,16 @@ const BlogsTable = () => {
         onAddNew={handleAddNewBlog}
       >
         <thead className="hidden md:table-header-group">
-          <tr className="text-white">
+          <tr className="bg-blue-950 text-white">
             {["ID", "PRODUCTO", "SUBTÍTULO", "IMAGEN", "FECHA", "ACCIÓN"].map(
-              (header) => {
-                return (
-                  <th
-                    key={header}
-                    className={`text-white px-4 py-2 uppercase text-xs font-bold rounded-md ${darkMode ? 'bg-cyan-900' : 'bg-cyan-400'}`}
-                  >
-                    {header}
-                  </th>
-                )
-              }
+              (header) => (
+                <th
+                  key={header}
+                  className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+                >
+                  {header}
+                </th>
+              )
             )}
           </tr>
         </thead>
@@ -185,99 +181,112 @@ const BlogsTable = () => {
               </td>
             </tr>
           ) : data.length > 0 ? (
-            data.map((item, idx) => {
-
-              return (
-                <tr
-                  key={item.id}
-                  className={`md:table-row block md:mb-0 mb-6 rounded-xl shadow-md overflow-hidden border ${(idx % 2 === 0 && darkMode) ? "bg-white text-black" : "text-black bg-white"
-                    }`}
+            data.map((item, idx) => (
+              <tr
+                key={item.id}
+                className={`md:table-row block md:mb-0 mb-6 rounded-xl shadow-md overflow-hidden border ${
+                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                }`}
+              >
+                <td
+                  data-label="ID"
+                  className="block md:table-cell px-4 py-2 border-b font-bold before:content-['ID'] before:font-semibold before:block md:before:hidden"
                 >
-                  <td
-                    data-label="ID"
-                    className="block md:table-cell px-4 py-2 border-b font-bold before:content-['ID'] before:font-semibold before:block md:before:hidden"
-                  >
-                    {item.id}
-                  </td>
+                  {item.id}
+                </td>
 
-                  <td
-                    data-label="Producto"
-                    className={`block md:table-cell px-4 py-2 border-b font-semibold before:content-['Producto'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
-                  >
-                    {truncateText(item.nombre_producto || "Sin nombre", 30)}
-                  </td>
+                <td
+                  data-label="Producto"
+                  className="block md:table-cell px-4 py-2 border-b font-semibold before:content-['Producto'] before:font-semibold before:block md:before:hidden"
+                >
+                  {truncateText(item.nombre_producto || "Sin nombre", 30)}
+                </td>
 
-                  <td
-                    data-label="Subtítulo"
-                    className={`block md:table-cell px-4 py-2 border-b before:content-['Subtítulo'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
-                  >
-                    {truncateText(item.subtitulo, 40)}
-                  </td>
+                <td
+                  data-label="Subtítulo"
+                  className="block md:table-cell px-4 py-2 border-b before:content-['Subtítulo'] before:font-semibold before:block md:before:hidden"
+                >
+                  {truncateText(item.subtitulo, 40)}
+                </td>
 
-                  <td
-                    data-label="Imagen"
-                    className={`block md:table-cell px-4 py-2 border-b border-gray-200 relative md:static before:content-['Imagen'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
-                  >
-                    {/* Swiper para movil */}
-                    <div className="block md:hidden w-full">
+              <td
+                  data-label="Imagen"
+                  className="block md:table-cell px-4 py-2 border-b border-gray-200 relative md:static before:content-['Imagen'] before:font-semibold before:block md:before:hidden"
+                >
+                  {/* Swiper para movil */}
+                  <div className="block md:hidden w-full">
+                    <Swiper
+                      modules={[Navigation, Pagination]}
+                      spaceBetween={10}
+                      slidesPerView={1}
+                      pagination={{ clickable: true }}
+                      navigation={true}
+                      className="w-full max-w-[320px] rounded-lg shadow-md"
+                    >
+                      <SwiperSlide>
+                        <img
+                          src={getImageUrl(item.imagen_principal)}
+                          alt={item.nombre_producto || "Blog"}
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                      </SwiperSlide>
+                      {item.imagenes?.map((img, i) => (
+                        <SwiperSlide key={i}>
+                          <img
+                            src={getImageUrl(img.ruta_imagen)}
+                            alt={img.text_alt || "Imagen extra"}
+                            className="w-full h-48 object-cover rounded-lg"
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </div>
+
+                  {/* Swiper para escritorio */}
+                  <div className="hidden md:block w-full">
+                    {(!item.imagenes || item.imagenes.length === 0) ? (
+                      <img
+                        src={getImageUrl(item.imagen_principal)}
+                        alt={item.nombre_producto || "Blog"}
+                        className="w-full max-w-[120px] h-20 object-cover rounded-lg shadow-md"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/placeholder-image.jpg";
+                        }}
+                      />
+                    ) : (
                       <Swiper
-                        modules={[Navigation, Pagination]}
+                        modules={[Pagination, Autoplay]}
                         spaceBetween={10}
                         slidesPerView={1}
+                        loop={item.imagenes.length >= 3} 
+                        rewind={item.imagenes.length === 2} 
+                        autoplay={{
+                          delay: 2000,
+                          disableOnInteraction: false, 
+                        }}
                         pagination={{ clickable: true }}
-                        navigation={true}
-                        className="w-full max-w-[320px] rounded-lg shadow-md"
+                        className="w-full max-w-[120px] h-20 rounded-lg shadow-md"
                       >
+                        {/* Imagen principal */}
                         <SwiperSlide>
                           <img
                             src={getImageUrl(item.imagen_principal)}
                             alt={item.nombre_producto || "Blog"}
-                            className="w-full h-48 object-cover rounded-lg"
+                            className="w-full h-20 object-cover rounded-lg"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "/placeholder-image.jpg";
+                            }}
                           />
                         </SwiperSlide>
-                        {item.imagenes?.map((img, i) => (
+
+                        {/* Otras imágenes */}
+                        {item.imagenes.map((img, i) => (
                           <SwiperSlide key={i}>
                             <img
                               src={getImageUrl(img.ruta_imagen)}
                               alt={img.text_alt || "Imagen extra"}
-                              className="w-full h-48 object-cover rounded-lg"
-                            />
-                          </SwiperSlide>
-                        ))}
-                      </Swiper>
-                    </div>
-
-                    {/* Swiper para escritorio */}
-                    <div className="hidden md:block w-full">
-                      {(!item.imagenes || item.imagenes.length === 0) ? (
-                        <img
-                          src={getImageUrl(item.imagen_principal)}
-                          alt={item.nombre_producto || "Blog"}
-                          className="w-full max-w-[120px] h-20 object-cover rounded-lg shadow-md"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/placeholder-image.jpg";
-                          }}
-                        />
-                      ) : (
-                        <Swiper
-                          modules={[Pagination, Autoplay]}
-                          spaceBetween={10}
-                          slidesPerView={1}
-                          loop={item.imagenes.length >= 3}
-                          rewind={item.imagenes.length === 2}
-                          autoplay={{
-                            delay: 2000,
-                            disableOnInteraction: false,
-                          }}
-                          pagination={{ clickable: true }}
-                          className="w-full max-w-[120px] h-20 rounded-lg shadow-md"
-                        >
-                          {/* Imagen principal */}
-                          <SwiperSlide>
-                            <img
-                              src={getImageUrl(item.imagen_principal)}
-                              alt={item.nombre_producto || "Blog"}
                               className="w-full h-20 object-cover rounded-lg"
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
@@ -285,65 +294,50 @@ const BlogsTable = () => {
                               }}
                             />
                           </SwiperSlide>
+                        ))}
+                      </Swiper>
+                    )}
+                  </div>
 
-                          {/* Otras imágenes */}
-                          {item.imagenes.map((img, i) => (
-                            <SwiperSlide key={i}>
-                              <img
-                                src={getImageUrl(img.ruta_imagen)}
-                                alt={img.text_alt || "Imagen extra"}
-                                className="w-full h-20 object-cover rounded-lg"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = "/placeholder-image.jpg";
-                                }}
-                              />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      )}
-                    </div>
+                </td>
 
-                  </td>
+                <td
+                  data-label="Fecha"
+                  className="block md:table-cell px-4 py-2 border-b text-sm before:content-['Fecha'] before:font-semibold before:block md:before:hidden"
+                >
+                  {item.created_at
+                    ? new Date(item.created_at).toLocaleDateString("es-ES")
+                    : "N/A"}
+                </td>
 
-                  <td
-                    data-label="Fecha"
-                    className={`block md:table-cell px-4 py-2 border-b text-sm before:content-['Fecha'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
-                  >
-                    {item.created_at
-                      ? new Date(item.created_at).toLocaleDateString("es-ES")
-                      : "N/A"}
-                  </td>
-
-                  <td
-                    data-label="Acción"
-                    className={`block md:table-cell px-4 py-3 border-b before:content-['Acción'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
-                  >
-                    <div className="flex flex-col sm:flex-row justify-center gap-3 mt-2 sm:mt-0">
-                      <button
-                        className="flex items-center justify-center gap-2 p-2 text-red-600 hover:text-red-800 transition bg-red-100 rounded-lg shadow-sm"
-                        title="Eliminar"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        <FaTrash size={18} />
-                        <span className="md:hidden font-medium">Borrar</span>
-                      </button>
-                      <button
-                        className="flex items-center justify-center gap-2 p-2 text-yellow-600 hover:text-yellow-800 transition bg-yellow-100 rounded-lg shadow-sm"
-                        title="Editar"
-                        onClick={() => {
-                          setEditBlog(item);
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        <FaEdit size={18} />
-                        <span className="md:hidden font-medium">Editar</span>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })
+                <td
+                  data-label="Acción"
+                  className="block md:table-cell px-4 py-3 border-b before:content-['Acción'] before:font-semibold before:block md:before:hidden"
+                >
+                  <div className="flex flex-col sm:flex-row justify-center gap-3 mt-2 sm:mt-0">
+                    <button
+                      className="flex items-center justify-center gap-2 p-2 text-red-600 hover:text-red-800 transition bg-red-100 rounded-lg shadow-sm"
+                      title="Eliminar"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      <FaTrash size={18} />
+                      <span className="md:hidden font-medium">Borrar</span>
+                    </button>
+                    <button
+                      className="flex items-center justify-center gap-2 p-2 text-yellow-600 hover:text-yellow-800 transition bg-yellow-100 rounded-lg shadow-sm"
+                      title="Editar"
+                      onClick={() => {
+                        setEditBlog(item);
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      <FaEdit size={18} />
+                      <span className="md:hidden font-medium">Editar</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
           ) : (
             <tr>
               <td colSpan={6} className="text-center py-4 text-gray-500">
@@ -371,10 +365,11 @@ const BlogsTable = () => {
               <button
                 key={pageNum}
                 onClick={() => handlePageChange(pageNum)}
-                className={`px-3 py-2 rounded-md ${currentPage === pageNum
+                className={`px-3 py-2 rounded-md ${
+                  currentPage === pageNum
                     ? "bg-blue-950 text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
+                }`}
               >
                 {pageNum}
               </button>
