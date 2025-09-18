@@ -52,21 +52,6 @@ export default function TableContainer({
     if (headerContent) return headerContent;
 
     switch (tableType) {
-      case "seguimiento":
-        return (
-          <div className="flex flex-wrap gap-2 mb-4">
-            <button className="bg-sky-600 text-white px-4 py-2 rounded-xl font-semibold opacity-80 hover:opacity-100 transition-opacity">
-              MENSAJES
-            </button>
-            <button className="bg-sky-600 text-white px-4 py-2 rounded-xl font-semibold opacity-80 hover:opacity-100 transition-opacity">
-              MEDIO DE SEGUIMIENTO
-            </button>
-            <button className="bg-sky-600 text-white px-4 py-2 rounded-xl font-semibold opacity-80 hover:opacity-100 transition-opacity">
-              MONITOREO
-            </button>
-          </div>
-        );
-
       case "blogs":
       case "productos":
       case "usuarios":
