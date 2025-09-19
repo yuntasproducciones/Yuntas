@@ -1,49 +1,68 @@
-// src/utils/imageHelpers.js
-
 // Base URL global de imágenes (producción)
 const DEFAULT_IMAGE_BASE_URL = "https://apiyuntas.yuntaspublicidad.com";
 
 /**
  * Construye una URL completa de imagen.
- * @param {string} path - Ruta de la imagen (relativa o absoluta).
- * @param {string} [baseUrl=DEFAULT_IMAGE_BASE_URL] - Base URL a usar si el path es relativo.
- * @returns {string|null} - URL lista para usar en <img>.
+ * - Si ya es absoluta (http/https), se devuelve tal cual.
+ * - Si es relativa, se une con la baseUrl.
+ * - Si está vacía o null, devuelve null.
  */
 export function buildImageUrl(path, baseUrl = DEFAULT_IMAGE_BASE_URL) {
-  if (!path) return null;
+  if (!path || typeof path !== "string") return null;
   return path.startsWith("http")
     ? path
     : `${baseUrl}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
 /**
- * Genera un título SEO para una imagen.
+ * Genera un ALT SEO para una imagen.
  * Reglas:
- * 1. Usa la propiedad `title` si existe.
+ * 1. Usa `texto_alt` o `texto_alt_SEO` si existen.
+ * 2. Si no, usa `title`.
+ * 3. Si no, genera a partir del nombre del archivo.
+ * 4. Como último recurso, usa el fallback.
+ */
+export function getImageAlt(image, fallback = "Imagen") {
+  if (!image) return fallback;
+
+  if (typeof image === "object") {
+    if (image.texto_alt) return sanitizeText(image.texto_alt);
+    if (image.texto_alt_SEO) return sanitizeText(image.texto_alt_SEO);
+    if (image.title) return sanitizeText(image.title);
+    if (image.ruta_imagen || image.url_imagen) {
+      return capitalize(extractFileName(image.ruta_imagen || image.url_imagen));
+    }
+  }
+
+  if (typeof image === "string") {
+    return capitalize(extractFileName(image));
+  }
+
+  return fallback;
+}
+
+/**
+ * Genera un TITLE SEO para una imagen.
+ * Reglas:
+ * 1. Usa `title` si existe.
  * 2. Si no, usa `texto_alt` o `texto_alt_SEO`.
- * 3. Si no, intenta obtener el nombre del archivo de la ruta.
- * 4. Como último recurso, usa el `fallback`.
- *
- * @param {Object|string} image - Objeto de imagen o string con la ruta.
- * @param {string} [fallback="Imagen"] - Texto de respaldo si no hay datos.
- * @returns {string} - Título para la imagen.
+ * 3. Si no, genera a partir del nombre del archivo.
+ * 4. Como último recurso, usa el fallback.
  */
 export function getImageTitle(image, fallback = "Imagen") {
   if (!image) return fallback;
 
-  // Si image es un objeto con datos
   if (typeof image === "object") {
-    if (image.title) return image.title;
-    if (image.texto_alt) return image.texto_alt;
-    if (image.texto_alt_SEO) return image.texto_alt_SEO;
+    if (image.title) return sanitizeText(image.title);
+    if (image.texto_alt) return sanitizeText(image.texto_alt);
+    if (image.texto_alt_SEO) return sanitizeText(image.texto_alt_SEO);
     if (image.ruta_imagen || image.url_imagen) {
-      return extractFileName(image.ruta_imagen || image.url_imagen);
+      return capitalize(extractFileName(image.ruta_imagen || image.url_imagen));
     }
   }
 
-  // Si es string (ruta directa)
   if (typeof image === "string") {
-    return extractFileName(image);
+    return capitalize(extractFileName(image));
   }
 
   return fallback;
@@ -52,8 +71,6 @@ export function getImageTitle(image, fallback = "Imagen") {
 /**
  * Extrae el nombre del archivo sin extensión desde una ruta o URL.
  * Ej: "/uploads/productos/mueble_moderno.jpg" -> "mueble moderno"
- * @param {string} path
- * @returns {string}
  */
 function extractFileName(path) {
   if (!path) return "Imagen";
@@ -61,4 +78,23 @@ function extractFileName(path) {
   const fileName = parts[parts.length - 1] || "";
   const nameWithoutExt = fileName.split(".")[0];
   return nameWithoutExt.replace(/[_-]/g, " ").trim() || "Imagen";
+}
+
+/**
+ * Capitaliza la primera letra de cada palabra.
+ * Ej: "mueble moderno" -> "Mueble Moderno"
+ */
+function capitalize(text) {
+  return text
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+/**
+ * Sanitiza texto para ALT/TITLE, eliminando etiquetas y normalizando espacios.
+ */
+function sanitizeText(text) {
+  if (typeof text !== "string") return "Imagen";
+  return text.replace(/<\/?[^>]+(>|$)/g, "").trim();
 }

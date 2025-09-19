@@ -1,22 +1,18 @@
+import { buildImageUrl, getImageTitle } from "../../utils/imageHelpers";
+
 const ProductCard = ({ producto }) => {
-  console.log('🎴 ProductCard recibió producto:', producto);
+  console.log("🎴 ProductCard recibió producto:", producto);
 
-  const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
-
-  // 🔍 Usar imagen_principal si está disponible
-  const imagenUrl = producto.imagen_principal
-    ? (producto.imagen_principal.startsWith('http')
-        ? producto.imagen_principal
-        : `${imageBaseUrl}/${producto.imagen_principal}`)
-    : null;
-
+  // 📸 Usar imagen principal (resuelta con helper)
+  const imagenUrl = buildImageUrl(producto.imagen_principal);
   const imagenAlt = producto.alt_imagen_principal || "Imagen del producto";
-  const titulo = producto.title || producto.titulo || "Producto sin título";
+  const titulo =
+    producto.title || producto.titulo || producto.nombre || "Producto sin título";
   const link = producto.link;
 
-  console.log('🖼️ Imagen URL calculada:', imagenUrl);
-  console.log('📝 Título calculado:', titulo);
-  console.log('🔗 Link del producto:', link);
+  console.log("🖼️ Imagen URL calculada:", imagenUrl);
+  console.log("📝 Título calculado:", titulo);
+  console.log("🔗 Link del producto:", link);
 
   return (
     <a
@@ -32,6 +28,8 @@ const ProductCard = ({ producto }) => {
               className="w-full h-full object-cover object-center"
               src={imagenUrl}
               alt={imagenAlt}
+              title={getImageTitle(imagenUrl, titulo)}
+              loading="lazy"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
