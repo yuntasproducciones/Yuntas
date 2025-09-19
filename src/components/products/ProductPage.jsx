@@ -5,7 +5,7 @@ import ProductSection from "./ProductSection.jsx";
 import { motion } from "framer-motion";
 import Emergente from "./Emergente"; 
 import { buildImageUrl, getImageTitle } from "../../utils/imageHelpers";
-
+import { insertProductJsonLd } from "../../utils/schema-markup-generator";
 export default function ProductPage(){
     const [product, setProduct] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -79,6 +79,7 @@ export default function ProductPage(){
                 };
 
                 setProduct(mappedProduct);
+                insertProductJsonLd(mappedProduct);
                 setLoading(false);
             })
             .catch((error) => {

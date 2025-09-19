@@ -44,14 +44,16 @@ export function generateJsonLd(product: any) {
 }
 
 // Función para insertar el JSON-LD en el <head>
-export function insertProductJsonLd(productData: any) {
+export function insertProductJsonLd(mappedProduct: { success: boolean; message: string; data: any }) {
   try {
-    const jsonLd = generateJsonLd(productData);
+    const jsonLd = generateJsonLd(mappedProduct.data);
 
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.text = JSON.stringify(jsonLd, null, 2);
     document.head.appendChild(script);
+
+    console.log('JSON-LD insertado:', script);
   } catch (error) {
     console.error("Error al generar JSON-LD del producto:", error);
   }
