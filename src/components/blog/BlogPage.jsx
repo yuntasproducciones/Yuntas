@@ -70,6 +70,8 @@ export default function BlogPage() {
   }
 
   // Función para armar la URL correcta de la imagen
+  const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com'; //quitar si da errores en url de imgenes
+  
   const buildImageUrl = (path) => {
     if (!path) return null;
     return path.startsWith("http") ? path : imageBaseUrl + path;
@@ -102,12 +104,14 @@ export default function BlogPage() {
           <img
             src={buildImageUrl(article.imagen_principal)}
             alt={article.nombre_producto || "Imagen principal del blog"}
+            title={article.title || article.nombre_producto || "Imagen principal del blog"}
             className="w-full max-h-[100vh] object-cover"
           />
         ) : article.imagenes?.length > 0 ? (
           <img
             src={buildImageUrl(article.imagenes[0].ruta_imagen)}
             alt={article.imagenes[0].texto_alt || "Imagen del blog"}
+            title={article.imagenes[0].title || article.imagenes[0].texto_alt || "Imagen del blog"}
             className="w-full max-h-[100vh] object-cover"
           />
         ) : (
@@ -149,6 +153,7 @@ export default function BlogPage() {
                       <img
                         src={buildImageUrl(image.ruta_imagen)}
                         alt={image.texto_alt || "Imagen del blog"}
+                        title={image.title || image.texto_alt || "Imagen del blog"}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                     </div>
