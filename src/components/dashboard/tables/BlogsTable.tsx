@@ -6,6 +6,7 @@ import TableContainer from "./TableContainer";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useDarkMode } from "../../../hooks/darkmode/useDarkMode";
 
 interface Blog {
   id: number;
@@ -44,6 +45,8 @@ const BlogsTable = () => {
   const [editBlog, setEditBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   const fetchData = async (page = 1) => {
     setLoading(true);
@@ -118,8 +121,7 @@ const BlogsTable = () => {
         } else {
           const errorData = await response.json().catch(() => ({}));
           alert(
-            `❌ Error al eliminar el blog: ${
-              errorData.message || "Error desconocido"
+            `❌ Error al eliminar el blog: ${errorData.message || "Error desconocido"
             }`
           );
         }
@@ -161,7 +163,7 @@ const BlogsTable = () => {
               (header) => (
                 <th
                   key={header}
-                  className="px-4 py-2 bg-cyan-400 text-white uppercase text-xs font-bold rounded-md"
+                  className={`px-4 py-2 text-white uppercase text-xs font-bold rounded-md ${darkMode ? 'bg-cyan-900' : 'bg-cyan-400'}`}
                 >
                   {header}
                 </th>
@@ -184,34 +186,33 @@ const BlogsTable = () => {
             data.map((item, idx) => (
               <tr
                 key={item.id}
-                className={`md:table-row block md:mb-0 mb-6 rounded-xl shadow-md overflow-hidden border ${
-                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
+                className={`md:table-row block md:mb-0 mb-6 rounded-xl shadow-md overflow-hidden border ${(idx % 2 === 0 && darkMode) ? "bg-white text-black" : "text-black bg-white"
+                  }`}
               >
                 <td
                   data-label="ID"
-                  className="block md:table-cell px-4 py-2 border-b font-bold before:content-['ID'] before:font-semibold before:block md:before:hidden"
+                  className={`block md:table-cell px-4 py-2 border-b font-bold before:content-['ID'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
                 >
                   {item.id}
                 </td>
 
                 <td
                   data-label="Producto"
-                  className="block md:table-cell px-4 py-2 border-b font-semibold before:content-['Producto'] before:font-semibold before:block md:before:hidden"
+                  className={`block md:table-cell px-4 py-2 border-b font-semibold before:content-['Producto'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
                 >
                   {truncateText(item.nombre_producto || "Sin nombre", 30)}
                 </td>
 
                 <td
                   data-label="Subtítulo"
-                  className="block md:table-cell px-4 py-2 border-b before:content-['Subtítulo'] before:font-semibold before:block md:before:hidden"
+                  className={`block md:table-cell px-4 py-2 border-b before:content-['Subtítulo'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
                 >
                   {truncateText(item.subtitulo, 40)}
                 </td>
 
-              <td
+                <td
                   data-label="Imagen"
-                  className="block md:table-cell px-4 py-2 border-b border-gray-200 relative md:static before:content-['Imagen'] before:font-semibold before:block md:before:hidden"
+                  className={`block md:table-cell px-4 py-2 border-b border-gray-200 relative md:static before:content-['Imagen'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
                 >
                   {/* Swiper para movil */}
                   <div className="block md:hidden w-full">
@@ -259,11 +260,11 @@ const BlogsTable = () => {
                         modules={[Pagination, Autoplay]}
                         spaceBetween={10}
                         slidesPerView={1}
-                        loop={item.imagenes.length >= 3} 
-                        rewind={item.imagenes.length === 2} 
+                        loop={item.imagenes.length >= 3}
+                        rewind={item.imagenes.length === 2}
                         autoplay={{
                           delay: 2000,
-                          disableOnInteraction: false, 
+                          disableOnInteraction: false,
                         }}
                         pagination={{ clickable: true }}
                         className="w-full max-w-[120px] h-20 rounded-lg shadow-md"
@@ -303,7 +304,7 @@ const BlogsTable = () => {
 
                 <td
                   data-label="Fecha"
-                  className="block md:table-cell px-4 py-2 border-b text-sm before:content-['Fecha'] before:font-semibold before:block md:before:hidden"
+                  className={`block md:table-cell px-4 py-2 border-b text-sm before:content-['Fecha'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
                 >
                   {item.created_at
                     ? new Date(item.created_at).toLocaleDateString("es-ES")
@@ -312,7 +313,7 @@ const BlogsTable = () => {
 
                 <td
                   data-label="Acción"
-                  className="block md:table-cell px-4 py-3 border-b before:content-['Acción'] before:font-semibold before:block md:before:hidden"
+                  className={`block md:table-cell px-4 py-3 border-b before:content-['Acción'] before:font-semibold before:block md:before:hidden ${darkMode ? 'bg-gray-300' : ''}`}
                 >
                   <div className="flex flex-col sm:flex-row justify-center gap-3 mt-2 sm:mt-0">
                     <button
@@ -365,11 +366,10 @@ const BlogsTable = () => {
               <button
                 key={pageNum}
                 onClick={() => handlePageChange(pageNum)}
-                className={`px-3 py-2 rounded-md ${
-                  currentPage === pageNum
+                className={`px-3 py-2 rounded-md ${currentPage === pageNum
                     ? "bg-blue-950 text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
+                  }`}
               >
                 {pageNum}
               </button>
