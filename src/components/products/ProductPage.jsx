@@ -141,6 +141,11 @@ export default function ProductPage(){
                             ? images[0].texto_alt_SEO
                             : 'Banner de ' + title
                     }
+                    title={
+                        images && images.length > 0 && images[0]?.title
+                        ? images[0].title
+                        : title
+                    }
                     className="w-full h-[600px] mx-auto my-auto object-cover"
                 />
 
@@ -163,21 +168,29 @@ export default function ProductPage(){
                             <img
                                 id="product-viewer"
                                 src={
-                                  images && images.length > 1 && images[1]?.url_imagen
+                                    images && images.length > 1 && images[1]?.url_imagen
                                     ? buildImageUrl(images[1].url_imagen)
                                     : buildImageUrl(image)
                                 }
-                                alt={images && images.length > 1 && images[1]?.texto_alt_SEO ? images[1].texto_alt_SEO : 'Especificaciones de ' + title}
+                                alt={
+                                    images && images.length > 1 && images[1]?.texto_alt_SEO
+                                    ? images[1].texto_alt_SEO
+                                    : "Especificaciones de " + title
+                                }
+                                title={
+                                    images && images.length > 1 && images[1]?.title
+                                    ? images[1].title
+                                    : "Especificaciones de " + title
+                                }
                                 className="w-full rounded-2xl object-contain"
                                 onError={(e) => {
-                                    console.error('Error cargando imagen specs:', e.target.src);
-                                    // e.target.style.border = '2px solid red';
-                                    e.target.alt = 'Error cargando imagen: ' + e.target.src;
+                                    console.error("Error cargando imagen specs:", e.target.src);
+                                    e.target.alt = "Error cargando imagen: " + e.target.src;
                                 }}
                                 onLoad={(e) => {
-                                    console.log('Imagen specs cargada correctamente:', e.target.src);
+                                    console.log("Imagen specs cargada correctamente:", e.target.src);
                                 }}
-                            />
+                                />
                         </div>
 
                         {/* Especificaciones */}
@@ -254,12 +267,17 @@ export default function ProductPage(){
                                     <img
                                         src={
                                             images && images.length > 2 && images[2]?.url_imagen
-                                                ? buildImageUrl(images[2].url_imagen)
-                                                : buildImageUrl(image)
+                                            ? buildImageUrl(images[2].url_imagen)
+                                            : buildImageUrl(image)
                                         }
-                                        alt={'Beneficios de ' + title}
+                                        alt={"Beneficios de " + title}
+                                        title={
+                                            images && images.length > 2 && images[2]?.title
+                                            ? images[2].title
+                                            : "Beneficios de " + title
+                                        }
                                         className="w-full h-full object-cover"
-                                    />
+                                        />
                                 </div>
                                 {/* Efecto de glow */}
                                 <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-xl opacity-60 -z-10"></div>
