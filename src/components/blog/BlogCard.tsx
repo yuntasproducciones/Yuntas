@@ -6,6 +6,7 @@ interface Blog {
   nombre_producto: string;
   subtitulo: string;
   imagen_principal: string;
+  text_alt_principal: string;
   link?: string;
   imagenes?: { ruta_imagen: string; texto_alt: string }[];
   parrafos?: { parrafo: string }[];
@@ -39,7 +40,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
         {!imageError && imagenUrl ? (
           <img
             src={imagenUrl}
-            alt={blog.nombre_producto}
+            alt={blog.text_alt_principal || titulo}
             title={getImageTitle(imagenUrl, titulo)}
             className="w-full h-full aspect-square object-cover transition-transform duration-500 group-hover:scale-110"
             onError={handleImageError}
