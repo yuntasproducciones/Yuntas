@@ -7,14 +7,17 @@ import ProductForm from "../../products/ProductForm";
 import type { Product } from "../../../models/Product";
 import { config, getApiUrl } from "../../../../config";
 import TableContainer from "./TableContainer";
-import { useProducts } from "../../../hooks/useProducts"; 
+import { useProducts } from "../../../hooks/useProducts";
+import { useDarkMode } from "../../../hooks/darkmode/useDarkMode";
 export default function DataTable() {
   const { productos, loading, createProduct, updateProduct, error, pagination, refetch } =
-  useProducts(); 
+    useProducts();
   const [isOpen, setIsOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<Product | undefined>(
     undefined
   );
+  const { darkMode, toggleDarkMode } = useDarkMode()
+
   console.log('Productos cargados:', productos); // Depuración básica
   const eliminarProducto = async (id: string | number) => {
     const url = getApiUrl(config.endpoints.productos.delete(id));
@@ -57,7 +60,7 @@ export default function DataTable() {
         if (respuesta.ok) {
           Swal.fire("¡Eliminado!", data.message, "success");
           // Después de eliminar, recargamos la página actual
-          refetch(pagination.current_page); 
+          refetch(pagination.current_page);
         } else {
           let errorMessage = data.message || "Error desconocido al eliminar";
 
@@ -126,7 +129,7 @@ export default function DataTable() {
         });
         setIsOpen(false);
         // Después de guardar/editar, recargamos la página actual
-        refetch(pagination.current_page); 
+        refetch(pagination.current_page);
       } else {
         let errorMessage = result.message || "Error desconocido";
 
@@ -176,97 +179,96 @@ export default function DataTable() {
           Añadir Producto
         </button>
       </div>
-      <TableContainer tableType="productos">
-        <div className="overflow-x-auto">
-          <table className="w-full responsive-table">
-            <thead>
-              <tr className="bg-cyan-400 dark:bg-cyan-600 text-white uppercase text-xs font-bold">
-                <th className="px-4 py-2 rounded-md">ID</th>
-                <th className="px-4 py-2 rounded-md">NOMBRE</th>
-                <th className="px-4 py-2 rounded-md">SECCIÓN</th>
-                <th className="px-4 py-2 rounded-md">PRECIO</th>
-                <th className="px-4 py-2 rounded-md">ACCIÓN</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={5} className="text-center py-12">
-                    <div className="flex justify-center items-center gap-3">
-                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-500"></div>
-                      <span className="text-teal-500 font-medium">
-                        Cargando productos...
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ) : productos.length > 0 ? ( 
-                productos.map((item, index) => {
-                  const isEven = index % 2 === 0;
-                  const bgLight = isEven ? "bg-gray-100" : "bg-gray-200";
-                  const bgDark = isEven ? "dark:bg-gray-800" : "dark:bg-gray-700";
-                  const text = "text-gray-900 dark:text-gray-100";
-                  const key = item.id ?? `producto-${index}`;
 
-                  return (
-                    <tr key={key} className={`${bgLight} ${bgDark}`}>
-                      <td data-label="ID" className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                        {item.id}
-                      </td>
-                      <td data-label="Nombre" className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                        {item.nombre}
-                      </td>
-                      <td data-label="Sección" className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                        {item.seccion}
-                      </td>
-                      <td data-label="Precio" className={`px-4 py-2 font-bold rounded-md ${text}`}>
-                        ${item.precio ? item.precio.toFixed(2) : ""}
-                      </td>
-                      <td data-label="Acción" className={`px-4 py-2 rounded-md ${text}`}>
-                        <div className="flex justify-center gap-4">
-                          <button
-                            onClick={() => handleEdit(item)}
-                            className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
-                            title="Editar"
-                          >
-                            <FaRegEdit size={18} />
-                          </button>
-                          <button
-                            onClick={() => eliminarProducto(item.id)}
-                            className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                            title="Eliminar"
-                          >
-                            <FaTrash size={18} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={5} className="text-center py-16 text-gray-500">
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <div className="bg-teal-50 p-6 rounded-full">
-                        <FaTags className="h-10 w-10 text-teal-300" />
+      <div className="overflow-x-auto p-4">
+        <TableContainer tableType="productos">
+          <thead className="hidden md:table-header-group">
+            <tr>
+              {["ID", "Nombre", "Sección", "Precio", "Acción"].map((header) => (
+                <th
+                  key={header}
+                  className={`px-4 py-2 text-white uppercase text-xs font-bold rounded-md ${darkMode ? 'bg-cyan-900' : 'bg-cyan-400'}`}
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={5} className="text-center py-12">
+                  <div className="flex justify-center items-center gap-3">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-500"></div>
+                    <span className="text-teal-500 font-medium">Cargando productos...</span>
+                  </div>
+                </td>
+              </tr>
+            ) : productos.length > 0 ? (
+              productos.map((item, index) => {
+                const rowBg = (index % 2 === 0 && darkMode) ? "bg-white text-black" : "text-black bg-white";
+                const key = item.id ?? `producto-${index}`;
+
+                return (
+                  <tr
+                    key={key}
+                    className={`text-center md:table-row block md:mb-0 mb-4 rounded-lg shadow-sm ${rowBg}`}
+                  >
+                    <td data-label="ID" className={`px-4 py-2 font-bold border block md:table-cell ${darkMode ? 'bg-gray-300' : 'bg-white'}`}>
+                      {item.id}
+                    </td>
+                    <td data-label="Nombre" className={`px-4 py-2 font-bold border block md:table-cell ${darkMode ? 'bg-gray-300' : 'bg-white'}`}>
+                      {item.nombre}
+                    </td>
+                    <td data-label="Sección" className={`px-4 py-2 font-bold border block md:table-cell ${darkMode ? 'bg-gray-300' : 'bg-white'}`}>
+                      {item.seccion}
+                    </td>
+                    <td data-label="Precio" className={`px-4 py-2 font-bold border block md:table-cell ${darkMode ? 'bg-gray-300' : 'bg-white'}`}>
+                      ${item.precio ? item.precio.toFixed(2) : ""}
+                    </td>
+                    <td data-label="Acción" className={`px-4 py-2 border block md:table-cell ${darkMode ? 'bg-gray-300' : 'bg-white'}`}>
+                      <div className="flex justify-center gap-4">
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="flex items-center justify-center gap-2 p-2 text-yellow-600 hover:text-yellow-800 transition bg-yellow-100 rounded-lg shadow-sm"
+                          title="Editar"
+                        >
+                          <FaRegEdit size={18} />
+                        </button>
+                        <button
+                          onClick={() => eliminarProducto(item.id)}
+                          className="flex items-center justify-center gap-2 p-2 text-red-600 hover:text-red-800 transition bg-red-100 rounded-lg shadow-sm"
+                          title="Eliminar"
+                        >
+                          <FaTrash size={18} />
+                        </button>
                       </div>
-                      <p className="text-xl font-medium text-gray-600 mt-4">
-                        No hay productos registrados
-                      </p>
-                      <p className="text-gray-400 max-w-md mx-auto">
-                        Comienza agregando productos a tu catálogo con el botón 'Añadir Producto'
-                      </p>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={5} className="text-center py-16 text-gray-500">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <div className="bg-teal-50 p-6 rounded-full">
+                      <FaTags className="h-10 w-10 text-teal-300" />
                     </div>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </TableContainer>
+                    <p className="text-xl font-medium text-gray-600 mt-4">No hay productos registrados</p>
+                    <p className="text-gray-400 max-w-md mx-auto">
+                      Comienza agregando productos a tu catálogo con el botón 'Añadir Producto'
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </TableContainer>
+      </div>
 
       {/* Paginación */}
-      {pagination.last_page > 1 && ( 
+      {pagination.last_page > 1 && (
         <div className="flex justify-center items-center mt-4 gap-2">
           <button
             onClick={() => handlePageChange(pagination.current_page - 1)}
@@ -277,18 +279,16 @@ export default function DataTable() {
           </button>
 
           <div className="flex gap-1">
-            {/* Generamos los botones de página usando pagination.last_page */}
             {Array.from({ length: pagination.last_page }, (_, i) => {
               const pageNum = i + 1;
               return (
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
-                  className={`px-3 py-2 rounded-md ${
-                    pagination.current_page === pageNum 
+                  className={`px-3 py-2 rounded-md ${pagination.current_page === pageNum
                       ? "bg-blue-950 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
+                    }`}
                 >
                   {pageNum}
                 </button>
@@ -298,7 +298,7 @@ export default function DataTable() {
 
           <button
             onClick={() => handlePageChange(pagination.current_page + 1)}
-            disabled={pagination.current_page === pagination.last_page} 
+            disabled={pagination.current_page === pagination.last_page}
             className="px-4 py-2 bg-blue-950 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Siguiente
@@ -323,4 +323,5 @@ export default function DataTable() {
       </Modal>
     </>
   );
+
 }
