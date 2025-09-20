@@ -4,6 +4,7 @@ import { FaRegSquareCheck } from "react-icons/fa6";
 import ProductSection from "./ProductSection.jsx";
 import { motion } from "framer-motion";
 import Emergente from "./Emergente"; 
+import { buildImageUrl, getImageTitle } from "../../utils/imageHelpers";
 
 export default function ProductPage(){
     const [product, setProduct] = useState(null)
@@ -48,39 +49,32 @@ export default function ProductPage(){
                 // Inicializar objeto de especificaciones/beneficios
                 let specsObject = {};   
 
-                // Caso: especificaciones viene como objeto (tu backend actual)
                 if (productData.especificaciones && typeof productData.especificaciones === "object" && !Array.isArray(productData.especificaciones)) {
                     specsObject = { ...productData.especificaciones };
-                }
-
-                // Caso: especificaciones viene como array (por si en el futuro cambias backend)
-                else if (Array.isArray(productData.especificaciones)) {
+                } else if (Array.isArray(productData.especificaciones)) {
                     productData.especificaciones.forEach((spec, index) => {
                         specsObject[`spec_${index + 1}`] = spec;
                     });
                 }
 
-                // Beneficios: si el backend devuelve un array extra de beneficios
                 if (productData.beneficios && Array.isArray(productData.beneficios)) {
                     productData.beneficios.forEach((beneficio, index) => {
                         specsObject[`beneficio_${index + 1}`] = beneficio;
                     });
                 }
 
-
-                // Mapear los campos para que coincidan con lo que espera el componente
                 const mappedProduct = {
                     success: data.success,
                     message: data.message,
                     data: {
                         ...productData,
-                        title: productData.titulo || productData.nombre, // titulo o nombre -> title
-                        subtitle: productData.nombre, // nombre -> subtitle
-                        description: productData.descripcion, // descripcion -> description
-                        image: productData.imagen_principal, // imagen_principal -> image
-                        specs: specsObject, // estructura convertida
-                        benefits: productData.beneficios || [], // mantener beneficios originales
-                        images: productData.imagenes || [] // mantener imagenes
+                        title: productData.titulo || productData.nombre,
+                        subtitle: productData.nombre,
+                        description: productData.descripcion,
+                        image: productData.imagen_principal,
+                        specs: specsObject,
+                        benefits: productData.beneficios || [],
+                        images: productData.imagenes || []
                     }
                 };
 
@@ -112,41 +106,30 @@ export default function ProductPage(){
         );
     }
 
-    // Determinar la URL base para las imágenes - usando siempre producción como ProductCard
-    const imageBaseUrl = 'https://apiyuntas.yuntaspublicidad.com';
-
     const { title, subtitle, description, images, specs: allSpecs, benefits, image } = product.data;
-
-    // Función helper para construir URLs de imágenes - ARREGLADA
-    const buildImageUrl = (imagenUrl) => {
-        if (!imagenUrl) return '/placeholder-image.jpg';
-        return imagenUrl.startsWith('http') ? imagenUrl : `${imageBaseUrl}${imagenUrl.startsWith('/') ? '' : '/'}${imagenUrl}`;
-    };
     
     return (
         <div className="w-full">
-            {/* Componente Emergente - se mostrará automáticamente */}
             <Emergente producto={product} />
 
-                {/* Banner principal */}
-                <img
-                    id="product-img"
-                    src={
-                        images && images.length > 0 && images[0]?.url_imagen
-                            ? buildImageUrl(images[0].url_imagen)
-                            : buildImageUrl(image)
-                    }
-                    alt={
-                        images && images.length > 0 && images[0]?.texto_alt_SEO
-                            ? images[0].texto_alt_SEO
-                            : 'Banner de ' + title
-                    }
-                    className="w-full h-[600px] mx-auto my-auto object-cover"
-                />
+            {/* Banner principal */}
+            <img
+                id="product-img"
+                src={
+                    images && images.length > 0 && images[0]?.url_imagen
+                        ? buildImageUrl(images[0].url_imagen)
+                        : buildImageUrl(image)
+                }
+                alt={
+                    images && images.length > 0 && images[0]?.texto_alt_SEO
+                        ? images[0].texto_alt_SEO
+                        : 'Banner de ' + title
+                }
+                title={getImageTitle(images[0] || image, 'Banner de ' + title)}
+                className="w-full h-[600px] mx-auto my-auto object-cover"
+            />
 
-                
-                {/* Hero Banner */}
-                <h2 className="font-extrabold text-center text-5xl py-16 px-4 text-blue-950">{title}</h2>
+            <h2 className="font-extrabold text-center text-5xl py-16 px-4 text-blue-950">{title}</h2>
 
             {/* Sección de Especificaciones */}
             <div className="bg-indigo-950 py-12 lg:py-20">
@@ -158,29 +141,24 @@ export default function ProductPage(){
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true, amount: 0.2 }}
                     >
-                      {/* Imagen para Especificaciones */}
                         <div className="mx-auto w-2/3 md:w-full aspect-[1/1] overflow-hidden flex items-center justify-center border-2">
                             <img
                                 id="product-viewer"
                                 src={
-                                  images && images.length > 1 && images[1]?.url_imagen
+                                    images && images.length > 1 && images[1]?.url_imagen
                                     ? buildImageUrl(images[1].url_imagen)
                                     : buildImageUrl(image)
                                 }
-                                alt={images && images.length > 1 && images[1]?.texto_alt_SEO ? images[1].texto_alt_SEO : 'Especificaciones de ' + title}
+                                alt={
+                                    images && images.length > 1 && images[1]?.texto_alt_SEO
+                                    ? images[1].texto_alt_SEO
+                                    : "Especificaciones de " + title
+                                }
+                                title={getImageTitle(images[1] || image, "Especificaciones de " + title)}
                                 className="w-full rounded-2xl object-contain"
-                                onError={(e) => {
-                                    console.error('Error cargando imagen specs:', e.target.src);
-                                    // e.target.style.border = '2px solid red';
-                                    e.target.alt = 'Error cargando imagen: ' + e.target.src;
-                                }}
-                                onLoad={(e) => {
-                                    console.log('Imagen specs cargada correctamente:', e.target.src);
-                                }}
                             />
                         </div>
 
-                        {/* Especificaciones */}
                         <div className="order-1 lg:order-2 text-white">
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 text-center lg:text-left">
                                 Especificaciones
@@ -226,7 +204,6 @@ export default function ProductPage(){
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true, amount: 0.2 }}
                     >
-                        {/* Beneficios */}
                         <div className="text-white">
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 text-center lg:text-left">
                                 Beneficios:
@@ -247,21 +224,20 @@ export default function ProductPage(){
                             </div>
                         </div>
                         
-                        {/* Imagen de beneficios */}
                         <div className="flex justify-center lg:justify-end">
                             <div className="relative max-w-sm w-full">
                                 <div className="aspect-[3/4] bg-white rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
                                     <img
                                         src={
                                             images && images.length > 2 && images[2]?.url_imagen
-                                                ? buildImageUrl(images[2].url_imagen)
-                                                : buildImageUrl(image)
+                                            ? buildImageUrl(images[2].url_imagen)
+                                            : buildImageUrl(image)
                                         }
-                                        alt={'Beneficios de ' + title}
+                                        alt={"Beneficios de " + title}
+                                        title={getImageTitle(images[2] || image, "Beneficios de " + title)}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
-                                {/* Efecto de glow */}
                                 <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-xl opacity-60 -z-10"></div>
                             </div>
                         </div>
