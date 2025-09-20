@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { blogService } from "../../services/blogService";
 import useBlogSEO from "../../hooks/useBlogSEO";
 import { buildImageUrl, getImageTitle } from "../../utils/imageHelpers";
+import { insertJsonLd } from "../../utils/schema-markup-generator";
 
 export default function BlogPage() {
   const [article, setArticle] = useState(null);
@@ -38,6 +39,7 @@ export default function BlogPage() {
         }
 
         setArticle(response.data);
+        insertJsonLd("blog", response);
         console.log("✅ Blog cargado correctamente:", response.data);
       } catch (err) {
         console.error("❌ Error cargando blog:", err);
