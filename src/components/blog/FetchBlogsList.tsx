@@ -6,6 +6,7 @@ interface Blog {
   nombre_producto: string;
   subtitulo: string;
   imagen_principal: string;
+  text_alt_principal: string;
   link: string;
   imagenes?: { ruta_imagen: string; texto_alt: string }[];
   parrafos?: { parrafo: string }[];
@@ -17,7 +18,7 @@ export default function FetchBlogsList() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalBlogs, setTotalBlogs] = useState(0); 
+  const [totalBlogs, setTotalBlogs] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,7 +29,7 @@ export default function FetchBlogsList() {
       }
     };
 
-    handleResize(); 
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -39,9 +40,9 @@ export default function FetchBlogsList() {
       try {
         const page = currentIndex + 1;
         const timestamp = new Date().getTime();
-      
+
         const apiUrl = `https://apiyuntas.yuntaspublicidad.com/api/blogs?page=${page}&perPage=${itemsPerPage}&_t=${timestamp}`;
-        
+
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -52,19 +53,21 @@ export default function FetchBlogsList() {
 
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(`Error al obtener blogs: ${response.status} - ${errorText}`);
+          throw new Error(
+            `Error al obtener blogs: ${response.status} - ${errorText}`
+          );
         }
 
         const jsonResponse = await response.json();
-        console.log('Blog API Response:', jsonResponse); // Debug
+        console.log("Blog API Response:", jsonResponse); // Debug
 
         if (jsonResponse.success) {
           // ✅ Aquí está el arreglo real de blogs
           const blogData = jsonResponse.data?.data || [];
           const blogsArray = Array.isArray(blogData) ? blogData : [blogData];
 
-          const validBlogs = blogsArray.filter(blog =>
-            blog && (blog.id || blog.title || blog.nombre_producto)
+          const validBlogs = blogsArray.filter(
+            (blog) => blog && (blog.id || blog.title || blog.nombre_producto)
           );
 
           setBlogs(validBlogs);
@@ -80,8 +83,6 @@ export default function FetchBlogsList() {
           setTotalPages(1);
           setTotalBlogs(0);
         }
-
-        
       } catch (err) {
         console.error("❌ Error al obtener blogs:", err);
 
@@ -89,7 +90,9 @@ export default function FetchBlogsList() {
         try {
           const fallbackResponse = await fetch("/api/productos");
           const fallbackData = await fallbackResponse.json();
-          const fallbackBlogs = Array.isArray(fallbackData.data) ? fallbackData.data : [fallbackData.data];
+          const fallbackBlogs = Array.isArray(fallbackData.data)
+            ? fallbackData.data
+            : [fallbackData.data];
           setBlogs(fallbackBlogs);
           setTotalPages(1);
         } catch (fallbackErr) {
@@ -103,14 +106,14 @@ export default function FetchBlogsList() {
     };
 
     fetchBlogs();
-  }, [currentIndex, itemsPerPage]); 
+  }, [currentIndex, itemsPerPage]);
 
   const hasMorePages = () => {
     return blogs.length === itemsPerPage || currentIndex < totalPages - 1;
   };
 
   const canGoLeft = currentIndex > 0;
-  const canGoRight = hasMorePages() && (currentIndex < totalPages - 1);
+  const canGoRight = hasMorePages() && currentIndex < totalPages - 1;
 
   const goLeft = () => {
     if (canGoLeft) setCurrentIndex(currentIndex - 1);
@@ -127,7 +130,9 @@ export default function FetchBlogsList() {
       <div className="min-h-screen grid place-content-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent mb-4"></div>
-          <p className="text-white text-2xl font-bold mb-2">Cargando blogs...</p>
+          <p className="text-white text-2xl font-bold mb-2">
+            Cargando blogs...
+          </p>
         </div>
       </div>
     );
@@ -145,16 +150,22 @@ export default function FetchBlogsList() {
       {/* Cards Container */}
       <div className="max-w-7xl mx-auto px-6 relative">
         <div className="overflow-hidden">
-          <div className="transition-transform duration-500 ease-in-out" style={{ transform: `translateX(0%)` }}>
+          <div
+            className="transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(0%)` }}
+          >
             {currentBlogs.length > 0 ? (
               <>
                 {/* Layout 2x3 para sm y md */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 place-items-center lg:hidden">
                   {currentBlogs.map((blog) => (
-                    <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
+                    <div
+                      key={blog.id}
+                      className="group cursor-pointer transform transition-all duration-300"
+                    >
                       <div className="rounded-2xl p-1">
-                          <div className="w-full max-w-[320px] mx-auto bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden">
-                            <BlogCard blog={blog} />
+                        <div className="w-full max-w-[320px] mx-auto bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden">
+                          <BlogCard blog={blog} />
                         </div>
                       </div>
                     </div>
@@ -165,7 +176,10 @@ export default function FetchBlogsList() {
                 <div className="hidden lg:block space-y-8">
                   <div className="grid grid-cols-3 gap-8 justify-items-center">
                     {currentBlogs.slice(0, 3).map((blog) => (
-                      <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
+                      <div
+                        key={blog.id}
+                        className="group cursor-pointer transform transition-all duration-300"
+                      >
                         <div className="rounded-2xl p-1">
                           <div className="w-full max-w-[320px] mx-auto bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden">
                             <BlogCard blog={blog} />
@@ -179,7 +193,10 @@ export default function FetchBlogsList() {
                     <div className="flex justify-center mt-12">
                       <div className="grid grid-cols-2 gap-24 max-w-2xl">
                         {currentBlogs.slice(3, 5).map((blog) => (
-                          <div key={blog.id} className="group cursor-pointer transform transition-all duration-300">
+                          <div
+                            key={blog.id}
+                            className="group cursor-pointer transform transition-all duration-300"
+                          >
                             <div className="rounded-2xl p-1">
                               <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl overflow-hidden max-w-[250px]">
                                 <BlogCard blog={blog} />
@@ -194,7 +211,9 @@ export default function FetchBlogsList() {
               </>
             ) : (
               <div className="text-center py-12">
-                <p className="text-white/70 text-xl">No hay blogs disponibles</p>
+                <p className="text-white/70 text-xl">
+                  No hay blogs disponibles
+                </p>
               </div>
             )}
           </div>
@@ -219,11 +238,13 @@ export default function FetchBlogsList() {
               </button>
 
               <div className="flex items-center space-x-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-4 rounded-full">
-                <span className="uppercase tracking-wide font-semibold text-lg">ver más</span>
+                <span className="uppercase tracking-wide font-semibold text-lg">
+                  ver más
+                </span>
               </div>
 
               <button
-               aria-label="Página siguiente"
+                aria-label="Página siguiente"
                 title="Página siguiente"
                 onClick={goRight}
                 disabled={!canGoRight}
@@ -246,7 +267,11 @@ export default function FetchBlogsList() {
                     aria-label={`Ir a la página ${i + 1}`}
                     title={`Ir a la página ${i + 1}`}
                     onClick={() => setCurrentIndex(i)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${ i === currentIndex ? "bg-white" : "bg-white/30 hover:bg-white/50" }`}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      i === currentIndex
+                        ? "bg-white"
+                        : "bg-white/30 hover:bg-white/50"
+                    }`}
                   />
                 ))}
               </div>
