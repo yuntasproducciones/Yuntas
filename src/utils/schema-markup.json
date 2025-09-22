@@ -1,0 +1,1286 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Letreros Acrílicos",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756342930_principal_AnyConv.com__letrero-luminoso-metal-calado-letras-acrilicas-corporea-10-mm-luz-led-scaled-1.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753480856_0_letreros-acrilicos-banner.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753480856_1_letreros-acrilicos-especificaciones.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753480856_2_letreros-acrilicos-beneficios.jpg"
+    ],
+    "description": "Una opción moderna y elegante para señalizar o decorar tus espacios. Puedes personalizar tamaños, colores y estilos según lo que necesites. Además, el material es duradero, resistente a impactos y fácil de mantener, por lo que combina estética y practicidad en un solo producto.",
+    "sku": "PROD-2",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=letreros-acrilicos",
+    "category": "Decoración de negocios",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Personalizables en colores, tamaños y formas"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Ideales para espacios interiores y/o exteriores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Elaborado con material acrílico de alta calidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Resistente a múltiples impactos"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Mantenimiento sencillo"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Señalización moderna"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Calidad asegurada"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Durabilidad en el tiempo"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=letreros-acrilicos",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Paneles LED Electrónicos",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756344182_principal_Letreros.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753481965_0_panel-led-electronico-banner.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753481965_1_panel-led-electronico-especificaciones.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753481965_2_panel-led-electronico-beneficios.png"
+    ],
+    "description": "Herramientas de comunicación visual que proyectan contenidos dinámicos como textos, imágenes o videos, con alta visibilidad incluso a distancia o en espacios iluminados. Ideales para mostrar promociones, horarios o atraer miradas, representan una inversión estratégica para destacar y fortalecer la presencia de tu marca.",
+    "sku": "PROD-3",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=paneles-led-electronicos",
+    "category": "Publicidad y Promoción Visual",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Pantalla de alto brillo y visibilidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Variedad de contenido (imágenes, videos, etc)"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Colores monocromáticos o multicolor"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Personalizable en formato y tamaños"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Facilidad en comunicación de publicidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Adaptable en distintos negocios"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Rapidez en cambios de contenido"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Refuerza la imagen de tu marca o negocio"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=paneles-led-electronicos",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Letreros Neón LED",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756346110_principal_1753482403_0_letrero-neon-led-banner.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753482403_0_letrero-neon-led-banner.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753482403_1_letrero-neon-led-especificaciones.jpg",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753482403_2_letrero-neon-led-beneficios.png"
+    ],
+    "description": "Los Letreros Neón LED combinan tecnología moderna con un diseño atractivo y personalizable. Son ideales para dar personalidad a espacios comerciales, destacar frases, logos o crear ambientes visuales únicos. Ofrecen el efecto del neón clásico, pero con menor consumo, mayor seguridad y durabilidad. Fáciles de instalar en interiores, funcionan conectados a corriente eléctrica y se adaptan al estilo de cada marca, transmitiendo una estética creativa, moderna o acogedora según lo que se quiera comunicar.",
+    "sku": "PROD-4",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=letreros-neon-led",
+    "category": "Decoración Comercial",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Iluminación LED de bajo consumo"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Amplia gama de colores personalizables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Material PVC flexible y resistente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Aporta estilo y personalidad al negocio"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ideales para destacar mensajes o productos"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Crea atmósferas visuales únicas"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Bajo consumo eléctrico"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=letreros-neon-led",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Relojes Digitales",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1753547093_principal_relojes-digitales-banner.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753547093_0_relojes-digitales-banner.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753547093_1_relojes-digitales-especificaciones.jpg",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753547093_2_relojes-digitales-beneficios.png"
+    ],
+    "description": "Los relojes digitales son una solución moderna y funcional para controlar el tiempo en espacios públicos o comerciales. Con alta visibilidad gracias a su tecnología LED, ofrecen una lectura clara y precisa, incluso a distancia. Ideales para oficinas, centros médicos, colegios, almacenes o gimnasios, pueden instalarse en interiores o exteriores y personalizarse con funciones como fecha, temperatura o cronómetro. Fáciles de instalar y de diseño robusto, aportan orden, eficiencia y una imagen profesional al entorno.",
+    "sku": "PROD-5",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=relojes-digitales",
+    "category": "Sistemas de Control",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Pantalla LED de alta visibilidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Amplia gama de colores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Funciones adicionales"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Fácil instalación"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Control del tiempo a simple vista"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Mejora la organización del ambiente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Aporta acabados estéticos al espacio"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ideal para ambientes amplios"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=relojes-digitales",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Pisos LED",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756322905_principal_imagen_2025-03-31.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756322905_0_IMAGEN-17.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756322905_1_imagen_2025-03-31-_1_.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756322905_2_IMAGEN-27.webp"
+    ],
+    "description": "¿Qué pasaría si el piso de tu local también hablara por tu marca? Los Pisos LED convierten cualquier superficie en una experiencia visual sorprendente. Fabricados con materiales resistentes como vidrio templado o acrílico, soportan alto tránsito sin perder impacto. Puedes programar colores, patrones y animaciones para crear ambientes dinámicos, modernos e interactivos. Son perfectos para centros comerciales, discotecas, showrooms o eventos que buscan impresionar y generar contenido instagrameable. Perfectos para centros comerciales, discotecas, showrooms o eventos corporativos, estos pisos captan la atención, generan contenido instagrameable y refuerzan la identidad del espacio desde el suelo.",
+    "sku": "PROD-7",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=pisos-led",
+    "category": "Decoración comercial",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Colores múltiples programables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Tecnología de iluminación LED RGB"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Cuenta con patrones de animaciones"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Uso en interiores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Vidrio templado o acrílico de alta resistencia"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Animaciones y patrones personalizables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Impacto visual desde el primer paso"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Adaptables a campañas o temporadas"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Refuerzo de branding desde el piso"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Espacios modernos y memorables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Interactividad y dinamismo"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Fáciles de programar y mantener"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Alta resistencia y durabilidad"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=pisos-led",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Pantallas LED",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756323783_principal_imagen_2025-03-29_105417077.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756323783_0_imagen_2025-03-29_105158132.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756323783_1_imagen_2025-03-29_111003727.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756323783_2_imagen_2025-03-29_105955993.webp"
+    ],
+    "description": "Nuestras Pantallas LED son la forma más moderna y dinámica de mostrar tu mensaje en tiempo real. Con su alta resolución y diseño modular, puedes proyectar imágenes, videos, promociones o cualquier información personalizada con total claridad, de día o de noche. Son perfectas para vitrinas, espacios comerciales, ferias o fachadas, porque no solo llaman la atención: también convierten cada pantalla en una experiencia que conecta directamente con tus clientes.",
+    "sku": "PROD-8",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=pantallas-led",
+    "category": "Decoración comercial",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Material de paneles modulares LED"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Alta luminosidad con brillo ajustable"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Diseño personalizable por software"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Pantalla full color"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Uso en interiores y exteriores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Alta visibilidad en cualquier ambiente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Diseño moderno que actualiza espacios"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Control remoto para cambiar contenido"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ahorro en impresión tradicional"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Versatilidad de formatos y tamaños"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Comunicación dinámica e inmediata"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ideal para promociones y campañas"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=pantallas-led",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Techos LED",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756317847_principal_IMAGEN-03.jpeg",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753548599_0_techos-led-banner.jpg",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753548599_1_techos-led-especificaciones.png",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1753548599_2_techos-led-beneficios.png"
+    ],
+    "description": "Nuestros Techos LED no solo iluminan, ¡transforman por completo tu espacio! Con su tecnología RGB de bajo consumo puedes jugar con colores, formas e incluso animaciones que se adaptan al estilo de tu negocio. Están hechos con paneles ligeros y resistentes, fáciles de instalar y perfectos para darle un toque único a restaurantes, tiendas, clínicas o espacios corporativos.",
+    "sku": "PROD-9",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=techos-led",
+    "category": "Decoración comercial",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Paneles LED con difusores acrílicos"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "LED RGB de bajo consumo"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Colores personalizables y programables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Diseños con efectos y visuales personalizables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Uso en interiores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Refuerzo visual del branding"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ambientes envolventes y únicos"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Fácil instalación y mantenimiento"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ideal para puntos de venta y experiencia"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Innovación estética que sorprende"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Eficiencia energética"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Programación sencilla"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=techos-led",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Barras Pixel LED",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756324517_principal_imagen_2025-03-29_120911316.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756324517_0_imagen_2025-03-31-_2_.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756324517_1_imagen_2025-03-31_092038385.jpg",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756324517_2_imagen_2025-03-29_120310451.png"
+    ],
+    "description": "Las Barras Pixel LED llevan la iluminación a otro nivel con efectos de color y movimiento totalmente personalizables. Son perfectas para escenarios, discotecas, karaokes o salas de juego, ya que convierten cualquier espacio en una experiencia visual única. Con sus luces direccionables puedes crear animaciones, secuencias y ambientaciones que se sincronizan con la música en tiempo real, logrando un ambiente dinámico, temático y lleno de energía.",
+    "sku": "PROD-11",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=barras-pixel-led",
+    "category": "Decoración comercial",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Uso en interiores y exteriores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Material PVC flexible y resistente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Iluminación: Luz LED de bajo consumo"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Amplia gama personalizable"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Diseño personalizable"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Personalización total"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Atractivo visual garantizado"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Versatilidad de uso"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Control inteligente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Alta durabilidad"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=barras-pixel-led",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Letras Pintadas en MDF",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756368913_principal_Imagen_Portada_LetrasMDF.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756368913_0_Imagen_Principal_LetrasMDF.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756368913_1_Imagen_Especificaciones_LetrasMDF.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756368913_2_Imagen_Beneficios_LetrasMDF.webp"
+    ],
+    "description": "En Yuntas, creamos letras decorativas en MDF pintadas a medida, ideales para darle identidad visual a tu marca, negocio o evento. Fabricadas con materiales resistentes y acabados profesionales, nuestras letras en MDF son personalizables en color, tamaño y estilo, adaptándose perfectamente a cualquier ambiente.",
+    "sku": "PROD-14",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=letras-pintadas-en-mdf",
+    "category": "Decoración / Eventos",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Acabados mate brillante y/o brillante"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Materiales que duran en el tiempo"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Elaborados con pintura acrílica"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Producto liviano resistente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Instalación sin complicaciones"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Adaptación a cualquier ambiente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Reutilizables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Alta personalización para eventos, marcas o espacios comerciales"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ideales para decoración temática, señalética o branding"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Livianas, resistentes y de acabado profesional"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Fácil instalación y reutilizables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Se adaptan a cualquier tipo de ambiente"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=letras-pintadas-en-mdf",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Impresión en vinilo",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756369429_principal_Imagen_Portada_Impresión Vinilo.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756369429_0_Imagen_Principal_Impresión Vinilo.webp"
+    ],
+    "description": "Material vinílico adhesivo de alta calidad para aplicar mensajes, diseños o logotipos en diversas superficies. Impresión nítida, colores vibrantes y acabados detallados. Adhesivo removible que permite fácil aplicación y remoción sin residuos.",
+    "sku": "PROD-15",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/productos/?link=impresion-en-vinilo",
+    "category": "Publicidad y Promoción Visual",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Material adhesivo de calidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Colores CMYK de alta fidelidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Uso en interiores como exteriores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Impresión nítida"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Adhesivo removible"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Aplicación fácil"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "No deja rastro de residuos"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/productos/?link=impresion-en-vinilo",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Menú Board",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756311107_principal_menu-closeup-1.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756311107_0_b2c4a1bc282b254b9594ada91b87ace0 (1).jpg",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756311107_1_JDS_Durks-Cafe-and-Eatery-Southbound-Ampol_Menu-Board (2) (1).jpg",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756311107_2_b2c4a1bc282b254b9594ada91b87ace0 (1).jpg"
+    ],
+    "description": "Nuestros menú boards están diseñados para destacar tus platos con imágenes en alta definición y colores intensos. Son resistentes a la humedad, el calor y los cambios de temperatura, lo que los convierte en la opción ideal para restaurantes que buscan calidad, durabilidad y una presentación impecable.",
+    "sku": "PROD-16",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/productos/?link=menu-board",
+    "category": "Publicidad y Promoción Visual",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Apto para interior y exterior"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Material duradero y resistente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Tamaños en A2, A1 o personalizados"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Acabados mate, brillante o con iluminación LED"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Montaje en pared, colgante o sobremesa"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Colores de amplia gama"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Bajo consumo energético"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Alta resistencia"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Personalizable"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Diseño impactante"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Variedad de contenidos"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/productos/?link=menu-board",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Neón LED",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756319962_principal_productos-neon-led-empresas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756319962_0_neon-led-iluminacion-comercial.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756319962_1_especificaciones-productos-neon-led (2).webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756319962_2_beneficios-productos-neon-led.webp"
+    ],
+    "description": "Fabricamos letreros, frases, logotipos y figuras con tecnología de Neón LED que combinan impacto visual con eficiencia y durabilidad. Son piezas personalizables en forma, color y tamaño, ideales para destacar tu marca, atraer miradas y dar vida a tus espacios. Una solución moderna, brillante y confiable para empresas que buscan diferenciarse.",
+    "sku": "PROD-17",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/productos/?link=neon-led",
+    "category": "Decoración comercial / Iluminación",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Vida útil de +50 000 horas"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Amplia gama de colores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Materiales de alta calidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Personalización en colores y tamaños"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Bajo consumo energético"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Alta durabilidad energética"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/productos/?link=neon-led",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Letreros Luminosos",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756313382_principal_letreros-luminosos-personalizados-empresas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756313382_0_letreros-luminosos-empresas-calidad-durabilidad.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756313382_1_especificaciones-letreros-luminosos.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756313382_2_beneficios-letreros-luminosos-empresas.webp"
+    ],
+    "description": "Lleva tu marca al siguiente nivel con nuestros letreros iluminados personalizables. Textos, logotipos o imágenes se transforman en piezas que captan atención, con total flexibilidad en tamaño, forma y tipo de iluminación para cualquier espacio comercial.",
+    "sku": "PROD-18",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=letreros-luminosos",
+    "category": "Decoración comercial / Iluminación",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Estructuras en acrílico, metal o PVC"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Diferentes tamaños y acabados"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Uso en interiores y exteriores"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Contamos colores personalizables"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Mayor visibilidad de tu negocio las 24 horas"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Bajo consumo energético con tecnología"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Personalizable en diseño, colores y tipografía"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ideal para restaurantes, tiendas, bares, etc"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=letreros-luminosos",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Hologramas 3D",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756315584_principal_proyectores-holograficos-3d-empresas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756315584_0_proyector-holografico-ventilador-holografico.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756315584_1_especificaciones-proyectores-holograficos.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756315584_2_beneficios-proyectores-holograficos-empresas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1757702660_imagen_popups_1756315584_principal_proyectores-holograficos-3d-empresas.webp"
+    ],
+    "description": "Proyectores holográficos de última generación que crean imágenes tridimensionales usando luz a través de una placa fotográfica. Permiten mostrar contenidos visibles desde múltiples ángulos, generando experiencias inmersivas y llamativas. Ideales para empresas que buscan impactar a su público, reforzar su marca y destacar en ferias, eventos o espacios comerciales.",
+    "sku": "PROD-19",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=Hologramas-3D",
+    "category": "Sistemas de Control / Eventos",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Compatible con imágenes y videos"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Proyección de imágenes 3D"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Bajo consumo de energético"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Instalación sencilla"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Proyección de imágenes en alta calidad"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Tecnología de última generación"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Adaptable en multientornos"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Mejora tu negocio y marca"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=Hologramas-3D",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Letras Doradas y Plateadas",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756349240_principal_Imagen_Portada_Letras Doradas y Plateadas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756349240_0_Imagen_Principal_Letras Doradas y plateadas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756349240_1_Imagen_Especificaciones_Letras Doradas y Plateadas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756349240_2_Imagen_Befeficio_Letras Doradas y Plateadas.webp"
+    ],
+    "description": "Solución ideal para decoración y señalización con alta personalización. Permite elegir formas, tamaños y colores. Acabados premium que logran una apariencia impecable y elegante.",
+    "sku": "PROD-20",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=letras%20doradas%20y%20plateadas",
+    "category": "Decoración comercial",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Brillante, espejo o mate en tonos dorado y plateado"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Personalizado en tipografía, logotipo o formas especiales."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Resistencia a la intemperie, rayones y desgaste del color."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Fijación en pared, autoadhesivas o con bases metálicas."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Proyectan una imagen premium para tu marca o negocio."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Los acabados metálicos reflejan la luz y atraen miradas."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Materiales resistentes al tiempo y a las condiciones ambientales."
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=letras%20doradas%20y%20plateadas",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Monitores de Publicidad Digital",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756368455_principal_Imagen_Portada_Monitores.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756368455_0_Imagen_Principal_Monitores.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756368455_1_Imagen_Especificaciones_Monitores.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756368455_2_Imagen_Beneficio_Monitores.webp"
+    ],
+    "description": "Fabricadas con materiales resistentes y acabados modernos, estas barras son perfectas para negocios como bares, discotecas, centros comerciales, showrooms o eventos corporativos, conciertos y lanzamientos de marca. Su diseño modular y su facilidad de instalación hacen que puedan adaptarse a diferentes configuraciones y estilos.",
+    "sku": "PROD-26",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=monitores-digitales",
+    "category": "Publicidad y Promoción Visual",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Conectividad: HDMI, USB, WiFi, LAN."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Compatibilidad: Software de gestión de contenidos en la nube"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Opciones en pared, pedestal o totem digital."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Diseñados para funcionar de manera continua sin perder calidad."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Integra animaciones, promociones y contenido multimedia."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Úsalos en tiendas, restaurantes, oficinas, ferias, clínicas y más."
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=monitores-digitales",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Mesas y sillas LED",
+    "image": [
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/1756317317_principal_mesas-sillas-led-empresas.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756317317_0_mesas-y-sillas-led-iluminado-eventos.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756317317_1_especificaciones-mesas-sillas-led.webp",
+      "https://apiyuntas.yuntaspublicidad.com/storage/productos/adicionales/1756317317_2_beneficios-mesas-sillas-led-empresas.webp"
+    ],
+    "description": "Nuestro mobiliario LED combina diseño innovador e iluminación multicolor, con opción de personalizar en acabado translúcido con tu logo. Fabricado en acrílico o policarbonato, garantiza resistencia y durabilidad con un estilo moderno. Las mesas iluminan de forma uniforme y las sillas, cómodas y ergonómicas, aportan un toque vanguardista. Ideales para transformar cualquier evento en una experiencia visual única y memorable.",
+    "sku": "PROD-27",
+    "brand": {
+      "@type": "Organization",
+      "name": "Yuntas Publicidad",
+      "logo": "https://yuntaspublicidad.com/images/yuntas_publicidad_logo_tablet.webp",
+      "url": "https://yuntaspublicidad.com"
+    },
+    "url": "https://yuntaspublicidad.com/products/producto/?link=Mesas-y-sillas-LED-(Sillas Luminosas)",
+    "category": "SillasLED",
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Uso: Interiores y Exteriores."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Material: PVC flexible y resistente."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Iluminación: Luz LED de bajo consumo."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Colores: Amplia gama personalizable."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Especificación",
+        "value": "Diseño: Personalizable."
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Atraen miradas y generan impacto visual"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Modernizan el ambiente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Personalización de marca"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Versatilidad en eventos"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ambiente envolvente"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Ahorro energético"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Beneficio",
+        "value": "Alta durabilidad"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": "https://yuntaspublicidad.com/products/producto/?link=Mesas-y-sillas-LED-(Sillas Luminosas)",
+      "priceCurrency": "PEN",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  }
+]
