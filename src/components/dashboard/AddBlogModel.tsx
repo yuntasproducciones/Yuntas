@@ -222,7 +222,7 @@ const AddBlogModal = ({
   const handleInsertManualLink = () => {
     if (selectedParagraphIndex === null || selectedTextRange === null || !linkUrl.trim()) return;
     const currentText = formData.parrafos[selectedParagraphIndex];
-    const linkedText = `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer">${selectedText}</a>`;
+    const linkedText = `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer" title="${selectedText}">${selectedText}</a>`;
     const newText = currentText.slice(0, selectedTextRange.start) + linkedText + currentText.slice(selectedTextRange.end);
     const updatedParrafos = [...formData.parrafos];
     updatedParrafos[selectedParagraphIndex] = newText;
@@ -254,7 +254,7 @@ const AddBlogModal = ({
     if (selectedParagraphIndex === null || selectedTextRange === null) return;
     const currentText = formData.parrafos[selectedParagraphIndex];
     const link = producto.link;
-    const linkedText = `<a href="/products/producto/?link=${link}" style="color: blue; text-decoration: underline;">${selectedText}</a>`;
+    const linkedText = `<a href="/products/producto/?link=${link}" style="color: blue; text-decoration: underline;" title="${link}">${selectedText}</a>`;
     const newText = currentText.slice(0, selectedTextRange.start) + linkedText + currentText.slice(selectedTextRange.end);
     const updatedParrafos = [...formData.parrafos];
     updatedParrafos[selectedParagraphIndex] = newText;
