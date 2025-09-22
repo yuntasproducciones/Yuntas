@@ -18,6 +18,7 @@ const ProductCard = ({ producto }) => {
     <a
       href={`/products/producto/?link=${link}`}
       className="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group mb-8"
+      title={titulo}
     >
       {/* Contenedor principal con dimensiones fijas */}
       <div className="relative w-[280px] bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700">

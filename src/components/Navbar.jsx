@@ -6,11 +6,11 @@ import MobileMenuUnified from "./MobileMenuUnified"; // reemplazo
 import ToggleNavbar from "./ui/ToggleNavbar";
 
 const rutas = [
-  { link: "/", texto: "INICIO" },
-  { link: "/products", texto: "PRODUCTOS" },
-  { link: "/about", texto: "NOSOTROS" },
-  { link: "/blogs", texto: "BLOG" },
-  { link: "/contact", texto: "CONTACTO" },
+  { link: "/", texto: "INICIO" , title:"Página de Inicio - Yuntas Publicidad"},
+  { link: "/products", texto: "PRODUCTOS" , title:"Productos - Yuntas Publicidad"},
+  { link: "/about", texto: "NOSOTROS" , title:"Nosotros - Yuntas Publicidad"},
+  { link: "/blogs", texto: "BLOG" , title:"Blog - Yuntas Publicidad"},
+  { link: "/contact", texto: "CONTACTO" , title:"Contacto - Yuntas Publicidad"},
 ];
 
 const Navbarjsx = ({ variant = "default", pathname }) => {
@@ -49,6 +49,7 @@ const Navbarjsx = ({ variant = "default", pathname }) => {
           srcSet={'/images/yuntas_publicidad_logo_mobile.webp 60w, /images/yuntas_publicidad_logo_tablet.webp 125w'}
           sizes="(max-width: 640px) 60px, 125px"
           alt="Logo Yuntas"
+          title="Logo Yuntas Publicidad"
           loading="eager"
           className="h-14 w-auto cursor-pointer"
           fetchPriority="high"
@@ -56,10 +57,11 @@ const Navbarjsx = ({ variant = "default", pathname }) => {
 
         {/* Links - solo en desktop */}
         <div className="hidden lg:flex justify-between gap-x-6">
-          {rutas.map(({ link, texto }) => (
+          {rutas.map(({ link, texto, title }) => (
             <a
               key={link}
               href={link}
+              title={title}
               className={`relative px-6 py-2 ${pathname === link ? "border-effect" : ""}`}
             >
               <span className="relative">{texto}</span>
@@ -68,7 +70,7 @@ const Navbarjsx = ({ variant = "default", pathname }) => {
         </div>
 
         {/* Icono login/admin */}
-        <a href="/login" className="ml-4">
+        <a href="/login" className="ml-4" title="Iniciar Sesión - Yuntas Publicidad">
           <IoPerson className="text-3xl" aria-label="Login" />
         </a>
       </nav>

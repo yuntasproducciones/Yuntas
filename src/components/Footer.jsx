@@ -25,12 +25,14 @@ const Footerjsx = ({ variant = "default" }) => {
           <img
             src={yuntasLogo.src}
             alt="Yuntas Logo"
+            title="Logo Yuntas Publicidad"
             className={`mx-auto ${isAdmin ? "h-16" : "h-24"}`}
           />
           <div className="border-t-1 border-l-2 border-cyan-400 max-w-54 w-full my-2"></div>
           <div className="flex justify-center gap-3 mt-4">
             <a
               href="https://www.facebook.com/yuntaspublicidad"
+              title="Facebook de Yuntas Publicidad"
               target="_blank"
               aria-label="Facebook"
             >
@@ -39,6 +41,7 @@ const Footerjsx = ({ variant = "default" }) => {
             <a
               href="https://www.instagram.com/yuntasdecoracioncomercial/"
               target="_blank"
+              title="Instagram de Yuntas Publicidad"
               aria-label="Instagram"
             >
               <FaInstagram className="text-white text-2xl hover:text-pink-500" />
@@ -47,6 +50,7 @@ const Footerjsx = ({ variant = "default" }) => {
               href="https://www.youtube.com/@yuntaspublicidad5082/"
               target="_blank"
               aria-label="YouTube"
+              title="YouTube de Yuntas Publicidad"
             >
               <FaYoutube className="text-white text-2xl hover:text-red-500" />
             </a>
@@ -54,6 +58,7 @@ const Footerjsx = ({ variant = "default" }) => {
               href="https://wa.me/912849782"
               target="_blank"
               aria-label="WhatsApp"
+              title="WhatsApp de Yuntas Publicidad"
             >
               <FaWhatsapp className="text-white text-2xl hover:text-green-500" />
             </a>
@@ -61,6 +66,7 @@ const Footerjsx = ({ variant = "default" }) => {
               href="https://www.tiktok.com/@yuntasproduccione"
               target="_blank"
               aria-label="TikTok"
+              title="TikTok de Yuntas Publicidad"
             >
               <FaTiktok className="text-white text-2xl hover:text-purple-500" />
             </a>
@@ -74,7 +80,7 @@ const Footerjsx = ({ variant = "default" }) => {
           <h3 className="font-semibold text-[#98D8DF] mt-4">Horario</h3>
           <p className="text-gray-300">L - V: 9 a.m - 5 p.m</p>
           <p className="text-gray-300">S: 9 a.m - 2 p.m</p>
-          <a href="/libro_reclamaciones" className="text-sm font-bold mt-2 block">
+          <a href="/libro_reclamaciones" className="text-sm font-bold mt-2 block" title="Libro de Reclamaciones - Yuntas Publicidad">
             Libro de reclamaciones
           </a>
         </div>
@@ -90,6 +96,7 @@ const Footerjsx = ({ variant = "default" }) => {
             <a
               href="mailto:yuntaspublicidad@gmail.com"
               className="hover:text-blue-400"
+              title="Correo de Contacto Yuntas Publicidad"
             >
               yuntaspublicidad@gmail.com
             </a>
