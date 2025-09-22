@@ -70,6 +70,7 @@ export default function BlogPage() {
           </p>
           <a
             href="/blogs"
+            title="Volver al Blog"
             className="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             Volver al blog
