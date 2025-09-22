@@ -25,6 +25,7 @@ const Footerjsx = ({ variant = "default" }) => {
           <img
             src={yuntasLogo.src}
             alt="Yuntas Logo"
+            title="Logo Yuntas Publicidad"
             className={`mx-auto ${isAdmin ? "h-16" : "h-24"}`}
           />
           <div className="border-t-1 border-l-2 border-cyan-400 max-w-54 w-full my-2"></div>

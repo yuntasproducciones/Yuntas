@@ -49,6 +49,7 @@ const Navbarjsx = ({ variant = "default", pathname }) => {
           srcSet={'/images/yuntas_publicidad_logo_mobile.webp 60w, /images/yuntas_publicidad_logo_tablet.webp 125w'}
           sizes="(max-width: 640px) 60px, 125px"
           alt="Logo Yuntas"
+          title="Logo Yuntas Publicidad"
           loading="eager"
           className="h-14 w-auto cursor-pointer"
           fetchPriority="high"
