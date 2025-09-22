@@ -13,9 +13,10 @@ export default defineConfig({
       filter: (page) => 
         !page.includes('/admin/') && 
         !page.includes('/login/') &&
-        !page.includes('/blogs/') &&
-        !page.includes('/products/producto/')
-    })
+        !page.includes('/products/producto/') &&
+        !page.includes('/blogs/blog/') &&
+        !page.includes('/dashboard/blogs/')
+    }),
   ],
 
   build: {

@@ -1,4 +1,11 @@
 User-agent: *
+
+Allow: /products/
+Allow: /blogs/
+Allow: /about
+Allow: /contact/
+Allow: /
+
 Disallow: /admin/
 Disallow: /login
 
