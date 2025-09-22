@@ -12,14 +12,17 @@ import { Image } from "astro:assets";
 const slidersData = [
   {
     src: imagen1,
+    title: "Túnel iluminado con luces LED",
     alt: "Túnel iluminado con luces LED, diseño moderno de iluminación en espacios urbanos, tecnología visual para entornos impactantes y personalizados.",
   },
   {
     src: imagen2,
+    title: "Instalación arquitectónica curva",
     alt: "Instalación arquitectónica curva, iluminación LED roja, estructura exterior futurista, ideal para eventos nocturnos y espacios públicos envolventes.",
   },
   {
     src: imagen3,
+    title: "Instalaciones de paneles electrónicos",
     alt: "Instalaciones de paneles electrónicos y sistemas visuales para negocios",
   },
 ];
@@ -35,6 +38,7 @@ const slidersData = [
               <Image
                 src={slide.src}
                 alt={slide.alt}
+                title={slide.title}
                 widths={[320, 540, 600, slide.src.width]}
                 sizes="(max-width: 420px) 320px, (max-width: 720px) 540px, (max-width: 1024px) 600px, 100vw"
                 quality={60}

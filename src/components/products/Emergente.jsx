@@ -276,6 +276,7 @@ const Emergente = ({ producto }) => {
     <img
       src={imagenPopup}
       alt={`Popup de ${productoTitulo || 'producto'}`}
+      title={`Popup de ${productoTitulo || 'producto'}`}
       className="w-full h-full object-cover rounded-3xl"
       onError={(e) => {
         console.error('Error cargando imagen popup:', e.target.src);

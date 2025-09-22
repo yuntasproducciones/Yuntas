@@ -169,6 +169,7 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
           href="https://www.facebook.com/yuntaspublicidad"
           target="_blank"
           aria-label="Facebook"
+          title="Facebook - Yuntas Publicidad"
           className="flex items-center gap-1 text-white"
         >
           <FaFacebook className="text-2xl hover:text-blue-500" />
@@ -178,6 +179,7 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
           href="https://wa.me/912849782"
           target="_blank"
           aria-label="WhatsApp"
+          title="WhatsApp - Yuntas Publicidad"
           className="flex items-center gap-1 text-white"
         >
           <FaWhatsapp className="text-2xl hover:text-green-500" />
@@ -187,6 +189,7 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
           href="https://www.instagram.com/yuntasdecoracioncomercial/"
           target="_blank"
           aria-label="Instagram"
+          title="Instagram - Yuntas Publicidad"
           className="flex items-center gap-1 text-white"
         >
           <FaInstagram className="text-2xl hover:text-pink-500" />
@@ -196,6 +199,7 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
           href="https://www.tiktok.com/@yuntasproduccione"
           target="_blank"
           aria-label="TikTok"
+          title="TikTok - Yuntas Publicidad"
           className="flex items-center gap-1 text-white"
         >
           <FaTiktok className="text-2xl hover:text-purple-500" />
@@ -205,6 +209,7 @@ const MobileMenuUnified = ({ isOpen, logo, onClose }: MobileMenuUnifiedProps) =>
           href="https://www.linkedin.com/company/yuntas-producciones/"
           target="_blank"
           aria-label="LinkedIn"
+          title="LinkedIn - Yuntas Publicidad"
           className="flex items-center gap-1 text-white"
         >
           <FaLinkedin className="text-2xl hover:text-blue-700" />
