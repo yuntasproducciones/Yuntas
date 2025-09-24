@@ -290,14 +290,15 @@ const ScrollModal = () => {
         {/* Contenedor de imagen - ocupa todo el ancho en móvil, lateral en desktop */}
         <div className="w-full sm:w-1/2 relative">
           <div className="w-full h-[250px] sm:h-auto sm:min-h-[400px] relative overflow-hidden sm:p-4">
-            <div className="w-full h-full relative clip-vase overflow-hidden">
-              <img
-                src={yuleLove.src}
-                alt="Asesoría"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black/10 sm:bg-transparent"></div>
-            </div>
+            <div className="w-full h-full relative clip-vase overflow-hidden flex items-center justify-center">
+                  <img
+                    src={yuleLove.src}
+                    alt="Asesoría"
+                    className="w-full h-full object-cover object-center"
+                  />
+                  <div className="absolute inset-0 bg-black/10 sm:bg-transparent"></div>
+                </div>
+
           </div>
           <button
             onClick={closeModal}
