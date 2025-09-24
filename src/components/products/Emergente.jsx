@@ -20,6 +20,22 @@ const textosPromocionales = [
   { titulo: "Programa tu", destacado: "Asesoría Gratuita", subtitulo: "" }
 ];
 
+/* Textos dinámicos para botones */
+const textosBoton = [
+  "Empieza a brillar",
+  "Quiero mi descuento",
+  "Solicitar asesoría",
+  "Obtener beneficio",
+  "Transformar mi espacio",
+  "Activar promoción",
+  "Lo quiero ahora",
+  "Acceder a la oferta",
+  "Sí, quiero destacar",
+  "Aprovechar envío gratis"
+];
+
+
+
 /* Validación zod */
 const schema = z.object({
   nombre: z
@@ -76,6 +92,12 @@ const Emergente = ({ producto }) => {
     const idx = Math.floor(Math.random() * textosPromocionales.length);
     return textosPromocionales[idx];
   }, []);
+
+  //From Popup Boton texto aleatorio
+  const textoBoton = useMemo(() => {
+  const idx = Math.floor(Math.random() * textosBoton.length);
+  return textosBoton[idx];
+}, []);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -261,31 +283,36 @@ const Emergente = ({ producto }) => {
         }`}
         style={{ border: "3px solid #e5e7eb" }}
       >
-        {/* Imagen */}
-        <div className="w-full sm:w-1/2 relative">
-          <div className="w-full h-[250px] sm:h-auto sm:min-h-[400px] relative overflow-hidden sm:p-4">
-            <div className="w-full h-full relative overflow-hidden">
-              <img
-                src={imagenPopup}
-                alt={`Popup de ${productoTitulo || "producto"}`}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  try {
-                    e.target.src = yuleLove;
-                  } catch {}
-                }}
-              />
-              <div className="absolute inset-0 bg-black/10 sm:bg-transparent"></div>
+        
+        {/* Imagen -------     resolucion 800 × 600 px (horizontal)  las img del popup*/}    
+          <div className="w-full sm:w-1/2 relative">
+            <div className="w-full h-[250px] sm:h-full relative sm:p-4">
+              {/* Clip con esquinas redondeadas y diagonal */}
+              <div className="w-full h-full clip-vase overflow-hidden rounded-2xl relative">
+                <img
+                  src={imagenPopup}
+                  alt={`Popup de ${productoTitulo || "producto"}`}
+                  className="w-full h-full object-cover object-center"
+                  onError={(e) => {
+                    try {
+                      e.target.src = yuleLove;
+                    } catch {}
+                  }}
+                />
+                <div className="absolute inset-0 bg-black/10 sm:bg-transparent"></div>
+              </div>
             </div>
+
+            <button
+              onClick={closeModal}
+              aria-label="Cerrar modal"
+              className="absolute top-3 right-3 bg-white/90 hover:bg-white text-gray-600 rounded-full w-8 h-8 flex items-center justify-center transition-colors cursor-pointer text-sm z-10 shadow-sm sm:hidden"
+            >
+              ✕
+            </button>
           </div>
-          <button
-            onClick={closeModal}
-            aria-label="Cerrar modal"
-            className="absolute top-3 right-3 bg-white/90 hover:bg-white text-gray-600 rounded-full w-8 h-8 flex items-center justify-center transition-colors cursor-pointer text-sm z-10 shadow-sm sm:hidden"
-          >
-            ✕
-          </button>
-        </div>
+
+
 
         {/* Formulario */}
         <div className="w-full sm:w-1/2 p-6 relative flex flex-col justify-center">
@@ -299,9 +326,10 @@ const Emergente = ({ producto }) => {
 
           <div className="mb-6 sm:mb-8">
             <h2
-              className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight font-montserrat text-center sm:text-left"
-              style={{ color: "#0E3F88" }}
-            >
+  className="text-2xl sm:text-3xl md:text-4xl font-bold font-extrabold leading-tight font-montserrat text-center"
+  style={{ color: "#0E3F88" }}
+>
+
               {textoData.titulo} <br />
               <span className="text-2xl sm:text-4xl font-bold">
                 {textoData.destacado}
@@ -387,7 +415,8 @@ const Emergente = ({ producto }) => {
                 disabled={isSubmitting}
                 className="w-full max-w-[220px] bg-[#0E3F88] hover:bg-[#0b3674] text-white font-semibold py-3 px-6 rounded-xl transition-all disabled:opacity-50 mt-4 sm:mt-6"
               >
-                {isSubmitting ? "Enviando..." : "Empieza a brillar"}
+                {isSubmitting ? "Enviando..." : textoBoton}
+
               </button>
             </div>
           </form>
