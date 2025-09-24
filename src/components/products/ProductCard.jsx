@@ -5,7 +5,7 @@ const ProductCard = ({ producto }) => {
 
   // 📸 Usar imagen principal (resuelta con helper)
   const imagenUrl = buildImageUrl(producto.imagen_principal);
-  const imagenAlt = producto.alt_imagen_principal || "Imagen del producto";
+  const imagenAlt = producto.text_alt_principal || "Imagen del producto";
   const titulo =
     producto.title || producto.titulo || producto.nombre || "Producto sin título";
   const link = producto.link;
