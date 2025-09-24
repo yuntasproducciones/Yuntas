@@ -26,12 +26,11 @@ const textosBoton = [
   "Quiero mi descuento",
   "Solicitar asesoría",
   "Obtener beneficio",
-  "Transformar mi espacio",
   "Activar promoción",
   "Lo quiero ahora",
-  "Acceder a la oferta",
-  "Sí, quiero destacar",
-  "Aprovechar envío gratis"
+  "Quiero la oferta",
+  "Quiero destacar",
+  "Envío gratis"
 ];
 
 
@@ -278,15 +277,13 @@ const Emergente = ({ producto }) => {
     <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center px-4">
       <div
         ref={modalRef}
-        className={`flex flex-col sm:flex-row rounded-3xl shadow-xl w-[90vw] sm:w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white relative ${
-          isClosing ? "animate-slideOut" : "animate-slideIn"
-        }`}
+        className={`flex flex-col sm:flex-row sm:gap-[1px] rounded-3xl shadow-xl w-[90vw] sm:w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white relative ${ isClosing ? "animate-slideOut" : "animate-slideIn" }`}
         style={{ border: "3px solid #e5e7eb" }}
       >
         
         {/* Imagen -------     resolucion 800 × 600 px (horizontal)  las img del popup*/}    
           <div className="w-full sm:w-1/2 relative">
-            <div className="w-full h-[250px] sm:h-full relative sm:p-4">
+            <div className="w-full h-[250px] sm:h-full relative sm:pt-2 sm:pb-2 sm:pl-2 sm:pr-[1px]">
               {/* Clip con esquinas redondeadas y diagonal */}
               <div className="w-full h-full clip-vase overflow-hidden rounded-2xl relative">
                 <img
@@ -315,7 +312,7 @@ const Emergente = ({ producto }) => {
 
 
         {/* Formulario */}
-        <div className="w-full sm:w-1/2 p-6 relative flex flex-col justify-center">
+        <div className="w-full sm:w-1/2 pr-2 pt-2 pb-2 pl-0 relative flex flex-col justify-center">
           <button
             onClick={closeModal}
             aria-label="Cerrar modal"
@@ -326,9 +323,9 @@ const Emergente = ({ producto }) => {
 
           <div className="mb-6 sm:mb-8">
             <h2
-  className="text-2xl sm:text-3xl md:text-4xl font-bold font-extrabold leading-tight font-montserrat text-center"
-  style={{ color: "#0E3F88" }}
->
+                className="text-3xl sm:text-4xl font-extrabold font-montserrat leading-tight text-center"
+                style={{ color: "#0E3F88" }}
+              >
 
               {textoData.titulo} <br />
               <span className="text-2xl sm:text-4xl font-bold">
@@ -352,7 +349,7 @@ const Emergente = ({ producto }) => {
               onChange={(e) =>
                 setFormData({ ...formData, nombre: e.target.value })
               }
-              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 focus:ring-2 ${
+              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 text-base font-montserrat font-normal focus:ring-2 ${
                 errors.nombre
                   ? "ring-2 ring-red-400"
                   : "focus:ring-blue-500/20"
@@ -369,7 +366,7 @@ const Emergente = ({ producto }) => {
               onChange={(e) =>
                 setFormData({ ...formData, telefono: e.target.value })
               }
-              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 focus:ring-2 ${
+              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 text-base font-montserrat font-normal focus:ring-2 ${
                 errors.telefono
                   ? "ring-2 ring-red-400"
                   : "focus:ring-blue-500/20"
@@ -387,7 +384,7 @@ const Emergente = ({ producto }) => {
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 focus:ring-2 ${
+              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 text-base font-montserrat font-normal focus:ring-2 ${
                 errors.email
                   ? "ring-2 ring-red-400"
                   : "focus:ring-blue-500/20"
@@ -413,7 +410,7 @@ const Emergente = ({ producto }) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full max-w-[220px] bg-[#0E3F88] hover:bg-[#0b3674] text-white font-semibold py-3 px-6 rounded-xl transition-all disabled:opacity-50 mt-4 sm:mt-6"
+                className="w-full max-w-[240px] bg-[#0E3F88] hover:bg-[#0b3674] text-white font-montserrat font-semibold text-lg sm:text-xl py-4 px-8 rounded-xl transition-all disabled:opacity-50 mt-4 sm:mt-6"
               >
                 {isSubmitting ? "Enviando..." : textoBoton}
 
