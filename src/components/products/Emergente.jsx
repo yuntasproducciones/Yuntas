@@ -60,8 +60,8 @@ const Emergente = ({ producto }) => {
   const [isClosing, setIsClosing] = useState(false);
 
   // Producto
-  const productoId = producto?.data?.id;
-  const productoTitulo = producto?.data?.title || producto?.data?.nombre;
+  const productoId = producto?.id;
+  const productoTitulo = producto?.title || producto?.nombre;
 
   // Construcción de URL de imagen
   const imageBaseUrl = "https://apiyuntas.yuntaspublicidad.com";
@@ -74,15 +74,15 @@ const Emergente = ({ producto }) => {
 
   // Imagen
   const getPopupImage = () => {
-    const images = producto?.data?.images || [];
+    const images = producto?.imagenes || [];
     if (images.length > 3) {
       const url =
         images[3]?.url_imagen ||
         images[3]?.ruta_imagen ||
-        images[3]?.imagen;
+        images[3]?.imagen_principal;
       if (url) return buildImageUrl(url);
     }
-    return buildImageUrl(producto?.data?.image) || yuleLove;
+    return buildImageUrl(producto?.imagen_principal) || yuleLove;
   };
   const imagenPopup = getPopupImage();
 

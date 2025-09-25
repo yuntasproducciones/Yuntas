@@ -22,9 +22,10 @@ class ProductoService {
     async getAllProductos(page: number = 1, perPage: number = 6): Promise<ProductoListResponse> {
     try {
         const url = `${config.endpoints.productos.list}?page=${page}&perPage=${perPage}`;
-        const response = await httpService.get<ProductoListResponse>(url); 
-        console.log('response from getAllProductos2:', response);
-        return response; 
+        const response = await fetch(config.apiUrl + url); 
+        const data: ProductoListResponse = await response.json();
+        console.log('response from getAllProductos2:', data);
+        return data; 
     } catch (error) {
         console.error('[ProductoService] Error obteniendo productos:', error);
         throw error;
@@ -38,6 +39,16 @@ class ProductoService {
         } catch (error) {
             console.error('[ProductoService] Error obteniendo producto:', error);
             throw error;
+        }
+    }
+
+    async getProductoByLink(link: string): Promise<ProductoDetailResponse> {
+        try {
+          const response = await httpService.get<Product>(config.endpoints.productos.link(link));
+          return response;
+        } catch (error) {
+          console.error('[ProductoService] Error obteniendo producto por link:', error);
+          throw error;
         }
     }
 
