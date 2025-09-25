@@ -19,20 +19,22 @@ export default interface Blog {
 }
 
 export interface BlogFormData {
-  titulo: string;
-  link: string;
-  producto_id: string;
-  parrafo: string;
-  descripcion: string;
-  imagen_principal: File | null;
-  titulo_blog?: string;
-  subtitulo_beneficio?: string;
+   producto_id?: string;
+  subtitulo?: string;
+  meta_titulo?: string;
+  meta_descripcion?: string;
+  link?: string;
+  parrafos?: { texto: string }[];
+  
+  imagen_principal?: File | string | null; // string para la URL existente, File para la nueva
+  alt_imagen_principal?: string;
+  
+  imagenes_secundarias?: {
+    archivo?: File | string | null; // string para la URL, File para el nuevo archivo
+    alt?: string;
+  }[];
+  
   url_video?: string;
-  titulo_video?: string;
-  imagenes?: Array<{
-    url_imagen: File | null;
-    parrafo_imagen: string;
-  }>;
 }
 export default interface BlogAPI {
   id: number;

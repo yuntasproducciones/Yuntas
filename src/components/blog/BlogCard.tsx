@@ -19,11 +19,6 @@ interface BlogCardProps {
 export default function BlogCard({ blog }: BlogCardProps) {
   const [imageError, setImageError] = useState(false);
 
-  const handleCardClick = () => {
-    // Igual que antes: redirige usando query params
-    window.location.href = `/blogs/blog/?link=${blog.link}`;
-  };
-
   const handleImageError = () => {
     setImageError(true);
   };
@@ -32,9 +27,9 @@ export default function BlogCard({ blog }: BlogCardProps) {
   const titulo = blog.nombre_producto || "Blog sin título";
 
   return (
-    <div
-      onClick={handleCardClick}
-      className="group relative overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 cursor-pointer hover:scale-105 w-[250px] h-[320px] flex flex-col"
+    <a
+      href={`/blogs/${blog.link}`}
+      className="group relative overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:scale-105 w-[250px] h-[320px] flex flex-col"
     >
       <div className="relative w-full h-[200px] overflow-hidden flex-shrink-0">
         {!imageError && imagenUrl ? (
@@ -78,6 +73,6 @@ export default function BlogCard({ blog }: BlogCardProps) {
           </p>
         )}
       </div>
-    </div>
+    </a>
   );
 }

@@ -36,6 +36,8 @@ if (!article) {
 }
 ---
 
-<Layout title={article.nombre_producto}>
-  <!-- <BlogDetail client:load article={article} /> -->
+<Layout title={article.nombre_producto} description={article.subtitulo || ''}>
+  
+  <BlogDetail client:load article={article} />
+
 </Layout>
