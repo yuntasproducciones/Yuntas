@@ -6,31 +6,14 @@ import yuleLove from "../../assets/images/emergente/yuleLove.jpg";
 
 /* Textos promocionales */
 const textosPromocionales = [
-  { titulo: "Brilla con un", destacado: "10% dto", subtitulo: "en tu compra" },
-  { titulo: "Posiciónate", destacado: "Envío Gratis", subtitulo: "" },
-  { titulo: "Solicita", destacado: "Asesoría Gratuita", subtitulo: "" },
-  { titulo: "Deslumbra con", destacado: "10% dto.", subtitulo: "en tu compra" },
-  { titulo: "Obtén", destacado: "Descuento Especial", subtitulo: "" },
-  { titulo: "Haz", destacado: "Brillar", subtitulo: "tu ambiente" },
-  { titulo: "Cotiza tus", destacado: "Pantallas", subtitulo: "ahora" },
-  { titulo: "Transforma", destacado: "Tu Espacio Hoy", subtitulo: "" },
-  { titulo: "Dale estilo", destacado: "A tu evento ahora", subtitulo: "" },
-  { titulo: "Ilumina con", destacado: "Ofertas Exclusivas", subtitulo: "" },
-  { titulo: "Envío", destacado: "Gratis", subtitulo: "Destaca tu negocio" },
-  { titulo: "Programa tu", destacado: "Asesoría Gratuita", subtitulo: "" }
+  { titulo: "Convierte la pista en el alma de la fiesta" }
+  
+  
 ];
 
 /* Textos dinámicos para botones */
 const textosBoton = [
-  "Empieza a brillar",
-  "Quiero mi descuento",
-  "Solicitar asesoría",
-  "Obtener beneficio",
-  "Activar promoción",
-  "Lo quiero ahora",
-  "Quiero la oferta",
-  "Quiero destacar",
-  "Envío gratis"
+  "Cotiza aquí",
 ];
 
 
@@ -277,8 +260,8 @@ const Emergente = ({ producto }) => {
     <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center px-4">
       <div
         ref={modalRef}
-        className={`flex flex-col sm:flex-row sm:gap-[1px] rounded-3xl shadow-xl w-[90vw] sm:w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white relative ${ isClosing ? "animate-slideOut" : "animate-slideIn" }`}
-        style={{ border: "3px solid #e5e7eb" }}
+         className={`flex flex-col sm:flex-row sm:gap-[1px] rounded-3xl shadow-xl w-[90vw] sm:w-full max-w-2xl max-h-[90vh] overflow-hidden bg-white relative ${ isClosing ? "animate-slideOut" : "animate-slideIn" }`}
+        style={{ border: "3px solid #e5e7eb" }} 
       >
         
         {/* Imagen -------     resolucion 800 × 600 px (horizontal)  las img del popup*/}    
@@ -299,7 +282,6 @@ const Emergente = ({ producto }) => {
                 <div className="absolute inset-0 bg-black/10 sm:bg-transparent"></div>
               </div>
             </div>
-
             <button
               onClick={closeModal}
               aria-label="Cerrar modal"
@@ -312,7 +294,8 @@ const Emergente = ({ producto }) => {
 
 
         {/* Formulario */}
-        <div className="w-full sm:w-1/2 pr-2 pt-2 pb-2 pl-0 relative flex flex-col justify-center">
+      
+<div className="w-full sm:w-1/2 pr-2 pt-2 pb-2 pl-0 relative flex flex-col justify-center">
           <button
             onClick={closeModal}
             aria-label="Cerrar modal"
@@ -321,103 +304,90 @@ const Emergente = ({ producto }) => {
             ✕
           </button>
 
-          <div className="mb-6 sm:mb-8">
-            <h2
-                className="text-3xl sm:text-4xl font-extrabold font-montserrat leading-tight text-center"
-                style={{ color: "#0E3F88" }}
-              >
+  {/* Contenedor reducido */}
+  <div className="w-full text-center">
+    <div className="mb-4 sm:mb-6">
+      <h2
+        className="text-2xl sm:text-3xl font-bold font-montserrat leading-snug text-center"
+        style={{ color: "#172649" }}
+      >
+        {textoData.titulo}
+      </h2>
+    </div>
 
-              {textoData.titulo} <br />
-              <span className="text-2xl sm:text-4xl font-bold">
-                {textoData.destacado}
-              </span>
-              {textoData.subtitulo && (
-                <>
-                  <br />
-                  <span className="text-base sm:text-lg">
-                    {textoData.subtitulo}
-                  </span>
-                </>
-              )}
-            </h2>
-          </div>
+    <form className="space-y-3" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={formData.nombre}
+        onChange={(e) =>
+          setFormData({ ...formData, nombre: e.target.value })
+        }
+        className={`w-full px-4 py-3 rounded-xl bg-[#EBEBEB] border-0 text-base font-montserrat focus:ring-2 ${
+          errors.nombre ? "ring-2 ring-red-400" : "focus:ring-blue-500/20"
+        }`}
+        placeholder="Nombre"
+      />
+      {errors.nombre && (
+        <p className="text-red-500 text-sm">{errors.nombre}</p>
+      )}
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={formData.nombre}
-              onChange={(e) =>
-                setFormData({ ...formData, nombre: e.target.value })
-              }
-              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 text-base font-montserrat font-normal focus:ring-2 ${
-                errors.nombre
-                  ? "ring-2 ring-red-400"
-                  : "focus:ring-blue-500/20"
-              }`}
-              placeholder="Nombre"
-            />
-            {errors.nombre && (
-              <p className="text-red-500 text-sm">{errors.nombre}</p>
-            )}
+      <input
+        type="tel"
+        value={formData.telefono}
+        onChange={(e) =>
+          setFormData({ ...formData, telefono: e.target.value })
+        }
+        className={`w-full px-4 py-3 rounded-xl bg-[#EBEBEB] border-0 text-base font-montserrat focus:ring-2 ${
+          errors.telefono ? "ring-2 ring-red-400" : "focus:ring-blue-500/20"
+        }`}
+        placeholder="Teléfono"
+        maxLength={9}
+      />
+      {errors.telefono && (
+        <p className="text-red-500 text-sm">{errors.telefono}</p>
+      )}
 
-            <input
-              type="tel"
-              value={formData.telefono}
-              onChange={(e) =>
-                setFormData({ ...formData, telefono: e.target.value })
-              }
-              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 text-base font-montserrat font-normal focus:ring-2 ${
-                errors.telefono
-                  ? "ring-2 ring-red-400"
-                  : "focus:ring-blue-500/20"
-              }`}
-              placeholder="Teléfono"
-              maxLength={9}
-            />
-            {errors.telefono && (
-              <p className="text-red-500 text-sm">{errors.telefono}</p>
-            )}
+      <input
+        type="email"
+        value={formData.email}
+        onChange={(e) =>
+          setFormData({ ...formData, email: e.target.value })
+        }
+        className={`w-full px-4 py-3 rounded-xl bg-[#EBEBEB] border-0 text-base font-montserrat focus:ring-2 ${
+          errors.email ? "ring-2 ring-red-400" : "focus:ring-blue-500/20"
+        }`}
+        placeholder="Correo"
+      />
+      {errors.email && (
+        <p className="text-red-500 text-sm">{errors.email}</p>
+      )}
 
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className={`w-[95%] px-4 py-3 rounded-xl bg-gray-100 border-0 text-base font-montserrat font-normal focus:ring-2 ${
-                errors.email
-                  ? "ring-2 ring-red-400"
-                  : "focus:ring-blue-500/20"
-              }`}
-              placeholder="Correo"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
-
-            {errors.general && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-red-600">
-                {errors.general}
-              </div>
-            )}
-            {successMessage && (
-              <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-green-600">
-                {successMessage}
-              </div>
-            )}
-
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full max-w-[240px] bg-[#0E3F88] hover:bg-[#0b3674] text-white font-montserrat font-semibold text-lg sm:text-xl py-4 px-8 rounded-xl transition-all disabled:opacity-50 mt-4 sm:mt-6"
-              >
-                {isSubmitting ? "Enviando..." : textoBoton}
-
-              </button>
-            </div>
-          </form>
+      {errors.general && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-red-600">
+          {errors.general}
         </div>
+      )}
+      {successMessage && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-green-600">
+          {successMessage}
+        </div>
+      )}
+
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-[#172649] hover:bg-[#0f1a33] text-white font-montserrat font-semibold text-2xl pt-[3px] pr-[20px] pb-[9px] pl-[20px] rounded-xl transition-all disabled:opacity-50 mt-2 sm:mt-3"
+        >
+          {isSubmitting ? "Enviando..." : textoBoton}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
       </div>
     </div>
   );
