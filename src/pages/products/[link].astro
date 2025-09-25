@@ -1,0 +1,39 @@
+---
+import ProductoPage from "../../components/products/ProductoPage";
+import Layout from "../../layouts/Layout.astro";
+import type { Product } from "../../models/Product";
+import { productoService } from "../../services/productoService";
+
+// Las páginas se generan en tiempo de build, no en tiempo de solicitud
+// Por lo tanto, necesitamos definir todas las rutas posibles de antemano mediante el fetct.
+// Si se agrega un nuevo producto, se debe reconstruir el sitio (build) para que la nueva página esté disponible.
+export async function getStaticPaths() {
+  let allProducts: Product[] = [];
+  let page = 1;
+  let lastPage = 1;
+
+  do {
+    const response = await productoService.getAllProductos(page);
+    allProducts = allProducts.concat(response.data);
+    lastPage = response.last_page;
+    page++;
+  } while (page <= lastPage);
+
+  return allProducts.map((producto) => ({
+    params: { link: producto.link },
+    props: { producto },
+  }));
+}
+
+
+// Props que recibirá el componente
+const { link } = Astro.params;
+const { producto } = Astro.props;
+if (!producto) {
+  throw new Error(`Producto con link "${link}" no encontrado.`);
+}
+---
+
+<Layout title={producto.etiqueta.meta_titulo || producto.nombre} description={producto.etiqueta.meta_descripcion || producto.descripcion} keywords="publicidad, maquinaria, diseño, decoración, carteles" canonicalUrl={`${Astro.site}products/${producto.link}`}>
+  <ProductoPage client:load data={producto} />
+</Layout>

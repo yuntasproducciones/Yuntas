@@ -16,41 +16,43 @@ interface Props {
   isEditing?: boolean;
 }
 
-  // Validación de peso de imagen (máx. 2MB)
-  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.size > 2 * 1024 * 1024) {
-      Swal.fire({
-        icon: "warning",
-        title: "¡Imagen muy grande!",
-        text: "Máx. 2 MB.",
-      });
-      e.target.value = "";
-    }
-  };
+// Validación de peso de imagen (máx. 2MB)
+const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file && file.size > 2 * 1024 * 1024) {
+    Swal.fire({
+      icon: "warning",
+      title: "¡Imagen muy grande!",
+      text: "Máx. 2 MB.",
+    });
+    e.target.value = "";
+  }
+};
 
 const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
   useEffect(() => {
     if (initialData) {
-      console.log("Inicializando especificaciones y beneficios desde specs:", initialData.especificaciones);
+      console.log(
+        "Inicializando especificaciones y beneficios desde specs:",
+        initialData.especificaciones
+      );
 
       const specs = initialData.especificaciones
         ? Object.entries(initialData.especificaciones)
-          .filter(([key]) => key.startsWith("spec_"))
-          .map(([, value]) => String(value).trim())
+            .filter(([key]) => key.startsWith("spec_"))
+            .map(([, value]) => String(value).trim())
         : [];
 
       setEspecificaciones(specs.length > 0 ? specs : [""]);
 
       const benefits = initialData.especificaciones
         ? Object.entries(initialData.especificaciones)
-          .filter(([key]) => key.startsWith("beneficio_"))
-          .map(([, value]) => String(value).trim())
+            .filter(([key]) => key.startsWith("beneficio_"))
+            .map(([, value]) => String(value).trim())
         : [];
 
       setBeneficios(benefits.length > 0 ? benefits : [""]);
-    };
-
+    }
   }, [initialData]);
 
   // Estados para imágenes existentes (legacy) - convertir desde la estructura v1
@@ -64,7 +66,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
     (() => {
       if (!initialData?.especificaciones) return [""];
       const specs = Object.entries(initialData.especificaciones)
-        .filter(([key]) => key.startsWith('spec_'))
+        .filter(([key]) => key.startsWith("spec_"))
         .map(([, value]) => String(value));
       return specs.length > 0 ? specs : [""];
     })()
@@ -75,7 +77,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
     (() => {
       if (!initialData?.especificaciones) return [""];
       const benefits = Object.entries(initialData.especificaciones)
-        .filter(([key]) => key.startsWith('beneficio_'))
+        .filter(([key]) => key.startsWith("beneficio_"))
         .map(([, value]) => String(value));
       return benefits.length > 0 ? benefits : [""];
     })()
@@ -135,24 +137,29 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
     const finalFormData = new FormData();
 
     // CAMPOS REQUERIDOS por StoreProductoRequest
-    finalFormData.append('nombre', formData.get('nombre') as string);
-    finalFormData.append('link', formData.get('link') as string);
-    finalFormData.append('titulo', formData.get('titulo_hero') as string);
-    finalFormData.append('stock', formData.get('stock') as string);
+    finalFormData.append("nombre", formData.get("nombre") as string);
+    finalFormData.append("link", formData.get("link") as string);
+    finalFormData.append("titulo", formData.get("titulo_hero") as string);
+    finalFormData.append("stock", formData.get("stock") as string);
 
     // Limpiar el precio (quitar el símbolo $)
-    const precioValue = (formData.get('precio') as string).replace('$', '').trim();
-    finalFormData.append('precio', precioValue);
+    const precioValue = (formData.get("precio") as string)
+      .replace("$", "")
+      .trim();
+    finalFormData.append("precio", precioValue);
 
     // CAMPOS OPCIONALES
-    finalFormData.append('subtitulo', formData.get('nombre') as string); // Usar nombre como subtítulo
-    finalFormData.append('descripcion', formData.get('descripcion_informacion') as string);
-    finalFormData.append('seccion', formData.get('seccion') as string);
+    finalFormData.append("subtitulo", formData.get("nombre") as string); // Usar nombre como subtítulo
+    finalFormData.append(
+      "descripcion",
+      formData.get("descripcion_informacion") as string
+    );
+    finalFormData.append("seccion", formData.get("seccion") as string);
 
     // IMAGEN PRINCIPAL (para catálogo/lista) - Solo si se subió una nueva
-    const imagenListaProductos = formData.get('imagen_lista_productos') as File;
+    const imagenListaProductos = formData.get("imagen_lista_productos") as File;
     if (imagenListaProductos && imagenListaProductos.size > 0) {
-      finalFormData.append('imagen_principal', imagenListaProductos);
+      finalFormData.append("imagen_principal", imagenListaProductos);
     }
 
     // ESPECIFICACIONES como array asociativo
@@ -179,31 +186,54 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
     // IMÁGENES ADICIONALES - Orden específico y solo las que se modificaron
     const tiposImagenes = [
-      { key: 'imagen_hero', file: formData.get('imagen_hero') as File, index: 0 },
-      { key: 'imagen_especificaciones', file: formData.get('imagen_especificaciones') as File, index: 1 },
-      { key: 'imagen_beneficios', file: formData.get('imagen_beneficios') as File, index: 2 },
-      { key: 'imagen_popups', file: formData.get('imagen_popups') as File, index: 3 }
+      {
+        key: "imagen_hero",
+        file: formData.get("imagen_hero") as File,
+        index: 0,
+      },
+      {
+        key: "imagen_especificaciones",
+        file: formData.get("imagen_especificaciones") as File,
+        index: 1,
+      },
+      {
+        key: "imagen_beneficios",
+        file: formData.get("imagen_beneficios") as File,
+        index: 2,
+      },
+      {
+        key: "imagen_popups",
+        file: formData.get("imagen_popups") as File,
+        index: 3,
+      },
     ];
 
-    console.log('=== DEBUGGING IMÁGENES FRONTEND ===');
+    console.log("=== DEBUGGING IMÁGENES FRONTEND ===");
     let imagenesEnviadas = 0;
     tiposImagenes.forEach((imagen) => {
       console.log(`Revisando imagen ${imagen.index} (${imagen.key}):`, {
         hasFile: imagen.file instanceof File,
-        fileName: imagen.file?.name || 'N/A',
+        fileName: imagen.file?.name || "N/A",
         fileSize: imagen.file?.size || 0,
-        fileType: imagen.file?.type || 'N/A'
+        fileType: imagen.file?.type || "N/A",
       });
 
       if (imagen.file && imagen.file instanceof File && imagen.file.size > 0) {
-        console.log(`✅ Agregando imagen ${imagen.index}:`, imagen.key, imagen.file.name, `(${imagen.file.size} bytes)`);
+        console.log(
+          `✅ Agregando imagen ${imagen.index}:`,
+          imagen.key,
+          imagen.file.name,
+          `(${imagen.file.size} bytes)`
+        );
         // Usar el índice original para mantener el orden correcto
         finalFormData.append(`imagenes[${imagen.index}]`, imagen.file);
         // También enviar el tipo de imagen para que el backend sepa qué es
         finalFormData.append(`imagen_tipos[${imagen.index}]`, imagen.key);
         imagenesEnviadas++;
       } else {
-        console.log(`❌ Imagen ${imagen.index} (${imagen.key}) no tiene archivo válido o está vacía`);
+        console.log(
+          `❌ Imagen ${imagen.index} (${imagen.key}) no tiene archivo válido o está vacía`
+        );
       }
     });
 
@@ -217,18 +247,23 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
     }
 
     // etiqueta
-    const metaTitulo = formData.get('meta_título') as string;
-    const metaDescripcion = formData.get('meta_descripcion') as string;
+    const metaTitulo = formData.get("meta_título") as string;
+    const metaDescripcion = formData.get("meta_descripcion") as string;
     if (metaTitulo.trim() || metaDescripcion.trim()) {
-      finalFormData.append('etiqueta[meta_titulo]', metaTitulo.trim());
-      finalFormData.append('etiqueta[meta_descripcion]', metaDescripcion.trim());
+      finalFormData.append("etiqueta[meta_titulo]", metaTitulo.trim());
+      finalFormData.append(
+        "etiqueta[meta_descripcion]",
+        metaDescripcion.trim()
+      );
     }
 
     // Log para debugging
-    console.log('=== DATOS ENVIADOS AL BACKEND ===');
+    console.log("=== DATOS ENVIADOS AL BACKEND ===");
     finalFormData.forEach((value, key) => {
       if (value instanceof File) {
-        console.log(`Campo: ${key}, Archivo: ${value.name} (${value.size} bytes)`);
+        console.log(
+          `Campo: ${key}, Archivo: ${value.name} (${value.size} bytes)`
+        );
       } else {
         console.log(`Campo: ${key}, Valor: ${value}`);
       }
@@ -256,7 +291,8 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nombre del Producto <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
+              Nombre del Producto{" "}
+              <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
             </label>
             <input
               name="nombre"
@@ -264,12 +300,15 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
-            <small className="text-gray-500 block mt-1">Máx. 255 caracteres (letras, números y espacios).</small>
+            <small className="text-gray-500 block mt-1">
+              Máx. 255 caracteres (letras, números y espacios).
+            </small>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Sección/Categoría <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
+              Sección/Categoría{" "}
+              <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
             </label>
             <input
               name="seccion"
@@ -278,21 +317,30 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
-            <small className="text-gray-500 block mt-1">Máx. 255 caracteres (letras, números y espacios).</small>
+            <small className="text-gray-500 block mt-1">
+              Máx. 255 caracteres (letras, números y espacios).
+            </small>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Precio <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
+              Precio{" "}
+              <span className="text-blue-600 text-sm">(Aparece en tabla)</span>
             </label>
             <input
               name="precio"
-              defaultValue={initialData?.precio ? `$${initialData.precio}` : initialData?.precio}
+              defaultValue={
+                initialData?.precio
+                  ? `$${initialData.precio}`
+                  : initialData?.precio
+              }
               placeholder="ej: $500.00"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
-            <small className="text-gray-500 block mt-1">Coloca el precio en números (máx. 100 000).</small>
+            <small className="text-gray-500 block mt-1">
+              Coloca el precio en números (máx. 100 000).
+            </small>
           </div>
 
           {/* <div>
@@ -311,16 +359,29 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Link/URL <span className="text-blue-600 text-sm">(ej: letreros-neon-led)</span>
+              Link/URL{" "}
+              <span className="text-blue-600 text-sm">
+                (ej: letreros-neon-led)
+              </span>
             </label>
             <input
               name="link"
-              defaultValue={initialData?.link || (initialData?.titulo ? initialData.titulo.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '') : '')}
+              defaultValue={
+                initialData?.link ||
+                (initialData?.titulo
+                  ? initialData.titulo
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/[^\w\-]/g, "")
+                  : "")
+              }
               placeholder="letreros-neon-led"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
-            <small className="text-gray-500 block mt-1">Solo minúsculas y guiones. Hasta 255 letras, números o espacios.</small>
+            <small className="text-gray-500 block mt-1">
+              Solo minúsculas y guiones. Hasta 255 letras, números o espacios.
+            </small>
           </div>
 
           <div className="md:col-span-2">
@@ -333,12 +394,15 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               placeholder="Título para SEO del producto"
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-            <small className="text-gray-500 block mt-1">Máx. 70 caracteres (letras, números y espacios).</small>
+            <small className="text-gray-500 block mt-1">
+              Máx. 70 caracteres (letras, números y espacios).
+            </small>
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Meta Descripción <span className="text-blue-600 text-sm">(SEO)</span>
+              Meta Descripción{" "}
+              <span className="text-blue-600 text-sm">(SEO)</span>
             </label>
             <textarea
               name="meta_descripcion"
@@ -347,7 +411,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Descripción breve del producto para SEO..."
             />
-            <small className="text-gray-500 block mt-1">Máx. 160 caracteres (letras, números y espacios).</small>
+            <small className="text-gray-500 block mt-1">
+              Máx. 160 caracteres (letras, números y espacios).
+            </small>
           </div>
         </div>
       </div>
@@ -361,7 +427,10 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Título Hero <span className="text-green-600 text-sm">(Aparece sobre la imagen principal)</span>
+              Título Hero{" "}
+              <span className="text-green-600 text-sm">
+                (Aparece sobre la imagen principal)
+              </span>
             </label>
             <input
               name="titulo_hero"
@@ -370,12 +439,17 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
-            <small className="text-gray-500 block mt-1">Máx. 255 caracteres (letras, números y espacios).</small>
+            <small className="text-gray-500 block mt-1">
+              Máx. 255 caracteres (letras, números y espacios).
+            </small>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Descripción <span className="text-green-600 text-sm">(Sección "Información")</span>
+              Descripción{" "}
+              <span className="text-green-600 text-sm">
+                (Sección "Información")
+              </span>
             </label>
             <textarea
               rows={4}
@@ -385,7 +459,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
-            <small className="text-gray-500 block mt-1">Descripción detallada. 300-600 palabras.</small>
+            <small className="text-gray-500 block mt-1">
+              Descripción detallada. 300-600 palabras.
+            </small>
           </div>
         </div>
       </div>
@@ -401,7 +477,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
               <input
                 type="text"
                 value={esp}
-                onChange={(e) => handleEspecificacionChange(index, e.target.value)}
+                onChange={(e) =>
+                  handleEspecificacionChange(index, e.target.value)
+                }
                 placeholder="ej: Materiales duraderos"
                 className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
               />
@@ -472,7 +550,9 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
         {/* Imágenes existentes */}
         {imagenesExistentes.length > 0 && (
           <div className="mb-6">
-            <h4 className="text-md font-medium text-gray-700 mb-3">Imágenes actuales</h4>
+            <h4 className="text-md font-medium text-gray-700 mb-3">
+              Imágenes actuales
+            </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {imagenesExistentes.map((img) => (
                 <div
@@ -505,9 +585,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen para lista de productos */}
           <div className="bg-white p-4 rounded-lg border border-blue-200">
             <h4 className="text-md font-semibold text-blue-700 mb-3">
-              Imagen para Lista de Productos <span className="text-red-500">*</span>
+              Imagen para Lista de Productos{" "}
+              <span className="text-red-500">*</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Esta imagen aparece en la página "Nuestros Productos" y es <strong>obligatoria</strong></p>
+            <p className="text-sm text-gray-600 mb-3">
+              Esta imagen aparece en la página "Nuestros Productos" y es{" "}
+              <strong>obligatoria</strong>
+            </p>
             <div className="space-y-2">
               <input
                 type="file"
@@ -517,10 +601,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                 onChange={handleImageFileChange}
               />
-              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
+              <small className="text-gray-500 block mt-1">
+                Cada imagen debe pesar menos de 2 MB.
+              </small>
               <input
                 type="text"
                 name="alt_imagen_lista"
+                value={initialData?.text_alt_principal || ""}
                 placeholder="Texto ALT para SEO"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
@@ -530,9 +617,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen Hero */}
           <div className="bg-white p-4 rounded-lg border border-green-200">
             <h4 className="text-md font-semibold text-green-700 mb-3">
-              🎯 Imagen Hero del Producto <span className="text-sm text-gray-500">(Banner Principal)</span>
+              🎯 Imagen Hero del Producto{" "}
+              <span className="text-sm text-gray-500">(Banner Principal)</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Imagen de fondo grande en la página individual del producto - <strong>Banner superior principal</strong></p>
+            <p className="text-sm text-gray-600 mb-3">
+              Imagen de fondo grande en la página individual del producto -{" "}
+              <strong>Banner superior principal</strong>
+            </p>
             <div className="space-y-2">
               <input
                 type="file"
@@ -541,10 +632,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
                 onChange={handleImageFileChange}
               />
-              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
+              <small className="text-gray-500 block mt-1">
+                Cada imagen debe pesar menos de 2 MB.
+              </small>
               <input
                 type="text"
                 name="alt_imagen_hero"
+                value={initialData?.imagenes[0]?.texto_alt_SEO || ""}
                 placeholder="Texto ALT para SEO"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
@@ -554,9 +648,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Especificaciones */}
           <div className="bg-white p-4 rounded-lg border border-purple-200">
             <h4 className="text-md font-semibold text-purple-700 mb-3">
-              📋 Imagen para Especificaciones <span className="text-sm text-gray-500">(Sección Izquierda)</span>
+              📋 Imagen para Especificaciones{" "}
+              <span className="text-sm text-gray-500">(Sección Izquierda)</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de especificaciones - <strong>Lado izquierdo de la página</strong></p>
+            <p className="text-sm text-gray-600 mb-3">
+              Imagen que acompaña la sección de especificaciones -{" "}
+              <strong>Lado izquierdo de la página</strong>
+            </p>
             <div className="space-y-2">
               <input
                 type="file"
@@ -565,10 +663,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
                 onChange={handleImageFileChange}
               />
-              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
+              <small className="text-gray-500 block mt-1">
+                Cada imagen debe pesar menos de 2 MB.
+              </small>
               <input
                 type="text"
                 name="alt_imagen_especificaciones"
+                value={initialData?.imagenes[1]?.texto_alt_SEO || ""}
                 placeholder="Texto ALT para SEO"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
               />
@@ -578,9 +679,13 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           {/* Imagen de Beneficios */}
           <div className="bg-white p-4 rounded-lg border border-orange-200">
             <h4 className="text-md font-semibold text-orange-700 mb-3">
-              🎁 Imagen para Beneficios <span className="text-sm text-gray-500">(Sección Derecha)</span>
+              🎁 Imagen para Beneficios{" "}
+              <span className="text-sm text-gray-500">(Sección Derecha)</span>
             </h4>
-            <p className="text-sm text-gray-600 mb-3">Imagen que acompaña la sección de beneficios - <strong>Lado derecho de la página</strong></p>
+            <p className="text-sm text-gray-600 mb-3">
+              Imagen que acompaña la sección de beneficios -{" "}
+              <strong>Lado derecho de la página</strong>
+            </p>
             <div className="space-y-2">
               <input
                 type="file"
@@ -589,50 +694,65 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
                 className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
                 onChange={handleImageFileChange}
               />
-              <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
+              <small className="text-gray-500 block mt-1">
+                Cada imagen debe pesar menos de 2 MB.
+              </small>
               <input
                 type="text"
                 name="alt_imagen_beneficios"
+                value={initialData?.imagenes[2]?.texto_alt_SEO || ""}
                 placeholder="Texto ALT para SEO"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
               />
             </div>
           </div>
-            {/* Imagen de Popups*/}
-            <div className="bg-white p-4 rounded-lg border border-yellow-200">
-              <h4 className="text-md font-semibold text-yellow-700 mb-3">
-                💬 Imagen para Popups
-              </h4>
-              <p className="text-sm text-gray-600 mb-3">Imagen que acompaña los popups de registro clientes</p>
-              <div className="space-y-2">
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="imagen_popups"
-                  className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"
-                  onChange={handleImageFileChange}
-                />
-                <small className="text-gray-500 block mt-1">Cada imagen debe pesar menos de 2 MB.</small>
-                <input
-                  type="text"
-                  name="alt_imagen_popups"
-                  placeholder="Texto ALT para SEO"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
-                />
-              </div>
+          {/* Imagen de Popups*/}
+          <div className="bg-white p-4 rounded-lg border border-yellow-200">
+            <h4 className="text-md font-semibold text-yellow-700 mb-3">
+              💬 Imagen para Popups
+            </h4>
+            <p className="text-sm text-gray-600 mb-3">
+              Imagen que acompaña los popups de registro clientes
+            </p>
+            <div className="space-y-2">
+              <input
+                type="file"
+                accept="image/*"
+                name="imagen_popups"
+                className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100"
+                onChange={handleImageFileChange}
+              />
+              <small className="text-gray-500 block mt-1">
+                Cada imagen debe pesar menos de 2 MB.
+              </small>
+              <input
+                type="text"
+                name="alt_imagen_popups"
+                value={initialData?.imagenes[3]?.texto_alt_SEO || ""}
+                placeholder="Texto ALT para SEO"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
+              />
             </div>
+          </div>
 
           <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-sm text-yellow-800">
-              <strong>💡 Estructura CORRECTA de imágenes:</strong><br />
-              📸 <strong>Lista Productos:</strong> Imagen para vista de catálogo (imagen_principal)<br />
-              🎯 <strong>Hero:</strong> Banner principal superior (images[0])<br />
-              📋 <strong>Especificaciones:</strong> Acompaña características (images[1])<br />
-              🎁 <strong>Beneficios:</strong> Acompaña ventajas (images[2])<br />
-              💬 <strong>Popups:</strong> Acompaña popups registro (images[3]) 
+              <strong>💡 Estructura CORRECTA de imágenes:</strong>
+              <br />
+              📸 <strong>Lista Productos:</strong> Imagen para vista de catálogo
+              (imagen_principal)
+              <br />
+              🎯 <strong>Hero:</strong> Banner principal superior (images[0])
+              <br />
+              📋 <strong>Especificaciones:</strong> Acompaña características
+              (images[1])
+              <br />
+              🎁 <strong>Beneficios:</strong> Acompaña ventajas (images[2])
+              <br />
+              💬 <strong>Popups:</strong> Acompaña popups registro (images[3])
             </p>
           </div>
-          </div>
+        </div>
       </div>
       {/* BOTONES DE ACCIÓN */}
       <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
@@ -646,7 +766,7 @@ const ProductForm = ({ initialData, onSubmit, isEditing }: Props) => {
           type="submit"
           className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
-          {isEditing ? 'Actualizar' : 'Crear'} Producto
+          {isEditing ? "Actualizar" : "Crear"} Producto
         </button>
       </div>
     </form>

@@ -5,7 +5,7 @@ const ProductCard = ({ producto }) => {
 
   // 📸 Usar imagen principal (resuelta con helper)
   const imagenUrl = buildImageUrl(producto.imagen_principal);
-  const imagenAlt = producto.alt_imagen_principal || "Imagen del producto";
+  const imagenAlt = producto.text_alt_principal || "Imagen del producto";
   const titulo =
     producto.title || producto.titulo || producto.nombre || "Producto sin título";
   const link = producto.link;
@@ -16,8 +16,9 @@ const ProductCard = ({ producto }) => {
 
   return (
     <a
-      href={`/products/producto/?link=${link}`}
+      href={`/products/${link}`}
       className="relative flex flex-col items-center hover:scale-105 transition-all duration-200 cursor-pointer group mb-8"
+      title={titulo}
     >
       {/* Contenedor principal con dimensiones fijas */}
       <div className="relative w-[280px] bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700">
