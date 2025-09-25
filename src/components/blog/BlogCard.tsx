@@ -76,3 +76,5 @@ export default function BlogCard({ blog }: BlogCardProps) {
     </a>
   );
 }
+
+
