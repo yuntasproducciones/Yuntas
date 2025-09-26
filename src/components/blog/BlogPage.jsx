@@ -1,6 +1,8 @@
 import useBlogSEO from "../../hooks/useBlogSEO";
 import { buildImageUrl, getImageTitle } from "../../utils/imageHelpers";
-
+/**
+ * @param {{ article: import('../../models/Blog').default }} props
+ */
 // 1. Aceptamos 'article' como una prop en la definición del componente
 export default function BlogPage({ article }) {
   
