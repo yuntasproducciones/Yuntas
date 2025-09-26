@@ -60,7 +60,7 @@ export interface Product {
   precio?: number;
   seccion: string;
   imagen_principal: string;
-  especificaciones: Array<{id?: string, texto: string}>;
+  especificaciones: Record<string, string>;
   beneficios: Array<{id?: string, texto: string}>;
   imagenes: { id: string, url_imagen: string, texto_alt_SEO: string }[];
   etiqueta: {
