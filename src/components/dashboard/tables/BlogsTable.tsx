@@ -3,9 +3,10 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import AddBlogModal from "../AddBlogModel";
 import { config, getApiUrl } from "../../../../config";
 import TableContainer from "./TableContainer";
+import BlogImageCarousel from './BlogImageCarousel';
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Pagination, Autoplay, FreeMode } from "swiper/modules";
 import { useDarkMode } from "../../../hooks/darkmode/useDarkMode";
 
 interface Blog {
@@ -149,7 +150,6 @@ const BlogsTable = () => {
     setEditBlog(null);
     setIsModalOpen(true);
   };
-
   return (
     <div className="overflow-x-auto p-2 sm:p-4">
       <TableContainer
@@ -183,7 +183,9 @@ const BlogsTable = () => {
               </td>
             </tr>
           ) : data.length > 0 ? (
-            data.map((item, idx) => (
+            data.map((item, idx) => {
+              const totalSlides = 1 + (item.imagenes?.length || 0);
+              return(
               <tr
                 key={item.id}
                 className={`md:table-row block md:mb-0 mb-6 rounded-xl shadow-md overflow-hidden border ${(idx % 2 === 0 && darkMode) ? "bg-white text-black" : "text-black bg-white"
@@ -245,59 +247,7 @@ const BlogsTable = () => {
 
                   {/* Swiper para escritorio */}
                   <div className="hidden md:block w-full">
-                    {(!item.imagenes || item.imagenes.length === 0) ? (
-                      <img
-                        src={getImageUrl(item.imagen_principal)}
-                        alt={item.nombre_producto || "Blog"}
-                        className="w-full max-w-[120px] h-20 object-cover rounded-lg shadow-md"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/placeholder-image.jpg";
-                        }}
-                      />
-                    ) : (
-                      <Swiper
-                        modules={[Pagination, Autoplay]}
-                        spaceBetween={10}
-                        slidesPerView={1}
-                        loop={item.imagenes.length >= 3}
-                        rewind={item.imagenes.length === 2}
-                        autoplay={{
-                          delay: 2000,
-                          disableOnInteraction: false,
-                        }}
-                        pagination={{ clickable: true }}
-                        className="w-full max-w-[120px] h-20 rounded-lg shadow-md"
-                      >
-                        {/* Imagen principal */}
-                        <SwiperSlide>
-                          <img
-                            src={getImageUrl(item.imagen_principal)}
-                            alt={item.nombre_producto || "Blog"}
-                            className="w-full h-20 object-cover rounded-lg"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = "/placeholder-image.jpg";
-                            }}
-                          />
-                        </SwiperSlide>
-
-                        {/* Otras imágenes */}
-                        {item.imagenes.map((img, i) => (
-                          <SwiperSlide key={i}>
-                            <img
-                              src={getImageUrl(img.ruta_imagen)}
-                              alt={img.text_alt || "Imagen extra"}
-                              className="w-full h-20 object-cover rounded-lg"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = "/placeholder-image.jpg";
-                              }}
-                            />
-                          </SwiperSlide>
-                        ))}
-                      </Swiper>
-                    )}
+                    <BlogImageCarousel key={item.id} item={item} getImageUrl={getImageUrl} />
                   </div>
 
                 </td>
@@ -338,7 +288,8 @@ const BlogsTable = () => {
                   </div>
                 </td>
               </tr>
-            ))
+              );
+})
           ) : (
             <tr>
               <td colSpan={6} className="text-center py-4 text-gray-500">
@@ -348,7 +299,7 @@ const BlogsTable = () => {
           )}
         </tbody>
       </TableContainer>
-
+        
       {/* Controles de paginación */}
       {paginationData.last_page > 1 && (
         <div className="flex flex-wrap justify-center items-center mt-4 gap-2">

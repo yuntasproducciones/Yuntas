@@ -9,10 +9,12 @@ import type Blog from "../models/Blog";
 
 // Metadatos específicos para la página general del blog
 const generalMetadata = {
-  titulo: "Blog de Innovación en Luces LED y Tendencias en Diseño Sostenible",
+  titulo: "Blog Yuntas | Tendencias en Publicidad LED y Tips para tu negocio",
   description:
-    "Explore el blog de Yuntas Publicidad para conocer a fondo las novedades en construcción y diseño. Encuentra las tendencias que están transformando el sector.",
-};
+    "Consejos, tendencias y guías sobre publicidad LED, letreros luminosos, señales digitales y mucho más. Contenido experto para potenciar tu negocio con tecnología innovadora.",
+  keywordsBlog:
+  "cómo elegir letrero led, mantenimiento letreros luminosos, diferencias LED vs neón tradicional, ahorro energético publicidad LED, problemas comunes paneles LED, duración vida útil LED, mejores letreros luminosos, como usar neon, mejores productos led",
+  };
 
 let allArticles = [];
 let error = null;
@@ -29,7 +31,7 @@ try {
 }
 ---
 
-<Layout title={generalMetadata.titulo}>
+<Layout title={generalMetadata.titulo} description={generalMetadata.description}keywords={generalMetadata.keywordsBlog}>
   <!-- Banner -->
   <section class="relative h-screen">
     <img
