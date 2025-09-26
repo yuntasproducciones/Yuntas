@@ -306,8 +306,8 @@ const Emergente = ({ producto }) => {
       <div className="w-full text-center max-w-[240px] mx-auto">
         <div className="mb-4 sm:mb-6">
           <h2
-            className="text-2xl sm:text-3xl font-bold font-montserrat leading-snug text-center"
-            style={{ color: "#172649" }}
+            className="text-2xl sm:text-3xl font-extrabold font-montserrat leading-tight text-center pt-2 pb-6"
+            style={{ color: "#0E3F88" }}
           >
             {textoData.titulo}
           </h2>
