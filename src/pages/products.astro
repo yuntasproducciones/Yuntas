@@ -3,18 +3,28 @@
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import imagenPrincipio from "../assets/images/products/principio2.png";
-import FetchProductsList from "../components/products/FetchProductsList.tsx"
-
+import FetchProductsList from "../components/products/FetchProductsList.tsx";
 ---
-<Layout title="Productos">
+
+<Layout
+  title="Cátalogo Yuntas Perú | Letreros LED, Hologramas 3D y Más"
+  keywords="comprar panel led exterior, precios paneles led, letrero luminoso precio, precio holograma, letreros led restaurantes, techo led barberia, mesas y sillas luminosas discotecas, iluminacion lima, info de letreros led, barras luminosas"
+>
   <!-- Banner -->
   <section class="relative h-screen">
-    <Picture src={imagenPrincipio} alt="Night club iluminada con letreros neón LED, luces rosa y azul, ideal para publicidad visual nocturna" class="w-full h-full object-cover" title="Night club iluminada con letreros neón LED"/>
+    <Picture
+      src={imagenPrincipio}
+      alt="Night club iluminada con letreros neón LED, luces rosa y azul, ideal para publicidad visual nocturna"
+      class="w-full h-full object-cover"
+      title="Night club iluminada con letreros neón LED"
+    />
   </section>
 
   <!-- Título principal -->
   <div class="bg-gray h-30 flex items-center justify-center">
-    <h2 class="text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-extrabold text-[#243360]">
+    <h2
+      class="text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-extrabold text-[#243360]"
+    >
       NUESTROS PRODUCTOS
     </h2>
   </div>
@@ -24,7 +34,9 @@ import FetchProductsList from "../components/products/FetchProductsList.tsx"
     <div class="max-w-[1200px] px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24 mx-auto">
       <!-- Subtítulo -->
       <div class="flex items-center justify-center mb-10">
-        <p class="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-medium text-white/75 text-center">
+        <p
+          class="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl Montserrat font-medium text-white/75 text-center"
+        >
           Descubre la selección que tenemos para ti
         </p>
       </div>

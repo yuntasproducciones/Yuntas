@@ -14,9 +14,9 @@ interface Props {
 }
 const {
   title,
-  description = "YUNTAS PUBLICIDAD Especialistas en diseñar y transformar tus espacios utilizando tecnología innovadora y soluciones eficientes. Creamos ambientes personalizados",
+  description = "Descubre letreros LED, paneles acrílicos, hologramas 3D y más. Soluciones innovadoras y personalizadas para tu negocio en Lima. ¡Cotiza gratis!",
   keywords,
-  canonicalUrl
+  canonicalUrl,
 } = Astro.props;
 ---
 
@@ -32,9 +32,9 @@ const {
     <meta name="author" content="Yuntas" />
     <meta name="publisher" content="Technology 3" />
     <link rel="canonical" href={canonicalUrl} />
-    {keywords && <meta name="keywords" content={keywords}/>}
+    {keywords && <meta name="keywords" content={keywords} />}
     {description && <meta name="description" content={description} />}
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow" />
     <!--  fuente de Google Fonts Optimizada -->
     <!-- Proximamente -->
     <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
