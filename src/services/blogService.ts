@@ -29,8 +29,45 @@ class BlogService {
   
  // --- MÉTODOS DE OBTENCIÓN (Sin cambios) ---
 
-  getAllBlogs(): Promise<BlogListResponse> {
-    return httpService.get<BlogPagination>(config.endpoints.blogs.list);
+  async getAllBlogs(): Promise<BlogListResponse> {
+    let allBlogs: Blog[] = [];
+    let currentPage = 1;
+    let lastPage = 1;
+    let hasMorePages = true;
+
+    while (hasMorePages) {
+      // Usamos httpService para obtener página por página
+      const response: BlogListResponse = await httpService.get<BlogPagination>(
+        `${config.endpoints.blogs.list}?page=${currentPage}`
+      );
+      
+      if (response && response.success && response.data.data.length > 0) {
+        allBlogs = [...allBlogs, ...response.data.data];
+        lastPage = response.data.last_page;
+
+        if (currentPage >= lastPage) {
+          hasMorePages = false;
+        } else {
+          currentPage++;
+        }
+      } else {
+        hasMorePages = false;
+      }
+    }
+
+    // Devolvemos la respuesta en el formato esperado, pero con la lista completa de blogs
+    return {
+      success: true,
+      message: 'Todos los blogs obtenidos exitosamente.',
+      status: 200,
+      data: {
+        data: allBlogs,
+        current_page: 1,
+        last_page: 1,
+        per_page: allBlogs.length,
+        total: allBlogs.length,
+      },
+    };
   }
 
   getBlogByLink(link: string): Promise<BlogDetailResponse> {

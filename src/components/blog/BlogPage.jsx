@@ -9,8 +9,6 @@ export default function BlogPage({ article }) {
   // Usamos el hook de SEO con la prop que recibimos
   useBlogSEO(article);
 
-  // 2. ¡Quitamos todo el código de useState y useEffect que buscaba los datos!
-
   // 3. Añadimos una validación por si la prop no llega
   if (!article) {
     return (
