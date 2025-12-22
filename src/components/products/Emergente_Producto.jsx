@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState, useMemo } from "react";
 import { config, getApiUrl } from "../../../config";
 import { z } from "zod";
+import productoImagen from "../../assets/images/products/Productos.webp";
 
 /* Textos promocionales */
 const textosPromocionales = [{ titulo: "¡Tu marca brillando como se merece!" }];
@@ -236,7 +237,7 @@ const Emergente_Producto = ({ producto }) => {
             {/* Clip con esquinas redondeadas y diagonal */}
             <div className="w-full h-full clip-vase overflow-hidden rounded-2xl relative">
               <img
-                src={"images/Productos.webp"}
+                src={productoImagen.src}
                 alt={`Popup`}
                 title={`Popup`}
                 className="w-full h-full object-cover object-center"
@@ -342,7 +343,7 @@ const Emergente_Producto = ({ producto }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#172649] hover:bg-[#0f1a33] text-white font-montserrat font-semibold text-md pt-[5px] pr-[10px] pb-[5px] pl-[10px] rounded-lg transition-all disabled:opacity-50 mt-2 sm:mt-3"
+                  className="bg-[#172649] hover:bg-[#0f1a33] hover:cursor-pointer text-white font-montserrat font-semibold text-md pt-[5px] pr-[10px] pb-[5px] pl-[10px] rounded-lg transition-all disabled:opacity-50 mt-2 sm:mt-3"
                 >
                   {isSubmitting ? "Enviando..." : textoBoton}
                 </button>
