@@ -103,7 +103,7 @@ const Footerjsx = ({ variant = "default" }) => {
 
           <div className="hidden md:flex items-center justify-center md:justify-start gap-3 mt-4">
             <a
-              href="https://www.instagram.com/yuntasdecoracioncomercial/"
+              href="https://www.instagram.com/yuntaspublicidad/"
               target="_blank"
               title="Instagram de Yuntas Publicidad"
               aria-label="Instagram"
@@ -111,7 +111,7 @@ const Footerjsx = ({ variant = "default" }) => {
               <FaInstagram className="text-white text-2xl hover:text-pink-500" />
             </a>
             <a
-              href="https://www.facebook.com/YuntasProducciones"
+              href="https://www.facebook.com/kp.yuntas.1/"
               title="Facebook de Yuntas Publicidad"
               target="_blank"
               aria-label="Facebook"
@@ -119,7 +119,7 @@ const Footerjsx = ({ variant = "default" }) => {
               <FaFacebook className="text-white text-2xl hover:text-blue-500" />
             </a>
             <a
-              href="https://www.tiktok.com/@y.decoracioncomercial"
+              href="https://www.tiktok.com/@yuntaspublicidad"
               target="_blank"
               aria-label="TikTok"
               title="TikTok de Yuntas Publicidad"
@@ -127,7 +127,7 @@ const Footerjsx = ({ variant = "default" }) => {
               <FaTiktok className="text-white text-2xl hover:text-purple-500" />
             </a>
             <a
-              href="https://www.youtube.com/@yuntaspublicidad5082/"
+              href="https://www.youtube.com/@yuntaspublicidad"
               target="_blank"
               aria-label="YouTube"
               title="YouTube de Yuntas Publicidad"
